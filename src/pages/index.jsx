@@ -7,6 +7,7 @@ import Footer from '../components/home/Footer';
 import Navbar from '../components/home/Navbar';
 import IframeSect from '../components/home/IframeSect';
 import { PLAN_CONFIG, formatPercent } from '../utils/planConfig';
+import dashboardStyles from '../components/dashboard/DashboardSect.module.css';
 
 export default function Home() {
   const [currentUser, setCurrentUser] = useState({});
@@ -205,44 +206,51 @@ export default function Home() {
           </div>
         </section>
         {!currentUser?.admin && (
-          <section id="packages" className="packages">
-            <h2>Kickstart Your Journey To Financial Freedom</h2>
+          <section id="packages" className={`homePackagesSection ${dashboardStyles.packages}`}>
+            <h2 className={dashboardStyles.packagesTitle}>Kickstart Your Journey To Financial Freedom</h2>
             <p className="packageSummary">
               Grant Union is an officially registered company operating worldwide under International Financial Legislation (IFL),
               keeping every client protected legally and financially. Every package starts at the $100 company minimum deposit with
               daily commissions that scale from 2.5% to 4% across our 7-day, 14-day, 3-month, and 6-month plans. Withdraw both
               capital and earnings the moment your plan matures.
             </p>
-            <div className="packagesCntn">
+            <div className={dashboardStyles.packageGrid}>
               {PLAN_CONFIG.map((plan) => {
                 const sample = plan.sampleEarning.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const buttonClass = `${dashboardStyles.investButton} ${
+                  plan.featured ? dashboardStyles.diamondButton : dashboardStyles.standardButton
+                }`;
                 return (
-                  <div className={`unitPackage ${plan.featured ? 'fancybg' : ''}`} key={plan.id}>
-                    <h3>{plan.name}</h3>
-                    <p className="packageSubtitle">{plan.subtitle}</p>
-                    <h4>
-                      <span>{formatPercent(plan.dailyRate)} daily</span>
-                      <br />•<br />
-                      <span>{plan.durationLabel}</span>
-                    </h4>
-                    <ul>
-                      <li>
-                        <i className="icofont-tick-mark"></i> <span>Minimum deposit ${plan.minCapital.toLocaleString()}</span>
+                  <div className={`${dashboardStyles.packageCard} ${plan.featured ? dashboardStyles.diamond : ''}`} key={plan.id}>
+                    <div>
+                      <h3 className={dashboardStyles.packageTitle}>{plan.name}</h3>
+                      <p className={dashboardStyles.planSubtitle}>{plan.subtitle}</p>
+                      <div className={dashboardStyles.packagePrice}>
+                        <span>{formatPercent(plan.dailyRate)} daily commission</span>
+                        <span>Term: {plan.durationLabel}</span>
+                      </div>
+                    </div>
+                    <ul className={dashboardStyles.featureList}>
+                      <li className={dashboardStyles.featureItem}>
+                        <i className={`icofont-tick-mark ${dashboardStyles.featureIcon}`}></i>
+                        <span className={dashboardStyles.featureText}>Minimum deposit ${plan.minCapital.toLocaleString()}</span>
                       </li>
-                      <li>
-                        <i className="icofont-tick-mark"></i> <span>Withdraw capital + earnings after {plan.durationLabel}</span>
+                      <li className={dashboardStyles.featureItem}>
+                        <i className={`icofont-tick-mark ${dashboardStyles.featureIcon}`}></i>
+                        <span className={dashboardStyles.featureText}>Withdraw capital + earnings after {plan.durationLabel}</span>
                       </li>
-                      <li>
-                        <i className="icofont-tick-mark"></i> <span>{formatPercent(plan.dailyRate)} daily commission</span>
+                      <li className={dashboardStyles.featureItem}>
+                        <i className={`icofont-tick-mark ${dashboardStyles.featureIcon}`}></i>
+                        <span className={dashboardStyles.featureText}>{formatPercent(plan.dailyRate)} daily commission</span>
                       </li>
-                      <li>
-                        <i className="icofont-tick-mark"></i> <span>Earn ${sample} on a ${plan.minCapital.toLocaleString()} deposit</span>
+                      <li className={dashboardStyles.featureItem}>
+                        <i className={`icofont-tick-mark ${dashboardStyles.featureIcon}`}></i>
+                        <span className={dashboardStyles.featureText}>
+                          Earn $${sample} on a $${plan.minCapital.toLocaleString()} deposit
+                        </span>
                       </li>
                     </ul>
-                    <Link
-                      href={currentUser?.id ? '/profile#packages' : '/signup'}
-                      className={plan.featured ? 'fancyBtn' : 'borderBtn'}
-                    >
+                    <Link href={currentUser?.id ? '/profile#packages' : '/signup'} className={buttonClass}>
                       {currentUser?.id ? 'Invest' : 'Get Started'}
                     </Link>
                   </div>

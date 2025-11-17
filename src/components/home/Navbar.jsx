@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState, useContext, useEffect, useLayoutEffect} from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { themeContext } from '../../../providers/ThemeProvider';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -19,9 +19,15 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
         window.location.href = "/signin";
     }
 
-    useLayoutEffect(() => {
-        const user = JSON.parse(sessionStorage.getItem("activeUser")) || JSON.parse(localStorage.getItem("activeUser"));
-        setCurrentUser(user);
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const storedUser = sessionStorage.getItem("activeUser") || localStorage.getItem("activeUser");
+        if (!storedUser) return;
+        try {
+            setCurrentUser(JSON.parse(storedUser));
+        } catch (err) {
+            console.warn('Invalid cached user payload', err);
+        }
     }, []);
 
     useEffect(() => {
@@ -86,9 +92,9 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                 <Image 
                     src="/grantunionsmall.png" 
                     alt="Grant Union Investment logo" 
-                    width={160} 
-                    height={40}
-                    style={{ height: 'auto', width: 'auto' }}
+                    width={220} 
+                    height={60}
+                    style={{ height: 'auto', width: '220px' }}
                     priority
                 />
             </Link>

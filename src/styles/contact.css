@@ -1,27 +1,27 @@
 :root {
-    --primary-clr: #003459;
-    --sec2-clr: #007EA7;
-    --sec-clr: #00A8E8;
-    --text-clr1: #F5F5F5;
-    --text-deco: #E6EEF5;
-    --white-purple: #D6EBF8;
-    --dark-clr1: #001B2D;
-    --dark-clr2: #01243B;
-    --dark-clr3: #022C4D;
-    --dark-clr4: #03395F;
-    --dark-clr5: #001326;
+    --primary-clr: #1C0F36;
+    --sec2-clr: #3A1A63;
+    --sec-clr: #FF8C37;
+    --text-clr1: #FEF9FF;
+    --text-deco: #EAD8FF;
+    --white-purple: #F8EDFF;
+    --dark-clr1: #120524;
+    --dark-clr2: #1A0833;
+    --dark-clr3: #230E42;
+    --dark-clr4: #311456;
+    --dark-clr5: #080112;
   
-    --opac-clr1: #00345945;
-    --opac-clr2: #007EA77d;
-    --opac-clr3: #003459a1;
+    --opac-clr1: #1C0F3645;
+    --opac-clr2: #FF8C3770;
+    --opac-clr3: #1C0F36a1;
   
     --danger-clr: #DC1262;
     --yellow-clr: #F9F871;
     --green-clr: #2DC194;
-    --grey-clr: #8CA6B1;
-    --linear-grad1: linear-gradient(180deg, #003459 40%, #007EA7);
-    --linear-grad2: linear-gradient(120deg, #003459 , #00A8E8);
-    --linear-grad3: linear-gradient(180deg,  #00A8E8, #003459, #F5F5F5);
+    --grey-clr: #B8A5D6;
+    --linear-grad1: linear-gradient(180deg, #1C0F36 40%, #3A1A63);
+    --linear-grad2: linear-gradient(120deg, #1C0F36 , #FF8C37);
+    --linear-grad3: linear-gradient(180deg,  #FF8C37, #1C0F36, #FEF9FF);
   
   
     --gen-padding: 10%;
