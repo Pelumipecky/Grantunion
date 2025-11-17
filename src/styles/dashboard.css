@@ -19,6 +19,7 @@
     --yellow-clr: #F9F871;
     --green-clr: #2DC194;
     --grey-clr: #B8A5D6;
+    --text-accent: #d7d9e4;
     --linear-grad1: linear-gradient(180deg, #1C0F36 40%, #3A1A63);
     --linear-grad2: linear-gradient(120deg, #1C0F36 , #FF8C37);
     --linear-grad3: linear-gradient(180deg,  #FF8C37, #1C0F36, #FEF9FF);
@@ -307,7 +308,7 @@
 }
 
 .unitUserEarningDisplay h3 span i{
-    color: var(--primary-clr);
+    color: var(--text-accent);
     font-size: 1.2em;
 }
 
@@ -376,7 +377,7 @@
 }
 
 .profilefooter p a{
-    color: var(--primary-clr);
+    color: var(--text-accent);
     font-weight: 500;
     font-size: 1.05em;
 }
@@ -554,7 +555,7 @@
 
 .unitInputField span i{
     font-size: 1.2em;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .profileEditableDisplay button{
@@ -726,7 +727,7 @@
 .investwidgetSection > p span{
     font-size: 1.1em;
     font-weight: 500;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .investMinmax {
@@ -854,7 +855,7 @@
 
 .emptyTable i{
     font-size: 5em;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .emptyTable p{
@@ -864,7 +865,7 @@
 }
 
 .emptyTable p a{
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .emptyTable p button{
@@ -872,7 +873,7 @@
     background-color: transparent;
     border: none;
     outline: none;
-    color: var(--primary-clr);
+    color: var(--text-accent);
     font-size: 1.6em;
     font-weight: 400;
     cursor: pointer;
@@ -921,7 +922,7 @@
 .topmostWithdraw h2 span{
     font-size: 1.5em;
     font-weight: 400;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .mainPaymentSect{
@@ -939,7 +940,7 @@
 
 .mainPaymentSect h3 span{
     font-size: 1.2em;
-    color: var(--primary-clr);
+    color: var(--text-accent);
     font-weight: 500;
 }
 

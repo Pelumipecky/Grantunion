@@ -21,6 +21,7 @@
   --yellow-clr: #F9F871;
   --green-clr: #2DC194;
   --grey-clr: #B8A5D6;
+  --text-accent: #d7d9e4;
   --linear-grad1: linear-gradient(180deg, #1C0F36 40%, #3A1A63);
   --linear-grad2: linear-gradient(120deg, #1C0F36 , #FF8C37);
   --linear-grad3: linear-gradient(180deg,  #FF8C37, #1C0F36, #FEF9FF);
@@ -460,24 +461,34 @@ video {
 
 .translate-widget span {
   font-size: 0.85em;
-  color: var(--text-deco);
-  opacity: 0.85;
+  color: var(--text-clr1);
+  opacity: 0.9;
 }
 
-.translate-widget select {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+.translate-widget select,
+.translate-widget .goog-te-gadget .goog-te-combo {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: 10px;
   padding: 6px 10px;
-  color: var(--text-clr1);
+  color: var(--text-clr1) !important;
+  width: 100%;
+}
+
+.translate-widget option {
+  color: #0d0d17;
 }
 
 .translate-widget .goog-te-gadget {
-  font-family: inherit;
-  color: var(--text-clr1);
+  font-family: inherit !important;
+  color: var(--text-clr1) !important;
+}
+
+.translate-widget .goog-te-gadget img {
+  display: none;
 }
 
 .translate-widget .goog-te-gadget-simple {
   background-color: transparent;
-  border: none;
+  border: none !important;
 }

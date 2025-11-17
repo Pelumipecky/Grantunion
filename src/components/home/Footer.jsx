@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className='homefooter'>
       <div className="firstFooterSect">
         <div className="topper">
-            <Image src="/grantunionsmall.png" alt="Grant Union Investment logo" width={160} height={40} style={{ height: 'auto' }} />
+            <Image src="/grantunionLogo.png" alt="Grant Union Investment logo" width={160} height={40} style={{ height: 'auto' }} />
             <span></span>
             <div className="socials_1">
                 <a href="https://twitter.com/GrantUnionInvest"><Image src="/twitter.svg" alt="twitter" width={24} height={24} /></a>

@@ -17,6 +17,7 @@
   
     --danger-clr: #DC1262;
     --grey-clr: #B8A5D6;
+    --text-accent: #d7d9e4;
     --linear-grad1: linear-gradient(180deg, #1C0F36 40%, #3A1A63);
     --linear-grad2: linear-gradient(120deg, #1C0F36 , #FF8C37);
     --linear-grad3: linear-gradient(180deg,  #FF8C37, #1C0F36, #FEF9FF);
@@ -96,7 +97,7 @@
 }
 
 .leftSide .overlay p span{
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .rightSide{
@@ -440,13 +441,13 @@ form .inputcontainer{
 .inputCntn span i{
     font-size: 0.5em;
     font-weight: 300;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .passcntn button i{
     font-size: 0.6em;
     font-weight: 300;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .inputcontainer .form-control2{
@@ -561,7 +562,7 @@ form .inputcontainer{
     transform: translate(-50%, -50%);
     display: flex;
     font-size: 2em;
-    color: var(--primary-clr);
+    color: var(--text-accent);
     animation: scale 0.5s ease-in-out forwards;
     transform-origin: center;
 }
@@ -645,7 +646,7 @@ form button[type="submit"]{
 }
 
 .haveanaccount a{
-    color: var(--primary-clr);
+    color: var(--text-accent);
     font-size: 1.1em;
 }
 

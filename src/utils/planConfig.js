@@ -1,5 +1,3 @@
-const MINIMUM_CAPITAL = 100;
-
 const BASE_PLANS = [
   {
     id: "plan-7",
@@ -9,6 +7,9 @@ const BASE_PLANS = [
     durationLabel: "7 days",
     dailyRate: 0.025,
     featured: false,
+    minCapital: 100,
+    maxCapital: 999,
+    referralBonus: 0.1,
   },
   {
     id: "plan-14",
@@ -18,6 +19,9 @@ const BASE_PLANS = [
     durationLabel: "14 days",
     dailyRate: 0.03,
     featured: true,
+    minCapital: 600,
+    maxCapital: 4999,
+    referralBonus: 0.1,
   },
   {
     id: "plan-90",
@@ -27,6 +31,9 @@ const BASE_PLANS = [
     durationLabel: "3 months (90 days)",
     dailyRate: 0.035,
     featured: false,
+    minCapital: 5000,
+    maxCapital: 9999,
+    referralBonus: 0.1,
   },
   {
     id: "plan-180",
@@ -36,17 +43,24 @@ const BASE_PLANS = [
     durationLabel: "6 months (180 days)",
     dailyRate: 0.04,
     featured: false,
+    minCapital: 10000,
+    maxCapital: null,
+    referralBonus: 0.1,
   },
 ];
 
 const withComputedFields = BASE_PLANS.map((plan) => {
-  const minCapital = MINIMUM_CAPITAL;
+  const minCapital = plan.minCapital ?? 100;
+  const maxCapital = Number.isFinite(plan.maxCapital) ? plan.maxCapital : null;
+  const referralBonus = typeof plan.referralBonus === "number" ? plan.referralBonus : 0;
   const sampleEarning = parseFloat((minCapital * plan.dailyRate * plan.durationDays).toFixed(2));
   const totalReturnPercent = parseFloat((plan.dailyRate * plan.durationDays * 100).toFixed(1));
 
   return {
     ...plan,
     minCapital,
+    maxCapital,
+    referralBonus,
     sampleEarning,
     totalReturnPercent,
   };

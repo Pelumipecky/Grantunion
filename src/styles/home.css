@@ -17,6 +17,7 @@
   
     --danger-clr: #DC1262;
     --grey-clr: #B8A5D6;
+    --text-accent: #d7d9e4;
     --linear-grad1: linear-gradient(180deg, #1C0F36 40%, #3A1A63);
     --linear-grad2: linear-gradient(120deg, #1C0F36 , #FF8C37);
     --linear-grad3: linear-gradient(180deg,  #FF8C37, #1C0F36, #FEF9FF);
@@ -472,11 +473,11 @@ nav .logoCntn img{
 .homeIntro ul li i{
     margin-right: 16px;
     color: var(--sec-clr);
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .homeIntro ul li span{
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .homeIntro .cta{
@@ -575,7 +576,7 @@ nav .logoCntn img{
 
 .abouttext h2{
     font-size: 3.5em;
-    color: var(--primary-clr);
+    color: var(--text-accent);
     font-weight: 400;
     background-image: linear-gradient(120deg, var(--primary-clr) 0%, var(--sec2-clr) 60%,  var(--sec-clr) 100%);
     color: transparent;
@@ -707,7 +708,7 @@ nav .logoCntn img{
 
 .floater h3{
     font-size: 1.5em;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .floater p{
@@ -913,7 +914,7 @@ nav .logoCntn img{
 }
 
 .leftCta2 h2 span{
-    color: var(--primary-clr);
+    color: var(--text-accent);
     font-size: 1.1em;
 }
 
@@ -1064,7 +1065,7 @@ nav .logoCntn img{
 .testimonies > p{
     font-size: 2.5em;
     font-weight: 400;
-    color: var(--primary-clr);
+    color: var(--text-accent);
     text-align: center;
 }
 
@@ -1178,7 +1179,7 @@ nav .logoCntn img{
 
 .unittestimony .overlay button i{
     font-size: 25px;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .videograndCntn .scrollbtncntn{
@@ -1211,7 +1212,7 @@ nav .logoCntn img{
 
 .videograndCntn .scrollbtncntn button i{
     font-size: 3em;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .intersect{
@@ -1225,7 +1226,7 @@ nav .logoCntn img{
 .intersect p{
     font-size: 2.5em;
     font-weight: 400;
-    color: var(--primary-clr);
+    color: var(--text-accent);
     text-align: center;
 }
 
@@ -1239,7 +1240,7 @@ nav .logoCntn img{
 .user_testimony p{
     font-size: 1.4em;
     font-weight: 500;
-    color: var(--primary-clr);
+    color: var(--text-accent);
     text-align: center;
 
     margin-top: 1em;
@@ -1341,7 +1342,7 @@ nav .logoCntn img{
 
 .answerBody p span{
     font-weight: 500;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .rightFAQ > p{
@@ -1354,7 +1355,7 @@ nav .logoCntn img{
 .rightFAQ > p a{
     font-size: 0.98em;
     font-weight: 500;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .homefooter{
@@ -1483,7 +1484,7 @@ footer .faller{
 .address_1 h5{
     font-size: 1.2em;
     font-weight: 400;
-    color: var(--primary-clr);
+    color: var(--text-accent);
     margin-bottom: 8px;
 }
 

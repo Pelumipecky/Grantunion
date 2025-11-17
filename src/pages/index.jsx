@@ -210,13 +210,17 @@ export default function Home() {
             <h2 className={dashboardStyles.packagesTitle}>Kickstart Your Journey To Financial Freedom</h2>
             <p className="packageSummary">
               Grant Union is an officially registered company operating worldwide under International Financial Legislation (IFL),
-              keeping every client protected legally and financially. Every package starts at the $100 company minimum deposit with
-              daily commissions that scale from 2.5% to 4% across our 7-day, 14-day, 3-month, and 6-month plans. Withdraw both
-              capital and earnings the moment your plan matures.
+              keeping every client protected legally and financially. Each plan now clearly lists the minimum and maximum deposit
+              range (from $100 up to unlimited capital) and includes a standard 10% referral bonus so you always know the exact
+              requirements before investing.
             </p>
             <div className={dashboardStyles.packageGrid}>
               {PLAN_CONFIG.map((plan) => {
                 const sample = plan.sampleEarning.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const maxDepositText = plan.maxCapital
+                  ? `$${plan.maxCapital.toLocaleString()}`
+                  : 'Unlimited';
+                const referralBonusText = formatPercent(plan.referralBonus);
                 const buttonClass = `${dashboardStyles.investButton} ${
                   plan.featured ? dashboardStyles.diamondButton : dashboardStyles.standardButton
                 }`;
@@ -237,11 +241,19 @@ export default function Home() {
                       </li>
                       <li className={dashboardStyles.featureItem}>
                         <i className={`icofont-tick-mark ${dashboardStyles.featureIcon}`}></i>
+                        <span className={dashboardStyles.featureText}>Maximum deposit {maxDepositText}</span>
+                      </li>
+                      <li className={dashboardStyles.featureItem}>
+                        <i className={`icofont-tick-mark ${dashboardStyles.featureIcon}`}></i>
                         <span className={dashboardStyles.featureText}>Withdraw capital + earnings after {plan.durationLabel}</span>
                       </li>
                       <li className={dashboardStyles.featureItem}>
                         <i className={`icofont-tick-mark ${dashboardStyles.featureIcon}`}></i>
                         <span className={dashboardStyles.featureText}>{formatPercent(plan.dailyRate)} daily commission</span>
+                      </li>
+                      <li className={dashboardStyles.featureItem}>
+                        <i className={`icofont-tick-mark ${dashboardStyles.featureIcon}`}></i>
+                        <span className={dashboardStyles.featureText}>Referral bonus {referralBonusText}</span>
                       </li>
                       <li className={dashboardStyles.featureItem}>
                         <i className={`icofont-tick-mark ${dashboardStyles.featureIcon}`}></i>

@@ -19,6 +19,7 @@
     --yellow-clr: #F9F871;
     --green-clr: #2DC194;
     --grey-clr: #B8A5D6;
+    --text-accent: #d7d9e4;
     --linear-grad1: linear-gradient(180deg, #1C0F36 40%, #3A1A63);
     --linear-grad2: linear-gradient(120deg, #1C0F36 , #FF8C37);
     --linear-grad3: linear-gradient(180deg,  #FF8C37, #1C0F36, #FEF9FF);
@@ -79,8 +80,9 @@
     padding: 4px;
 }
 
+
 .preSect a {
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .preSect a:hover{
@@ -90,7 +92,7 @@
 
 .preSect span i{
     font-size: 1em;
-    color: var(--primary-clr);
+    color: var(--text-accent);
 }
 
 .contactFormCntn{
