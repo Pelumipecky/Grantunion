@@ -90,7 +90,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
         <div className="leftBox">
             <Link href={"/"} className={styles.logoCntn}>
                 <Image 
-                    src="/grantunionsmall.png" 
+                    src="/GrantunionLogo.png" 
                     alt="Grant Union Investment logo" 
                     width={220} 
                     height={60}
