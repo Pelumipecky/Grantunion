@@ -42,14 +42,22 @@ const Signin = () => {
             return;
         }
 
+        const trimmedEmail = email.trim().toLowerCase();
+        const trimmedPassword = password.trim();
+        if (!trimmedEmail || !trimmedPassword) {
+            setErrMsg("Email or password cannot be empty");
+            removeErr();
+            return;
+        }
+
         setVerify("verifying");
         try {
             // Sign in with Supabase Auth
-            const { data: authData, error: authError } = await supabaseAuth.signIn(email, password);
+            const { data: authData, error: authError } = await supabaseAuth.signIn(trimmedEmail, trimmedPassword);
             if (authError) throw authError;
 
             // Check if user is admin
-            const { data: userData, error: userError } = await supabaseDb.getUserByEmail(email);
+            const { data: userData, error: userError } = await supabaseDb.getUserByEmail(trimmedEmail);
             if (userError || !userData || !userData.admin) {
                 setErrMsg("Not authorized as admin");
                 setVerify("Default");
@@ -138,7 +146,7 @@ const Signin = () => {
 
             <div className="rightSide">
                 <form onSubmit={handleSubmit}>
-                    <Link href={"/"} className='topsignuplink'><Image src="/topmintLogo.png" alt="logo" width={160} height={40} style={{ height: 'auto' }} /></Link>
+                    <Link href={"/"} className='topsignuplink'><Image src="/grantunionLogo.png" alt="Grant Union Investment logo" width={160} height={40} style={{ height: 'auto' }} /></Link>
                     <h1>Admin Sign In</h1>
                     <div className="inputcontainer">
                         <div className="inputCntn">

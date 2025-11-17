@@ -1,5 +1,5 @@
-
 import styles from "./DashboardSect.module.css";
+import { PLAN_CONFIG, formatPercent } from "../../utils/planConfig";
 
 const InvestmentSect = ({ setWidgetState, setInvestData, currentUser, investments}) => {
   const currentDate = new Date();
@@ -11,25 +11,25 @@ const InvestmentSect = ({ setWidgetState, setInvestData, currentUser, investment
   const dateString =
     currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
 
-    const investProcess = (vlad, clad, blad) => {
-        setInvestData({
-            idnum: currentUser?.idnum,
-            plan: vlad,
-            status: "Pending",
-            capital: clad,
-            date: new Date().toISOString(),
-            duration: blad,
-            paymentOption: "Bitcoin",
-            authStatus: "unseen",
-            admin: false,
-            roi: 0,
-            bonus: 0
-        });
-        setWidgetState({
-            state: true,
-            type: "invest",
-        })
-    }
+    const handlePlanInvest = (plan) => {
+      setInvestData({
+        idnum: currentUser?.idnum,
+        plan: plan.name,
+        status: "Pending",
+        capital: plan.minCapital,
+        date: new Date().toISOString(),
+        duration: plan.durationDays,
+        paymentOption: "Bitcoin",
+        authStatus: "unseen",
+        admin: false,
+        roi: 0,
+        bonus: 0
+      });
+      setWidgetState({
+        state: true,
+        type: "invest",
+      });
+    };
   return (
     <div className="investmentMainCntn">
       <div className="myinvestmentSection">
@@ -78,96 +78,45 @@ const InvestmentSect = ({ setWidgetState, setInvestData, currentUser, investment
         <section className={styles.packages} id="packages">
           <h2 className={styles.packagesTitle}>Our Available Packages</h2>
         <div className={styles.packageGrid}>
-          <div className={styles.packageCard}>
-            <div className={styles.packageTitle}>SILVER</div>
-            <div className={styles.packagePrice}>
-              <span>$100</span> - <span>$900</span>
-            </div>
-            <ul className={styles.featureList}>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>5X ROI</span>
-              </li>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>5X bonus on investment</span>
-              </li>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>Get ROI and bonus in 2 Days</span>
-              </li>
-            </ul>
-            <button 
-              className={`${styles.investButton} ${styles.standardButton}`}
-              onClick={() => {investProcess("Silver", 100, 2)}}
-            >
-              Start Investing
-            </button>
-          </div>
-
-          <div className={`${styles.packageCard} ${styles.diamond}`}>
-            <div className={styles.packageTitle}>
-              DIAMOND <i className="icofont-diamond"></i>
-            </div>
-            <div className={styles.packagePrice}>
-              <span>$10,000</span> - <span>$100,000</span>
-            </div>
-            <ul className={styles.featureList}>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>5X ROI</span>
-              </li>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>10X Bonus on investment</span>
-              </li>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>Get ROI and bonus in 7 Days</span>
-              </li>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>Access to 15 digital financial resources</span>
-              </li>
-            </ul>
-            <button 
-              className={`${styles.investButton} ${styles.diamondButton}`}
-              onClick={() => {investProcess("Diamond", 10000, 7)}}
-            >
-              Premium Investment
-            </button>
-          </div>
-
-          <div className={styles.packageCard}>
-            <div className={styles.packageTitle}>GOLD</div>
-            <div className={styles.packagePrice}>
-              <span>$1,000</span> - <span>$9000</span>
-            </div>
-            <ul className={styles.featureList}>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>5X ROI</span>
-              </li>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>8X Bonus on investment</span>
-              </li>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>Get ROI and bonus in 4 Days</span>
-              </li>
-              <li className={styles.featureItem}>
-                <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
-                <span className={styles.featureText}>Access to 5 digital financial resources</span>
-              </li>
-            </ul>
-            <button 
-              className={`${styles.investButton} ${styles.standardButton}`}
-              onClick={() => {investProcess("Gold", 1000, 5)}}
-            >
-              Start Investing
-            </button>
-          </div>
+          {PLAN_CONFIG.map((plan) => {
+            const cardClass = `${styles.packageCard} ${plan.featured ? styles.diamond : ''}`;
+            const buttonClass = `${styles.investButton} ${plan.featured ? styles.diamondButton : styles.standardButton}`;
+            const sample = plan.sampleEarning.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return (
+              <div className={cardClass} key={plan.id}>
+                <div className={styles.packageTitle}>{plan.name}</div>
+                <p className={styles.planSubtitle}>{plan.subtitle}</p>
+                <div className={styles.packagePrice}>
+                  <span>{formatPercent(plan.dailyRate)} daily commission</span>
+                  <span>Term: {plan.durationLabel}</span>
+                </div>
+                <ul className={styles.featureList}>
+                  <li className={styles.featureItem}>
+                    <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
+                    <span className={styles.featureText}>Minimum deposit ${plan.minCapital.toLocaleString()}</span>
+                  </li>
+                  <li className={styles.featureItem}>
+                    <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
+                    <span className={styles.featureText}>Withdraw after {plan.durationLabel}</span>
+                  </li>
+                  <li className={styles.featureItem}>
+                    <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
+                    <span className={styles.featureText}>{formatPercent(plan.dailyRate)} credited daily</span>
+                  </li>
+                  <li className={styles.featureItem}>
+                    <i className={`icofont-tick-mark ${styles.featureIcon}`}></i>
+                    <span className={styles.featureText}>Earn ${sample} on ${plan.minCapital.toLocaleString()}</span>
+                  </li>
+                </ul>
+                <button 
+                  className={buttonClass}
+                  onClick={() => handlePlanInvest(plan)}
+                >
+                  Start Investing
+                </button>
+              </div>
+            );
+          })}
         </div>
       </section>
       </div>

@@ -18,6 +18,9 @@ import PaymentSect from "../components/dashboard/PaymentSect";
 import WithdrawalPayment from "../components/dashboard/WithdrawPayment";
 import LoansAdmin from "../components/dashAdmin/LoansAdmin";
 import KycAdmin from "../components/dashAdmin/KycAdmin";
+import { PLAN_CONFIG } from "../utils/planConfig";
+
+const DEFAULT_PLAN = PLAN_CONFIG[0];
 
 
 export default function DashboardAdmin() {
@@ -212,13 +215,13 @@ export default function DashboardAdmin() {
   useEffect(() => {
     const adminData = JSON.parse(localStorage.getItem("adminData") || "null");
     if (adminData) {
-      setCurrentUser({
-        ...currentUser,
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
         ...adminData,
         name: adminData.name || "Admin",
         avatar: adminData.avatar || "avatar_1",
         email: adminData.email || "",
-      });
+      }));
     }
   }, []);
 
@@ -242,11 +245,11 @@ export default function DashboardAdmin() {
 
   const [investData, setInvestData] = useState({
     idnum: currentUser?.idnum,
-    plan: "Gold",
+    plan: DEFAULT_PLAN?.name || "7-Day Plan",
     status: "Pending",
-    capital: 0,
+    capital: DEFAULT_PLAN?.minCapital || 100,
     date: defaultDate,
-    duration: 5,
+    duration: DEFAULT_PLAN?.durationDays || 7,
     paymentOption: "Bitcoin",
     roi: 0,
     bonus: 0,
@@ -390,7 +393,7 @@ export default function DashboardAdmin() {
       <div id="mobilenone" className="leftProfile">
         <div className="topmostRightPrile">
             <Link href="/">
-              <Image src="/topmintLogo.png" className="theLogo" alt="logo" width={160} height={40} style={{ height: 'auto' }} />
+              <Image src="/grantunionLogo.png" className="theLogo" alt="Grant Union Investment logo" width={160} height={40} style={{ height: 'auto' }} />
             </Link>
           <div className="panelPrfileDisp">
             <div
@@ -629,7 +632,7 @@ export default function DashboardAdmin() {
           >
             <div className="topmostRightPrile">
               <Link href={"/"}>
-                <img src="/topmintLogo.png" className="theLogo" alt="logo" style={{ height: 'auto', width: '160px' }} />
+                <Image src="/grantunionLogo.png" className="theLogo" alt="Grant Union Investment logo" width={160} height={40} style={{ height: 'auto', width: '160px' }} />
               </Link>
               <div className="panelPrfileDisp">
                 <div

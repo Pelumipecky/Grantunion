@@ -62,7 +62,7 @@ export default function LoansAdmin({ setProfileState, currentUser }) {
             .single();
 
           if (!userError && userData?.email) {
-            const emailSubject = `Loan Request ${newStatus} - TopMintInvest`;
+            const emailSubject = `Loan Request ${newStatus} - Grant Union Investment`;
             const emailMessage = `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <h2 style="color: ${newStatus === 'Approved' ? '#28a745' : '#dc3545'};">${newStatus === 'Approved' ? '✅' : '❌'} Loan Request ${newStatus}</h2>
@@ -81,7 +81,7 @@ export default function LoansAdmin({ setProfileState, currentUser }) {
                 ` : `
                   <p>If you have any questions about this decision or would like to discuss alternative options, please contact our support team.</p>
                 `}
-                <p>Best regards,<br>TopMintInvest Team</p>
+                <p>Best regards,<br>Grant Union Investment Team</p>
                 <hr>
                 <p style="font-size: 12px; color: #666;">
                   This is an automated message. Please do not reply to this email.

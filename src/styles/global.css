@@ -1,27 +1,29 @@
-:root {
-  --primary-clr: #0672CD;
-  --sec2-clr: #9864AD;
-  --sec-clr: #D8A31A;
-  --text-clr1: #F5F9FF;
-  --text-deco: #F3F9FF;
-  --white-purple: #b9dfff;
-  --dark-clr1: #000613;
-  --dark-clr2: #070e1e;
-  --dark-clr3: #020d25;
-  --dark-clr4: #002848;
-  --dark-clr5: #070032;
+@import url('/icofont/icofont.min.css');
 
-  --opac-clr1: #00123345;
-  --opac-clr2: #0263b37d;
-  --opac-clr3: #364763a1;
+:root {
+  --primary-clr: #003459;
+  --sec2-clr: #007EA7;
+  --sec-clr: #00A8E8;
+  --text-clr1: #F5F5F5;
+  --text-deco: #E6EEF5;
+  --white-purple: #D6EBF8;
+  --dark-clr1: #001B2D;
+  --dark-clr2: #01243B;
+  --dark-clr3: #022C4D;
+  --dark-clr4: #03395F;
+  --dark-clr5: #001326;
+
+  --opac-clr1: #00345945;
+  --opac-clr2: #007EA77d;
+  --opac-clr3: #003459a1;
 
   --danger-clr: #DC1262;
   --yellow-clr: #F9F871;
   --green-clr: #2DC194;
-  --grey-clr: #928e84;
-  --linear-grad1: linear-gradient(180deg, #0672cd 40%, #d8a31a);
-  --linear-grad2: linear-gradient(120deg, #0672cd , #d8a31a);
-  --linear-grad3: linear-gradient(180deg,  #d8a31a, #0672cd, #d8a31a);
+  --grey-clr: #8CA6B1;
+  --linear-grad1: linear-gradient(180deg, #003459 40%, #007EA7);
+  --linear-grad2: linear-gradient(120deg, #003459 , #00A8E8);
+  --linear-grad3: linear-gradient(180deg,  #00A8E8, #003459, #F5F5F5);
 
 
   --gen-padding: 10%;

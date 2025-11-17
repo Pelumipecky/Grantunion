@@ -19,6 +19,9 @@ import LoanSect from "../components/dashboard/LoanSect";
 import KYC from "../components/dashboard/KYC";
 import Head from "next/head";
 import Script from "next/script";
+import { PLAN_CONFIG } from "../utils/planConfig";
+
+const DEFAULT_PLAN = PLAN_CONFIG[0];
 
 const Profile = () => {
   const router = useRouter();
@@ -65,12 +68,12 @@ const Profile = () => {
   });
 
   const [investData, setInvestData] = useState({
-    idnum: 101010, // Use default value instead of currentUser?.idnum
-    plan: "Gold",
+    idnum: 101010,
+    plan: DEFAULT_PLAN?.name || "7-Day Plan",
     status: "Pending",
-    capital: 0,
+    capital: DEFAULT_PLAN?.minCapital || 100,
     date: new Date().toISOString(),
-    duration: 5,
+    duration: DEFAULT_PLAN?.durationDays || 7,
     paymentOption: "Bitcoin",
     roi: 0,
     bonus: 0,
@@ -244,7 +247,7 @@ const Profile = () => {
       notificationsSubscription.unsubscribe();
       if (kycSubscription) kycSubscription.unsubscribe();
     };
-  }, [currentUser?.idnum]);
+  }, [currentUser?.idnum, currentUser?.id]);
 
   // Router moved to top of component
   async function fetchData(path, stateSetter) {
@@ -376,7 +379,7 @@ const Profile = () => {
     }
     setupListener();
     return () => { if (subscription) subscription.unsubscribe(); };
-  }, []);
+  }, [router, setregisterFromPath]);
 
 
 
@@ -464,7 +467,7 @@ const Profile = () => {
       <div id="mobilenone" className="leftProfile">
         <div className="topmostRightPrile">
           <Link href={"/"}>
-            <Image src="/topmintLogo.png" className="theLogo" alt="logo" width={160} height={40} style={{ height: 'auto' }} />
+            <Image src="/grantunionLogo.png" className="theLogo" alt="Grant Union Investment logo" width={160} height={40} style={{ height: 'auto' }} />
           </Link>
           <div className="panelPrfileDisp">
             <div
@@ -608,6 +611,10 @@ const Profile = () => {
           <div className="unitUserEarningDisplay fancybg">
             <h3>Active / Pending Plans</h3>
             <h2>{investments.length}</h2>
+          </div>
+          <div className="unitUserEarningDisplay fancybg">
+            <h3>Referrals</h3>
+            <h2>{Number(currentUser?.referralCount || 0).toLocaleString()}</h2>
           </div>
         </div>
         {profilestate === "Dashboard" && (
@@ -757,7 +764,7 @@ const Profile = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src="/cloudflare.png" alt="cloudflare" style={{ height: 'auto' }} />
+              <Image src="/cloudflare.png" alt="cloudflare" width={120} height={40} style={{ height: 'auto' }} />
             </a>
           </p>
         </footer>
@@ -803,7 +810,7 @@ const Profile = () => {
           >
             <div className="topmostRightPrile">
               <Link href={"/"}>
-                <img src="/topmintLogo.png" className="theLogo" alt="logo" style={{ height: 'auto', width: '160px' }} />
+                <Image src="/grantunionLogo.png" className="theLogo" alt="Grant Union Investment logo" width={160} height={40} style={{ height: 'auto', width: '160px' }} />
               </Link>
               <div className="panelPrfileDisp">
                 <div
@@ -883,7 +890,8 @@ const Profile = () => {
       {/* Load Tawk.to chat widget only for non-admin users */}
       {!currentUser?.admin && (
         <Script
-          src="https://embed.tawk.to/6917d2021d89b1195dfc3d49/1ja2gomk8"
+          src="https://embed.tawk.to/691a8701dde8a319591806a0/1ja7puo6d"
+          crossOrigin="anonymous"
           strategy="afterInteractive"
           onLoad={() => {
             console.log('Tawk.to loaded successfully');

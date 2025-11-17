@@ -7,6 +7,7 @@ import Navbar from "../components/home/Navbar";
 import Link from "next/link";
 import IframeSect from "../components/home/IframeSect";
 import Image from 'next/image';
+import { PLAN_CONFIG, formatPercent } from '../utils/planConfig';
 
 
 export default function Home() {
@@ -139,7 +140,7 @@ export default function Home() {
             </div>
           </section>
           <section className="features">
-            <h2>You Can Never Go Wrong With TOPMINT</h2>
+            <h2>You Can Never Go Wrong With Grant Union Investment</h2>
             <div className="thefeatureGrid">
               <div className="topSubgrid">
                 <div className="lefttopSubgrid">
@@ -204,36 +205,35 @@ export default function Home() {
             !currentUser?.admin && (
               <section id="packages" className="packages">
                 <h2>Kickstart Your Journey To Financial Freedom</h2>
+                <p className="packageSummary">
+                  Grant Union operates worldwide as an officially registered company under International Financial Legislation (IFL),
+                  safeguarding every investor. Our $100 minimum deposit unlocks daily commissions from 2.5% up to 4% across 7-day,
+                  14-day, 3-month, and 6-month plans, with the freedom to withdraw capital and earnings immediately after maturity.
+                </p>
                 <div className="packagesCntn">
-                  <div className="unitPackage">
-                    <h3>SILVER</h3>
-                    <h4><span>$100</span> <br /> - <br /> <span>$900</span></h4>
-                    <ul>
-                      <li><i className="icofont-tick-mark"></i> <span>5X ROI</span></li>
-                      <li><i className="icofont-tick-mark"></i> <span>Get ROI in 2 Days</span></li>
-                    </ul>
-                    <Link href={currentUser?.id ? "/profile#packages" : "/signup"} className="borderBtn">Invest</Link>
-                  </div>
-                  <div className="unitPackage fancybg">
-                    <h3>DIAMOND <i className="icofont-diamond"></i></h3>
-                    <h4><span>$10,000</span> <br /> - <br /> <span>$100,000</span></h4>
-                    <ul>
-                      <li><i className="icofont-tick-mark"></i> <span>10X ROI</span></li>
-                      <li><i className="icofont-tick-mark"></i> <span>Get ROI in 7 Days</span></li>
-                      <li><i className="icofont-tick-mark"></i> <span>Access to 15 of our digital financial resources</span></li>
-                    </ul>
-                    <Link href={currentUser?.id ? "/profile#packages" : "/signup"} className="fancyBtn">Get Rich</Link>
-                  </div>
-                  <div className="unitPackage">
-                    <h3>GOLD</h3>
-                    <h4><span>$1,000</span> <br /> - <br /> <span>$9,000</span></h4>
-                    <ul>
-                      <li><i className="icofont-tick-mark"></i> <span>7X ROI</span></li>
-                      <li><i className="icofont-tick-mark"></i> <span>Get ROI in 4 Days</span></li>
-                      <li><i className="icofont-tick-mark"></i> <span>Access to 5 of our digital financial resources</span></li>
-                    </ul>
-                    <Link href={currentUser?.id ? "/profile#packages" : "/signup"} className="borderBtn">Invest</Link>
-                  </div>
+                  {PLAN_CONFIG.map((plan) => {
+                    const sample = plan.sampleEarning.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    return (
+                      <div className={`unitPackage ${plan.featured ? 'fancybg' : ''}`} key={plan.id}>
+                        <h3>{plan.name}</h3>
+                        <p className="packageSubtitle">{plan.subtitle}</p>
+                        <h4>
+                          <span>{formatPercent(plan.dailyRate)} daily</span>
+                          <br />•<br />
+                          <span>{plan.durationLabel}</span>
+                        </h4>
+                        <ul>
+                          <li><i className="icofont-tick-mark"></i> <span>Minimum deposit ${plan.minCapital.toLocaleString()}</span></li>
+                          <li><i className="icofont-tick-mark"></i> <span>{formatPercent(plan.dailyRate)} daily commission</span></li>
+                          <li><i className="icofont-tick-mark"></i> <span>Withdraw capital + earnings after {plan.durationLabel}</span></li>
+                          <li><i className="icofont-tick-mark"></i> <span>Earn ${sample} on ${plan.minCapital.toLocaleString()}</span></li>
+                        </ul>
+                        <Link href={currentUser?.id ? "/profile#packages" : "/signup"} className={plan.featured ? 'fancyBtn' : 'borderBtn'}>
+                          {currentUser?.id ? 'Invest' : 'Get Started'}
+                        </Link>
+                      </div>
+                    );
+                  })}
                 </div>
               </section>
             )

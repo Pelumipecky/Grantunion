@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     const { message, type, userId, amount } = req.body;
 
     // Format the message based on notification type
-    let formattedMessage = '🔔 <b>TopMint Notification</b>\n\n';
+    let formattedMessage = '🔔 <b>Grant Union Investment Notification</b>\n\n';
     
     switch (type) {
       case 'investment':

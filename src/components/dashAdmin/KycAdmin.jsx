@@ -124,7 +124,7 @@ export default function KycAdmin({ currentUser }) {
                   ? '<p>You can now access all withdrawal features and premium services on our platform.</p>'
                   : '<p>Please review your submitted documents and contact our support team if you need assistance.</p>'
                 }
-                <p>Best regards,<br>TopMintInvest Team</p>
+                <p>Best regards,<br>Grant Union Investment Team</p>
                 <hr>
                 <p style="font-size: 12px; color: #666;">
                   This is an automated message. Please do not reply to this email.

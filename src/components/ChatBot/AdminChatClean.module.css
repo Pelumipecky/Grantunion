@@ -17,7 +17,7 @@
 .selectedUser { background:#e8f2ff; }
 
 .chatWindow { flex:1; display:flex; flex-direction:column; background:#fff; }
-.chatHeader { padding:14px 16px; background:linear-gradient(135deg,#0672CD,#0550a0); color:white; display:flex; align-items:center; }
+.chatHeader { padding:14px 16px; background:linear-gradient(135deg,var(--primary-clr),var(--sec2-clr)); color:white; display:flex; align-items:center; }
 .backButton { display:none; }
 
 .messageList { flex:1; padding:16px; overflow-y:auto; background:#f0efe9; }
@@ -28,7 +28,7 @@
 .messageInputContainer { padding:12px; background:#fafafa; border-top:1px solid #eef2f6; }
 .messageForm { display:flex; gap:8px; }
 .messageInput { flex:1; padding:10px; border-radius:8px; border:1px solid #e6edf3; }
-.sendButton { padding:10px 14px; border-radius:8px; background:#0672CD; color:white; border:none; }
+.sendButton { padding:10px 14px; border-radius:8px; background:var(--sec2-clr); color:white; border:none; }
 
 @media (max-width: 768px) {
   .usersList { position:absolute; left:0; top:0; width:100%; height:100vh; transform:translateX(0); z-index:20; }

@@ -162,7 +162,7 @@ function ChatBot() {
             {isOpen && (
                 <div className={styles.chatWindow}>
                     <div className={styles.chatHeader}>
-                        <h3>TopMint Support</h3>
+                        <h3>Grant Union Investment Support</h3>
                         <button onClick={() => setIsOpen(false)}>×</button>
                     </div>
                     

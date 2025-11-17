@@ -19,8 +19,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 async function setupAdmin() {
-  const adminEmail = "admin@topmint.com";
-  const adminPassword = "TopMint@123"; // Using a simpler but still secure password
+  const adminEmail = "admin@grantunioninvestment.com";
+  const adminPassword = "GrantUnion@123"; // Using a simpler but still secure password
 
   try {
     console.log("Starting admin setup...");

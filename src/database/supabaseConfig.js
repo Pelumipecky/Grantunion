@@ -25,4 +25,5 @@ export const supabase = createClient(maskedSupabaseUrl, supabaseAnonKey);
 export const db = null;
 export const storage = null;
 export const auth = null;
-export default null;
+const legacyDefault = null;
+export default legacyDefault;

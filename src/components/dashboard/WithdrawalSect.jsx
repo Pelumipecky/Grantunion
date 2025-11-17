@@ -94,14 +94,14 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
         if (withdrawalsSubscription) withdrawalsSubscription.unsubscribe();
         if (kycSubscription) kycSubscription.unsubscribe();
       };
-    }, [currentUser?.idnum]);
+    }, [currentUser?.idnum, currentUser?.id]);
 
   return (
     <div className='widthdrawMainSect'>
         <div className="topmostWithdraw">
             <h2 style={{ color: '#F3F9FF', fontSize: '1.5em' }}>
               Total Balance:
-              <span style={{ color: '#0672CD', fontWeight: 'bold' }}>
+              <span style={{ color: '#003459', fontWeight: 'bold' }}>
                 ${(() => {
                   // Calculate total available balance like in the profile dashboard
                   const userBalance = parseFloat(currentUser?.balance || 0);

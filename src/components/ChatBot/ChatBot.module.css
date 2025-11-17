@@ -9,19 +9,19 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: #0672CD;
+    background: var(--primary-clr);
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 15px rgba(6, 114, 205, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 52, 89, 0.35);
     transition: all 0.3s ease;
 }
 
 .chatToggle:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(6, 114, 205, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 52, 89, 0.45);
 }
 
 .chatToggle i {
@@ -51,7 +51,7 @@
 
 .chatHeader {
     padding: 15px 20px;
-    background: #0672CD;
+    background: var(--primary-clr);
     color: white;
     display: flex;
     justify-content: space-between;
@@ -98,19 +98,19 @@
 }
 
 .bot {
-    background: #1e3a8a;
+    background: var(--primary-clr);
     color: white;
     align-self: flex-start;
     border-bottom-left-radius: 5px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(0, 126, 167, 0.25);
 }
 
 .user {
-    background: #0672CD;
+    background: var(--sec2-clr);
     color: white;
     align-self: flex-end;
     border-bottom-right-radius: 5px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(0, 126, 167, 0.25);
 }
 
 .inputContainer {
@@ -140,8 +140,8 @@
 }
 
 .inputContainer input:focus {
-    border-color: #0672CD;
-    box-shadow: 0 0 0 3px rgba(6,114,205,0.1);
+    border-color: var(--sec2-clr);
+    box-shadow: 0 0 0 3px rgba(0,126,167,0.2);
 }
 
 .inputContainer input::placeholder {
@@ -149,7 +149,7 @@
 }
 
 .inputContainer button {
-    background: #0672CD;
+    background: var(--sec2-clr);
     color: white;
     border: none;
     padding: 8px 20px;
@@ -160,7 +160,7 @@
 }
 
 .inputContainer button:hover {
-    background: #0563b4;
+    background: var(--sec-clr);
     transform: translateY(-1px);
 }
 

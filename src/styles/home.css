@@ -1,25 +1,25 @@
 :root {
-    --primary-clr: #0672CD;
-    --sec2-clr: #9864AD;
-    --sec-clr: #D8A31A;
-    --text-clr1: #F5F9FF;
-    --text-deco: #F3F9FF;
-    --white-purple: #b9dfff;
-    --dark-clr1: #000613;
-    --dark-clr2: #070e1e;
-    --dark-clr3: #020d25;
-    --dark-clr4: #002848;
-    --dark-clr5: #070032;
+    --primary-clr: #003459;
+    --sec2-clr: #007EA7;
+    --sec-clr: #00A8E8;
+    --text-clr1: #F5F5F5;
+    --text-deco: #E6EEF5;
+    --white-purple: #D6EBF8;
+    --dark-clr1: #001B2D;
+    --dark-clr2: #01243B;
+    --dark-clr3: #022C4D;
+    --dark-clr4: #03395F;
+    --dark-clr5: #001326;
 
-    --opac-clr1: #00123345;
-    --opac-clr2: #0263b37d;
-    --opac-clr3: #364763a1;
+    --opac-clr1: #00345945;
+    --opac-clr2: #007EA77d;
+    --opac-clr3: #003459a1;
   
     --danger-clr: #DC1262;
-    --grey-clr: #5b574e;
-    --linear-grad1: linear-gradient(180deg, #0672cd 40%, #d8a31a);
-    --linear-grad2: linear-gradient(120deg, #0672cd , #d8a31a);
-    --linear-grad3: linear-gradient(180deg,  #d8a31a, #0672cd, #d8a31a);
+    --grey-clr: #8CA6B1;
+    --linear-grad1: linear-gradient(180deg, #003459 40%, #007EA7);
+    --linear-grad2: linear-gradient(120deg, #003459 , #00A8E8);
+    --linear-grad3: linear-gradient(180deg,  #00A8E8, #003459, #F5F5F5);
 
   
     --gen-padding: 10%;
@@ -93,7 +93,7 @@ nav .logoCntn img{
 .fancyBtn{
     height: var(--btn-height);
     border-radius: 40px;
-    background-image: linear-gradient(160deg, #0672cd 30%, #d8a31a, #0672cd 20%, #d8a31a);
+    background-image: linear-gradient(160deg, var(--primary-clr) 30%, var(--sec-clr), var(--primary-clr) 20%, var(--sec-clr));
     width: max-content;
     padding-inline: 25px;
     font-size: 1.1em;
@@ -113,7 +113,7 @@ nav .logoCntn img{
 }
 
 .fancybg, .unitPackage.fancybg{
-    background-image: linear-gradient(170deg, #0672cd, #d8a31a);
+    background-image: linear-gradient(170deg, var(--primary-clr), var(--sec2-clr));
     position: relative;
     isolation: isolate;
 }
@@ -514,7 +514,7 @@ nav .logoCntn img{
     font-size: 2.5em;
     font-weight: 600;
     color: transparent;
-    background-image: linear-gradient(120deg, #0672cd,  #d8a31a);
+    background-image: linear-gradient(120deg, var(--primary-clr),  var(--sec2-clr));
     -webkit-background-clip: text;
     background-clip: text;
 }
@@ -577,7 +577,7 @@ nav .logoCntn img{
     font-size: 3.5em;
     color: var(--primary-clr);
     font-weight: 400;
-    background-image: linear-gradient(120deg, #0672cd, 60%,  #d8a31a);
+    background-image: linear-gradient(120deg, var(--primary-clr) 0%, var(--sec2-clr) 60%,  var(--sec-clr) 100%);
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
@@ -630,7 +630,7 @@ nav .logoCntn img{
 .companyscopes .unitscope h3{
     font-size: 1.7em;
     font-weight: 500;
-    background-image: linear-gradient(160deg, #0672cd,  #d8a31a);
+    background-image: linear-gradient(160deg, var(--primary-clr),  var(--sec2-clr));
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
@@ -1025,6 +1025,17 @@ nav .logoCntn img{
     text-shadow: 0 0 30px rgba(255,255,255,0.2);
 }
 
+.packages .packageSummary{
+    max-width: 900px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: var(--text-deco);
+    margin: -1em auto 1em;
+    z-index: 1;
+}
+
 .packagesCntn{
     width: 100%;
     min-width: 600px;
@@ -1093,6 +1104,15 @@ nav .logoCntn img{
     margin-bottom: 1.5em;
     position: relative;
     transition: all 0.3s ease;
+}
+
+.unitPackage .packageSubtitle{
+    font-size: 0.95em;
+    letter-spacing: 0.1em;
+    color: var(--text-deco);
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: -10px;
 }
 
 .unitPackage:hover h4 {

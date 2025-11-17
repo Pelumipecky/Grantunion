@@ -20,8 +20,8 @@ const db = getFirestore(app);
 
 async function createNewAdmin() {
   // Simple admin credentials
-  const adminEmail = "admin@topmint.com";
-  const adminPassword = "Admin123!";
+  const adminEmail = "admin@grantunioninvestment.com";
+  const adminPassword = "GrantUnion@123";
 
   try {
     console.log("Creating new admin account...");

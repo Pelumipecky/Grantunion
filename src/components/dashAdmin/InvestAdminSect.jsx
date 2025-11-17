@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { supabaseDb } from "../../database/supabaseUtils";
 import { supabase } from "../../database/supabaseConfig";
+import { PLAN_CONFIG_MAP, LEGACY_PLAN_RULES, formatPercent } from "../../utils/planConfig";
 
 const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCapital, bitPrice, ethPrice, currentUser }) => {
     const [filterStatus, setFilterStatus] = useState('all');
@@ -21,7 +22,7 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
         return matchesStatus && matchesSearch;
     });
 
-    const handleActiveInvestment = async (vlad) => {
+    const handleActiveInvestment = useCallback(async (vlad) => {
         try {
             await supabaseDb.updateInvestment(vlad?.id, {
                 status: "Expired",
@@ -30,10 +31,10 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
         } catch (error) {
             console.error('Error updating investment:', error);
         }
-    };
+    }, [setProfileState]);
 
     // Function to distribute earnings over time
-    const distributeEarnings = async (investment) => {
+    const distributeEarnings = useCallback(async (investment) => {
         try {
             const investmentDate = new Date(investment.date);
             const now = new Date();
@@ -120,7 +121,7 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
         } catch (error) {
             console.error('Error distributing earnings:', error);
         }
-    };
+      }, []);
 
     useEffect(() => {
         investments.forEach((elem) => {
@@ -136,7 +137,7 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                 }
             }
         });
-    }, [investments]);
+    }, [handleActiveInvestment, distributeEarnings, investments]);
   return (
     <div className="investmentMainCntn">
       <div className="overviewSection">
@@ -277,31 +278,49 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                         onClick={async (e) => {
                                                             e.stopPropagation();
 
-                                                            // Calculate ROI and bonus based on plan
+                                                            // Calculate ROI using new plan config (fallback to legacy rules if needed)
                                                             const capital = parseFloat(elem.capital) || 0;
-                                                            let roiMultiplier = 5; // Default 5X ROI for all plans
-                                                            let bonusMultiplier = 0;
+                                                            const planConfig = PLAN_CONFIG_MAP[elem.plan];
+                                                            const legacyRule = PLAN_CONFIG_MAP[elem.plan] ? null : LEGACY_PLAN_RULES[elem.plan?.toLowerCase() || ''];
+                                                            const fallbackDuration = elem.duration || planConfig?.durationDays || 7;
+                                                            const termLabel = planConfig?.durationLabel || `${fallbackDuration} days`;
 
-                                                            // Set bonus multiplier based on plan
-                                                            switch (elem.plan?.toLowerCase()) {
-                                                                case 'silver':
-                                                                    bonusMultiplier = 5; // 5X bonus
-                                                                    break;
-                                                                case 'gold':
-                                                                    bonusMultiplier = 8; // 8X bonus
-                                                                    break;
-                                                                case 'diamond':
-                                                                    bonusMultiplier = 10; // 10X bonus
-                                                                    break;
-                                                                default:
-                                                                    bonusMultiplier = 5; // Default to 5X
+                                                            let calculatedROI = 0;
+                                                            let calculatedBonus = 0;
+                                                            let payoutSummary = '';
+
+                                                            if (planConfig) {
+                                                              calculatedROI = capital * planConfig.dailyRate * planConfig.durationDays;
+                                                              payoutSummary = `${formatPercent(planConfig.dailyRate)} daily • ${planConfig.durationLabel}`;
+                                                            } else if (legacyRule) {
+                                                              calculatedROI = capital * legacyRule.roiMultiplier;
+                                                              calculatedBonus = capital * legacyRule.bonusMultiplier;
+                                                              payoutSummary = `${legacyRule.roiMultiplier}X ROI (legacy ${elem.plan} plan)`;
+                                                            } else {
+                                                              const fallbackRate = 0.025;
+                                                              calculatedROI = capital * fallbackRate * fallbackDuration;
+                                                              payoutSummary = `${formatPercent(fallbackRate)} daily • ${fallbackDuration} days (fallback)`;
                                                             }
 
-                                                            const calculatedROI = capital * roiMultiplier;
-                                                            const calculatedBonus = capital * bonusMultiplier;
+                                                            const confirmMessage = [
+                                                              `Approve investment ${elem.id} for user ${elem.idnum}?`,
+                                                              '',
+                                                              `Plan: ${elem.plan}`,
+                                                              `Capital: $${capital.toLocaleString()}`,
+                                                              `Projected earnings: $${calculatedROI.toLocaleString()}`,
+                                                              calculatedBonus > 0 ? `Legacy bonus: $${calculatedBonus.toLocaleString()}` : null,
+                                                              `Payout schedule: ${payoutSummary}`,
+                                                              '',
+                                                              `This will credit the capital immediately. Earnings accrue over ${termLabel}.`
+                                                            ].filter(Boolean).join('\n');
 
-                                                            const ok = window.confirm(`Approve investment ${elem.id} for user ${elem.idnum}?\n\nPlan: ${elem.plan}\nCapital: $${capital.toLocaleString()}\nROI: $${calculatedROI.toLocaleString()} (${roiMultiplier}X)\nBonus: $${calculatedBonus.toLocaleString()} (${bonusMultiplier}X)\nDuration: ${elem.duration} days\n\nThis will credit the investment amount to their balance immediately. ROI and bonus will be earned over ${elem.duration} days.`);
+                                                            const ok = window.confirm(confirmMessage);
                                                             if (!ok) return;
+
+                                                            const dailyRateLabel = planConfig ? formatPercent(planConfig.dailyRate) : legacyRule ? `${legacyRule.roiMultiplier}X legacy ROI` : formatPercent(0.025);
+                                                            const capitalFormatted = capital.toLocaleString();
+                                                            const roiFormatted = calculatedROI.toLocaleString();
+                                                            const bonusFormatted = calculatedBonus.toLocaleString();
 
                                                             try {
                                                                 console.log('Starting investment approval for:', elem.id);
@@ -334,12 +353,16 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                                 });
 
                                                                 // Add notification
+                                                                const payoutMessage = calculatedBonus > 0
+                                                                  ? `You will earn $${roiFormatted} ROI and $${bonusFormatted} bonus over ${termLabel}.`
+                                                                  : `You will earn $${roiFormatted} in daily commissions (${payoutSummary}).`;
+
                                                                 const notificationPush = {
-                                                                    title: 'Investment Approved',
-                                                                    message: `Your $${capital.toLocaleString()} ${elem.plan} investment has been activated! You will earn $${calculatedROI.toLocaleString()} ROI and $${calculatedBonus.toLocaleString()} bonus over ${elem.duration} days.`,
-                                                                    idnum: elem.idnum,
-                                                                    status: 'unseen',
-                                                                    type: 'success'
+                                                                  title: 'Investment Approved',
+                                                                  message: `Your $${capitalFormatted} ${elem.plan} investment has been activated! ${payoutMessage} Capital and earnings unlock after ${termLabel}.`,
+                                                                  idnum: elem.idnum,
+                                                                  status: 'unseen',
+                                                                  type: 'success'
                                                                 };
 
                                                                 const notificationResult = await supabaseDb.createNotification(notificationPush);
@@ -353,7 +376,7 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                                 // Send email notification to user
                                                                 try {
                                                                     if (userData?.email) {
-                                                                        const emailSubject = 'Investment Approved - TopMintInvest';
+                                                                        const emailSubject = 'Investment Approved - Grant Union Investment';
                                                                         const emailMessage = `
                                                                           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                                                                             <h2 style="color: #28a745;">🎉 Investment Approved!</h2>
@@ -363,14 +386,16 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                                               <h3 style="margin-top: 0;">Investment Details:</h3>
                                                                               <ul style="list-style: none; padding: 0;">
                                                                                 <li><strong>Plan:</strong> ${elem.plan}</li>
-                                                                                <li><strong>Capital:</strong> $${capital.toLocaleString()}</li>
-                                                                                <li><strong>ROI:</strong> $${calculatedROI.toLocaleString()}</li>
-                                                                                <li><strong>Bonus:</strong> $${calculatedBonus.toLocaleString()}</li>
-                                                                                <li><strong>Duration:</strong> ${elem.duration} days</li>
+                                                                                <li><strong>Capital:</strong> $${capitalFormatted}</li>
+                                                                                <li><strong>Projected Earnings:</strong> $${roiFormatted}</li>
+                                                                                ${calculatedBonus > 0 ? `<li><strong>Legacy Bonus:</strong> $${bonusFormatted}</li>` : ''}
+                                                                                <li><strong>Payout Schedule:</strong> ${payoutSummary}</li>
+                                                                                <li><strong>Daily Rate:</strong> ${dailyRateLabel}</li>
+                                                                                <li><strong>Term:</strong> ${termLabel}</li>
                                                                               </ul>
                                                                             </div>
-                                                                            <p>Your capital amount has been credited to your account balance. ROI and bonus will be earned and credited daily over the investment period.</p>
-                                                                            <p>Best regards,<br>TopMintInvest Team</p>
+                                                                            <p>Your capital has been credited to your account balance. Earnings will be posted daily according to the schedule above, and you can withdraw capital plus commissions once the term is complete.</p>
+                                                                            <p>Best regards,<br>Grant Union Investment Team</p>
                                                                             <hr>
                                                                             <p style="font-size: 12px; color: #666;">
                                                                               This is an automated message. Please do not reply to this email.
@@ -402,7 +427,7 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                                     // Don't throw here - email failure shouldn't block approval
                                                                 }
 
-                                                                alert(`✅ Investment approved successfully!\n\nUser ${elem.idnum} has been credited $${capital.toLocaleString()}.\nThey will earn $${calculatedROI.toLocaleString()} ROI and $${calculatedBonus.toLocaleString()} bonus over ${elem.duration} days.`);
+                                                                alert(`✅ Investment approved successfully!\n\nUser ${elem.idnum} has been credited $${capitalFormatted}.\nProjected earnings: $${roiFormatted}${calculatedBonus > 0 ? ` + legacy bonus $${bonusFormatted}` : ''}.\nSchedule: ${payoutSummary}.`);
 
                                                                 // Force a refresh of the investments data
                                                                 window.location.reload();

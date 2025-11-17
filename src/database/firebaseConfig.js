@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Supabase configuration
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'your_supabase_project_url_here';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your_supabase_anon_key_here';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://njsrlykklqqanqqcqklo.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qc3JseWtrbHFxYW5xcWNxa2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMTM2OTcsImV4cCI6MjA3ODg4OTY5N30.A30trZhFsazi9nzsdaZxKEUNLyOCmRJ49KjjjlUN9rU';
 
 // Initialize Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -11,4 +11,5 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const db = null;
 export const storage = null;
 export const auth = null;
-export default null;
+const legacyFirebaseCompat = null;
+export default legacyFirebaseCompat;

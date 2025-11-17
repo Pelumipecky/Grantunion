@@ -196,6 +196,15 @@
   gap: 0.5rem;
 }
 
+.planSubtitle {
+  font-size: 0.95em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: rgba(255,255,255,0.85);
+  margin-top: -0.5rem;
+}
+
 .diamond .packageTitle {
   color: #ffd700;
   text-shadow: 0 0 10px rgba(255,215,0,0.3);
@@ -206,6 +215,16 @@
   font-size: 1.8em;
   margin: 1.5rem 0;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.packagePrice span {
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.9);
 }
 
 .packagePrice::after {

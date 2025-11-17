@@ -29,7 +29,7 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
                     .single();
 
                 if (!userError && userData?.email) {
-                    const emailSubject = 'Withdrawal Confirmed - TopMintInvest';
+                    const emailSubject = 'Withdrawal Confirmed - Grant Union Investment';
                     const emailMessage = `
                       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                         <h2 style="color: #28a745;">💰 Withdrawal Confirmed!</h2>
@@ -46,7 +46,7 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
                         </div>
                         <p>Your funds are now being processed and will be sent to your wallet shortly. Processing times may vary depending on the payment method.</p>
                         <p>If you have any questions, please contact our support team.</p>
-                        <p>Best regards,<br>TopMintInvest Team</p>
+                        <p>Best regards,<br>Grant Union Investment Team</p>
                         <hr>
                         <p style="font-size: 12px; color: #666;">
                           This is an automated message. Please do not reply to this email.

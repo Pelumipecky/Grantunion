@@ -34,7 +34,7 @@ export default async function handler(req, res) {
 
     const msg = {
       to: to,
-      from: 'noreply@topmintinvest.com',
+      from: 'noreply@grantunioninvestment.com',
       subject: subject,
       html: message,
     };

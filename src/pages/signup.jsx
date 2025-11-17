@@ -15,6 +15,9 @@ const Signup = () => {
   const [errMsg, setErrMsg] = useState("");
   const [verify, setVerify] = useState("Default");
   const [isLoading, setIsLoading] = useState(false);
+  const [referralCodeInput, setReferralCodeInput] = useState('');
+  const [signupSuccessInfo, setSignupSuccessInfo] = useState(null);
+  const [copiedField, setCopiedField] = useState(null);
   const inputRef = useRef(null);
 
   const router = useRouter();
@@ -83,12 +86,41 @@ const Signup = () => {
     }).catch(err => console.error('Error fetching users:', err));
   }, []);
 
+  useEffect(() => {
+    if (router?.query?.ref) {
+      setReferralCodeInput(String(router.query.ref).toUpperCase());
+    }
+  }, [router?.query?.ref]);
+
+  const buildReferralLink = (code) => {
+    if (!code) return '';
+    if (typeof window !== 'undefined' && window.location?.origin) {
+      return `${window.location.origin}/signup?ref=${encodeURIComponent(code)}`;
+    }
+    const fallbackHost = process.env.NEXT_PUBLIC_SITE_URL || 'https://grantunioninvestment.com';
+    return `${fallbackHost.replace(/\/$/, '')}/signup?ref=${encodeURIComponent(code)}`;
+  };
+
+  const handleCopy = async (text, field) => {
+    if (!text || typeof navigator === 'undefined' || !navigator.clipboard?.writeText) {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (copyError) {
+      console.warn('Unable to copy text:', copyError);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
 
     try {
       setIsLoading(true); // Set loading state at start
+      setSignupSuccessInfo(null);
 
       // Validate inputs
       if (!toLocaleStorage.email?.includes('@')) {
@@ -160,13 +192,11 @@ const Signup = () => {
         updated_at: new Date().toISOString()
       };
 
-      // Save notification and user document
       await supabaseDb.createNotification(notificationPush);
-      const { data: userRecord, error: userError } = await supabase
-        .from('userlogs')
-        .insert([userDoc])
-        .select()
-        .single();
+      const { data: userRecord, error: userError } = await supabaseDb.createUser({
+        ...userDoc,
+        referralCodeUsed: referralCodeInput?.trim() || null
+      });
       if (userError) throw userError;
 
       // Store user data safely (no password) in localStorage
@@ -175,13 +205,20 @@ const Signup = () => {
       localStorage.setItem("activeUser", JSON.stringify(safeUserData));
       try { sessionStorage.setItem("activeUser", JSON.stringify(safeUserData)); } catch (e) { /* ignore */ }
 
-      // Reset form state
+      const referralCode = userRecord?.referralCode || userRecord?.referral_code || '';
+      const referralLink = buildReferralLink(referralCode);
+
+      setSignupSuccessInfo({
+        referralCode,
+        referralLink,
+        destination: registerFromPath || "/"
+      });
+
+      // Reset form state (except referral so they can share)
       form.reset();
       setVerify("Default");
+      setReferralCodeInput(referralCode);
       setToLocalStorage({ ...emptyUser, idnum: generatePassword(), date: dateString });
-
-      // Redirect
-      router.push(registerFromPath || "/");
     } catch (err) {
       console.error('Signup error:', err);
       let message;
@@ -227,8 +264,8 @@ const Signup = () => {
       <Head>
         <title>Sign up</title>
         <meta property="og:title" content="Sign up"/>
-        <link rel="icon" href="/topmintSmall.png" />
-        <link rel="shortcut icon" href="/topmintSmall.png" />
+        <link rel="icon" href="/grant-union-icon.png" />
+        <link rel="shortcut icon" href="/grant-union-icon.png" />
       </Head>
 
       <div className="leftSide">
@@ -241,8 +278,47 @@ const Signup = () => {
 
       <div className="rightSide">
         <form onSubmit={handleSubmit}>
-          <Link href={"/"} className='topsignuplink'><Image src="/topmintLogo.png" alt="logo" width={160} height={40} style={{ height: 'auto' }} /></Link>
+          <Link href={"/"} className='topsignuplink'><Image src="/grantunionLogo.png" alt="Grant Union Investment logo" width={160} height={40} style={{ height: 'auto' }} /></Link>
           <h1>Sign Up with Email</h1>
+          {signupSuccessInfo && (
+            <div className="signupSuccessCard">
+              <h2>Account Created Successfully 🎉</h2>
+              <p>Share your referral details to earn rewards.</p>
+              <div className="referralShareRow">
+                <div>
+                  <label>Your Referral Code</label>
+                  <strong>{signupSuccessInfo.referralCode || 'Generating...'}</strong>
+                </div>
+                <button
+                  type="button"
+                  className="copyBtn"
+                  onClick={() => handleCopy(signupSuccessInfo.referralCode, 'code')}
+                >
+                  {copiedField === 'code' ? 'Copied!' : 'Copy Code'}
+                </button>
+              </div>
+              <div className="referralShareRow">
+                <div>
+                  <label>Your Referral Link</label>
+                  <small>{signupSuccessInfo.referralLink}</small>
+                </div>
+                <button
+                  type="button"
+                  className="copyBtn"
+                  onClick={() => handleCopy(signupSuccessInfo.referralLink, 'link')}
+                >
+                  {copiedField === 'link' ? 'Copied!' : 'Copy Link'}
+                </button>
+              </div>
+              <button
+                type="button"
+                className="fancyBtn secondary"
+                onClick={() => router.push(signupSuccessInfo.destination)}
+              >
+                Go to Dashboard
+              </button>
+            </div>
+          )}
           <div className="inputcontainer">
             <div className="inputCntn">
               <input
@@ -264,6 +340,17 @@ const Signup = () => {
                 <i className={`icofont-eye-${!passwordShow ? "alt" : "blocked"}`}></i>
               </button>
             </div>
+            <div className="inputCntn">
+              <input
+                onChange={(e) => setReferralCodeInput(e.target.value.toUpperCase())}
+                value={referralCodeInput}
+                type="text"
+                name='referralCode'
+                placeholder='Referral Code (optional)'
+                autoComplete="off"
+              />
+              <span><i className="icofont-gift"></i></span>
+            </div>
 
             <div className="_cloudflr_verifcation_widget">
               <div className="verification_Box">
@@ -281,7 +368,7 @@ const Signup = () => {
                 </div>
               </div>
               <div className="service_provider">
-                <p>Protected by <img src="/cloudflare.png" alt="cloudflare" style={{ height: 'auto' }} /></p>
+                    <p>Protected by <Image src="/cloudflare.png" alt="cloudflare" width={120} height={40} style={{ height: 'auto' }} /></p>
               </div>
             </div>
 
@@ -289,7 +376,7 @@ const Signup = () => {
 
             <label className="form-control2">
               <input type="checkbox" name="checkbox" required/>
-              I agree to all terms and conditions of Topmint Invesment Incorp.
+              I agree to all terms and conditions of Grant Union Investment Inc.
             </label>
 
             <button 

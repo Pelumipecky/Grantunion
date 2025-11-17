@@ -113,7 +113,7 @@ export default function Signin() {
             <div className='rightSide'>
                 <form onSubmit={handleSignIn}>
                     <Link href='/' className='topsignuplink'>
-                        <Image src='/topmintLogo.png' alt='logo' width={160} height={40} style={{ height: 'auto' }} />
+                        <Image src='/grantunionLogo.png' alt='Grant Union Investment logo' width={160} height={40} style={{ height: 'auto' }} />
                     </Link>
                     <h1>Sign In with Email</h1>
                     <div className='inputcontainer'>

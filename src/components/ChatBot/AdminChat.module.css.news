@@ -514,7 +514,7 @@
 
 .chatHeader {
     padding: 16px 18px;
-    background: linear-gradient(135deg,#0672CD,#0550a0);
+    background: linear-gradient(135deg,#003459,#007EA7);
     color: white;
     display: flex;
     align-items: center;
@@ -540,7 +540,7 @@
 .messageInputContainer { padding:12px 16px; background:#f8f9fa; border-top:1px solid #e2e8f0; }
 .messageForm { display:flex; gap:10px; }
 .messageInput { flex:1; padding:10px; border-radius:8px; border:1px solid #e6edf3; }
-.sendButton { padding:10px 14px; border-radius:8px; background:#0672CD; color:white; border:none; }
+.sendButton { padding:10px 14px; border-radius:8px; background:#007EA7; color:white; border:none; }
 
 @media (max-width: 768px) {
     .usersList { position:absolute; left:0; top:0; width:100%; height:100vh; transform:translateX(0); z-index:20; }
@@ -657,7 +657,7 @@
 
 .chatHeader {
     padding: 20px;
-    background: linear-gradient(135deg, #0672CD, #0550a0);
+    background: linear-gradient(135deg, #003459, #007EA7);
     color: white;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
@@ -824,7 +824,7 @@
 }
 
 .sendButton {
-    background: linear-gradient(135deg, #0672CD, #0550a0);
+    background: linear-gradient(135deg, #003459, #007EA7);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -833,7 +833,7 @@
     font-size: 0.95em;
     font-weight: 500;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(6, 114, 205, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 52, 89, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -842,7 +842,7 @@
 
 .sendButton:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(6, 114, 205, 0.25);
+    box-shadow: 0 4px 6px rgba(0, 52, 89, 0.25);
 }
 
 .sendButton:disabled {
@@ -940,7 +940,7 @@
 }
 
 .sendButton {
-    background: linear-gradient(135deg, #0672CD, #0550a0);
+    background: linear-gradient(135deg, #003459, #007EA7);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -949,12 +949,12 @@
     font-size: 0.95em;
     font-weight: 500;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(6, 114, 205, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 52, 89, 0.2);
 }
 
 .sendButton:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(6, 114, 205, 0.25);
+    box-shadow: 0 4px 6px rgba(0, 52, 89, 0.25);
 }
 
 .sendButton:disabled {
@@ -1043,7 +1043,7 @@
 }
 
 .sendBtn {
-    background: linear-gradient(135deg, #0672CD, #0550a0);
+    background: linear-gradient(135deg, #003459, #007EA7);
     color: white;
     border: none;
     padding: 10px 16px;
@@ -1053,7 +1053,7 @@
 }
 
 .sendBtn:hover {
-    background: #055ea6;
+    background: #002B47;
 }
 
 /* Improve scrolling behavior */
@@ -1377,7 +1377,7 @@
 }
 
 .sendButton {
-    background: linear-gradient(135deg, #0672CD, #0550a0);
+    background: linear-gradient(135deg, #003459, #007EA7);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -1386,7 +1386,7 @@
     font-size: 0.95em;
     font-weight: 500;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(6, 114, 205, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 52, 89, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1395,7 +1395,7 @@
 
 .sendButton:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(6, 114, 205, 0.25);
+    box-shadow: 0 4px 6px rgba(0, 52, 89, 0.25);
 }
 
 .sendButton:disabled {
@@ -1493,7 +1493,7 @@
 }
 
 .sendButton {
-    background: linear-gradient(135deg, #0672CD, #0550a0);
+    background: linear-gradient(135deg, #003459, #007EA7);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -1502,12 +1502,12 @@
     font-size: 0.95em;
     font-weight: 500;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(6, 114, 205, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 52, 89, 0.2);
 }
 
 .sendButton:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(6, 114, 205, 0.25);
+    box-shadow: 0 4px 6px rgba(0, 52, 89, 0.25);
 }
 
 .sendButton:disabled {
@@ -1596,7 +1596,7 @@
 }
 
 .sendBtn {
-    background: linear-gradient(135deg, #0672CD, #0550a0);
+    background: linear-gradient(135deg, #003459, #007EA7);
     color: white;
     border: none;
     padding: 10px 16px;
@@ -1606,7 +1606,7 @@
 }
 
 .sendBtn:hover {
-    background: #055ea6;
+    background: #002B47;
 }
 
 /* Improve scrolling behavior */

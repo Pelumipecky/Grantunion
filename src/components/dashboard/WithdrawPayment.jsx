@@ -457,8 +457,8 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                             color: '#333'
                         }}
                         onFocus={(e) => {
-                            e.target.style.borderColor = '#0672CD';
-                            e.target.style.boxShadow = '0 0 0 3px rgba(6, 114, 205, 0.15)';
+                            e.target.style.borderColor = '#007EA7';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(0, 126, 167, 0.2)';
                         }}
                         onBlur={(e) => {
                             e.target.style.borderColor = '#ddd';

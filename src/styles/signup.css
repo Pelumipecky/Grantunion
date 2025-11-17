@@ -1,25 +1,25 @@
 :root {
-    --primary-clr: #0672CD;
-    --sec2-clr: #9864AD;
-    --sec-clr: #D8A31A;
-    --text-clr1: #F5F9FF;
-    --text-deco: #F3F9FF;
-    --white-purple: #b9dfff;
-    --dark-clr1: #000613;
-    --dark-clr2: #070e1e;
-    --dark-clr3: #020d25;
-    --dark-clr4: #002848;
-    --dark-clr5: #070032;
+    --primary-clr: #003459;
+    --sec2-clr: #007EA7;
+    --sec-clr: #00A8E8;
+    --text-clr1: #F5F5F5;
+    --text-deco: #E6EEF5;
+    --white-purple: #D6EBF8;
+    --dark-clr1: #001B2D;
+    --dark-clr2: #01243B;
+    --dark-clr3: #022C4D;
+    --dark-clr4: #03395F;
+    --dark-clr5: #001326;
 
-    --opac-clr1: #00123345;
-    --opac-clr2: #0263b37d;
-    --opac-clr3: #364763a1;
+    --opac-clr1: #00345945;
+    --opac-clr2: #007EA77d;
+    --opac-clr3: #003459a1;
   
     --danger-clr: #DC1262;
-    --grey-clr: #5b574e;
-    --linear-grad1: linear-gradient(180deg, #0672cd 40%, #d8a31a);
-    --linear-grad2: linear-gradient(120deg, #0672cd , #d8a31a);
-    --linear-grad3: linear-gradient(180deg,  #d8a31a, #0672cd, #d8a31a);
+    --grey-clr: #8CA6B1;
+    --linear-grad1: linear-gradient(180deg, #003459 40%, #007EA7);
+    --linear-grad2: linear-gradient(120deg, #003459 , #00A8E8);
+    --linear-grad3: linear-gradient(180deg,  #00A8E8, #003459, #F5F5F5);
 
   
     --gen-padding: 10%;
@@ -279,6 +279,87 @@
     color: var(--text-deco);
     font-weight: 500;
     margin-top: 10px;
+}
+
+.signupSuccessCard{
+    width: var(--input-width);
+    max-width: 100%;
+    background: rgba(0, 52, 89, 0.3);
+    border: 1px solid rgba(0, 168, 232, 0.3);
+    border-radius: 16px;
+    padding: 1.5em;
+    color: var(--text-clr1);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    text-align: left;
+}
+
+.signupSuccessCard h2{
+    margin: 0;
+    font-size: 1.2em;
+    color: var(--text-deco);
+}
+
+.signupSuccessCard p{
+    margin: 0;
+    color: var(--grey-clr);
+    font-size: 0.9em;
+}
+
+.referralShareRow{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    padding: 0.75em 1em;
+    background: rgba(1, 36, 59, 0.7);
+    border-radius: 12px;
+}
+
+.referralShareRow label{
+    display: block;
+    font-size: 0.85em;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--grey-clr);
+    margin-bottom: 0.2em;
+}
+
+.referralShareRow strong{
+    font-size: 1.2em;
+    color: var(--text-deco);
+}
+
+.referralShareRow small{
+    display: block;
+    font-size: 0.85em;
+    color: var(--text-deco);
+    word-break: break-all;
+}
+
+.copyBtn{
+    border: none;
+    border-radius: 999px;
+    padding: 0.6em 1.2em;
+    background: var(--sec-clr);
+    color: #002239;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+}
+
+.copyBtn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 168, 232, 0.2);
+}
+
+.fancyBtn.secondary{
+    width: 100%;
+    margin-top: 0.5em;
+    background: transparent;
+    border: 1px solid rgba(0, 168, 232, 0.4);
 }
 
 form .inputcontainer{

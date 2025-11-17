@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import { supabaseDb, supabaseRealtime } from "../../database/supabaseUtils";
 import { useRouter } from 'next/router';
+import { PLAN_CONFIG, getPlanByName, formatPercent } from "../../utils/planConfig";
 
 
 const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser, investData, setInvestData, setProfileState, withdrawData, setWithdrawData, totalBonus, totalCapital, totaROI}) => {
@@ -66,6 +67,18 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
         }
     }
 
+    const selectedPlan = getPlanByName(investData?.plan);
+
+    const handlePlanChange = (value) => {
+        const plan = getPlanByName(value);
+        setInvestData((prev) => ({
+            ...prev,
+            plan: plan.name,
+            duration: plan.durationDays,
+            capital: Math.max(plan.minCapital, Number(prev?.capital) || 0)
+        }));
+    };
+
     return (
         <div className="absoluteDynamicWidget">
             {
@@ -87,12 +100,9 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                     <div className="avatarSection investwidgetSection">
                         <span type="button" onClick={handlewidgetClose}><i className="icofont-close-line"></i></span>
                         <h2>Initiate Investment</h2>
-                        <p>You are about to invest in the <span>{investData?.plan}</span> package which takes a period of <span>{investData?.duration} days</span></p>
+                        <p>You are about to invest in the <span>{selectedPlan?.name}</span> package which takes a period of <span>{selectedPlan?.durationLabel}</span></p>
                         <div className="investMinmax">
-                            {
-                                investData?.plan === "Silver" ? "Min. Capital: USD 100 | Max. Capital: USD 900" : investData?.plan === "Gold" ? "Min. Capital: USD 1000 | Max. Capital: USD 9000" : "Min. Capital: USD 10,000 | Max. Capital: USD 100,000"
-                            }
-                            
+                            Minimum deposit ${selectedPlan?.minCapital.toLocaleString()} | {formatPercent(selectedPlan?.dailyRate || 0)} daily | Withdraw after {selectedPlan?.durationLabel}
                         </div>
                         <form className='widgetInvestForm' onSubmit={handleProceed}>
                             <div className="unitInputField">
@@ -101,10 +111,10 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                             </div>
                             <div className="unitInputField">
                                 <label htmlFor="name">Investment Plan</label>
-                                <select required value={investData?.plan} onChange={(e) => {setInvestData({...investData, plan: e.target.value})}}>
-                                    <option value="Silver">Silver</option>
-                                    <option value="Gold">Gold</option>
-                                    <option value="Diamond">Diamond</option>
+                                <select required value={investData?.plan} onChange={(e) => handlePlanChange(e.target.value)}>
+                                    {PLAN_CONFIG.map((plan) => (
+                                        <option key={plan.id} value={plan.name}>{plan.name}</option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="unitInputField">
@@ -217,7 +227,7 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                                 backgroundColor: '#fff'
                                             }}
                                             onFocus={(e) => {
-                                                e.target.style.borderColor = '#0672CD';
+                                                e.target.style.borderColor = '#007EA7';
                                             }}
                                             onBlur={(e) => {
                                                 e.target.style.borderColor = '#ddd';
@@ -234,7 +244,7 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                 marginTop: '24px'
                             }}>
                                 <button type="submit" style={{
-                                    background: '#008069',
+                                    background: '#003459',
                                     color: 'white',
                                     padding: '14px',
                                     border: 'none',
@@ -244,8 +254,8 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                     cursor: 'pointer',
                                     transition: 'background 0.3s'
                                 }}
-                                onMouseOver={(e) => e.target.style.background = '#006d5b'}
-                                onMouseOut={(e) => e.target.style.background = '#008069'}
+                                onMouseOver={(e) => e.target.style.background = '#002B47'}
+                                onMouseOut={(e) => e.target.style.background = '#003459'}
                                 >
                                     Continue Withdrawal
                                 </button>
@@ -264,8 +274,8 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                         handlewidgetClose();
                                     }}
                                     style={{
-                                        background: '#f9f871',
-                                        color: '#000',
+                                        background: '#007EA7',
+                                        color: '#fff',
                                         padding: '14px',
                                         border: 'none',
                                         borderRadius: '8px',
@@ -274,8 +284,8 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                         cursor: 'pointer',
                                         transition: 'background 0.3s'
                                     }}
-                                    onMouseOver={(e) => e.target.style.background = '#f0e860'}
-                                    onMouseOut={(e) => e.target.style.background = '#f9f871'}
+                                    onMouseOver={(e) => e.target.style.background = '#00658A'}
+                                    onMouseOut={(e) => e.target.style.background = '#007EA7'}
                                 >
                                     Request Withdrawal Code
                                 </button>
@@ -396,8 +406,8 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                             }}
                                             className="withdraw-code-input"
                                             onFocus={(e) => {
-                                                e.target.style.borderColor = '#0672CD';
-                                                e.target.style.boxShadow = '0 0 0 3px rgba(6, 114, 205, 0.15)';
+                                                e.target.style.borderColor = '#007EA7';
+                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 126, 167, 0.2)';
                                             }}
                                             onBlur={(e) => {
                                                 e.target.style.borderColor = '#ddd';
@@ -415,7 +425,7 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                 marginTop: '20px'
                             }}>
                                 <button type="submit" style={{
-                                    background: '#008069',
+                                    background: '#003459',
                                     color: 'white',
                                     padding: '14px',
                                     border: 'none',
@@ -425,8 +435,8 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                     cursor: 'pointer',
                                     transition: 'background 0.3s'
                                 }}
-                                onMouseOver={(e) => e.target.style.background = '#006d5b'}
-                                onMouseOut={(e) => e.target.style.background = '#008069'}
+                                onMouseOver={(e) => e.target.style.background = '#002B47'}
+                                onMouseOut={(e) => e.target.style.background = '#003459'}
                                 >
                                     Continue to Confirmation
                                 </button>
@@ -445,9 +455,9 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                     }}
                                     style={{
                                         background: 'transparent',
-                                        color: '#0672CD',
+                                        color: '#007EA7',
                                         padding: '12px',
-                                        border: '1px solid #0672CD',
+                                        border: '1px solid #007EA7',
                                         borderRadius: '8px',
                                         fontSize: '0.9rem',
                                         fontWeight: '600',
@@ -455,12 +465,12 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                         transition: 'all 0.3s'
                                     }}
                                     onMouseOver={(e) => {
-                                        e.target.style.background = '#0672CD';
+                                        e.target.style.background = '#007EA7';
                                         e.target.style.color = '#fff';
                                     }}
                                     onMouseOut={(e) => {
                                         e.target.style.background = 'transparent';
-                                        e.target.style.color = '#0672CD';
+                                        e.target.style.color = '#007EA7';
                                     }}
                                 >
                                     Request Code from Admin

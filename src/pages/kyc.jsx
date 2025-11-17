@@ -22,7 +22,7 @@ export default function KYCPage() {
             localStorage.removeItem('activeUser');
             router.push('/signin');
         }
-    }, []);
+    }, [router]);
 
     if (!currentUser) {
         return (

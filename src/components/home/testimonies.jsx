@@ -147,7 +147,7 @@ const Testimonies = () => {
                 </div>
                 <div class="user_testimony">
                     <h4>
-                        &quot;I&apos;m so excited, I give gratitude to the entire staff of topmints Investment, I have received my profit of $4000, thank you all especially to my manager..&quot;
+                        &quot;I&apos;m so excited, I give gratitude to the entire staff of Grant Union Investment, I have received my profit of $4000, thank you all especially to my manager..&quot;
                     </h4>
                     <p>
                         <span class="color-blue">Jordan brooks Thomas</span> - USA
@@ -155,7 +155,7 @@ const Testimonies = () => {
                 </div>
                 <div class="user_testimony">
                     <h4>
-                        &quot;This is what you call online trading, I had doubt at first but I decided to try with just little and watched it grow to something big. Thank You topmints Investment. .&quot;
+                        &quot;This is what you call online trading, I had doubt at first but I decided to try with just little and watched it grow to something big. Thank You Grant Union Investment. .&quot;
                     </h4>
                     <p>
                         <span class="color-blue">Mary Matt&apos;s weiser</span> - USA
@@ -163,7 +163,7 @@ const Testimonies = () => {
                 </div>
                 <div class="user_testimony">
                     <h4>
-                        &quot;I&apos;ve joined a lot of trading websites. topmints Investment is the only one that has consistently made me profit in the long term. very happy customer and I will be buying Gold Plan this weekend so that should say it all!&quot;
+                        &quot;I&apos;ve joined a lot of trading websites. Grant Union Investment is the only one that has consistently made me profit in the long term. Very happy customer and I&apos;m locking in the 14-Day Plan this weekend so that should say it all!&quot;
                     </h4>
                     <p>
                         <span class="color-blue">TASHA LEWIS</span> - South Africa
@@ -179,7 +179,7 @@ const Testimonies = () => {
                 </div>
                 <div class="user_testimony">
                     <h4>
-                    &quot; My brother recommended www.topmintinvest.com to me, and I am very happy to get profit by their trading service.&quot;
+                    &quot; My brother recommended www.grantunioninvestment.com to me, and I am very happy to get profit by their trading service.&quot;
                     </h4>
                     <p>
                         <span class="color-blue">BILLY MADAN</span> - USA
@@ -187,7 +187,7 @@ const Testimonies = () => {
                 </div>
                 <div class="user_testimony">
                     <h4>
-                        &quot;OMG! I only started using topmints Investment a month back and i just cannot belive by how much my balance has grown. www.topmintinvest.com Rocks! &quot;
+                        &quot;OMG! I only started using Grant Union Investment a month back and I just cannot believe by how much my balance has grown. www.grantunioninvestment.com Rocks! &quot;
                     </h4>
                     <p>
                         <span class="color-blue">Jane Matthew</span> - Canada
@@ -195,7 +195,7 @@ const Testimonies = () => {
                 </div>
                 <div class="user_testimony">
                     <h4>
-                    &quot;This is one of the best companies I&apos;ve invested in, they give high profits and they are responsible for any loss. Thank you topmints Investment .&quot;
+                    &quot;This is one of the best companies I&apos;ve invested in, they give high profits and they are responsible for any loss. Thank you Grant Union Investment.&quot;
                     </h4>
                     <p>
                         <span class="color-blue">Bongani Kubeka</span> - Botswana

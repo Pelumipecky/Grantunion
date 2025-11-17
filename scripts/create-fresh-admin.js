@@ -20,8 +20,8 @@ const db = getFirestore(app);
 async function createFreshAdmin() {
   // New admin credentials with timestamp to ensure uniqueness
   const timestamp = new Date().getTime();
-  const adminEmail = `admin${timestamp}@topmint.com`;
-  const adminPassword = "TopMint@2025"; // Strong password
+  const adminEmail = `admin${timestamp}@grantunioninvestment.com`;
+  const adminPassword = "GrantUnion@2025"; // Strong password
 
   try {
     console.log("Starting fresh admin account creation...");
@@ -56,7 +56,7 @@ async function createFreshAdmin() {
     if (error.code === 'auth/email-already-in-use') {
       console.log("\nThis email is already registered. Try these steps:");
       console.log("1. Go to Firebase Console");
-      console.log("2. Delete the existing admin@topmint.com user");
+      console.log("2. Delete the existing admin@grantunioninvestment.com user");
       console.log("3. Run this script again");
     } else {
       console.error("Error creating admin:", error.message);

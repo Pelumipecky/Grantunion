@@ -19,8 +19,8 @@ const db = getFirestore(app);
 
 async function resetAdmin() {
   // New admin credentials - simple and clear
-  const adminEmail = "admin@topmint.com";
-  const adminPassword = "Admin123!";
+  const adminEmail = "admin@grantunioninvestment.com";
+  const adminPassword = "GrantUnion@123";
 
   try {
     console.log("Starting admin reset process...");
