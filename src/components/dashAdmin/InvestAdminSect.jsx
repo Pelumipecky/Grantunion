@@ -22,6 +22,15 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
         return matchesStatus && matchesSearch;
     });
 
+    const investmentStartDate = useCallback((investment) => {
+      if (!investment) return new Date();
+      if (investment.approved_at) return new Date(investment.approved_at);
+      if (investment.approvedAt) return new Date(investment.approvedAt);
+      if (investment.updated_at) return new Date(investment.updated_at);
+      if (investment.updatedAt) return new Date(investment.updatedAt);
+      return new Date(investment.date);
+    }, []);
+
     const handleActiveInvestment = useCallback(async (vlad) => {
         try {
             await supabaseDb.updateInvestment(vlad?.id, {
@@ -36,18 +45,19 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
     // Function to distribute earnings over time
     const distributeEarnings = useCallback(async (investment) => {
         try {
-            const investmentDate = new Date(investment.date);
+            const investmentDate = investmentStartDate(investment);
             const now = new Date();
             const daysElapsed = Math.floor((now - investmentDate) / (1000 * 60 * 60 * 24));
 
             if (daysElapsed < 1) return; // No earnings yet
 
             const totalDuration = investment.duration || 1;
+            const effectiveDays = Math.min(daysElapsed, totalDuration);
             const roiPerDay = parseFloat(investment.roi) / totalDuration;
             const bonusPerDay = parseFloat(investment.bonus) / totalDuration;
 
-            const earnedROI = Math.min(roiPerDay * daysElapsed, parseFloat(investment.roi));
-            const earnedBonus = Math.min(bonusPerDay * daysElapsed, parseFloat(investment.bonus));
+            const earnedROI = Math.min(roiPerDay * effectiveDays, parseFloat(investment.roi));
+            const earnedBonus = Math.min(bonusPerDay * effectiveDays, parseFloat(investment.bonus));
 
             // Find user and update their earnings
             const { data: userData, error: userError } = await supabase
@@ -107,8 +117,8 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                 // Create notification for earnings
                 if (roiToCredit > 0 || bonusToCredit > 0) {
                     const notificationPush = {
-                        title: 'Investment Earnings',
-                        message: `You've earned $${roiToCredit.toFixed(2)} ROI and $${bonusToCredit.toFixed(2)} bonus from your ${investment.plan} investment (Day ${Math.min(daysElapsed, totalDuration)}/${totalDuration}).`,
+                      title: 'Investment Earnings',
+                      message: `You've earned $${roiToCredit.toFixed(2)} ROI and $${bonusToCredit.toFixed(2)} bonus from your ${investment.plan} investment (Day ${Math.min(effectiveDays, totalDuration)}/${totalDuration}).`,
                         idnum: investment.idnum,
                         status: 'unseen',
                         type: 'earnings'
@@ -121,23 +131,24 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
         } catch (error) {
             console.error('Error distributing earnings:', error);
         }
-      }, []);
+      }, [investmentStartDate]);
 
     useEffect(() => {
         investments.forEach((elem) => {
             if (elem?.status === "Active") {
-                const daysElapsed = Math.floor((new Date() - new Date(elem?.date)) / (1000 * 60 * 60 * 24)) + 1;
+            const startDate = investmentStartDate(elem);
+            const daysElapsed = Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24));
 
                 // Distribute earnings for active investments
                 distributeEarnings(elem);
 
                 // Check if investment should expire
-                if (daysElapsed >= elem?.duration) {
+            if (daysElapsed >= elem?.duration) {
                     handleActiveInvestment(elem);
                 }
             }
         });
-    }, [handleActiveInvestment, distributeEarnings, investments]);
+      }, [distributeEarnings, handleActiveInvestment, investmentStartDate, investments]);
   return (
     <div className="investmentMainCntn">
       <div className="overviewSection">
@@ -248,14 +259,14 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                             ${parseFloat(elem?.credited_roi || 0).toLocaleString()} / ${parseFloat(elem?.roi || 0).toLocaleString()}
                                             <br />
                                             <small style={{color: '#666', fontSize: '0.8em'}}>
-                                                {elem?.status === 'Active' ? `${Math.min(Math.floor((new Date() - new Date(elem?.date)) / (1000 * 60 * 60 * 24)), elem?.duration || 0)}/${elem?.duration || 0} days` : ''}
+                                              {elem?.status === 'Active' ? `${Math.min(Math.floor((new Date() - investmentStartDate(elem)) / (1000 * 60 * 60 * 24)), elem?.duration || 0)}/${elem?.duration || 0} days` : ''}
                                             </small>
                                         </td>
                                         <td className="bonus">
                                             ${parseFloat(elem?.credited_bonus || 0).toLocaleString()} / ${parseFloat(elem?.bonus || 0).toLocaleString()}
                                             <br />
                                             <small style={{color: '#666', fontSize: '0.8em'}}>
-                                                {elem?.status === 'Active' ? `${Math.min(Math.floor((new Date() - new Date(elem?.date)) / (1000 * 60 * 60 * 24)), elem?.duration || 0)}/${elem?.duration || 0} days` : ''}
+                                              {elem?.status === 'Active' ? `${Math.min(Math.floor((new Date() - investmentStartDate(elem)) / (1000 * 60 * 60 * 24)), elem?.duration || 0)}/${elem?.duration || 0} days` : ''}
                                             </small>
                                         </td>
                                         <td>{elem?.duration || 0} days</td>

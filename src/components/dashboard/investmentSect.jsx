@@ -11,6 +11,15 @@ const InvestmentSect = ({ setWidgetState, setInvestData, currentUser, investment
   const dateString =
     currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
 
+  const getInvestmentStartDate = (investment) => {
+    if (!investment) return new Date();
+    if (investment.approved_at) return new Date(investment.approved_at);
+    if (investment.approvedAt) return new Date(investment.approvedAt);
+    if (investment.updated_at) return new Date(investment.updated_at);
+    if (investment.updatedAt) return new Date(investment.updatedAt);
+    return new Date(investment.date);
+  };
+
     const handlePlanInvest = (plan) => {
       setInvestData({
         idnum: currentUser?.idnum,
@@ -57,8 +66,37 @@ const InvestmentSect = ({ setWidgetState, setInvestData, currentUser, investment
                                 <div className="unitheadsect">{elem?.plan}</div>
                                 <div className="unitheadsect">${elem?.capital.toLocaleString()}</div>
                                 <div className="unitheadsect"><span style={{color: `${elem?.status === "Pending" ? "#F9F871" : elem?.status === "Expired" ? "#DC1262" : "#2DC194"}`}}>{elem?.status}</span></div>
-                                <div className="unitheadsect">{elem?.status === "Pending" ? "0" : elem?.status === "Expired" ? "0" : `${Math.floor((new Date(dateString) - new Date(elem?.date)) / (1000 * 60 * 60 * 24)) + 1}`}</div>
-                                <div className="unitheadsect">{elem?.status === "Pending" ? `${elem?.duration}` : elem?.status === "Expired" ? "0" : `${elem?.duration - (Math.floor((new Date(dateString) - new Date(elem?.date)) / (1000 * 60 * 60 * 24)) + 1)}`}</div>
+                                {(() => {
+                                  if (elem?.status === "Pending") {
+                                    return (
+                                      <>
+                                        <div className="unitheadsect">0</div>
+                                        <div className="unitheadsect">{elem?.duration}</div>
+                                      </>
+                                    );
+                                  }
+
+                                  const startDate = getInvestmentStartDate(elem);
+                                  const daysElapsed = Math.max(0, Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24)));
+                                  const cappedDays = Math.min(daysElapsed, elem?.duration || 0);
+                                  const remainingDays = Math.max((elem?.duration || 0) - cappedDays, 0);
+
+                                  if (elem?.status === "Expired") {
+                                    return (
+                                      <>
+                                        <div className="unitheadsect">{elem?.duration || 0}</div>
+                                        <div className="unitheadsect">0</div>
+                                      </>
+                                    );
+                                  }
+
+                                  return (
+                                    <>
+                                      <div className="unitheadsect">{cappedDays}</div>
+                                      <div className="unitheadsect">{remainingDays}</div>
+                                    </>
+                                  );
+                                })()}
                             </div>
                         ))
                     }
