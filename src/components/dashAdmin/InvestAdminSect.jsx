@@ -276,11 +276,16 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                 {elem?.status || 'Pending'}
                                             </span>
                                         </td>
-                                        <td>{new Date(elem?.date).toLocaleDateString("en-US", {
-                                            day: "numeric",
-                                            month: "short",
-                                            year: "numeric"
-                                        })}</td>
+                                        <td>{(() => {
+                                            const dateVal = elem?.date || elem?.created_at || elem?.createdAt;
+                                            if (!dateVal) return 'N/A';
+                                            const dateObj = new Date(dateVal);
+                                            return isNaN(dateObj.getTime()) ? 'Invalid Date' : dateObj.toLocaleDateString("en-US", {
+                                                day: "numeric",
+                                                month: "short",
+                                                year: "numeric"
+                                            });
+                                        })()}</td>
                                         <td>
                                             <div className="action-buttons">
                                                 {elem?.status === 'Pending' && (

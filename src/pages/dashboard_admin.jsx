@@ -329,15 +329,18 @@ export default function DashboardAdmin() {
 
 
   //user dashboard values
-  const totalCapital = investments
-    .filter((elem) => (elem?.idnum !== "101010"))
-    .reduce((sum, currentObject) => {
-      // Ensure that currentObject.capital is a number before adding it to the sum
-      const capitalValue =
-        typeof currentObject.capital === "number" ? currentObject.capital : parseInt(currentObject.capital) || 0;
-
-      // Add the capital value to the sum
-      return sum + capitalValue;
+  // Calculate Total Revenue (Total System Value) matching the user profile logic: Balance + ROI + Bonus
+  const totalCapital = activeUsers
+    .filter(u => !u.admin && u.idnum !== "101010")
+    .reduce((sum, user) => {
+      const userInvestments = investments.filter(inv => inv.idnum === user.idnum);
+      const userRoi = userInvestments.reduce((acc, inv) => acc + (parseFloat(inv.credited_roi) || 0), 0);
+      const userInvBonus = userInvestments.reduce((acc, inv) => acc + (parseFloat(inv.bonus) || 0), 0);
+      
+      const uBalance = parseFloat(user.balance || 0);
+      const uBonus = parseFloat(user.bonus || 0);
+      
+      return sum + uBalance + userRoi + userInvBonus + uBonus;
     }, 0);
 
   const totalROI = investments
