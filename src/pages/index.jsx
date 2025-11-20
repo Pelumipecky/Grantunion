@@ -5,7 +5,6 @@ import Testimonies from '../components/home/testimonies';
 import FAQ from '../components/home/FAQ';
 import Footer from '../components/home/Footer';
 import Navbar from '../components/home/Navbar';
-import IframeSect from '../components/home/IframeSect';
 import AdvancedChartWidget from '../components/dashboard/LengthyAnalytics';
 import { PLAN_CONFIG, formatPercent } from '../utils/planConfig';
 import dashboardStyles from '../components/dashboard/DashboardSect.module.css';
@@ -262,7 +261,6 @@ export default function Home() {
           <AdvancedChartWidget containerId="home-chart-widget" height="600px" />
         </section>
 
-        <IframeSect />
         <Testimonies />
         <FAQ />
         <Footer />
