@@ -136,178 +136,7 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                 )
             }
             {
-                widgetState.type === "withdraw-code" && (
-                    <div className="avatarSection investwidgetSection" style={{maxWidth: '500px', width: '90%'}}>
-                        <span type="button" onClick={handlewidgetClose} style={{cursor: 'pointer'}}><i className="icofont-close-line"></i></span>
-                        <h2 style={{marginBottom: '8px', fontSize: '1.5rem'}}>Enter Withdrawal Code</h2>
-                        <p style={{fontSize: '0.9rem', color: '#666', marginBottom: '24px', textAlign: 'center'}}>
-                            Enter the 6-digit code provided by admin
-                        </p>
-                        {error && <p style={{color: 'red', textAlign: 'center', marginBottom: '10px'}}>{error}</p>}
-                        <form className='widgetInvestForm withdraw-code-form' onSubmit={(e) => {
-                            e.preventDefault();
-                            const code = (withdrawData?.code || '').replace(/\s/g, '');
-                            if (!code || code.length !== 6) {
-                                setError('Please enter a complete 6-digit withdrawal code');
-                                return;
-                            }
-                            setWithdrawData({
-                                ...withdrawData,
-                                amount: widgetState.data?.amount,
-                                paymentOption: widgetState.data?.paymentOption
-                            });
-                            handleProceedWithdraw(e);
-                        }}>
-                            <div className="amountSummary" style={{
-                                background: '#f0f7ff',
-                                padding: '16px',
-                                borderRadius: '12px',
-                                marginBottom: '24px',
-                                border: '1px solid #d0e7ff'
-                            }}>
-                                <p style={{margin: '0 0 10px 0', fontSize: '0.95rem'}}>
-                                    <strong>Amount:</strong> ${widgetState.data?.amount?.toLocaleString()}
-                                </p>
-                                <p style={{margin: '0', fontSize: '0.95rem'}}>
-                                    <strong>Payment Method:</strong> {widgetState.data?.paymentOption}
-                                </p>
-                            </div>
-                            
-                            <div style={{marginBottom: '24px'}}>
-                                <label style={{
-                                    display: 'block',
-                                    marginBottom: '12px',
-                                    fontWeight: '600',
-                                    fontSize: '1rem',
-                                    textAlign: 'center'
-                                }}>Withdrawal Code</label>
-                                <div className="withdraw-code-grid">
-                                    {[0, 1, 2, 3, 4, 5].map((index) => (
-                                        <input
-                                            key={index}
-                                            id={`code-${index}`}
-                                            type="text"
-                                            maxLength="1"
-                                            required
-                                            value={(withdrawData?.code || '')[index] || ''}
-                                            onChange={(e) => {
-                                                setError(""); // Clear error on input
-                                                const value = e.target.value.replace(/[^0-9]/g, '');
-                                                if (value.length <= 1) {
-                                                    const currentCode = withdrawData?.code || '';
-                                                    const newCode = currentCode.split('');
-                                                    newCode[index] = value;
-                                                    setWithdrawData({...withdrawData, code: newCode.join('')});
-                                                    
-                                                    // Auto-focus next input
-                                                    if (value && index < 5) {
-                                                        document.getElementById(`code-${index + 1}`)?.focus();
-                                                    }
-                                                }
-                                            }}
-                                            onKeyDown={(e) => {
-                                                // Handle backspace to move to previous input
-                                                if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                                                    document.getElementById(`code-${index - 1}`)?.focus();
-                                                }
-                                            }}
-                                            onPaste={(e) => {
-                                                e.preventDefault();
-                                                const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
-                                                setWithdrawData({...withdrawData, code: pastedData});
-                                                // Focus the last filled input or the last one
-                                                const nextIndex = Math.min(pastedData.length, 5);
-                                                document.getElementById(`code-${nextIndex}`)?.focus();
-                                            }}
-                                            style={{
-                                                width: '50px',
-                                                height: '60px',
-                                                fontSize: '1.5rem',
-                                                textAlign: 'center',
-                                                border: '2px solid #ddd',
-                                                borderRadius: '8px',
-                                                outline: 'none',
-                                                transition: 'border-color 0.3s',
-                                                fontWeight: '600',
-                                                backgroundColor: '#fff'
-                                            }}
-                                            onFocus={(e) => {
-                                                e.target.style.borderColor = '#007EA7';
-                                            }}
-                                            onBlur={(e) => {
-                                                e.target.style.borderColor = '#ddd';
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '12px',
-                                marginTop: '24px'
-                            }}>
-                                <button type="submit" style={{
-                                    background: '#003459',
-                                    color: 'white',
-                                    padding: '14px',
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    fontSize: '1rem',
-                                    fontWeight: '600',
-                                    cursor: 'pointer',
-                                    transition: 'background 0.3s'
-                                }}
-                                onMouseOver={(e) => e.target.style.background = '#002B47'}
-                                onMouseOut={(e) => e.target.style.background = '#003459'}
-                                >
-                                    Continue Withdrawal
-                                </button>
-                                
-                                <button 
-                                    type="button"
-                                    onClick={() => {
-                                        const pre = `Withdrawal code request:\nAmount: $${widgetState.data?.amount?.toLocaleString()}\nPayment Method: ${widgetState.data?.paymentOption}\nUser ID: ${widgetState.data?.userId || 'unknown'}\nUsername: ${widgetState.data?.userName || 'unknown'}\nEmail: ${widgetState.data?.email || 'unknown'}`;
-                                        window.dispatchEvent(new CustomEvent('openChatBot', { 
-                                            detail: { 
-                                                prefillMessage: pre, 
-                                                highlight: 'request-withdrawal', 
-                                                autoSend: true 
-                                            } 
-                                        }));
-                                        handlewidgetClose();
-                                    }}
-                                    style={{
-                                        background: '#007EA7',
-                                        color: '#fff',
-                                        padding: '14px',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        fontSize: '1rem',
-                                        fontWeight: '600',
-                                        cursor: 'pointer',
-                                        transition: 'background 0.3s'
-                                    }}
-                                    onMouseOver={(e) => e.target.style.background = '#00658A'}
-                                    onMouseOut={(e) => e.target.style.background = '#007EA7'}
-                                >
-                                    Request Withdrawal Code
-                                </button>
-                            </div>
-
-                            <p style={{
-                                fontSize: '0.85rem',
-                                color: '#666',
-                                marginTop: '20px',
-                                textAlign: 'center',
-                                lineHeight: '1.4'
-                            }}>
-                                Don&apos;t have a withdrawal code? Click the button above to request one from admin.
-                            </p>
-                        </form>
-                    </div>
-                )
+                /* withdraw-code block removed */
             }
             {
                 widgetState.type === "withdraw" && (parseFloat(currentUser?.balance || 0) + parseFloat(currentUser?.bonus || 0)) < 200 && (
@@ -334,104 +163,40 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                             fontSize: '24px'
                         }}><i className="icofont-close-line"></i></span>
                         <h2 style={{
-                            marginBottom: '8px', 
+                            marginBottom: '16px', 
                             fontSize: '1.4rem',
                             fontWeight: '600',
                             textAlign: 'center'
-                        }}>Enter Withdrawal Code</h2>
+                        }}>Confirm Withdrawal</h2>
                         <p style={{
-                            fontSize: '0.85rem', 
+                            fontSize: '0.95rem', 
                             color: '#666', 
                             marginBottom: '24px', 
                             textAlign: 'center'
                         }}>
-                            Enter the 6-digit code from admin
+                            You are about to withdraw <strong>${widgetState.amount?.toLocaleString()}</strong> via <strong>{widgetState.paymentOption}</strong>.
                         </p>
-                        {error && <p style={{color: 'red', textAlign: 'center', marginBottom: '10px'}}>{error}</p>}
-                        <form className='widgetInvestForm' onSubmit={(e) => {
-                            e.preventDefault();
-                            const code = (withdrawData?.code || '').replace(/\s/g, '');
-                            if (!code || code.length !== 6) {
-                                setError('Please enter a complete 6-digit withdrawal code');
-                                return;
-                            }
-                            setWithdrawData({
-                                ...withdrawData,
-                                amount: widgetState.amount,
-                                paymentOption: widgetState.paymentOption,
-                                bankName: widgetState.bankName,
-                                bankAccountNumber: widgetState.bankAccountNumber,
-                                bankAccountName: widgetState.bankAccountName,
-                                bankRoutingSwift: widgetState.bankRoutingSwift
-                            });
-                            handleProceedWithdraw(e);
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px',
+                            marginTop: '20px'
                         }}>
-                            <div style={{marginBottom: '24px'}}>
-                                <div style={{
-                                    display: 'flex',
-                                    gap: '8px',
-                                    justifyContent: 'center',
-                                    marginBottom: '8px'
-                                }}>
-                                    {[0, 1, 2, 3, 4, 5].map((index) => (
-                                        <input
-                                            key={index}
-                                            id={`withdraw-code-${index}`}
-                                            type="text"
-                                            inputMode="numeric"
-                                            maxLength="1"
-                                            required
-                                            value={(withdrawData?.code || '')[index] || ''}
-                                            onChange={(e) => {
-                                                setError(""); // Clear error on input
-                                                const value = e.target.value.replace(/[^0-9]/g, '');
-                                                if (value.length <= 1) {
-                                                    const currentCode = withdrawData?.code || '';
-                                                    const newCode = currentCode.split('');
-                                                    newCode[index] = value;
-                                                    setWithdrawData({...withdrawData, code: newCode.join('')});
-                                                    
-                                                    // Auto-focus next input
-                                                    if (value && index < 5) {
-                                                        document.getElementById(`withdraw-code-${index + 1}`)?.focus();
-                                                    }
-                                                }
-                                            }}
-                                            onKeyDown={(e) => {
-                                                // Handle backspace to move to previous input
-                                                if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                                                    document.getElementById(`withdraw-code-${index - 1}`)?.focus();
-                                                }
-                                            }}
-                                            onPaste={(e) => {
-                                                e.preventDefault();
-                                                const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
-                                                setWithdrawData({...withdrawData, code: pastedData});
-                                                // Focus the last filled input or the last one
-                                                const nextIndex = Math.min(pastedData.length, 5);
-                                                document.getElementById(`withdraw-code-${nextIndex}`)?.focus();
-                                            }}
-                                            className="withdraw-code-input"
-                                            onFocus={(e) => {
-                                                e.target.style.borderColor = '#007EA7';
-                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 126, 167, 0.2)';
-                                            }}
-                                            onBlur={(e) => {
-                                                e.target.style.borderColor = '#ddd';
-                                                e.target.style.boxShadow = 'none';
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                            
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '10px',
-                                marginTop: '20px'
-                            }}>
-                                <button type="submit" style={{
+                            <button 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setWithdrawData({
+                                        ...withdrawData,
+                                        amount: widgetState.amount,
+                                        paymentOption: widgetState.paymentOption,
+                                        bankName: widgetState.bankName,
+                                        bankAccountNumber: widgetState.bankAccountNumber,
+                                        bankAccountName: widgetState.bankAccountName,
+                                        bankRoutingSwift: widgetState.bankRoutingSwift
+                                    });
+                                    handleProceedWithdraw(e);
+                                }}
+                                style={{
                                     background: '#003459',
                                     color: 'white',
                                     padding: '14px',
@@ -442,58 +207,26 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                     cursor: 'pointer',
                                     transition: 'background 0.3s'
                                 }}
-                                onMouseOver={(e) => e.target.style.background = '#002B47'}
-                                onMouseOut={(e) => e.target.style.background = '#003459'}
-                                >
-                                    Continue to Confirmation
-                                </button>
-                                
-                                <button 
-                                    type="button"
-                                    onClick={() => {
-                                        const pre = `Withdrawal code request:\nAmount: $${widgetState.amount?.toLocaleString()}\nPayment Method: ${widgetState.paymentOption}\nUser ID: ${currentUser?.idnum || 'unknown'}\nUsername: ${currentUser?.userName || 'unknown'}\nEmail: ${currentUser?.email || 'unknown'}`;
-                                        window.dispatchEvent(new CustomEvent('openChatBot', { 
-                                            detail: { 
-                                                prefillMessage: pre, 
-                                                highlight: 'request-withdrawal', 
-                                                autoSend: true 
-                                            } 
-                                        }));
-                                    }}
-                                    style={{
-                                        background: 'transparent',
-                                        color: '#007EA7',
-                                        padding: '12px',
-                                        border: '1px solid #007EA7',
-                                        borderRadius: '8px',
-                                        fontSize: '0.9rem',
-                                        fontWeight: '600',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.3s'
-                                    }}
-                                    onMouseOver={(e) => {
-                                        e.target.style.background = '#007EA7';
-                                        e.target.style.color = '#fff';
-                                    }}
-                                    onMouseOut={(e) => {
-                                        e.target.style.background = 'transparent';
-                                        e.target.style.color = '#007EA7';
-                                    }}
-                                >
-                                    Request Code from Admin
-                                </button>
-                            </div>
-
-                            <p style={{
-                                fontSize: '0.75rem',
-                                color: '#999',
-                                marginTop: '16px',
-                                textAlign: 'center',
-                                lineHeight: '1.4'
-                            }}>
-                                You&apos;ll see full withdrawal details on the next page
-                            </p>
-                        </form>
+                            >
+                                Proceed
+                            </button>
+                            <button 
+                                onClick={handlewidgetClose}
+                                style={{
+                                    background: 'transparent',
+                                    color: '#666',
+                                    padding: '12px',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '8px',
+                                    fontSize: '0.9rem',
+                                    fontWeight: '600',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                        {/* Form content removed */}
                     </div>
                 )
             }

@@ -7,7 +7,6 @@ import Modal from "../Modal";
 const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, currentUser}) => {
     const router = useRouter();
     const [copystate, setCopystate] = useState("Copy");
-    const [withdrawalCode, setWithdrawalCode] = useState("");
     const [walletAddress, setWalletAddress] = useState(""); // New state for wallet address
     // const [error, setError] = useState(""); // Replaced by Modal
     const [isVerifying, setIsVerifying] = useState(false);
@@ -87,64 +86,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
           });
     }
 
-
-
-    const verifyWithdrawalCode = async () => {
-        setIsVerifying(true);
-        
-        try {
-            const identifierCandidates = [
-                currentUser?.idnum,
-                currentUser?.id,
-                currentUser?.uid
-            ]
-                .filter(Boolean)
-                .map((value) => value.toString().trim())
-                .filter(Boolean);
-
-            if (!identifierCandidates.length) {
-                showModal('error', 'Error', "Unable to verify your withdrawal code because your account is missing an identifier.");
-                return null;
-            }
-
-            const uniqueIdentifiers = Array.from(new Set(identifierCandidates));
-
-            // Check if code exists, is unused, and belongs to current user (id or idnum)
-            const { data, error } = await supabase
-                .from('withdrawal_codes')
-                .select('*')
-                .eq('code', withdrawalCode)
-                .eq('used', false)
-                .in('user_id', uniqueIdentifiers)
-                .maybeSingle();
-
-            if (error || !data) {
-                showModal('error', 'Error', "Invalid or expired withdrawal code");
-                return null;
-            }
-
-            if (data.expires_at && new Date(data.expires_at).getTime() < Date.now()) {
-                showModal('error', 'Error', "Withdrawal code has expired. Request a new one.");
-                return null;
-            }
-
-            // return the data for later update
-            return data;
-        } catch (err) {
-            console.error("Error verifying code:", err);
-            showModal('error', 'Error', "Error verifying code. Please try again.");
-            return null;
-        } finally {
-            setIsVerifying(false);
-        }
-    }
-
     const handleTransacConfirmation = async () => {
-        if (!withdrawalCode) {
-            showModal('error', 'Error', "Please enter your withdrawal code");
-            return;
-        }
-
         // Check KYC status before proceeding
         if (!isUserKycVerified) {
             showModal('error', 'KYC Required', "KYC verification required. Please complete KYC verification before making a withdrawal.");
@@ -156,20 +98,10 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
             return;
         }
 
-        // Verify code (returns the doc snapshot) and then show confirmation popup with payment type
-        const codeDoc = await verifyWithdrawalCode();
-        if (!codeDoc) return;
-
-        setSelectedCodeDoc(codeDoc);
         showModal('confirm', 'Confirm Withdrawal', '');
     }
 
     const handleFinalConfirm = async () => {
-        if (!selectedCodeDoc) {
-            showModal('error', 'Error', "No withdrawal code selected. Try again.");
-            return;
-        }
-
         // Check KYC status before processing withdrawal
         if (!isUserKycVerified) {
             showModal('error', 'KYC Required', "KYC verification required. Please complete KYC before withdrawing.");
@@ -180,18 +112,6 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
         setIsProcessing(true);
 
         try {
-            // mark code used
-            const { error: codeUpdateError } = await supabase
-                .from('withdrawal_codes')
-                .update({ 
-                    used: true, 
-                    status: 'used',
-                    updated_at: new Date().toISOString() 
-                })
-                .eq('id', selectedCodeDoc.id);
-
-            if (codeUpdateError) throw codeUpdateError;
-
             const amount = withdrawData?.amount ?? withdrawData?.capital ?? 0;
 
             // Enforce minimum withdrawal amount at finalization as well
@@ -208,7 +128,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 wallet_address: walletAddress, // Add wallet address
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
-                withdrawal_code: withdrawalCode,
+                withdrawal_code: "N/A", // No longer using withdrawal codes
                 widthrawal_fee: withdrawData?.paymentOption === "Bitcoin"
                     ? `${calculateCryptoAmount(amount, bitPrice, 'BTC')} BTC`
                     : withdrawData?.paymentOption === "Ethereum"
@@ -388,74 +308,43 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
             <p>Withdrawal amount: <strong>${Number(displayAmount).toLocaleString()}</strong></p>
         </div>
 
-        <div className={styles.codeInputSect}>
-            <label className={styles.codeLabel}>Enter withdrawal code</label>
-            <div className={styles.codeInputsContainer}>
-                {[0, 1, 2, 3, 4, 5].map((index) => (
-                    <input
-                        key={index}
-                        id={`withdrawal-code-${index}`}
-                        type="text"
-                        inputMode="numeric"
-                        maxLength="1"
-                        value={withdrawalCode[index] || ''}
-                        onChange={(e) => {
-                            const value = e.target.value.replace(/[^0-9]/g, '');
-                            if (value.length <= 1) {
-                                const newCode = withdrawalCode.split('');
-                                newCode[index] = value;
-                                setWithdrawalCode(newCode.join(''));
-                                
-                                // Auto-focus next input
-                                if (value && index < 5) {
-                                    document.getElementById(`withdrawal-code-${index + 1}`)?.focus();
-                                }
-                            }
-                        }}
-                        onKeyDown={(e) => {
-                            // Handle backspace to move to previous input
-                            if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                                document.getElementById(`withdrawal-code-${index - 1}`)?.focus();
-                            }
-                        }}
-                        onPaste={(e) => {
-                            e.preventDefault();
-                            const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
-                            setWithdrawalCode(pastedData);
-                            // Focus the last filled input or the last one
-                            const nextIndex = Math.min(pastedData.length, 5);
-                            document.getElementById(`withdrawal-code-${nextIndex}`)?.focus();
-                        }}
-                        className={styles.codeInput}
-                    />
-                ))}
-            </div>
-            <div className={styles.actionButtons}>
-                <button 
-                    type="button" 
-                    onClick={handleTransacConfirmation} 
-                    disabled={isVerifying || countdown === 0}
-                    className={styles.verifyBtn}
-                >
-                    {isVerifying ? 'Verifying...' : 'Verify Code & Continue'}
-                </button>
-                <button 
-                    type="button" 
-                    onClick={() => {
-                        const pre = `Withdrawal code request:\nAmount: $${displayAmount?.toLocaleString()}\nPayment Method: ${withdrawData?.paymentOption}\nUser ID: ${currentUser?.idnum || 'unknown'}\nUsername: ${currentUser?.userName || currentUser?.name || 'unknown'}\nEmail: ${currentUser?.email || 'unknown'}`;
-                        window.dispatchEvent(new CustomEvent('openChatBot', { 
-                            detail: { 
-                                prefillMessage: pre, 
-                                highlight: 'request-withdrawal', 
-                                autoSend: true 
-                            } 
-                        }));
-                    }}
-                    className={styles.requestBtn}
-                >
-                    Request Code from Admin
-                </button>
-            </div>
+        <div className={styles.actionButtons}>
+            <button 
+                className={styles.confirmBtn} 
+                onClick={handleTransacConfirmation}
+                disabled={isProcessing}
+                style={{
+                    background: '#003459',
+                    color: 'white',
+                    padding: '14px 24px',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'background 0.3s'
+                }}
+            >
+                {isProcessing ? 'Processing...' : 'Confirm Withdrawal'}
+            </button>
+            <button 
+                className={styles.cancelBtn} 
+                onClick={() => setProfileState("Withdrawals")}
+                disabled={isProcessing}
+                style={{
+                    background: 'transparent',
+                    color: '#fff',
+                    padding: '14px 24px',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    marginLeft: '10px'
+                }}
+            >
+                Cancel
+            </button>
         </div>
 
         <Modal
@@ -474,7 +363,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                             <strong>Holder:</strong> {withdrawData?.bankAccountName}
                         </p>
                     )}
-                    <p>Withdrawal Code: <strong>{withdrawalCode}</strong></p>
+                    <p>Withdrawal Code: <strong>N/A</strong></p>
                     <div className={styles.modalActions}>
                         <button type="button" onClick={closeModal} disabled={isProcessing} className={styles.modalCancelBtn}>Cancel</button>
                         <button type="button" onClick={handleFinalConfirm} disabled={isProcessing} className={styles.modalConfirmBtn}>{isProcessing ? 'Processing...' : 'Confirm Transaction'}</button>

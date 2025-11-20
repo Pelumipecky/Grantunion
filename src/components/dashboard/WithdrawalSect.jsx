@@ -331,14 +331,12 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
         <div className={styles.guidelinesSection}>
             <h2 className={styles.guidelinesTitle}>Withdrawal Guidelines</h2>
             <div className={styles.guidelinesList}>
-                <p className={styles.guidelineItem}>- To initiate a withdrawal, you must first request a withdrawal code from the admin. This code is required to process your withdrawal request.</p>
-                <p className={styles.guidelineItem}>- Once you receive your withdrawal code, select your preferred withdrawal method and enter the amount you want to withdraw, then click &quot;Proceed&quot;.</p>
+                <p className={styles.guidelineItem}>- To initiate a withdrawal, select your preferred withdrawal method and enter the amount you want to withdraw, then click &quot;Proceed&quot;.</p>
                 <p className={styles.guidelineItem}>- We provide three (3) withdrawal methods (Bitcoin, Ethereum, and Bank Transfer).</p>
-                <p className={styles.guidelineItem}>- Withdrawal codes are specific to your account and the requested amount. They cannot be reused.</p>
-                <p className={styles.guidelineItem}>- Requests for withdrawals can be made at any time via this website, but will require admin approval and a valid withdrawal code.</p>
+                <p className={styles.guidelineItem}>- Requests for withdrawals can be made at any time via this website and will be processed after admin approval.</p>
                 <p className={styles.guidelineItem}>- Withdrawals are capped at the amount of funds that are currently in the account (Minimum withdrawal amount is $200).</p>
-                <p className={styles.guidelineItem}>- A withdrawal processing fee is required to be paid before a withdrawal can be made.</p>
-                <p className={styles.guidelineItem}>- Please contact support if you have not received your withdrawal code within 24 hours of requesting it.</p>
+                <p className={styles.guidelineItem}>- A withdrawal processing fee may apply.</p>
+                <p className={styles.guidelineItem}>- Please contact support if your withdrawal is not processed within 24 hours.</p>
             </div>
         </div>
 
