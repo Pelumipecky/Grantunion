@@ -8,6 +8,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
     const router = useRouter();
     const [copystate, setCopystate] = useState("Copy");
     const [withdrawalCode, setWithdrawalCode] = useState("");
+    const [walletAddress, setWalletAddress] = useState(""); // New state for wallet address
     // const [error, setError] = useState(""); // Replaced by Modal
     const [isVerifying, setIsVerifying] = useState(false);
     
@@ -204,6 +205,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
             const withdrawalData = {
                 ...withdrawData,
                 amount,
+                wallet_address: walletAddress, // Add wallet address
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
                 withdrawal_code: withdrawalCode,
@@ -332,8 +334,8 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                         <input 
                             type="text" 
                             placeholder={`Paste your ${withdrawData?.paymentOption} address here`}
-                            value={withdrawalCode}
-                            onChange={(e) => setWithdrawalCode(e.target.value)}
+                            value={walletAddress}
+                            onChange={(e) => setWalletAddress(e.target.value)}
                             style={{
                                 flex: 1,
                                 padding: '12px',
@@ -358,7 +360,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}
-                            onClick={() => alert("QR Code Scanner feature coming soon!")}
+                            onClick={() => showModal('info', 'Coming Soon', 'QR Code Scanner feature coming soon!')}
                         >
                             <i className="icofont-qr-code" style={{ fontSize: '1.2rem' }}></i>
                         </button>

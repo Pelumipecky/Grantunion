@@ -6,10 +6,12 @@ import { PLAN_CONFIG, getPlanByName, formatPercent } from "../../utils/planConfi
 
 const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser, investData, setInvestData, setProfileState, withdrawData, setWithdrawData, totalBonus, totalCapital, totaROI}) => {
     const [investments, setInvestments] = useState([]);
+    const [error, setError] = useState(""); // Add error state
 
     const router = useRouter();
     const handlewidgetClose = () => {
         setWidgetState({...widgetState, state: false});
+        setError(""); // Clear error on close
     };
 
     const handleProceed = (e) => {
@@ -141,11 +143,12 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                         <p style={{fontSize: '0.9rem', color: '#666', marginBottom: '24px', textAlign: 'center'}}>
                             Enter the 6-digit code provided by admin
                         </p>
+                        {error && <p style={{color: 'red', textAlign: 'center', marginBottom: '10px'}}>{error}</p>}
                         <form className='widgetInvestForm withdraw-code-form' onSubmit={(e) => {
                             e.preventDefault();
                             const code = (withdrawData?.code || '').replace(/\s/g, '');
                             if (!code || code.length !== 6) {
-                                alert('Please enter a complete 6-digit withdrawal code');
+                                setError('Please enter a complete 6-digit withdrawal code');
                                 return;
                             }
                             setWithdrawData({
@@ -188,6 +191,7 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                             required
                                             value={(withdrawData?.code || '')[index] || ''}
                                             onChange={(e) => {
+                                                setError(""); // Clear error on input
                                                 const value = e.target.value.replace(/[^0-9]/g, '');
                                                 if (value.length <= 1) {
                                                     const currentCode = withdrawData?.code || '';
@@ -343,11 +347,12 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                         }}>
                             Enter the 6-digit code from admin
                         </p>
+                        {error && <p style={{color: 'red', textAlign: 'center', marginBottom: '10px'}}>{error}</p>}
                         <form className='widgetInvestForm' onSubmit={(e) => {
                             e.preventDefault();
                             const code = (withdrawData?.code || '').replace(/\s/g, '');
                             if (!code || code.length !== 6) {
-                                alert('Please enter a complete 6-digit withdrawal code');
+                                setError('Please enter a complete 6-digit withdrawal code');
                                 return;
                             }
                             setWithdrawData({
@@ -378,6 +383,7 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                             required
                                             value={(withdrawData?.code || '')[index] || ''}
                                             onChange={(e) => {
+                                                setError(""); // Clear error on input
                                                 const value = e.target.value.replace(/[^0-9]/g, '');
                                                 if (value.length <= 1) {
                                                     const currentCode = withdrawData?.code || '';

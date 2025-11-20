@@ -33,7 +33,7 @@ const Testimonies = () => {
                     setActivThirdVid(vlad);
                 } else if (!currentVideo.paused) {
                     currentVideo.pause();
-                    setActiveVideo(vlad);
+                    setActiveVideo(-1);
                     setActiveSecVid(-1);
                     setActivThirdVid(vlad);
                 }
@@ -49,61 +49,61 @@ const Testimonies = () => {
         <div className="videograndCntn">
             <div ref={containerRef} className="videoTestimonies">
                 <div className={`unittestimony ${activeVideo === 0? "active": ""}`}>
-                    <video className='active' src="/user_video1.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video1.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(0)}}>
                         <button type="button"><i className={`icofont-ui-${activeSecVid === 0? "pause": "play"}`}></i></button>
                     </div>
                 </div>
                 <div className={`unittestimony ${activeVideo === 1? "active": ""}`}>
-                    <video className='active' src="/user_video2.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video2.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(1)}}>
                         <button type="button"><i className={`icofont-ui-${activeSecVid === 1? "pause": "play"}`}></i></button>
                     </div>
                 </div>
                 <div className={`unittestimony ${activeVideo === 2? "active": ""}`}>
-                    <video className='active' src="/user_video4.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video4.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(2)}}>
                         <button type="button"><i className={`icofont-ui-${activeSecVid === 2? "pause": "play"}`}></i></button>
                     </div>
                 </div>
                 <div className={`unittestimony ${activeVideo === 3? "active": ""}`}>
-                    <video className='active' src="/user_video3.mp4" poster='/trust_3.jpg' onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video3.mp4" poster='/trust_3.jpg' onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(3)}}>
                         <button type="button"><i className={`icofont-ui-${activeSecVid === 3? "pause": "play"}`}></i></button>
                     </div>
                 </div>
                 <div className={`unittestimony ${activeVideo === 4? "active": ""}`}>
-                    <video className='active' src="/user_video5.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video5.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(4)}}>
                     <button type="button"><i className={`icofont-ui-${activeSecVid === 4? "pause": "play"}`}></i></button>
                     </div>
                 </div>
                 <div className={`unittestimony ${activeVideo === 5? "active": ""}`}>
-                    <video className='active' src="/user_video1.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video1.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(5)}}>
                         <button type="button"><i className={`icofont-ui-${activeSecVid === 5? "pause": "play"}`}></i></button>
                     </div>
                 </div>
                 <div className={`unittestimony ${activeVideo === 6? "active": ""}`}>
-                    <video className='active' src="/user_video2.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video2.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(6)}}>
                         <button type="button"><i className={`icofont-ui-${activeSecVid === 6? "pause": "play"}`}></i></button>
                     </div>
                 </div>
                 <div className={`unittestimony ${activeVideo === 7? "active": ""}`}>
-                    <video className='active' src="/user_video4.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video4.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(7)}}>
                         <button type="button"><i className={`icofont-ui-${activeSecVid === 7? "pause": "play"}`}></i></button>
                     </div>
                 </div>
                 <div className={`unittestimony ${activeVideo === 8? "active": ""}`}>
-                    <video className='active' src="/user_video3.mp4" poster='/trust_3.jpg' onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video3.mp4" poster='/trust_3.jpg' onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(8)}}>
                         <button type="button"><i className={`icofont-ui-${activeSecVid === 8? "pause": "play"}`}></i></button>
                     </div>
                 </div>
                 <div className={`unittestimony ${activeVideo === 9? "active": ""}`}>
-                    <video className='active' src="/user_video5.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
+                    <video className='active' playsInline src="/user_video5.mp4" onEnded={() => {setActiveSecVid(-1); setActiveVideo(-1)}}></video>
                     <div className="overlay" onClick={() => {handleVideoplay(9)}}>
                         <button type="button"><i className={`icofont-ui-${activeSecVid === 9? "pause": "play"}`}></i></button>
                     </div>
