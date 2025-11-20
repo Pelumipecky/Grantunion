@@ -1,26 +1,56 @@
-// CoinGecko Price Ticker Widget
-import React from 'react';
+// TradingView Advanced Real-Time Chart Widget
+import React, { useEffect, useRef } from 'react';
 
-const CoinGeckoWidget = () => {
+const AdvancedChartWidget = ({ containerId = "tradingview_advanced_chart", height = "600px" }) => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://s3.tradingview.com/tv.js';
+    script.async = true;
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      if (window.TradingView && containerRef.current) {
+        new window.TradingView.widget({
+          "autosize": true,
+          "symbol": "BINANCE:BTCUSDT",
+          "interval": "D",
+          "timezone": "Etc/UTC",
+          "theme": "dark",
+          "style": "1",
+          "locale": "en",
+          "toolbar_bg": "#f1f3f6",
+          "enable_publishing": false,
+          "allow_symbol_change": true,
+          "container_id": containerId,
+          "hide_side_toolbar": false,
+          "details": true,
+          "hotlist": true,
+          "calendar": true,
+          "studies": [
+            "MASimple@tv-basicstudies",
+            "RSI@tv-basicstudies",
+            "MACD@tv-basicstudies"
+          ]
+        });
+      }
+    };
+
+    return () => {
+      const existingScript = document.querySelector('script[src="https://s3.tradingview.com/tv.js"]');
+      if (existingScript) {
+        document.head.removeChild(existingScript);
+      }
+    };
+  }, [containerId]);
+
   return (
-    <div style={{ width: '100%', height: '400px', backgroundColor: '#1d2224', padding: '20px', borderRadius: '8px' }}>
-      <iframe
-        src="https://www.coingecko.com/en/widgets/coin_compare_chart?widgets=social&defi_coins=0&include_24hr_changes=true"
-        width="100%"
-        height="100%"
-        frameBorder="0"
-        allowFullScreen
-        title="CoinGecko Widget"
-        style={{ borderRadius: '8px' }}
-      ></iframe>
-      <div style={{ textAlign: 'center', marginTop: '10px', color: '#888' }}>
-        <a href="https://www.coingecko.com/" rel="noopener nofollow" target="_blank" style={{ color: '#2962FF' }}>
-          Powered by CoinGecko
-        </a>
-      </div>
+    <div className="tradingview-widget-container" ref={containerRef} style={{ height: height, width: "100%" }}>
+      <div id={containerId} style={{ height: "calc(100% - 32px)", width: "100%" }}></div>
     </div>
   );
 };
 
-export default CoinGeckoWidget;
+export default AdvancedChartWidget;
 

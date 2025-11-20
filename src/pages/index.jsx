@@ -6,6 +6,7 @@ import FAQ from '../components/home/FAQ';
 import Footer from '../components/home/Footer';
 import Navbar from '../components/home/Navbar';
 import IframeSect from '../components/home/IframeSect';
+import AdvancedChartWidget from '../components/dashboard/LengthyAnalytics';
 import { PLAN_CONFIG, formatPercent } from '../utils/planConfig';
 import dashboardStyles from '../components/dashboard/DashboardSect.module.css';
 
@@ -15,14 +16,7 @@ export default function Home() {
   const [showDisplayCard, setShowDisplayCard] = useState(false);
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://widgets.coingecko.com/coingecko-coin-price-marquee-widget.js';
-    script.async = true;
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
+    // Removed CoinGecko widget
   }, []);
 
   useEffect(() => {
@@ -111,12 +105,9 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <coingecko-coin-price-marquee-widget
-            coin-ids="bitcoin,ethereum,eos,ripple,litecoin,tron,dogecoin,stellar,algorand,flow,dai,usdd,maker,astar,tezos,solana,neo,gala,cardano,aptos,helium,kava"
-            currency="usd"
-            background-color="#000613"
-            locale="en"
-          ></coingecko-coin-price-marquee-widget>
+          
+
+
           <div className="companyscopes">
             <div className="unitscope advantage">
               <h3>OUR ADVANTAGES</h3>
@@ -176,12 +167,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <coingecko-coin-price-marquee-widget
-          coin-ids="bitcoin,ethereum,eos,ripple,litecoin,tron,dogecoin,stellar,algorand,flow,dai,usdd,maker,astar,tezos,solana,neo,gala,cardano,aptos,helium,kava,fantom"
-          currency="usd"
-          background-color="#000613"
-          locale="en"
-        ></coingecko-coin-price-marquee-widget>
         <section className="pathToInvest">
           <h2>Your Investment Journey Starts Here</h2>
           <div className="pathCntn">
@@ -271,6 +256,12 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        <section style={{ width: '100%', padding: '2rem 5%', backgroundColor: '#000613' }}>
+          <h2 style={{ color: '#fff', textAlign: 'center', marginBottom: '1.5rem', fontSize: '2rem' }}>Live Market Analysis</h2>
+          <AdvancedChartWidget containerId="home-chart-widget" height="600px" />
+        </section>
+
         <IframeSect />
         <Testimonies />
         <FAQ />

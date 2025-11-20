@@ -1,10 +1,8 @@
 import {useState} from "react";
-import CoinGeckoWidget from "./LengthyAnalytics";
-import Analytics2 from "./Analytics2";
-import AnalyticsViewWidget from "./Analytics3";
 import styles from "./DashboardSect.module.css";
 import { PLAN_CONFIG, formatPercent } from "../../utils/planConfig";
 import profileStyles from "./Profile.module.css";
+import AdvancedChartWidget from "./LengthyAnalytics";
 
 const DashboardSect = ({setWidgetState, currentUser, setInvestData, totalCapital = 0, totalROI = 0, totalBonus = 0, investments = []}) => {
     const [passwordShow, setPasswordShow] = useState(false);
@@ -78,16 +76,8 @@ const DashboardSect = ({setWidgetState, currentUser, setInvestData, totalCapital
           </div>
         </div>
 
-        <div className="gridAnalytics">
-          <div className="leftGridAnalaytics">
-            <AnalyticsViewWidget />
-          </div>
-          <div className="rightGridAnalaytics">
-            <Analytics2 />
-          </div>
-        </div>
-        <div className="lengthyAnalytics">
-          <CoinGeckoWidget />
+        <div style={{ marginBottom: '2rem' }}>
+          <AdvancedChartWidget containerId="dashboard-chart-widget" />
         </div>
       </div>
         <section className={styles.packages} id="packages">
