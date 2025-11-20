@@ -27,6 +27,21 @@ const Profile = () => {
   const router = useRouter();
   const [passwordShow, setPasswordShow] = useState(true);
   const [profilestate, setProfileState] = useState("Dashboard");
+
+  // Persist profile state across refreshes
+  useEffect(() => {
+    const savedState = sessionStorage.getItem('currentProfileState');
+    if (savedState) {
+      setProfileState(savedState);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (profilestate) {
+      sessionStorage.setItem('currentProfileState', profilestate);
+    }
+  }, [profilestate]);
+
   const [bitPrice, setBitPrice] = useState(0);
   const [ethPrice, setEthPrice] = useState(0);
   const [investments, setInvestments] = useState([]);

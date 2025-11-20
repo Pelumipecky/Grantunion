@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { supabase, supabaseRealtime } from '../../database/supabaseUtils';
+import { supabase, supabaseRealtime, supabaseDb } from '../../database/supabaseUtils';
 import styles from './LoanSect.module.css';
 import Modal from "../Modal";
 
@@ -158,6 +158,11 @@ export default function LoanSect({ currentUser }) {
       return;
     }
 
+    if (!currentUser?.idnum) {
+      showModal('error', 'Authentication Error', 'User identifier missing. Please refresh the page or log in again.');
+      return;
+    }
+
     setSubmitting(true);
     try {
       const loanSubmitData = {
@@ -214,7 +219,7 @@ export default function LoanSect({ currentUser }) {
       showModal('success', 'Success', 'Loan request submitted successfully');
     } catch (err) {
       console.error('Loan request error', err);
-      showModal('error', 'Error', 'Error submitting loan request');
+      showModal('error', 'Error', `Error submitting loan request: ${err.message || 'Unknown error'}`);
     } finally {
       setSubmitting(false);
     }

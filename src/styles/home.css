@@ -1249,16 +1249,16 @@ nav .logoCntn img{
 .FAQ{
     background-color: var(--dark-clr2);
     padding-inline: 20px;
-    padding-block: 5em;
+    padding-block: 3em;
 }
 
 .questionCntn{
     width: 100%;
-    min-width: 700px;
-    max-width: 80vw;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2.5em;
+    min-width: 300px;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
     margin-inline: auto;
 }
 
@@ -1281,17 +1281,22 @@ nav .logoCntn img{
 }
 
 .leftFAQ h2{
-    font-size: 3em;
+    font-size: 2em;
     color: var(--text-deco);
     font-weight: 400;
     text-align: center;
-    margin-top: 1em;
+    margin-top: 0;
+    margin-bottom: 0.5em;
 }
 
 .rightFAQ{
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid var(--opac-clr3);
 }
 
 .unitQuestion{
@@ -1304,24 +1309,33 @@ nav .logoCntn img{
     transition: all 0.4s ease-in-out;
 }
 
+.unitQuestion:last-child {
+    border-bottom: none;
+}
+
 .questionHeading{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-block: 1.5em;
+    padding-block: 1em;
+    padding-inline: 10px;
     background-color: transparent;
     cursor: pointer;
 }
 
+.questionHeading:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
 .questionHeading h3{
-    font-size: 1.45em;
+    font-size: 1.1em;
     color: var(--text-deco);
     font-weight: 500;
 }
 
 .questionHeading i{
-    font-size: 1.7em;
-    color: var(--text-deco);
+    font-size: 1.2em;
+    color: var(--text-accent);
     font-weight: 500;
 
     transition: rotate 0.25s ease-in-out;
@@ -1331,13 +1345,15 @@ nav .logoCntn img{
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding-block: 5px 1em;
+    padding-block: 0 1em;
+    padding-inline: 10px;
 }
 
 .answerBody p{
-    font-size: 1.3em;
+    font-size: 0.95em;
     font-weight: 300;
-    color: var(--text-deco);
+    color: var(--grey-clr);
+    line-height: 1.6;
 }
 
 .answerBody p span{
@@ -1346,11 +1362,12 @@ nav .logoCntn img{
 }
 
 .rightFAQ > p{
-    font-size: 1.1em;
+    font-size: 0.9em;
     font-weight: 300;
     color: var(--text-deco);
-    padding-block: 1.5em;
+    padding-block: 1em;
     width: 100%;
+    text-align: center;
 }
 .rightFAQ > p a{
     font-size: 0.98em;
