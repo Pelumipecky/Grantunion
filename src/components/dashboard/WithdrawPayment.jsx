@@ -327,8 +327,45 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
         <div className={styles.paymentDetails}>
             {withdrawData?.paymentOption !== 'Bank Transfer' ? (
                 <>
-                    <h3>Send exactly <span>{withdrawData?.paymentOption === "Bitcoin" ? `${calculateCryptoAmount(displayAmount, bitPrice, 'BTC')} BTC` : `${calculateCryptoAmount(displayAmount, ethPrice, 'ETH')} ETH`}</span> to</h3>
-                    <p className={styles.infoText}>{withdrawData?.paymentOption === "Bitcoin" ? "Bitcoin Address:" : "Ethereum Address:"} <span className={styles.copyAddress} onClick={() => {copyToClipboard(`${withdrawData?.paymentOption === "Bitcoin" ? "bc1q4d5rfgeuq0su78agvermq3fpqtxjczlzhnttty" : "0x1D2C71bF833Df554A86Ad142f861bc12f3B24c1c"}`)}}>{copystate} <i className="icofont-ui-copy"></i></span></p>
+                    <h3>Enter your {withdrawData?.paymentOption} Wallet Address</h3>
+                    <div className={styles.inputGroup} style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '1rem' }}>
+                        <input 
+                            type="text" 
+                            placeholder={`Paste your ${withdrawData?.paymentOption} address here`}
+                            value={withdrawalCode}
+                            onChange={(e) => setWithdrawalCode(e.target.value)}
+                            style={{
+                                flex: 1,
+                                padding: '12px',
+                                borderRadius: '8px',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                background: 'rgba(0,0,0,0.2)',
+                                color: '#fff',
+                                outline: 'none'
+                            }}
+                        />
+                        <button 
+                            type="button"
+                            title="Scan QR Code"
+                            style={{
+                                padding: '12px',
+                                borderRadius: '8px',
+                                border: '1px solid #FFB347',
+                                background: 'rgba(255, 179, 71, 0.1)',
+                                color: '#FFB347',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                            onClick={() => alert("QR Code Scanner feature coming soon!")}
+                        >
+                            <i className="icofont-qr-code" style={{ fontSize: '1.2rem' }}></i>
+                        </button>
+                    </div>
+                    <p className={styles.infoText} style={{ marginTop: '0.5rem' }}>
+                        Please ensure the address is correct. We are not responsible for funds sent to the wrong address.
+                    </p>
                 </>
             ) : (
                 <>

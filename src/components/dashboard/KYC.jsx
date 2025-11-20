@@ -256,15 +256,20 @@ export default function KYC({ currentUser }) {
 
   const renderStatus = () => {
     if (!kycStatus) return null;
+    // Normalize status to capitalize first letter for display, but handle lowercase keys for styling
+    const normalizedStatus = kycStatus.charAt(0).toUpperCase() + kycStatus.slice(1).toLowerCase();
+    const statusKey = normalizedStatus; // Or just use normalizedStatus if keys match
+
     const statusClasses = {
       'Pending': styles.pending,
       'Verified': styles.verified,
       'Rejected': styles.rejected
     };
+    
     return (
-      <div className={`${styles.statusBox} ${statusClasses[kycStatus] || ''}`}>
-        <h3>KYC Status: {kycStatus}</h3>
-        {kycStatus === 'Rejected' && (
+      <div className={`${styles.statusBox} ${statusClasses[normalizedStatus] || ''}`}>
+        <h3>KYC Status: {normalizedStatus}</h3>
+        {normalizedStatus === 'Rejected' && (
           <p>Your KYC was rejected. Please submit again with correct documentation.</p>
         )}
       </div>
@@ -466,7 +471,7 @@ export default function KYC({ currentUser }) {
         </form>
 
         <div style={{ marginTop: 16 }}>
-          <p>Current status: {currentUser?.kycStatus || 'Not submitted'}</p>
+          <p>Current status: {kycStatus || 'Not submitted'}</p>
         </div>
       </div>
 

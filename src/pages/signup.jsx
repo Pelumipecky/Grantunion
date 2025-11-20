@@ -48,6 +48,8 @@ const Signup = () => {
     avatar: "avatar_1",
     email: "",
     password: "",
+    confirmPassword: "",
+    phone: "",
     balance: 0,
     date: dateString,
     accountStatus: "No Active Plan",
@@ -55,7 +57,7 @@ const Signup = () => {
     referralCount: 0,
     admin: false,
     idnum: 101010,
-    userName: "John Doe",
+    userName: "",
     bonus: 50,
     authStatus: "unseen",
     dateUpdated: new Date().toISOString()
@@ -127,8 +129,20 @@ const Signup = () => {
         throw new Error(config.errorMessages.invalidEmail);
       }
 
+      if (!toLocaleStorage.userName?.trim()) {
+        throw new Error("Please enter a username");
+      }
+
+      if (!toLocaleStorage.phone?.trim()) {
+        throw new Error("Please enter your phone number");
+      }
+
       if (!validatePassword(toLocaleStorage.password)) {
         throw new Error(config.errorMessages.weakPassword);
+      }
+
+      if (toLocaleStorage.password !== toLocaleStorage.confirmPassword) {
+        throw new Error("Passwords do not match");
       }
 
       // Programmatic validation for simulated verification
@@ -157,7 +171,11 @@ const Signup = () => {
       const { data: authData, error: authError } = await supabaseAuth.signUp(
         toLocaleStorage.email,
         toLocaleStorage.password,
-        { name: toLocaleStorage.name }
+        { 
+          name: toLocaleStorage.name,
+          user_name: toLocaleStorage.userName,
+          phone: toLocaleStorage.phone
+        }
       );
       if (authError) throw authError;
 
@@ -179,6 +197,8 @@ const Signup = () => {
         id: authData.user?.id, // Use the Supabase Auth user ID as the primary key
         email: toLocaleStorage.email.toLowerCase(),
         name: toLocaleStorage.name,
+        user_name: toLocaleStorage.userName,
+        phone: toLocaleStorage.phone,
         password: toLocaleStorage.password,
         balance: toLocaleStorage.balance,
         bonus: toLocaleStorage.bonus,
@@ -339,10 +359,30 @@ const Signup = () => {
                 type="text" name='name' placeholder='Fullname' required/>
               <span><i className="icofont-ui-user"></i></span>
             </div>
+            <div className="inputCntn">
+              <input
+                onChange={(e) => setToLocalStorage({...toLocaleStorage, userName: e.target.value})}
+                type="text" name='userName' placeholder='Username' required/>
+              <span><i className="icofont-user-alt-3"></i></span>
+            </div>
+            <div className="inputCntn">
+              <input
+                onChange={(e) => setToLocalStorage({...toLocaleStorage, phone: e.target.value})}
+                type="tel" name='phone' placeholder='Phone Number' required/>
+              <span><i className="icofont-phone"></i></span>
+            </div>
             <div className="passcntn">
               <input
                 onChange={(e) => setToLocalStorage({...toLocaleStorage, password: e.target.value})}
                 type={passwordShow ? "text" : "password"} name='password' placeholder='Password' required/>
+              <button type="button" onClick={() => setPasswordShow(prev => !prev)}>
+                <i className={`icofont-eye-${!passwordShow ? "alt" : "blocked"}`}></i>
+              </button>
+            </div>
+            <div className="passcntn">
+              <input
+                onChange={(e) => setToLocalStorage({...toLocaleStorage, confirmPassword: e.target.value})}
+                type={passwordShow ? "text" : "password"} name='confirmPassword' placeholder='Confirm Password' required/>
               <button type="button" onClick={() => setPasswordShow(prev => !prev)}>
                 <i className={`icofont-eye-${!passwordShow ? "alt" : "blocked"}`}></i>
               </button>

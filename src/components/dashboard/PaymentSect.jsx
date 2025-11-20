@@ -101,7 +101,9 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
         <div className="mainPaymentSect" style={{ background: 'rgba(255,255,255,0.03)', padding: '2rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
             <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', color: '#ccc' }}>
                 Send exactly <span style={{ color: '#FFB347', fontSize: '1.4rem', fontWeight: 'bold', display: 'block', marginTop: '0.5rem' }}>
-                    {investData?.paymentOption === "Bitcoin" ? `${calculateCryptoAmount(investData?.capital, bitPrice, 'BTC')} BTC` : `${calculateCryptoAmount(investData?.capital, ethPrice, 'ETH')} ETH`}
+                    {investData?.paymentOption === "Bitcoin" ? `${calculateCryptoAmount(investData?.capital, bitPrice, 'BTC')} BTC` : 
+                     investData?.paymentOption === "Ethereum" ? `${calculateCryptoAmount(investData?.capital, ethPrice, 'ETH')} ETH` :
+                     `${parseFloat(investData?.capital).toFixed(2)} USDT`}
                 </span>
             </h3>
             
@@ -119,10 +121,12 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
                     gap: '10px'
                 }}>
                     <span style={{ fontFamily: 'monospace', fontSize: '1.1rem', color: '#fff', wordBreak: 'break-all' }}>
-                        {investData?.paymentOption === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : "x675be3dc056d6a0c199395d66e21101ad87504f4"}
+                        {investData?.paymentOption === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : 
+                         investData?.paymentOption === "Ethereum" ? "0x1D2C71bF833Df554A86Ad142f861bc12f3B24c1c" :
+                         "0x675be3dc056d6a0c199395d66e21101ad87504f4"}
                     </span>
                     <button 
-                        onClick={() => {copyToClipboard(`${investData?.paymentOption === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : "x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
+                        onClick={() => {copyToClipboard(`${investData?.paymentOption === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : investData?.paymentOption === "Ethereum" ? "0x1D2C71bF833Df554A86Ad142f861bc12f3B24c1c" : "0x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
                         style={{
                             background: 'rgba(255, 179, 71, 0.15)',
                             border: '1px solid #FFB347',

@@ -19,6 +19,7 @@ import WithdrawalPayment from "../components/dashboard/WithdrawPayment";
 import LoansAdmin from "../components/dashAdmin/LoansAdmin";
 import KycAdmin from "../components/dashAdmin/KycAdmin";
 import { PLAN_CONFIG } from "../utils/planConfig";
+import profileStyles from "../components/dashboard/Profile.module.css";
 
 const DEFAULT_PLAN = PLAN_CONFIG[0];
 
@@ -454,51 +455,46 @@ export default function DashboardAdmin() {
             .
           </span>
         </h1>
-        <div className="topmostRightProfile">
-          <div className="unitUserEarningDisplay fancybg">
-            <h3>
-              Total Revenue{" "}
+        <div className={profileStyles.accountSnapshot} style={{marginBottom: '2rem'}}>
+          <div className={profileStyles.snapshotHeader}>
+            <h2>Admin Overview</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <p>System-wide financial and user statistics.</p>
               <span
-                onClick={() => {
-                  setPasswordShow((prev) => !prev);
-                }}
+                onClick={() => setPasswordShow((prev) => !prev)}
+                style={{ cursor: 'pointer', fontSize: '1.2rem', color: '#666' }}
+                title={passwordShow ? "Hide financial details" : "Show financial details"}
               >
-                <i
-                  className={`icofont-eye-${!passwordShow ? "alt" : "blocked"}`}
-                ></i>
+                <i className={`icofont-eye-${!passwordShow ? "alt" : "blocked"}`}></i>
               </span>
-            </h3>
-            <h2>
-              $
-              {passwordShow
-                ? `${totalCapital.toLocaleString()}`
-                : "******"}
-            </h2>
+            </div>
           </div>
-          <div className="unitUserEarningDisplay fancybg">
-            <h3>Active Users</h3>
-            <h2>{`${activeUsers.length}`}</h2>
-          </div>
-          <div className="unitUserEarningDisplay fancybg">
-            <h3>Active Investments</h3>
-            <h2>
-              {`${
-                investments.filter(
-                  (elem) => elem?.status === "Active" && elem?.idnum !== "101010"
-                ).length
-              }`}
-            </h2>
-          </div>
-          <div className="unitUserEarningDisplay fancybg">
-            <h3>Pending Plans</h3>
-            <h2>
-              {`${
-                investments.filter(
-                  (elem) =>
-                    (elem?.status === "Pending" && elem?.idnum !== "101010")
-                ).length
-              }`}
-            </h2>
+          <div className={profileStyles.snapshotGrid}>
+              <div className={profileStyles.snapshotCard}>
+                <p className={profileStyles.snapshotLabel}>Total Revenue</p>
+                <p className={profileStyles.snapshotValue}>
+                  ${passwordShow ? totalCapital.toLocaleString() : "******"}
+                </p>
+              </div>
+              
+              <div className={profileStyles.snapshotCard}>
+                <p className={profileStyles.snapshotLabel}>Active Users</p>
+                <p className={profileStyles.snapshotValue}>{activeUsers.length}</p>
+              </div>
+
+              <div className={profileStyles.snapshotCard}>
+                <p className={profileStyles.snapshotLabel}>Active Investments</p>
+                <p className={profileStyles.snapshotValue}>
+                  {investments.filter((elem) => elem?.status === "Active" && elem?.idnum !== "101010").length}
+                </p>
+              </div>
+
+              <div className={profileStyles.snapshotCard}>
+                <p className={profileStyles.snapshotLabel}>Pending Plans</p>
+                <p className={profileStyles.snapshotValue}>
+                  {investments.filter((elem) => (elem?.status === "Pending" && elem?.idnum !== "101010")).length}
+                </p>
+              </div>
           </div>
         </div>
         {profilestate === "Investments" && (

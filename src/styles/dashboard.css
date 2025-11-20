@@ -249,7 +249,7 @@
     cursor: pointer;
 }
 
-.rightLeftProfile button.logoutBtn {
+button.logoutBtn {
     align-items: center;
     justify-content: center;
     padding-block: 8px;
@@ -265,13 +265,18 @@
     opacity: 1;
     visibility: visible;
     display: flex;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    gap: 16px;
+    width: 100%;
 }
 
-.rightLeftProfile button.logoutBtn:hover{
+button.logoutBtn:hover{
     background-color:  #dc126348;
 }
 
-.rightLeftProfile button.logoutBtn i{
+button.logoutBtn i{
     color: var(--danger-clr);
 }
 
