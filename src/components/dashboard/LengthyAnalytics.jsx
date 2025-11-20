@@ -1,88 +1,26 @@
-// TradingViewWidget.jsx
-import React, { useEffect, useRef } from 'react';
+// CoinGecko Price Ticker Widget
+import React from 'react';
 
-const TradingViewWidget = () => {
-  const container = useRef();
-
-  useEffect(
-    () => {
-      const script = document.createElement("script");
-      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js";
-      script.type = "text/javascript";
-      script.async = true;
-      script.innerHTML = `
-      {
-        "symbols": [
-          [
-            "Apple",
-            "AAPL|1D"
-          ],
-          [
-            "Google",
-            "GOOGL|1D"
-          ],
-          [
-            "Microsoft",
-            "MSFT|1D"
-          ],
-          [
-            "NASDAQ:TSLA|1D"
-          ],
-          [
-            "COINBASE:BTCUSD|1D"
-          ],
-          [
-            "TVC:USOIL|1D"
-          ],
-          [
-            "TVC:US03MY|1D"
-          ]
-        ],
-        "chartOnly": false,
-        "width": "100%",
-        "height": "100%",
-        "locale": "en",
-        "colorTheme": "dark",
-        "autosize": true,
-        "showVolume": false,
-        "showMA": false,
-        "hideDateRanges": false,
-        "hideMarketStatus": false,
-        "hideSymbolLogo": false,
-        "scalePosition": "right",
-        "scaleMode": "Normal",
-        "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-        "fontSize": "10",
-        "noTimeScale": false,
-        "valuesTracking": "1",
-        "changeMode": "price-and-percent",
-        "chartType": "area",
-        "maLineColor": "#2962FF",
-        "maLineWidth": 1,
-        "maLength": 9,
-        "lineWidth": 2,
-        "lineType": 0,
-        "dateRanges": [
-          "1d|1",
-          "1m|30",
-          "3m|60",
-          "12m|1D",
-          "60m|1W",
-          "all|1M"
-        ]
-      }`;
-      container.current.appendChild(script);
-    },
-    []
-  );
-
+const CoinGeckoWidget = () => {
   return (
-  <div className="tradingview-widget-container" ref={container}>
-    <div className="tradingview-widget-container__widget"></div>
-    <div className="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span className="blue-text">Track all markets on TradingView</span></a></div>
-  </div>
+    <div style={{ width: '100%', height: '400px', backgroundColor: '#1d2224', padding: '20px', borderRadius: '8px' }}>
+      <iframe
+        src="https://www.coingecko.com/en/widgets/coin_compare_chart?widgets=social&defi_coins=0&include_24hr_changes=true"
+        width="100%"
+        height="100%"
+        frameBorder="0"
+        allowFullScreen
+        title="CoinGecko Widget"
+        style={{ borderRadius: '8px' }}
+      ></iframe>
+      <div style={{ textAlign: 'center', marginTop: '10px', color: '#888' }}>
+        <a href="https://www.coingecko.com/" rel="noopener nofollow" target="_blank" style={{ color: '#2962FF' }}>
+          Powered by CoinGecko
+        </a>
+      </div>
+    </div>
   );
-}
+};
 
-export default TradingViewWidget;
+export default CoinGeckoWidget;
 

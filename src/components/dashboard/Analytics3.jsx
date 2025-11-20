@@ -1,45 +1,26 @@
-// TradingViewWidget.jsx
-import React, { useEffect, useRef } from 'react';
+// CoinGecko Market Data Widget
+import React from 'react';
 
 const AnalyticsViewWidget = () => {
-  const container = useRef();
-
-  useEffect(
-    () => {
-      const script = document.createElement("script");
-      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-forex-cross-rates.js";
-      script.type = "text/javascript";
-      script.async = true;
-      script.innerHTML = `
-      {
-        "width": "100%",
-        "height": "100%",
-        "currencies": [
-          "EUR",
-          "USD",
-          "JPY",
-          "GBP",
-          "CHF",
-          "AUD",
-          "CAD",
-          "NZD"
-        ],
-        "isTransparent": true,
-        "colorTheme": "dark",
-        "locale": "en"
-      }`;
-      container.current.appendChild(script);
-    },
-    []
-  );
-
   return (
-  <div className="tradingview-widget-container" ref={container}>
-    <div className="tradingview-widget-container__widget"></div>
-    <div className="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span className="blue-text">Track all markets on TradingView</span></a></div>
+    <div style={{ width: '100%', height: '400px', backgroundColor: '#1d2224', padding: '20px', borderRadius: '8px' }}>
+      <iframe
+        src="https://www.coingecko.com/en/widgets/coin_price_chart_widget?widgets=price_chart&defi_coins=0&include_24hr_changes=true"
+        width="100%"
+        height="100%"
+        frameBorder="0"
+        allowFullScreen
+        title="CoinGecko Price Chart"
+        style={{ borderRadius: '8px' }}
+      ></iframe>
+      <div style={{ textAlign: 'center', marginTop: '10px', color: '#888' }}>
+        <a href="https://www.coingecko.com/" rel="noopener nofollow" target="_blank" style={{ color: '#2962FF' }}>
+          Powered by CoinGecko
+        </a>
+      </div>
     </div>
   );
-}
+};
 
 export default AnalyticsViewWidget;
 

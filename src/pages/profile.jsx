@@ -720,11 +720,11 @@ const Profile = () => {
           <p>
             Proudly powered by{" "}
             <a
-              href="https://www.tradingview.com"
+              href="https://www.coingecko.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Trading view
+              CoinGecko
             </a>
           </p>
           <p>|</p>

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import TradingViewWidget from "./LengthyAnalytics";
+import CoinGeckoWidget from "./LengthyAnalytics";
 import Analytics2 from "./Analytics2";
 import AnalyticsViewWidget from "./Analytics3";
 import styles from "./DashboardSect.module.css";
@@ -87,7 +87,7 @@ const DashboardSect = ({setWidgetState, currentUser, setInvestData, totalCapital
           </div>
         </div>
         <div className="lengthyAnalytics">
-          <TradingViewWidget />
+          <CoinGeckoWidget />
         </div>
       </div>
         <section className={styles.packages} id="packages">

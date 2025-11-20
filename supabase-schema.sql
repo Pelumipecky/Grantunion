@@ -1,31 +1,14 @@
 -- Supabase Database Schema for Grant Union Investment Migration
 -- Run this SQL in your Supabase SQL Editor
 
--- Drop existing tables if they exist (for clean migration)
-DROP TABLE IF EXISTS referral_rewards CASCADE;
-DROP TABLE IF EXISTS referrals CASCADE;
-DROP TABLE IF EXISTS withdrawals CASCADE;
-DROP TABLE IF EXISTS loans CASCADE;
-DROP TABLE IF EXISTS kyc CASCADE;
-DROP TABLE IF EXISTS notifications CASCADE;
-DROP TABLE IF EXISTS investments CASCADE;
-DROP TABLE IF EXISTS userlogs CASCADE;
-
--- Drop existing storage buckets if they exist
-DELETE FROM storage.objects WHERE bucket_id IN ('kyc-documents', 'avatars');
-DELETE FROM storage.buckets WHERE id IN ('kyc-documents', 'avatars');
-
--- Drop existing policies if they exist
-DROP POLICY IF EXISTS "Allow authenticated users to upload KYC documents" ON storage.objects;
-DROP POLICY IF EXISTS "Allow public access to KYC documents" ON storage.objects;
-DROP POLICY IF EXISTS "Allow authenticated users to upload avatars" ON storage.objects;
-DROP POLICY IF EXISTS "Allow public access to avatars" ON storage.objects;
+-- Note: This version does not drop existing tables to avoid data loss
+-- It creates tables and adds columns only if they don't exist
 
 -- Enable Row Level Security
 ALTER DEFAULT PRIVILEGES REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
 
 -- Create userlogs table (equivalent to Firestore userlogs collection)
-CREATE TABLE userlogs (
+CREATE TABLE IF NOT EXISTS userlogs (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
   name TEXT,
@@ -59,7 +42,7 @@ CREATE TABLE userlogs (
 );
 
 -- Create investments table
-CREATE TABLE investments (
+CREATE TABLE IF NOT EXISTS investments (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   idnum INTEGER NOT NULL REFERENCES userlogs(idnum),
   plan TEXT NOT NULL,
@@ -79,7 +62,7 @@ CREATE TABLE investments (
 );
 
 -- Create notifications table
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   idnum INTEGER NOT NULL REFERENCES userlogs(idnum),
   title TEXT,
@@ -91,7 +74,7 @@ CREATE TABLE notifications (
 );
 
 -- Create kyc table
-CREATE TABLE kyc (
+CREATE TABLE IF NOT EXISTS kyc (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id TEXT NOT NULL, -- References userlogs.id
   idnum INTEGER,
@@ -107,7 +90,7 @@ CREATE TABLE kyc (
 );
 
 -- Create loans table (if used)
-CREATE TABLE loans (
+CREATE TABLE IF NOT EXISTS loans (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   idnum INTEGER NOT NULL REFERENCES userlogs(idnum),
   user_id TEXT,
@@ -139,7 +122,7 @@ CREATE TABLE loans (
 );
 
 -- Create withdrawals table
-CREATE TABLE withdrawals (
+CREATE TABLE IF NOT EXISTS withdrawals (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   idnum INTEGER NOT NULL REFERENCES userlogs(idnum),
   amount DECIMAL(15,2),
@@ -151,7 +134,7 @@ CREATE TABLE withdrawals (
 );
 
 -- Create chats table for chatbot functionality
-CREATE TABLE chats (
+CREATE TABLE IF NOT EXISTS chats (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id TEXT NOT NULL, -- References user identifier (idnum or id)
   message TEXT NOT NULL,
@@ -162,7 +145,7 @@ CREATE TABLE chats (
 );
 
 -- Create withdrawal_codes table for withdrawal functionality
-CREATE TABLE withdrawal_codes (
+CREATE TABLE IF NOT EXISTS withdrawal_codes (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   code TEXT NOT NULL,
   user_id TEXT NOT NULL,
@@ -174,7 +157,7 @@ CREATE TABLE withdrawal_codes (
 );
 
 -- Create referrals table for referral relationships and payouts
-CREATE TABLE referrals (
+CREATE TABLE IF NOT EXISTS referrals (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   referral_code TEXT NOT NULL,
   referrer_id UUID REFERENCES userlogs(id) ON DELETE SET NULL,
@@ -194,7 +177,7 @@ CREATE TABLE referrals (
 );
 
 -- Track referral reward ledger for auditing payouts
-CREATE TABLE referral_rewards (
+CREATE TABLE IF NOT EXISTS referral_rewards (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   referral_id UUID REFERENCES referrals(id) ON DELETE CASCADE,
   referrer_idnum INTEGER REFERENCES userlogs(idnum) ON DELETE SET NULL,
@@ -279,3 +262,6 @@ FOR INSERT WITH CHECK (bucket_id = 'avatars' AND auth.role() = 'authenticated');
 
 CREATE POLICY "Allow public access to avatars" ON storage.objects
 FOR SELECT USING (bucket_id = 'avatars');
+
+-- Add missing columns if they don't exist (for existing databases)
+ALTER TABLE userlogs ADD COLUMN IF NOT EXISTS phone TEXT;
