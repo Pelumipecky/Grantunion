@@ -1,7 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { supabaseDb } from "../../database/supabaseUtils";
+import Modal from "../Modal";
 
 const UnitInvestSect = ({ setInvestData, setProfileState, investData, currentUser }) => {
+  // Modal State
+  const [modalConfig, setModalConfig] = useState({
+      isOpen: false,
+      type: '',
+      title: '',
+      message: '',
+      onConfirm: null
+  });
+
+  const closeModal = () => setModalConfig(prev => ({ ...prev, isOpen: false }));
+
+  const showModal = (type, title, message, onConfirm = null) => {
+      setModalConfig({
+          isOpen: true,
+          type,
+          title,
+          message,
+          onConfirm
+      });
+  };
+
   const notificationPush = {
     message: `Your $${investData?.capital} ${investData?.plan} investment plan has been activated`,
     idnum: investData.idnum,
@@ -21,9 +43,6 @@ const UnitInvestSect = ({ setInvestData, setProfileState, investData, currentUse
   };
 
   const handleActiveInvestment = async () => {
-    const ok = window.confirm(`Activate investment ${investData?.id} for ${investData?.idnum}? This will credit the user's balance.`);
-    if (!ok) return;
-
     try {
       const approvedBy = currentUser?.id || currentUser?.userName || 'admin';
 
@@ -37,11 +56,17 @@ const UnitInvestSect = ({ setInvestData, setProfileState, investData, currentUse
       });
 
       await supabaseDb.createNotification(notificationPush);
-      setProfileState("Investments");
+      showModal('success', 'Success', 'Investment activated successfully');
+      setTimeout(() => {
+          setProfileState("Investments");
+      }, 1500);
     } catch (err) {
       console.error('Error activating investment:', err);
       try { await supabaseDb.createNotification(notificationPush); } catch(e){}
-      setProfileState("Investments");
+      showModal('error', 'Error', 'Error activating investment');
+      setTimeout(() => {
+          setProfileState("Investments");
+      }, 1500);
     }
   };
 
@@ -96,12 +121,84 @@ const UnitInvestSect = ({ setInvestData, setProfileState, investData, currentUse
             <div className="flex-align-jusc">
                 {
                     investData?.status === "Pending" && (
-                        <button type="button" onClick={handleActiveInvestment} className='activateBtn'>Activate Investment</button>
+                        <button 
+                            type="button" 
+                            onClick={() => showModal('confirm', 'Confirm Activation', 
+                                `Activate investment ${investData?.id} for ${investData?.idnum}? This will credit the user's balance.`,
+                                handleActiveInvestment
+                            )} 
+                            className='activateBtn'
+                        >
+                            Activate Investment
+                        </button>
                     )
                 }
-                <button type="button" onClick={handleDetailUpdate}>Update Details</button>
+                <button type="button" onClick={handleDetailUpdate} className='updateBtn'>Update Details</button>
             </div>
         </div>
+
+    {/* Modal Component */}
+    <Modal
+        isOpen={modalConfig.isOpen}
+        onClose={closeModal}
+        title={modalConfig.title}
+    >
+        {modalConfig.type === 'confirm' ? (
+            <div>
+                <p style={{color: 'var(--text-clr1)', marginBottom: '20px'}}>{modalConfig.message}</p>
+                <div style={{display: 'flex', gap: '12px', justifyContent: 'center'}}>
+                    <button
+                        onClick={closeModal}
+                        style={{
+                            padding: '10px 24px',
+                            borderRadius: '25px',
+                            border: '1px solid var(--text-deco)',
+                            background: 'transparent',
+                            color: 'var(--text-clr1)',
+                            cursor: 'pointer',
+                            fontWeight: 600
+                        }}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={modalConfig.onConfirm}
+                        style={{
+                            padding: '10px 24px',
+                            borderRadius: '25px',
+                            border: 'none',
+                            background: 'linear-gradient(135deg, #FFB347, #FF7A18)',
+                            color: '#1C0F36',
+                            cursor: 'pointer',
+                            fontWeight: 600
+                        }}
+                    >
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        ) : (
+            <div>
+                <p style={{color: 'var(--text-clr1)', marginBottom: '20px'}}>{modalConfig.message}</p>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <button 
+                        onClick={closeModal} 
+                        style={{
+                            padding: '10px 24px',
+                            borderRadius: '25px',
+                            border: 'none',
+                            background: 'linear-gradient(135deg, #FFB347, #FF7A18)',
+                            color: '#1C0F36',
+                            cursor: 'pointer',
+                            fontWeight: 600
+                        }}
+                    >
+                        OK
+                    </button>
+                </div>
+            </div>
+        )}
+    </Modal>
     </div>
   )
 }

@@ -401,11 +401,10 @@ const Profile = () => {
   const totalROI = investments
     .filter((elem) => elem?.status !== "Pending")
     .reduce((sum, currentObject) => {
-      // Ensure that currentObject.capital is a number before adding it to the sum
+      // Use credited_roi instead of projected roi
       const ROIvalue =
-        typeof currentObject.roi === "number" ? currentObject.roi : 0;
+        typeof currentObject.credited_roi === "number" ? currentObject.credited_roi : 0;
 
-      // Add the capital value to the sum
       return sum + ROIvalue;
     }, 0);
 
@@ -547,7 +546,7 @@ const Profile = () => {
           </ul>
         </div>
         <div className={profileStyles.rightLeftProfile}>
-          <button onClick={handleLogOut}>
+          <button onClick={handleLogOut} className="logoutBtn">
             Log Out <i className="icofont-logout"></i>
           </button>
         </div>
@@ -564,59 +563,7 @@ const Profile = () => {
             .
           </span>
         </h1>
-        <div className="topmostRightProfile">
-          <div className="unitUserEarningDisplay fancybg">
-            <h3>
-              Available Balance {!currentUser && <span style={{fontSize: '0.8rem', color: '#999'}}>(Loading...)</span>}
-              <span
-                onClick={() => {
-                  setPasswordShow((prev) => !prev);
-                }}
-              >
-                <i
-                  className={`icofont-eye-${!passwordShow ? "alt" : "blocked"}`}
-                ></i>
-              </span>
-            </h3>
-            <h2>
-              $
-              {passwordShow
-                ? (() => {
-                    const userBalance = parseFloat(currentUser?.balance || 0);
-                    const capital = parseFloat(totalCapital || 0);
-                    const roi = parseFloat(totalROI || 0);
-                    const bonus = parseFloat(totalBonus || 0);
-                    const total = userBalance + capital + roi + bonus;
-                    return total.toLocaleString();
-                  })()
-                : "******"}
-            </h2>
-          </div>
 
-
-          <div className="unitUserEarningDisplay fancybg">
-            <h3>Bonuses</h3>
-            <h2>
-              $
-              {passwordShow
-                ? `${((parseFloat(currentUser?.bonus || 0)) + (parseFloat(totalBonus || 0))).toLocaleString()}`
-                : "******"}
-            </h2>
-          </div>
-
-          <div className="unitUserEarningDisplay fancybg">
-            <h3>Returns</h3>
-            <h2>${passwordShow ? `${(parseFloat(totalROI || 0)).toLocaleString()}` : "******"}</h2>
-          </div>
-          <div className="unitUserEarningDisplay fancybg">
-            <h3>Active / Pending Plans</h3>
-            <h2>{investments.length}</h2>
-          </div>
-          <div className="unitUserEarningDisplay fancybg">
-            <h3>Referrals</h3>
-            <h2>{Number(currentUser?.referralCount || 0).toLocaleString()}</h2>
-          </div>
-        </div>
         {profilestate === "Dashboard" && (
           <div className="dashboardWrapper">
             {/* KYC Verified Banner */}
@@ -677,6 +624,10 @@ const Profile = () => {
                 setWidgetState={setWidgetState}
                 currentUser={currentUser}
                 setInvestData={setInvestData}
+                totalCapital={totalCapital}
+                totalROI={totalROI}
+                totalBonus={totalBonus}
+                investments={investments}
               />
               {/* Debug panel removed - no user JSON exposed in dashboard */}
             </div>
@@ -688,6 +639,10 @@ const Profile = () => {
             setCurrentUser={setCurrentUser}
             widgetState={widgetState}
             setWidgetState={setWidgetState}
+            totalCapital={totalCapital}
+            totalROI={totalROI}
+            totalBonus={totalBonus}
+            investments={investments}
           />
         )}
         {profilestate === "Investments" && (
@@ -734,6 +689,7 @@ const Profile = () => {
             investData={investData}
             bitPrice={bitPrice}
             ethPrice={ethPrice}
+            setInvestments={setInvestments}
           />
         )}
         {profilestate === "Withdrawal Payment" && (
@@ -870,6 +826,22 @@ const Profile = () => {
                         .length
                     }
                   </span>
+                </li>
+                <li
+                  className={profilestate === "Loans" ? "active" : ""}
+                  onClick={() => {
+                    setProfileState("Loans");
+                  }}
+                >
+                  <i className="icofont-wallet"></i> Loans
+                </li>
+                <li
+                  className={profilestate === "KYC" ? "active" : ""}
+                  onClick={() => {
+                    setProfileState("KYC");
+                  }}
+                >
+                  <i className="icofont-id-card"></i> Verification
                 </li>
                 <Link href={"/contact"}>
                   <i className="icofont-ui-text-loading"></i> Feedback

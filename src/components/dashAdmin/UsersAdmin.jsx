@@ -1,14 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { supabaseDb } from "../../database/supabaseUtils";
+import Modal from "../Modal";
 
 const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setProfileState, setUserData}) => {
   const [searchTerm, setSearchTerm] = useState('');
     const [sortField, setSortField] = useState('date');
     const [sortOrder, setSortOrder] = useState('desc');
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [showSuspendModal, setShowSuspendModal] = useState(false);
+    // const [showDeleteModal, setShowDeleteModal] = useState(false); // Replaced by Modal
+    // const [showSuspendModal, setShowSuspendModal] = useState(false); // Replaced by Modal
     const [selectedUser, setSelectedUser] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
+
+    // Modal State
+    const [modalConfig, setModalConfig] = useState({
+        isOpen: false,
+        type: '',
+        title: '',
+        message: '',
+        onConfirm: null
+    });
+
+    const closeModal = () => setModalConfig(prev => ({ ...prev, isOpen: false }));
+
+    const showModal = (type, title, message, onConfirm = null) => {
+        setModalConfig({
+            isOpen: true,
+            type,
+            title,
+            message,
+            onConfirm
+        });
+    };
 
     // Calculate user stats
     const userStats = activeUsers.reduce((stats, user) => {
@@ -52,13 +74,12 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
             // Delete user document
             await supabaseDb.deleteUser(selectedUser.id);
             
-            alert(`User ${selectedUser.name} has been deleted successfully`);
-            setShowDeleteModal(false);
+            showModal('success', 'Success', `User ${selectedUser.name} has been deleted successfully`);
             setSelectedUser(null);
-            window.location.reload();
+            setTimeout(() => window.location.reload(), 1500);
         } catch (error) {
             console.error("Error deleting user:", error);
-            alert("Failed to delete user. Please try again.");
+            showModal('error', 'Error', "Failed to delete user. Please try again.");
         } finally {
             setIsProcessing(false);
         }
@@ -75,13 +96,12 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
                 accountStatus: newStatus
             });
             
-            alert(`User ${selectedUser.name} has been ${newStatus === "suspended" ? "suspended" : "activated"} successfully`);
-            setShowSuspendModal(false);
+            showModal('success', 'Success', `User ${selectedUser.name} has been ${newStatus === "suspended" ? "suspended" : "activated"} successfully`);
             setSelectedUser(null);
-            window.location.reload();
+            setTimeout(() => window.location.reload(), 1500);
         } catch (error) {
             console.error("Error updating user status:", error);
-            alert("Failed to update user status. Please try again.");
+            showModal('error', 'Error', "Failed to update user status. Please try again.");
         } finally {
             setIsProcessing(false);
         }
@@ -203,7 +223,10 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
                                                   className={`action-btn ${elem.accountStatus === 'suspended' ? 'activate' : 'suspend'}`}
                                                   onClick={() => {
                                                       setSelectedUser(elem);
-                                                      setShowSuspendModal(true);
+                                                      showModal('confirm', 'Confirm Status Change', 
+                                                          `Are you sure you want to ${elem.accountStatus === 'suspended' ? 'activate' : 'suspend'} user ${elem.name}?`,
+                                                          handleToggleSuspend
+                                                      );
                                                   }}
                                               >
                                                   {elem.accountStatus === 'suspended' ? 'Activate' : 'Suspend'}
@@ -212,7 +235,10 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
                                                   className="action-btn delete"
                                                   onClick={() => {
                                                       setSelectedUser(elem);
-                                                      setShowDeleteModal(true);
+                                                      showModal('confirm', 'Confirm Delete', 
+                                                          `Are you sure you want to delete user ${elem.name}? This action cannot be undone.`,
+                                                          handleDeleteUser
+                                                      );
                                                   }}
                                               >
                                                   Delete
@@ -238,137 +264,70 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
       }
     </div>
 
-    {/* Delete Confirmation Modal */}
-    {showDeleteModal && (
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999
-        }}>
-            <div style={{
-                backgroundColor: 'white',
-                padding: '24px',
-                borderRadius: '8px',
-                maxWidth: '400px',
-                width: '90%'
-            }}>
-                <h3 style={{marginTop: 0, color: '#333'}}>Confirm Delete</h3>
-                <p style={{color: '#666'}}>
-                    Are you sure you want to delete user <strong>{selectedUser?.name}</strong>? 
-                    This action will permanently delete the user and all their related data (investments, withdrawals, etc.). 
-                    This cannot be undone.
-                </p>
-                <div style={{display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px'}}>
+    {/* Modal Component */}
+    <Modal
+        isOpen={modalConfig.isOpen}
+        onClose={closeModal}
+        title={modalConfig.title}
+    >
+        {modalConfig.type === 'confirm' ? (
+            <div>
+                <p style={{color: 'var(--text-clr1)', marginBottom: '20px'}}>{modalConfig.message}</p>
+                <div style={{display: 'flex', gap: '12px', justifyContent: 'center'}}>
                     <button
-                        onClick={() => {
-                            setShowDeleteModal(false);
-                            setSelectedUser(null);
-                        }}
+                        onClick={closeModal}
                         disabled={isProcessing}
                         style={{
-                            padding: '8px 16px',
-                            borderRadius: '4px',
-                            border: '1px solid #ccc',
-                            backgroundColor: 'white',
+                            padding: '10px 24px',
+                            borderRadius: '25px',
+                            border: '1px solid var(--text-deco)',
+                            background: 'transparent',
+                            color: 'var(--text-clr1)',
                             cursor: isProcessing ? 'not-allowed' : 'pointer',
-                            opacity: isProcessing ? 0.5 : 1
+                            fontWeight: 600
                         }}
                     >
                         Cancel
                     </button>
                     <button
-                        onClick={handleDeleteUser}
+                        onClick={modalConfig.onConfirm}
                         disabled={isProcessing}
                         style={{
-                            padding: '8px 16px',
-                            borderRadius: '4px',
+                            padding: '10px 24px',
+                            borderRadius: '25px',
                             border: 'none',
-                            backgroundColor: '#f44336',
-                            color: 'white',
+                            background: 'linear-gradient(135deg, #FFB347, #FF7A18)',
+                            color: '#1C0F36',
                             cursor: isProcessing ? 'not-allowed' : 'pointer',
-                            opacity: isProcessing ? 0.5 : 1
+                            fontWeight: 600
                         }}
                     >
-                        {isProcessing ? 'Deleting...' : 'Delete User'}
+                        {isProcessing ? 'Processing...' : 'Confirm'}
                     </button>
                 </div>
             </div>
-        </div>
-    )}
-
-    {/* Suspend/Activate Confirmation Modal */}
-    {showSuspendModal && (
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999
-        }}>
-            <div style={{
-                backgroundColor: 'white',
-                padding: '24px',
-                borderRadius: '8px',
-                maxWidth: '400px',
-                width: '90%'
-            }}>
-                <h3 style={{marginTop: 0, color: '#333'}}>
-                    Confirm {selectedUser?.accountStatus === 'suspended' ? 'Activation' : 'Suspension'}
-                </h3>
-                <p style={{color: '#666'}}>
-                    Are you sure you want to {selectedUser?.accountStatus === 'suspended' ? 'activate' : 'suspend'} user <strong>{selectedUser?.name}</strong>?
-                    {selectedUser?.accountStatus !== 'suspended' && ' The user will not be able to log in while suspended.'}
-                </p>
-                <div style={{display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px'}}>
-                    <button
-                        onClick={() => {
-                            setShowSuspendModal(false);
-                            setSelectedUser(null);
-                        }}
-                        disabled={isProcessing}
+        ) : (
+            <div>
+                <p style={{color: 'var(--text-clr1)', marginBottom: '20px'}}>{modalConfig.message}</p>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <button 
+                        onClick={closeModal} 
                         style={{
-                            padding: '8px 16px',
-                            borderRadius: '4px',
-                            border: '1px solid #ccc',
-                            backgroundColor: 'white',
-                            cursor: isProcessing ? 'not-allowed' : 'pointer',
-                            opacity: isProcessing ? 0.5 : 1
-                        }}
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={handleToggleSuspend}
-                        disabled={isProcessing}
-                        style={{
-                            padding: '8px 16px',
-                            borderRadius: '4px',
+                            padding: '10px 24px',
+                            borderRadius: '25px',
                             border: 'none',
-                            backgroundColor: selectedUser?.accountStatus === 'suspended' ? '#4caf50' : '#ff9800',
-                            color: 'white',
-                            cursor: isProcessing ? 'not-allowed' : 'pointer',
-                            opacity: isProcessing ? 0.5 : 1
+                            background: 'linear-gradient(135deg, #FFB347, #FF7A18)',
+                            color: '#1C0F36',
+                            cursor: 'pointer',
+                            fontWeight: 600
                         }}
                     >
-                        {isProcessing ? 'Processing...' : (selectedUser?.accountStatus === 'suspended' ? 'Activate User' : 'Suspend User')}
+                        OK
                     </button>
                 </div>
             </div>
-        </div>
-    )}
-
+        )}
+    </Modal>
   </div>
   )
 }

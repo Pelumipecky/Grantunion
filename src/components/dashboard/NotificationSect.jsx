@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import { supabaseDb } from "../../database/supabaseUtils";
 import { PLAN_CONFIG, formatPercent } from "../../utils/planConfig";
-import styles from "./DashboardSect.module.css";
+import styles from "./NotificationSect.module.css";
 
 const NotificationSect = ({ setWidgetState, setInvestData, currentUser, notifications}) => {
     // use shared db instance
@@ -49,12 +49,12 @@ const NotificationSect = ({ setWidgetState, setInvestData, currentUser, notifica
     });
   };
   return (
-    <div className="investmentMainCntn">
-      <div className="myinvestmentSection">
-        <h2>Notifications</h2>
+    <div className={styles.notificationContainer}>
+      <div>
+        <h2 className={styles.sectionTitle}>Notifications</h2>
         {
             notifications.length > 0 ? (
-                <div className="historyTable">
+                <div className={styles.notificationList}>
                     {
                         notifications.sort((a, b) => {
                           const dateA = new Date(a.created_at);
@@ -62,17 +62,27 @@ const NotificationSect = ({ setWidgetState, setInvestData, currentUser, notifica
                         
                           return dateB - dateA;
                         }) .map((elem, idx) => (
-                            <div className="unitNotif" key={`${elem.idnum}-notiUser${idx}`}>
-                                <h4>{elem?.message}</h4>
-                                <p>{new Date(elem?.created_at).toLocaleDateString("en-US", {
-                                    day: "numeric",
-                                    month: "short",
-                                    year: "numeric",
-                                })} | {new Intl.DateTimeFormat('en-US', {
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: false,
-                                  }).format(new Date(elem?.created_at))}</p>
+                            <div className={`${styles.notificationCard} ${elem?.status === 'unseen' ? styles.unread : ''}`} key={`${elem.idnum}-notiUser${idx}`}>
+                                <div className={styles.iconWrapper}>
+                                  <i className="icofont-notification"></i>
+                                </div>
+                                <div className={styles.content}>
+                                  <div className={styles.header}>
+                                    <div className={styles.title}>New Notification</div>
+                                    <div className={styles.date}>
+                                      {new Date(elem?.created_at).toLocaleDateString("en-US", {
+                                        day: "numeric",
+                                        month: "short",
+                                        year: "numeric",
+                                      })} | {new Intl.DateTimeFormat('en-US', {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false,
+                                      }).format(new Date(elem?.created_at))}
+                                    </div>
+                                  </div>
+                                  <div className={styles.message}>{elem?.message}</div>
+                                </div>
                             </div>
                         ))
                     }
@@ -80,7 +90,7 @@ const NotificationSect = ({ setWidgetState, setInvestData, currentUser, notifica
 
             ) : (
 
-                <div className="emptyTable">
+                <div className={styles.emptyState}>
                     <i className="icofont-exclamation-tringle"></i>
                     <p>
                       Your notification stack is currently empty.

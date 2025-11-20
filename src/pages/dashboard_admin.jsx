@@ -343,7 +343,7 @@ export default function DashboardAdmin() {
   const totalROI = investments
     .filter((elem) => elem?.idnum !== "101010")
     .reduce((sum, currentObject) => {
-      const ROIvalue = typeof currentObject.roi === "number" ? currentObject.roi : 0;
+      const ROIvalue = typeof currentObject.credited_roi === "number" ? currentObject.credited_roi : 0;
       return sum + ROIvalue;
     }, 0);
 
@@ -434,7 +434,7 @@ export default function DashboardAdmin() {
         </div>
 
         <div className="rightLeftProfile">
-          <button className="borderBtn" onClick={handleLogout}>
+          <button className="logoutBtn" onClick={handleLogout}>
             Log Out <i className="icofont-logout"></i>
           </button>
         </div>
@@ -656,12 +656,14 @@ export default function DashboardAdmin() {
                   }}
                 >
                   <i className="icofont-money-bag"></i> Investments{" "}
-                  <span>
-                    {
-                      investments.filter((elem) => elem.authStatus !== "seen")
-                        .length
-                    }
-                  </span>
+                  {investments.filter((elem) => elem.authStatus !== "seen").length > 0 && (
+                    <span>
+                      {
+                        investments.filter((elem) => elem.authStatus !== "seen")
+                          .length
+                      }
+                    </span>
+                  )}
                 </li>
                 <li
                   className={profilestate === "Users" ? "active" : ""}
@@ -670,15 +672,20 @@ export default function DashboardAdmin() {
                   }}
                 >
                   <i className="icofont-users-alt-3"></i> Users{" "}
-                  <span>
-                    {
-                      activeUsers.filter((elem) => elem.authStatus !== "seen")
-                        .length
-                    }
-                  </span>
+                  {activeUsers.filter((elem) => elem.authStatus !== "seen").length > 0 && (
+                    <span>
+                      {
+                        activeUsers.filter((elem) => elem.authStatus !== "seen")
+                          .length
+                      }
+                    </span>
+                  )}
                 </li>
                 <li className={profilestate === "Loans" ? "active" : ""} onClick={() => setProfileState("Loans")}>
                   <i className="icofont-wallet"></i> Loans
+                </li>
+                <li className={profilestate === "KYC" ? "active" : ""} onClick={() => setProfileState("KYC")}>
+                  <i className="icofont-id-card"></i> KYC
                 </li>
                 <li
                   className={profilestate === "Withdrawals" ? "active" : ""}
@@ -687,12 +694,14 @@ export default function DashboardAdmin() {
                   }}
                 >
                   <i className="icofont-pay"></i> Withdrawals{" "}
-                  <span>
-                    {
-                      withdrawals.filter((elem) => elem.authStatus !== "seen")
-                        .length
-                    }
-                  </span>
+                  {withdrawals.filter((elem) => elem.authStatus !== "seen").length > 0 && (
+                    <span>
+                      {
+                        withdrawals.filter((elem) => elem.authStatus !== "seen")
+                          .length
+                      }
+                    </span>
+                  )}
                 </li>
               </ul>
             </div>

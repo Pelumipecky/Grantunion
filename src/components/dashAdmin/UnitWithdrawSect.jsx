@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { supabaseDb } from "../../database/supabaseUtils";
 import { supabase } from "../../database/supabaseConfig";
+import Modal from "../Modal";
 
 const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
+    // Modal State
+    const [modalConfig, setModalConfig] = useState({
+        isOpen: false,
+        type: '',
+        title: '',
+        message: '',
+        onConfirm: null
+    });
+
+    const closeModal = () => setModalConfig(prev => ({ ...prev, isOpen: false }));
+
+    const showModal = (type, title, message, onConfirm = null) => {
+        setModalConfig({
+            isOpen: true,
+            type,
+            title,
+            message,
+            onConfirm
+        });
+    };
+
     const notificationPush = {
         message: `Your $${withdrawData?.amount} withdrawal transaction has been confirmed. $${withdrawData?.amount} is on its way to your wallet address now`,
         idnum: withdrawData.idnum,
@@ -78,9 +100,13 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
                 // Don't throw here - email failure shouldn't block withdrawal confirmation
             }
 
-            setProfileState("Withdrawals");
+            showModal('success', 'Success', 'Withdrawal confirmed successfully');
+            setTimeout(() => {
+                setProfileState("Withdrawals");
+            }, 1500);
         } catch (error) {
             console.error("Error confirming withdrawal:", error);
+            showModal('error', 'Error', 'Failed to confirm withdrawal');
         }
     };
 
@@ -132,11 +158,83 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             <div className="flex-align-jusc">
                 {
                     withdrawData?.status === "Pending" && (
-                        <button type="button" onClick={handleActiveInvestment} className='activateBtn'>Confirm Withdrawal</button>
+                        <button 
+                            type="button" 
+                            onClick={() => showModal('confirm', 'Confirm Withdrawal', 
+                                `Are you sure you want to confirm this withdrawal of $${withdrawData?.amount}?`,
+                                handleActiveInvestment
+                            )} 
+                            className='activateBtn'
+                        >
+                            Confirm Withdrawal
+                        </button>
                     )
                 }
             </div>
         </div>
+
+    {/* Modal Component */}
+    <Modal
+        isOpen={modalConfig.isOpen}
+        onClose={closeModal}
+        title={modalConfig.title}
+    >
+        {modalConfig.type === 'confirm' ? (
+            <div>
+                <p style={{color: 'var(--text-clr1)', marginBottom: '20px'}}>{modalConfig.message}</p>
+                <div style={{display: 'flex', gap: '12px', justifyContent: 'center'}}>
+                    <button
+                        onClick={closeModal}
+                        style={{
+                            padding: '10px 24px',
+                            borderRadius: '25px',
+                            border: '1px solid var(--text-deco)',
+                            background: 'transparent',
+                            color: 'var(--text-clr1)',
+                            cursor: 'pointer',
+                            fontWeight: 600
+                        }}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={modalConfig.onConfirm}
+                        style={{
+                            padding: '10px 24px',
+                            borderRadius: '25px',
+                            border: 'none',
+                            background: 'linear-gradient(135deg, #FFB347, #FF7A18)',
+                            color: '#1C0F36',
+                            cursor: 'pointer',
+                            fontWeight: 600
+                        }}
+                    >
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        ) : (
+            <div>
+                <p style={{color: 'var(--text-clr1)', marginBottom: '20px'}}>{modalConfig.message}</p>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <button 
+                        onClick={closeModal} 
+                        style={{
+                            padding: '10px 24px',
+                            borderRadius: '25px',
+                            border: 'none',
+                            background: 'linear-gradient(135deg, #FFB347, #FF7A18)',
+                            color: '#1C0F36',
+                            cursor: 'pointer',
+                            fontWeight: 600
+                        }}
+                    >
+                        OK
+                    </button>
+                </div>
+            </div>
+        )}
+    </Modal>
     </div>
   )
 }

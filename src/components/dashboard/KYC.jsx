@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { supabase, supabaseDb, supabaseStorage } from '../../database/supabaseUtils';
 import { supabase as supabaseClient } from '../../database/supabaseConfig';
 import styles from './KYC.module.css';
+import Modal from "../Modal";
 
 export default function KYC({ currentUser }) {
   const [idNumber, setIdNumber] = useState('');
@@ -13,6 +14,25 @@ export default function KYC({ currentUser }) {
   const [step, setStep] = useState(1);
   const [dragActive, setDragActive] = useState({ id: false, selfie: false });
   const [uploadStatus, setUploadStatus] = useState('');
+
+  // Modal State
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    type: '',
+    title: '',
+    message: ''
+  });
+
+  const closeModal = () => setModalConfig(prev => ({ ...prev, isOpen: false }));
+
+  const showModal = (type, title, message) => {
+    setModalConfig({
+      isOpen: true,
+      type,
+      title,
+      message
+    });
+  };
 
   // Use refs for file inputs
   const idFileInputRef = useRef(null);
@@ -81,36 +101,36 @@ export default function KYC({ currentUser }) {
 
     // Enhanced authentication check
     if (!currentUser) {
-      alert('No user data found. Please refresh the page and try again.');
+      showModal('error', 'Error', 'No user data found. Please refresh the page and try again.');
       return;
     }
 
     if (!currentUser.id && !currentUser.idnum) {
-      alert('User authentication incomplete. Please sign in again.');
+      showModal('error', 'Error', 'User authentication incomplete. Please sign in again.');
       return;
     }
 
     // Use idnum as fallback if id is missing
     const userId = currentUser.id || currentUser.idnum;
     if (!userId) {
-      alert('User ID not found. Please contact support.');
+      showModal('error', 'Error', 'User ID not found. Please contact support.');
       return;
     }
 
     console.log('Using user ID for upload:', userId);
     
     if (!idNumber.trim()) {
-      alert('Please enter ID number');
+      showModal('error', 'Missing Information', 'Please enter ID number');
       return;
     }
     
     if (!idFile) {
-      alert('Please upload your ID document');
+      showModal('error', 'Missing Document', 'Please upload your ID document');
       return;
     }
     
     if (!selfieFile) {
-      alert('Please upload a selfie with your ID');
+      showModal('error', 'Missing Selfie', 'Please upload a selfie with your ID');
       return;
     }
 
@@ -127,7 +147,7 @@ export default function KYC({ currentUser }) {
     const timeoutId = setTimeout(() => {
       console.error('KYC submission timeout - resetting state');
       setSubmitting(false);
-      alert('Submission timeout. Please try again.');
+      showModal('error', 'Timeout', 'Submission timeout. Please try again.');
     }, 60000); // 60 second timeout
     
     try {
@@ -199,7 +219,7 @@ export default function KYC({ currentUser }) {
       console.log('User document updated successfully');
 
       clearTimeout(timeoutId);
-      alert('KYC submitted successfully! Your documents are now being reviewed.');
+      showModal('success', 'Success', 'KYC submitted successfully! Your documents are now being reviewed.');
       setKycStatus('Pending');
       setStep(1);
       setIdNumber('');
@@ -227,7 +247,7 @@ export default function KYC({ currentUser }) {
         errorMessage += 'Please try again or contact support.';
       }
       
-      alert(errorMessage);
+      showModal('error', 'Error', errorMessage);
     } finally {
       setSubmitting(false);
       setUploadStatus('');
@@ -449,6 +469,19 @@ export default function KYC({ currentUser }) {
           <p>Current status: {currentUser?.kycStatus || 'Not submitted'}</p>
         </div>
       </div>
+
+      <Modal
+        isOpen={modalConfig.isOpen}
+        onClose={closeModal}
+        title={modalConfig.title}
+      >
+        <div>
+            <p>{modalConfig.message}</p>
+            <div className={styles.modalActions}>
+                <button onClick={closeModal} className={styles.modalButton}>OK</button>
+            </div>
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -83,10 +83,10 @@
 
 .mainprofileSect .leftProfile{
     border-radius: 15px;
-    background-color: var(--profile-bg);
+    background-color: var(--dark-clr2);
     height: calc(100dvh - 20px);
     width: 17.5%;
-    min-width: max-content;
+    min-width: 250px;
     position: fixed;
     top: 10px;
     left: 10px;
@@ -95,100 +95,126 @@
     justify-content: space-between;
     padding: 30px 0 20px;
     overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 100;
 }
 
 .topmostRightPrile{
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 36px;
+    gap: 30px;
     padding-inline: 20px;
     width: 100%;
 }
 
 .topmostRightPrile .theLogo{
-    height: 27px;
+    height: 35px;
     object-fit: contain;
     object-position: center;
+    margin-bottom: 10px;
 }
 
 .panelPrfileDisp {
-    display: grid;
-    grid-template-columns: max-content 1fr;
+    display: flex;
     align-items: center;
     width: 100%;
-    gap: 16px;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .panelPrfileDisp .left{
-    width: 40px;
-    aspect-ratio: 1;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     background-image: url(/avatar_1.png);
     background-size: cover;
     background-position: center center;
+    border: 2px solid #FFB347;
+}
+
+.panelPrfileDisp .right {
+    flex: 1;
+    overflow: hidden;
 }
 
 .panelPrfileDisp .right h3{
-    font-size: 0.89em;
-    color: var(--text-deco);
-    font-weight: 400;
+    font-size: 0.95em;
+    color: var(--text-clr1);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .panelPrfileDisp .right p{
-    font-size: 0.59em;
+    font-size: 0.75em;
     color: var(--text-deco);
-    font-weight: 300;
-    word-break: break-all;
-    margin-top: 8px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 4px;
+    opacity: 0.7;
 }
 
 .centerRightProfile{
     width: 100%;
     flex: 1;
     overflow-y: auto;
+    margin-top: 20px;
+    padding-inline: 15px;
 }
 
 .centerRightProfile ul{
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .centerRightProfile ul li, .centerRightProfile ul a{
-    padding-inline: 20px;
+    padding: 12px 15px;
     display: flex;
-    gap: 16px;
+    gap: 12px;
     align-items: center;
     cursor: pointer;
-    padding-block: 8px;
-    border-radius: 6px;
-    font-size: 0.98em;
+    border-radius: 10px;
+    font-size: 0.95em;
     color: var(--text-deco);
-    font-weight: 300;
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: background-color 0.4s ease;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
 }
+
 .centerRightProfile ul li.active{
-    transform: scale(1.05);
-    background-color: #0028486d;
+    background: linear-gradient(90deg, rgba(255, 179, 71, 0.15), transparent);
+    color: #FFB347;
+    border-left: 3px solid #FFB347;
+    border-radius: 4px 10px 10px 4px;
 }
-
 
 .centerRightProfile ul li:hover, .centerRightProfile ul a:hover{
-    background-color: var(--opac-clr3);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-clr1);
+    transform: translateX(5px);
 }
 
 .centerRightProfile ul li i, .centerRightProfile ul a i{
-    font-size: 1.4em;
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-    background-image: var(--linear-grad2);
+    font-size: 1.3em;
     color: var(--text-deco);
-    pointer-events: none;
+    transition: color 0.3s ease;
+}
+
+.centerRightProfile ul li.active i {
+    color: #FFB347;
+}
+
+.centerRightProfile ul li:hover i {
+    color: #FFB347;
 }
 
 .centerRightProfile ul li span{
@@ -223,16 +249,7 @@
     cursor: pointer;
 }
 
-.rightLeftProfile button:nth-child(1) i{
-    font-size: 1.2em;
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-    background-image: var(--linear-grad2);
-    pointer-events: none;
-}
-
-.rightLeftProfile button:nth-child(2) {
+.rightLeftProfile button.logoutBtn {
     align-items: center;
     justify-content: center;
     padding-block: 8px;
@@ -250,11 +267,11 @@
     display: flex;
 }
 
-.rightLeftProfile button:nth-child(2):hover{
+.rightLeftProfile button.logoutBtn:hover{
     background-color:  #dc126348;
 }
 
-.rightLeftProfile button:nth-child(2) i{
+.rightLeftProfile button.logoutBtn i{
     color: var(--danger-clr);
 }
 

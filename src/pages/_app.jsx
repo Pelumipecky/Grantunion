@@ -24,6 +24,53 @@ export default function App({ Component, pageProps }) {
   const publicPaths = ['/signin', '/signin_admin', '/signup'];
   const [sessionInterval, setSessionInterval] = useState(null);
 
+  // Auto Logout Logic
+  useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+
+    const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
+    let timer;
+
+    const handleLogout = () => {
+      // Check if user is actually logged in before clearing/redirecting
+      const user = localStorage.getItem('activeUser') || sessionStorage.getItem('activeUser');
+      if (!user) return;
+
+      console.log('Auto logging out due to inactivity');
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Redirect based on current path
+      if (window.location.pathname.includes('admin')) {
+           window.location.href = '/signin_admin';
+      } else {
+           window.location.href = '/signin';
+      }
+    };
+
+    const resetTimer = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(handleLogout, 30 * 60 * 1000); // 30 minutes
+    };
+
+    // Initialize timer
+    resetTimer();
+
+    // Add event listeners
+    events.forEach(event => {
+      document.addEventListener(event, resetTimer);
+    });
+
+    // Cleanup
+    return () => {
+      if (timer) clearTimeout(timer);
+      events.forEach(event => {
+        document.removeEventListener(event, resetTimer);
+      });
+    };
+  }, []);
+
   // Disable all session and activity tracking to prevent signin conflicts
 
   // Disable automatic route guard to prevent signin conflicts

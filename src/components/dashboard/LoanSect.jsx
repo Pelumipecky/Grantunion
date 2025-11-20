@@ -1,11 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { supabase, supabaseRealtime } from '../../database/supabaseUtils';
 import styles from './LoanSect.module.css';
+import Modal from "../Modal";
 
 export default function LoanSect({ currentUser }) {
   const [loans, setLoans] = useState([]);
   const [formStep, setFormStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  
+  // Modal State
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    type: '',
+    title: '',
+    message: ''
+  });
+
+  const closeModal = () => setModalConfig(prev => ({ ...prev, isOpen: false }));
+
+  const showModal = (type, title, message) => {
+    setModalConfig({
+      isOpen: true,
+      type,
+      title,
+      message
+    });
+  };
+
   const formatLoanDate = (timestamp) => {
     if (!timestamp) return '-';
     try {
@@ -129,11 +150,11 @@ export default function LoanSect({ currentUser }) {
   const handleRequest = async (e) => {
     e.preventDefault();
     if (!loanData.amount || isNaN(Number(loanData.amount))) {
-      alert('Please enter a valid loan amount');
+      showModal('error', 'Invalid Amount', 'Please enter a valid loan amount');
       return;
     }
     if (!loanData.agreeToTerms) {
-      alert('Please agree to the terms and conditions');
+      showModal('error', 'Terms Required', 'Please agree to the terms and conditions');
       return;
     }
 
@@ -190,10 +211,10 @@ export default function LoanSect({ currentUser }) {
         agreeToTerms: false
       });
       setFormStep(1);
-      alert('Loan request submitted successfully');
+      showModal('success', 'Success', 'Loan request submitted successfully');
     } catch (err) {
       console.error('Loan request error', err);
-      alert('Error submitting loan request');
+      showModal('error', 'Error', 'Error submitting loan request');
     } finally {
       setSubmitting(false);
     }
@@ -216,7 +237,7 @@ export default function LoanSect({ currentUser }) {
                 required
               />
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Purpose of Loan *</label>
               <select
                 name="purpose"
@@ -233,7 +254,7 @@ export default function LoanSect({ currentUser }) {
                 <option value="Other">Other</option>
               </select>
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Preferred Loan Duration (months) *</label>
               <select
                 name="preferredDuration"
@@ -247,7 +268,7 @@ export default function LoanSect({ currentUser }) {
                 <option value="24">24 months</option>
               </select>
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Preferred Payment Date *</label>
               <select
                 name="preferredPaymentDate"
@@ -267,9 +288,9 @@ export default function LoanSect({ currentUser }) {
 
       case 2:
         return (
-          <div className="formStep">
+          <div className={styles.formStep}>
             <h3>Employment & Income</h3>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Employment Status *</label>
               <select
                 name="employmentStatus"
@@ -285,7 +306,7 @@ export default function LoanSect({ currentUser }) {
                 <option value="Retired">Retired</option>
               </select>
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Employer Name</label>
               <input
                 type="text"
@@ -295,7 +316,7 @@ export default function LoanSect({ currentUser }) {
                 placeholder="Enter employer name"
               />
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Monthly Income *</label>
               <input
                 type="number"
@@ -306,7 +327,7 @@ export default function LoanSect({ currentUser }) {
                 required
               />
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Employment Duration *</label>
               <input
                 type="text"
@@ -317,7 +338,7 @@ export default function LoanSect({ currentUser }) {
                 required
               />
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Previous Loans?</label>
               <select
                 name="previousLoans"
@@ -333,9 +354,9 @@ export default function LoanSect({ currentUser }) {
 
       case 3:
         return (
-          <div className="formStep">
+          <div className={styles.formStep}>
             <h3>Collateral & References</h3>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Willing to Provide Collateral?</label>
               <select
                 name="collateral"
@@ -348,7 +369,7 @@ export default function LoanSect({ currentUser }) {
             </div>
             {loanData.collateral === 'Yes' && (
               <>
-                <div className="formGroup">
+                <div className={styles.formGroup}>
                   <label>Collateral Type</label>
                   <select
                     name="collateralType"
@@ -362,7 +383,7 @@ export default function LoanSect({ currentUser }) {
                     <option value="Other">Other</option>
                   </select>
                 </div>
-                <div className="formGroup">
+                <div className={styles.formGroup}>
                   <label>Collateral Value</label>
                   <input
                     type="number"
@@ -377,9 +398,9 @@ export default function LoanSect({ currentUser }) {
             
             <h4>References</h4>
             {loanData.references.map((ref, index) => (
-              <div key={index} className="reference-section">
+              <div key={index} className={styles['reference-section']}>
                 <h5>Reference #{index + 1}</h5>
-                <div className="formGroup">
+                <div className={styles.formGroup}>
                   <label>Name *</label>
                   <input
                     type="text"
@@ -389,7 +410,7 @@ export default function LoanSect({ currentUser }) {
                     required
                   />
                 </div>
-                <div className="formGroup">
+                <div className={styles.formGroup}>
                   <label>Relationship *</label>
                   <input
                     type="text"
@@ -399,7 +420,7 @@ export default function LoanSect({ currentUser }) {
                     required
                   />
                 </div>
-                <div className="formGroup">
+                <div className={styles.formGroup}>
                   <label>Phone *</label>
                   <input
                     type="tel"
@@ -409,7 +430,7 @@ export default function LoanSect({ currentUser }) {
                     required
                   />
                 </div>
-                <div className="formGroup">
+                <div className={styles.formGroup}>
                   <label>Email</label>
                   <input
                     type="email"
@@ -422,7 +443,7 @@ export default function LoanSect({ currentUser }) {
                   <button
                     type="button"
                     onClick={() => handleRemoveReference(index)}
-                    className="remove-btn"
+                    className={styles['remove-btn']}
                   >
                     Remove Reference
                   </button>
@@ -433,7 +454,7 @@ export default function LoanSect({ currentUser }) {
               <button
                 type="button"
                 onClick={handleAddReference}
-                className="add-btn"
+                className={styles['add-btn']}
               >
                 Add Another Reference
               </button>
@@ -443,9 +464,9 @@ export default function LoanSect({ currentUser }) {
 
       case 4:
         return (
-          <div className="formStep">
+          <div className={styles.formStep}>
             <h3>Banking & Personal Information</h3>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Bank Name *</label>
               <input
                 type="text"
@@ -456,7 +477,7 @@ export default function LoanSect({ currentUser }) {
                 required
               />
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Account Number *</label>
               <input
                 type="text"
@@ -467,7 +488,7 @@ export default function LoanSect({ currentUser }) {
                 required
               />
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Account Type</label>
               <select
                 name="accountType"
@@ -481,7 +502,7 @@ export default function LoanSect({ currentUser }) {
             </div>
 
             <h4>Emergency Contact</h4>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Name *</label>
               <input
                 type="text"
@@ -491,7 +512,7 @@ export default function LoanSect({ currentUser }) {
                 required
               />
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Relationship *</label>
               <input
                 type="text"
@@ -501,7 +522,7 @@ export default function LoanSect({ currentUser }) {
                 required
               />
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Phone *</label>
               <input
                 type="tel"
@@ -511,7 +532,7 @@ export default function LoanSect({ currentUser }) {
                 required
               />
             </div>
-            <div className="formGroup">
+            <div className={styles.formGroup}>
               <label>Email</label>
               <input
                 type="email"
@@ -521,7 +542,7 @@ export default function LoanSect({ currentUser }) {
               />
             </div>
 
-            <div className="formGroup checkbox">
+            <div className={`${styles.formGroup} ${styles.checkbox}`}>
               <input
                 type="checkbox"
                 name="agreeToTerms"
@@ -601,6 +622,19 @@ export default function LoanSect({ currentUser }) {
           </div>
         )}
       </div>
+
+      <Modal
+        isOpen={modalConfig.isOpen}
+        onClose={closeModal}
+        title={modalConfig.title}
+      >
+        <div>
+            <p>{modalConfig.message}</p>
+            <div className={styles.modalActions}>
+                <button onClick={closeModal} className={styles.modalButton}>OK</button>
+            </div>
+        </div>
+      </Modal>
     </div>
   );
 }

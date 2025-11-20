@@ -87,10 +87,10 @@ const Signup = () => {
   }, []);
 
   useEffect(() => {
-    if (router?.query?.ref) {
+    if (router.isReady && router.query.ref) {
       setReferralCodeInput(String(router.query.ref).toUpperCase());
     }
-  }, [router?.query?.ref]);
+  }, [router.isReady, router.query.ref]);
 
   const buildReferralLink = (code) => {
     if (!code) return '';
@@ -192,12 +192,19 @@ const Signup = () => {
         updated_at: new Date().toISOString()
       };
 
-      await supabaseDb.createNotification(notificationPush);
       const { data: userRecord, error: userError } = await supabaseDb.createUser({
         ...userDoc,
         referralCodeUsed: referralCodeInput?.trim() || null
       });
       if (userError) throw userError;
+
+      // Create welcome notification after user is successfully created
+      try {
+        await supabaseDb.createNotification(notificationPush);
+      } catch (notifyError) {
+        console.error('Failed to create welcome notification:', notifyError);
+        // Don't block signup success if notification fails
+      }
 
       // Store user data safely (no password) in localStorage
       const safeUserData = { ...userRecord };

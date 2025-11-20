@@ -4,8 +4,31 @@ import Analytics2 from "./Analytics2";
 import AnalyticsViewWidget from "./Analytics3";
 import styles from "./DashboardSect.module.css";
 import { PLAN_CONFIG, formatPercent } from "../../utils/planConfig";
+import profileStyles from "./Profile.module.css";
 
-const DashboardSect = ({setWidgetState, currentUser, setInvestData}) => {
+const DashboardSect = ({setWidgetState, currentUser, setInvestData, totalCapital = 0, totalROI = 0, totalBonus = 0, investments = []}) => {
+    const [passwordShow, setPasswordShow] = useState(false);
+
+    const userBalance = parseFloat(currentUser?.balance || 0);
+    const capital = parseFloat(totalCapital || 0);
+    const roi = parseFloat(totalROI || 0);
+    const investmentBonus = parseFloat(totalBonus || 0);
+    const signupBonus = parseFloat(currentUser?.bonus || 0);
+    
+    // Fix: Removed 'capital' from total to avoid double-counting. 
+    // Added signupBonus to the total.
+    const total = userBalance + roi + investmentBonus + signupBonus;
+    const totalBonusValue = signupBonus + investmentBonus;
+
+    const snapshotCards = [
+      { label: "Available Balance", value: passwordShow ? `$${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "******" },
+      { label: "Bonuses", value: passwordShow ? `$${totalBonusValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "******" },
+      { label: "Returns", value: passwordShow ? `$${roi.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "******" },
+      { label: "Active / Pending Plans", value: investments.length },
+      { label: "Referrals", value: Number(currentUser?.referralCount || 0).toLocaleString() },
+      { label: "Register Id", value: currentUser?.idnum || "--" },
+    ];
+
     const handlePlanInvest = (plan) => {
       setInvestData({
         idnum: currentUser?.idnum,
@@ -28,6 +51,33 @@ const DashboardSect = ({setWidgetState, currentUser, setInvestData}) => {
   return (
     <>
       <div className="dashboardContent">
+        <div style={{ marginBottom: '1rem' }}>
+            <h2 style={{ fontSize: '1.5rem', color: 'var(--text-deco, #fff)' }}>Welcome back, {currentUser?.name || currentUser?.userName || 'User'}.</h2>
+        </div>
+        <div className={profileStyles.accountSnapshot} style={{marginBottom: '2rem'}}>
+          <div className={profileStyles.snapshotHeader}>
+            <h2>Account Snapshot</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <p>Quick view of your financial status.</p>
+              <span
+                onClick={() => setPasswordShow((prev) => !prev)}
+                style={{ cursor: 'pointer', fontSize: '1.2rem', color: '#666' }}
+                title={passwordShow ? "Hide financial details" : "Show financial details"}
+              >
+                <i className={`icofont-eye-${!passwordShow ? "alt" : "blocked"}`}></i>
+              </span>
+            </div>
+          </div>
+          <div className={profileStyles.snapshotGrid}>
+            {snapshotCards.map((card) => (
+              <div key={card.label} className={profileStyles.snapshotCard}>
+                <p className={profileStyles.snapshotLabel}>{card.label}</p>
+                <p className={profileStyles.snapshotValue}>{card.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="gridAnalytics">
           <div className="leftGridAnalaytics">
             <AnalyticsViewWidget />

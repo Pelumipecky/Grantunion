@@ -29,6 +29,12 @@ CREATE TABLE userlogs (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
   name TEXT,
+  user_name TEXT,
+  phone TEXT,
+  country TEXT,
+  city TEXT,
+  mailing_address TEXT,
+  username_locked BOOLEAN DEFAULT FALSE,
   password TEXT, -- Note: In production, use Supabase Auth instead
   idnum INTEGER UNIQUE,
   balance DECIMAL(15,2) DEFAULT 0,
