@@ -6,6 +6,7 @@ import FAQ from '../components/home/FAQ';
 import Footer from '../components/home/Footer';
 import Navbar from '../components/home/Navbar';
 import AdvancedChartWidget from '../components/dashboard/LengthyAnalytics';
+import GuideSection from '../components/home/GuideSection';
 import { PLAN_CONFIG, formatPercent } from '../utils/planConfig';
 import dashboardStyles from '../components/dashboard/DashboardSect.module.css';
 
@@ -189,6 +190,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <GuideSection />
+
         {!currentUser?.admin && (
           <section id="packages" className={`homePackagesSection ${dashboardStyles.packages}`}>
             <h2 className={dashboardStyles.packagesTitle}>Kickstart Your Journey To Financial Freedom</h2>
