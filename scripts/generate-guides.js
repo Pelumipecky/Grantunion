@@ -57,7 +57,6 @@ const PLANS = [
 const LANGUAGES = {
   en: {
     title: "Grant Union Investment Guide",
-<<<<<<< HEAD
     aboutCompany: {
       title: "About Grant Union",
       content: [
@@ -89,8 +88,6 @@ const LANGUAGES = {
         "Withdrawals are quick and efficient. The process takes only a few minutes, and at most, the company takes approximately 24 hours to approve any transaction."
       ]
     },
-=======
->>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
     intro: "Welcome to Grant Union, the world's premier investment and trading platform. We are committed to providing you with a secure, transparent, and profitable investment experience.",
     howToDeposit: {
       title: "How to Make a Deposit",
@@ -114,7 +111,6 @@ const LANGUAGES = {
   },
   es: {
     title: "Guía de Inversión Grant Union",
-<<<<<<< HEAD
     aboutCompany: {
       title: "Acerca de Grant Union",
       content: [
@@ -146,8 +142,6 @@ const LANGUAGES = {
         "Los retiros son rápidos y eficientes. El proceso toma solo unos minutos, y como máximo, la compañía tarda aproximadamente 24 horas en aprobar cualquier transacción."
       ]
     },
-=======
->>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
     intro: "Bienvenido a Grant Union, la plataforma de inversión y comercio líder en el mundo. Nos comprometemos a brindarle una experiencia de inversión segura, transparente y rentable.",
     howToDeposit: {
       title: "Cómo hacer un depósito",
@@ -171,7 +165,6 @@ const LANGUAGES = {
   },
   fr: {
     title: "Guide d'Investissement Grant Union",
-<<<<<<< HEAD
     aboutCompany: {
       title: "À propos de Grant Union",
       content: [
@@ -203,8 +196,6 @@ const LANGUAGES = {
         "Les retraits sont rapides et efficaces. Le processus ne prend que quelques minutes, et au maximum, la société prend environ 24 heures pour approuver toute transaction."
       ]
     },
-=======
->>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
     intro: "Bienvenue chez Grant Union, la première plateforme d'investissement et de trading au monde. Nous nous engageons à vous offrir une expérience d'investissement sécurisée, transparente et rentable.",
     howToDeposit: {
       title: "Comment faire un dépôt",
@@ -228,7 +219,6 @@ const LANGUAGES = {
   },
   de: {
     title: "Grant Union Anlageführer",
-<<<<<<< HEAD
     aboutCompany: {
       title: "Über Grant Union",
       content: [
@@ -260,8 +250,6 @@ const LANGUAGES = {
         "Auszahlungen sind schnell und effizient. Der Prozess dauert nur wenige Minuten, und höchstens benötigt das Unternehmen etwa 24 Stunden, um eine Transaktion zu genehmigen."
       ]
     },
-=======
->>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
     intro: "Willkommen bei Grant Union, der weltweit führenden Investitions- und Handelsplattform. Wir verpflichten uns, Ihnen ein sicheres, transparentes und profitables Anlageerlebnis zu bieten.",
     howToDeposit: {
       title: "Wie man eine Einzahlung tätigt",
@@ -285,7 +273,6 @@ const LANGUAGES = {
   },
   zh: {
     title: "Grant Union 投资指南",
-<<<<<<< HEAD
     aboutCompany: {
       title: "关于 Grant Union",
       content: [
@@ -317,8 +304,6 @@ const LANGUAGES = {
         "提款快速高效。该过程只需几分钟，最多公司需要大约24小时来批准任何交易。"
       ]
     },
-=======
->>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
     intro: "欢迎来到 Grant Union，全球首屈一指的投资和交易平台。我们致力于为您提供安全、透明和有利可图的投资体验。",
     howToDeposit: {
       title: "如何存款",
@@ -342,7 +327,6 @@ const LANGUAGES = {
   },
   ru: {
     title: "Руководство по инвестициям Grant Union",
-<<<<<<< HEAD
     aboutCompany: {
       title: "О Grant Union",
       content: [
@@ -374,8 +358,6 @@ const LANGUAGES = {
         "Выводы быстры и эффективны. Процесс занимает всего несколько минут, и максимум компания занимает примерно 24 часа на утверждение любой транзакции."
       ]
     },
-=======
->>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
     intro: "Добро пожаловать в Grant Union, ведущую мировую инвестиционную и торговую платформу. Мы стремимся предоставить вам безопасный, прозрачный и прибыльный инвестиционный опыт.",
     howToDeposit: {
       title: "Как сделать депозит",
@@ -399,7 +381,6 @@ const LANGUAGES = {
   },
   ar: {
     title: "دليل استثمار Grant Union",
-<<<<<<< HEAD
     aboutCompany: {
       title: "حول Grant Union",
       content: [
@@ -431,8 +412,6 @@ const LANGUAGES = {
         "عمليات السحب سريعة وفعالة. تستغرق العملية بضع دقائق فقط، وفي أقصى الحالات تستغرق الشركة حوالي 24 ساعة للموافقة على أي معاملة."
       ]
     },
-=======
->>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
     intro: "مرحبًا بكم في Grant Union، منصة الاستثمار والتداول الرائدة في العالم. نحن ملتزمون بتزويدك بتجربة استثمارية آمنة وشفافة ومربحة.",
     howToDeposit: {
       title: "كيفية الإيداع",
@@ -479,7 +458,6 @@ const generatePDF = (langCode, content) => {
   doc.fontSize(12).text(content.intro, { align: 'left' });
   doc.moveDown(2);
 
-<<<<<<< HEAD
   // About Company Section
   doc.fontSize(18).text(content.aboutCompany.title);
   doc.moveDown(0.5);
@@ -494,8 +472,6 @@ const generatePDF = (langCode, content) => {
   });
   doc.moveDown(2);
 
-=======
->>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
   // How to Deposit
   doc.fontSize(18).text(content.howToDeposit.title);
   doc.moveDown(0.5);

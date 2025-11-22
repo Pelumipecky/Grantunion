@@ -265,11 +265,7 @@ export default function Home() {
           <AdvancedChartWidget containerId="home-chart-widget" height="600px" />
         </section>
 
-<<<<<<< HEAD
-        {/* <Testimonies /> */}
-=======
-        <Testimonies />
->>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
+  {/* <Testimonies /> */}
         <FAQ />
         <Footer />
       </main>
