@@ -28,7 +28,11 @@ const GuideSection = () => {
               <iframe
                 width="100%"
                 height="100%"
+<<<<<<< HEAD
                 src="https://youtube.com/@grantunion308?si=qa_rbv59ICycx0kK" 
+=======
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+>>>>>>> 18cc3ce93938e8bb4c83c422d5873f01f5e27ba5
                 title="Grant Union Investment Guide"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
