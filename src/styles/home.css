@@ -592,11 +592,12 @@ nav .logoCntn img{
 
 .abouttext p span{
     display: inline-block;
-    background-color: var(--primary-clr);
+    /* make specific instrument keywords pop as bright orange */
+    background-color: var(--sec-clr);
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .companyscopes{

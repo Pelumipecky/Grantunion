@@ -43,7 +43,7 @@ export default function Home() {
       <main>
         <section className="homeIntro">
           <h1>
-            The World&apos;s Premier <br /> Investent &amp; Trading Platform
+            The World&apos;s Premier <br /> Investment&amp; Trading Platform
           </h1>
           <p>Trade with us and get a high margin return on your investment</p>
           <ul>
