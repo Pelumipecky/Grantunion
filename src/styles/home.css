@@ -514,10 +514,10 @@ nav .logoCntn img{
 .unitfact h2{
     font-size: 2.5em;
     font-weight: 600;
-    color: transparent;
-    background-image: linear-gradient(120deg, var(--primary-clr),  var(--sec2-clr));
-    -webkit-background-clip: text;
-    background-clip: text;
+    color: var(--light-bright-grey);
+    background-image: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
 }
 
 .unitfact p{
@@ -576,20 +576,18 @@ nav .logoCntn img{
 
 .abouttext h2{
     font-size: 3.5em;
-    color: var(--text-accent);
     font-weight: 400;
-    background-image: linear-gradient(120deg, var(--primary-clr) 0%, var(--sec2-clr) 60%,  var(--sec-clr) 100%);
-    color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
+    /* At Our Company heading uses light bright grey for visibility */
+    color: var(--light-bright-grey);
+    background-image: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
     width: max-content;
 }
 
 .abouttext p{
     font-size: 1.2em;
     color: var(--text-deco);
-    font-weight: 400;
-    max-width: 50ch;
 }
 
 .abouttext p span{
@@ -631,17 +629,18 @@ nav .logoCntn img{
 .companyscopes .unitscope h3{
     font-size: 1.7em;
     font-weight: 500;
-    background-image: linear-gradient(160deg, var(--primary-clr),  var(--sec2-clr));
-    color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
+    /* section titles use light bright grey for readability */
+    color: var(--light-bright-grey);
+    background-image: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
     width: max-content;
 }
 .companyscopes .unitscope p{
     font-size: 1.05em;
     color: var(--text-deco);
-    font-weight: 400;
-    text-align: center;
+    /* section titles use light bright grey for readability */
+    color: var(--light-bright-grey);
 }
 
 .features{
