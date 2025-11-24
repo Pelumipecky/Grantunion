@@ -654,6 +654,55 @@ nav .logoCntn img{
     padding-inline: 20px;
 }
 
+/* Responsive adjustments to improve visibility and layout on small devices */
+@media screen and (max-width: 1200px) {
+    .whatareweabout, .companyscopes {
+        min-width: 0; /* allow these sections to shrink on smaller screens */
+        max-width: 95vw;
+        margin-inline: auto;
+    }
+
+    /* Allow grid to wrap into fewer columns at medium sizes */
+    .companyscopes {
+        grid-template-columns: 1fr; /* single column by default on narrower screens */
+        gap: 1.5rem;
+    }
+
+    .about > h2 { font-size: 3.6em; }
+    .abouttext h2 { font-size: 2.2em; }
+    .unitfact h2 { font-size: 2.1em; }
+}
+
+@media screen and (max-width: 900px) {
+    .whatareweabout, .companyscopes {
+        grid-template-columns: 1fr; /* stack into single column */
+        padding-inline: 12px;
+        gap: 1.2rem;
+    }
+
+    .companyscopes .vertSept { display: none; }
+    .companyscopes .unitscope{ align-items: flex-start; text-align: left; }
+
+    .about > h2 { font-size: 2.6em; }
+    .abouttext h2 { font-size: 1.8em; }
+    .abouttext p, .companyscopes .unitscope p { font-size: 1rem; }
+
+    .unitfact h2 { font-size: 1.9em; }
+}
+
+@media screen and (max-width: 600px) {
+    /* Mobile friendly sizes */
+    .about > h2 { font-size: 2.1em; }
+    .abouttext h2 { font-size: 1.6em; }
+    .abouttext p { font-size: 0.98rem; max-width: 60ch; }
+
+    .unitfact h2 { font-size: 1.6em; }
+    .unitfact p { font-size: 1rem; }
+
+    .keyfactsCntn { transform: translateY(-40%); }
+    .whatareweabout, .companyscopes { min-width: 0; max-width: 100%; }
+}
+
 .features > h2{
     font-size: 5em;
     font-weight: 300;
