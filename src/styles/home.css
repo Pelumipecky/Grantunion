@@ -514,11 +514,10 @@ nav .logoCntn img{
 .unitfact h2{
     font-size: 2.5em;
     font-weight: 600;
-    /* use a light, high-contrast grey for better readability */
-    color: var(--light-sharp-grey);
-    background-image: none;
-    -webkit-background-clip: unset;
-    background-clip: unset;
+    color: transparent;
+    background-image: linear-gradient(120deg, var(--primary-clr),  var(--sec2-clr));
+    -webkit-background-clip: text;
+    background-clip: text;
 }
 
 .unitfact p{
@@ -577,12 +576,12 @@ nav .logoCntn img{
 
 .abouttext h2{
     font-size: 3.5em;
+    color: var(--text-accent);
     font-weight: 400;
-    /* make the 'At Our Company' header orange for better contrast */
-    color: var(--sec-clr);
-    background-image: none;
-    -webkit-background-clip: unset;
-    background-clip: unset;
+    background-image: linear-gradient(120deg, var(--primary-clr) 0%, var(--sec2-clr) 60%,  var(--sec-clr) 100%);
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
     width: max-content;
 }
 
@@ -632,11 +631,10 @@ nav .logoCntn img{
 .companyscopes .unitscope h3{
     font-size: 1.7em;
     font-weight: 500;
-    /* make the section titles stand out with the site orange */
-    color: var(--sec-clr);
-    background-image: none;
-    -webkit-background-clip: unset;
-    background-clip: unset;
+    background-image: linear-gradient(160deg, var(--primary-clr),  var(--sec2-clr));
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
     width: max-content;
 }
 .companyscopes .unitscope p{
