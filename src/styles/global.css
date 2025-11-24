@@ -6,6 +6,7 @@
   --sec-clr: #FF8C37;
   --text-clr1: #FEF9FF;
   --text-deco: #EAD8FF;
+  --light-sharp-grey: #D7D9E4; /* light sharp grey used for stats */
   --white-purple: #F8EDFF;
   --dark-clr1: #120524;
   --dark-clr2: #1A0833;
@@ -22,6 +23,7 @@
   --green-clr: #2DC194;
   --grey-clr: #B8A5D6;
   --text-accent: #d7d9e4;
+  --light-sharp-grey: #E6E6E9; /* new - for high contrast light grey text */
   --linear-grad1: linear-gradient(180deg, #1C0F36 40%, #3A1A63);
   --linear-grad2: linear-gradient(120deg, #1C0F36 , #FF8C37);
   --linear-grad3: linear-gradient(180deg,  #FF8C37, #1C0F36, #FEF9FF);
