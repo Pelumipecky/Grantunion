@@ -514,10 +514,11 @@ nav .logoCntn img{
 .unitfact h2{
     font-size: 2.5em;
     font-weight: 600;
-    color: transparent;
-    background-image: linear-gradient(120deg, var(--primary-clr),  var(--sec2-clr));
-    -webkit-background-clip: text;
-    background-clip: text;
+    /* use a light, high-contrast grey for better readability */
+    color: var(--light-sharp-grey);
+    background-image: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
 }
 
 .unitfact p{
