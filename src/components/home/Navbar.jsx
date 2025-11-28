@@ -4,6 +4,7 @@ import { themeContext } from '../../../providers/ThemeProvider';
 import Link from 'next/link';
 import Image from 'next/image';
 import { supabaseDb } from '../../database/supabaseUtils';
+import { useTranslation } from 'react-i18next';
 import styles from './Navbar.module.css';
 
 const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard }) => {
@@ -11,6 +12,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
     const [unreadChats, setUnreadChats] = useState(0);
     const ctx = useContext(themeContext);
     const { setregisterFromPath } = ctx;
+    const { t } = useTranslation('common');
 
     const handleLogOut = () => {
         localStorage.clear();
@@ -102,7 +104,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
         {
             shownavOptions && (
                 <div id="mobilenone" className="centerBox">
-                    <a  href="#about">About Us</a>
+                    <a  href="#about">{t('nav.about')}</a>
                     <a onClick={() => {
                         const user = JSON.parse(sessionStorage.getItem("activeUser") || localStorage.getItem("activeUser") || "null");
                         if (user?.id) {
@@ -111,7 +113,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                             window.location.href = "/signin";
                         }
                     }} style={{cursor: 'pointer'}}>Our Packages</a>
-                    <Link  href={"/contact"}>Contact</Link>
+                    <Link  href={"/contact"}>{t('nav.contact')}</Link>
                 </div>
             )
         }
@@ -168,7 +170,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                                         </div>
                                         <div className="bottomDisplay">
                                             <Link href={currentUser?.admin ? "/dashboard_admin": "/profile" } title='profile'>Dashboard <i className="icofont-dashboard-web"></i></Link>
-                                            <button type="button" title='log Out' onClick={handleLogOut}>Log Out <i className="icofont-logout"></i></button>
+                                            <button type="button" title='log Out' onClick={handleLogOut}>{t('nav.logout')} <i className="icofont-logout"></i></button>
                                         </div>
                                     </motion.div>
 
@@ -179,8 +181,8 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                     </div>
                 ) : (
                     <>
-                        <Link id="mobilenone" href={"/signup"} className="fancyBtn" onClick={() => {setregisterFromPath("/")}}>Register</Link>
-                        <Link id="mobilenone" href={"/signin"} className="borderBtn" onClick={() => {setregisterFromPath("/")}}>Sign In</Link>
+                        <Link id="mobilenone" href={"/signup"} className="fancyBtn" onClick={() => {setregisterFromPath("/")}}>{t('nav.register')}</Link>
+                        <Link id="mobilenone" href={"/signin"} className="borderBtn" onClick={() => {setregisterFromPath("/")}}>{t('nav.login')}</Link>
                     </>
                 )
             }
@@ -211,7 +213,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                                                 <p><span>{currentUser?.idnum}</span> | <span>{currentUser?.accountStatus}</span></p>
                                             </>
                                         ) : (
-                                            <p><Link href={"/signup"} onClick={() => {setregisterFromPath("/")}}>Register</Link> | <Link href={"/signin"} onClick={() => {setregisterFromPath("/")}}>Sign In</Link></p>
+                                            <p><Link href={"/signup"} onClick={() => {setregisterFromPath("/")}}>{t('nav.register')}</Link> | <Link href={"/signin"} onClick={() => {setregisterFromPath("/")}}>{t('nav.login')}</Link></p>
                                         )
                                     }
                                 </div>
@@ -276,13 +278,13 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                                         <Link href={`${!currentUser?.admin ? "/profile" : "/dashboard_admin"}`}>Dashboard</Link>
                                     )
                                 }
-                                <Link href={"/about"}>About</Link>
+                                <Link href={"/about"}>{t('nav.about')}</Link>
                                 <a href="#FAQ">FAQs</a>
-                                <Link href={"/contact"}>Contact</Link>
+                                <Link href={"/contact"}>{t('nav.contact')}</Link>
 
                                 {
                                     currentUser?.id && (
-                                        <button className="logout borderBtn" onClick={() => {handleLogOut()}}>Log Out <i className="icofont-logout"></i></button>
+                                        <button className="logout borderBtn" onClick={() => {handleLogOut()}}>{t('nav.logout')} <i className="icofont-logout"></i></button>
                                     )
                                 }
 

@@ -493,3 +493,16 @@ video {
   background-color: transparent;
   border: none !important;
 }
+
+/* Fix input field visibility when mobile keyboard opens */
+@media screen and (max-width: 600px) {
+  input, textarea, select {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+
+  /* Ensure buttons remain accessible */
+  button {
+    min-height: 44px; /* iOS touch target minimum */
+    min-width: 44px;
+  }
+}

@@ -212,6 +212,22 @@
         text-align: center;
         padding: 10px;
     }
+
+    /* Form layout improvements for mobile */
+    .signupForm {
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .signupForm input {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .signupForm button {
+        min-height: 48px;
+        font-size: 16px;
+    }
 }
 
 /* Extra small mobile devices */

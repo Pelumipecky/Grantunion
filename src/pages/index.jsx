@@ -43,7 +43,7 @@ export default function Home() {
       <main>
         <section className="homeIntro">
           <h1>
-            The World&apos;s Premier <br /> Investment&amp; Trading Platform
+            The World&apos;s Premier <br /> Investment  & Trading Platform
           </h1>
           <p>Trade with us and get a high margin return on your investment</p>
           <ul>
@@ -92,7 +92,7 @@ export default function Home() {
             <div className="abouttext">
               <h2>At Our Company</h2>
               <p>
-                We are a legally operating trading/investment company. The company was created by a group of qualified experts, professional bankers, traders and analysts who specialized in
+                We are a legally operating trading/investment company. The company was created by a group of qualified experts, professional bankers, traders and analysts who specialized in 
                 <span> cryptocurrency</span>, <span>binary</span>, <span>the stock</span>, <span>bond</span>, <span>futures</span>, <span>currencies</span>, <span>gold</span>, <span>silver</span> and
                 <span> oil trading</span> with having more than ten years of extensive practical experiences of combined personal skills, knowledge, talents and collective ambitions for success.
               </p>

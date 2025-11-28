@@ -13,8 +13,8 @@ import '../styles/admin-dashboard.css';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { config } from '../utils/config';
 import dynamic from 'next/dynamic';
-
-const TranslateWidget = dynamic(() => import('../components/TranslateWidget'), { ssr: false });
+import '../i18n'; // Add this import
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 // ChatBot is rendered only on the user dashboard (profile page).
 // Moved rendering into the profile page so admin pages don't load the widget.
@@ -78,6 +78,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <ThemeProvider>
+      <LanguageSwitcher /> {/* Add this component */}
       <Head>
         <title>Grant Union Investment</title>
         <meta charSet="UTF-8"/>
@@ -93,7 +94,6 @@ export default function App({ Component, pageProps }) {
           <div className="app-wrapper" key="app-content">
           {/* ChatBot is rendered inside the user profile page only */}
           <Component {...pageProps} />
-          <TranslateWidget />
         </div>
       </AnimatePresence>
     </ThemeProvider>
