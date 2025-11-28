@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { supabaseDb, supabase } from "../../database/supabaseUtils";
+import { createWithdrawalWithSession } from "../../utils/transactionManager";
 import styles from "./WithdrawPayment.module.css";
 import Modal from "../Modal";
 
-const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, currentUser}) => {
+const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, currentUser, startTransactionTracking}) => {
     const router = useRouter();
     const [copystate, setCopystate] = useState("Copy");
     const [walletAddress, setWalletAddress] = useState(""); // New state for wallet address
@@ -32,7 +33,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
 
     // Debug prices on mount
     useEffect(() => {
-        console.log('WithdrawalPayment Prices:', { bitPrice, ethPrice, bitPriceType: typeof bitPrice, ethPriceType: typeof ethPrice });
+        // Removed console.log for security
     }, [bitPrice, ethPrice]);
 
     const removeErr = () => {
@@ -138,15 +139,13 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 status: "Pending"
             };
 
-            const { error: withdrawalError } = await supabaseDb.createWithdrawal(withdrawalData);
+            const { error: withdrawalError } = await createWithdrawalWithSession(withdrawalData);
             if (withdrawalError) throw withdrawalError;
 
             // Deduct amount from user's available balance
             try {
                 const currentBalance = parseFloat(currentUser?.balance || 0);
                 const newBalance = Math.max(0, currentBalance - parseFloat(amount));
-                
-                console.log('Updating balance:', { currentBalance, amount, newBalance });
                 
                 const { error: balanceError } = await supabaseDb.updateUser(currentUser.id, { 
                     balance: newBalance,
@@ -171,6 +170,11 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
 
             showModal('success', 'Success', "Withdrawal request submitted successfully.");
 
+            // Start transaction tracking if function is provided
+            if (startTransactionTracking && withdrawalData?.session_id) {
+                startTransactionTracking(withdrawalData.session_id);
+            }
+
             // small delay so user can see success message before routing
             setTimeout(() => {
                 setProfileState("Withdrawals");
@@ -189,16 +193,12 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
     const numAmount = parseFloat(amount);
     const numPrice = parseFloat(price);
     
-    console.log('Crypto Calculation:', { crypto, amount, price, numAmount, numPrice });
-    
     if (!numAmount || !numPrice || numPrice === 0) {
-      console.warn(`Invalid calculation for ${crypto}: amount=${numAmount}, price=${numPrice}`);
       return '0.00000000';
     }
     
     // Calculate the crypto amount: withdrawal amount / current price
     const cryptoAmount = numAmount / numPrice;
-    console.log(`${crypto} Amount:`, cryptoAmount);
     return cryptoAmount.toFixed(8); // Show up to 8 decimal places for precision
   };
 

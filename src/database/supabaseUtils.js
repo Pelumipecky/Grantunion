@@ -51,6 +51,7 @@ const normalizeInvestmentPayload = (investmentData = {}) => ({
   authstatus: investmentData.authStatus ?? investmentData.authstatus ?? 'unseen',
   credited_roi: investmentData.credited_roi ?? 0,
   credited_bonus: investmentData.credited_bonus ?? 0,
+  session_id: investmentData.sessionId ?? investmentData.session_id ?? null,
 });
 
 // Referral helpers
@@ -646,8 +647,6 @@ export const supabaseDb = {
   createInvestment: async (investmentData) => {
     const cleanData = normalizeInvestmentPayload(investmentData);
 
-    console.log('Creating investment with data:', cleanData);
-
     const { data, error } = await supabase
       .from('investments')
       .insert([cleanData])
@@ -1212,6 +1211,7 @@ export const supabaseRealtime = {
       .from('withdrawals')
       .insert([{
         ...withdrawalData,
+        session_id: withdrawalData.sessionId ?? withdrawalData.session_id ?? null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }])

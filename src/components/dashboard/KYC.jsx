@@ -40,11 +40,7 @@ export default function KYC({ currentUser }) {
 
   // Debug currentUser prop
   useEffect(() => {
-    console.log('=== KYC COMPONENT DEBUG ===');
-    console.log('currentUser prop:', currentUser);
-    console.log('currentUser.id:', currentUser?.id);
-    console.log('currentUser.idnum:', currentUser?.idnum);
-    console.log('currentUser.email:', currentUser?.email);
+    // Removed console.log statements for security
   }, [currentUser]);
 
   useEffect(() => {
@@ -75,7 +71,7 @@ export default function KYC({ currentUser }) {
           table: 'kyc',
           filter: `user_id=eq.${currentUser.id}`
         }, (payload) => {
-          console.log('KYC status change:', payload);
+          // Removed console.log for security
           if (payload.new) {
             setKycStatus(payload.new.status || 'pending');
           } else if (payload.eventType === 'DELETE') {
@@ -95,7 +91,7 @@ export default function KYC({ currentUser }) {
 
     // Prevent double submission
     if (submitting) {
-      console.log('Already submitting, ignoring duplicate submission');
+      // Removed console.log for security
       return;
     }
 
@@ -117,8 +113,8 @@ export default function KYC({ currentUser }) {
       return;
     }
 
-    console.log('Using user ID for upload:', userId);
-    
+    // Removed console.log for security
+
     if (!idNumber.trim()) {
       showModal('error', 'Missing Information', 'Please enter ID number');
       return;
@@ -134,18 +130,12 @@ export default function KYC({ currentUser }) {
       return;
     }
 
-    console.log('Starting KYC submission...', {
-      currentUser: currentUser?.id,
-      idNumber,
-      idType,
-      hasIdFile: !!idFile,
-      hasSelfieFile: !!selfieFile
-    });
+    // Removed console.log for security
     setSubmitting(true);
     
     // Add timeout protection
     const timeoutId = setTimeout(() => {
-      console.error('KYC submission timeout - resetting state');
+      // Removed console.error for security
       setSubmitting(false);
       showModal('error', 'Timeout', 'Submission timeout. Please try again.');
     }, 60000); // 60 second timeout
@@ -153,45 +143,35 @@ export default function KYC({ currentUser }) {
     try {
       const uploaded = {};
       
-      console.log('Uploading ID document...');
+      // Removed console.log for security
       setUploadStatus('Uploading ID document...');
       if (idFile) {
-        console.log('ID file details:', {
-          name: idFile.name,
-          size: idFile.size,
-          type: idFile.type,
-          lastModified: idFile.lastModified
-        });
+        // Removed console.log for security
 
         const path = `kyc/${userId}/id_${Date.now()}_${idFile.name}`;
-        console.log('Upload path:', path);
+        // Removed console.log for security
 
         const { data, error } = await supabaseStorage.uploadFile('kyc-documents', path, idFile);
         if (error) throw error;
         uploaded.idUrl = supabaseStorage.getPublicUrl('kyc-documents', path);
-        console.log('ID document uploaded successfully, URL:', uploaded.idUrl);
+        // Removed console.log for security
       }
 
-      console.log('Uploading selfie...');
+      // Removed console.log for security
       setUploadStatus('Uploading selfie...');
       if (selfieFile) {
-        console.log('Selfie file details:', {
-          name: selfieFile.name,
-          size: selfieFile.size,
-          type: selfieFile.type,
-          lastModified: selfieFile.lastModified
-        });
+        // Removed console.log for security
 
         const path = `kyc/${userId}/selfie_${Date.now()}_${selfieFile.name}`;
-        console.log('Upload path:', path);
+        // Removed console.log for security
 
         const { data, error } = await supabaseStorage.uploadFile('kyc-documents', path, selfieFile);
         if (error) throw error;
         uploaded.selfieUrl = supabaseStorage.getPublicUrl('kyc-documents', path);
-        console.log('Selfie uploaded successfully, URL:', uploaded.selfieUrl);
+        // Removed console.log for security
       }
 
-      console.log('Creating KYC record...');
+      // Removed console.log for security
       setUploadStatus('Saving to database...');
       // Create kyc record
       const kycData = {
@@ -207,16 +187,16 @@ export default function KYC({ currentUser }) {
 
       const { data: kycRecord, error: kycError } = await supabaseDb.createKYC(kycData);
       if (kycError) throw kycError;
-      console.log('KYC record created successfully');
+      // Removed console.log for security
 
-      console.log('Updating user document...');
+      // Removed console.log for security
       // Update user doc kycStatus
       const { data: updatedUser, error: userError } = await supabaseDb.updateUser(userId, {
         kyc_status: 'pending',
         kyc_submitted_at: new Date().toISOString()
       });
       if (userError) throw userError;
-      console.log('User document updated successfully');
+      // Removed console.log for security
 
       clearTimeout(timeoutId);
       showModal('success', 'Success', 'KYC submitted successfully! Your documents are now being reviewed.');
@@ -384,7 +364,7 @@ export default function KYC({ currentUser }) {
                       accept="image/*,.pdf" 
                       onChange={(e) => {
                         const file = e.target.files[0];
-                        console.log('ID file selected:', file?.name, file?.size, file?.type);
+                        // Removed console.log for security
                         setIdFile(file);
                       }} 
                       style={{ display: 'none' }}
@@ -422,7 +402,7 @@ export default function KYC({ currentUser }) {
                       accept="image/*" 
                       onChange={(e) => {
                         const file = e.target.files[0];
-                        console.log('Selfie file selected:', file?.name, file?.size, file?.type);
+                        // Removed console.log for security
                         setSelfieFile(file);
                       }} 
                       style={{ display: 'none' }}

@@ -16,6 +16,10 @@ import dynamic from 'next/dynamic';
 import '../i18n'; // Add this import
 import LanguageSwitcher from '../components/LanguageSwitcher';
 
+// Dynamically import client-side components
+const SessionInfo = dynamic(() => import('../components/SessionInfo'), { ssr: false });
+const SessionInitializer = dynamic(() => import('../components/SessionInitializer'), { ssr: false });
+
 // ChatBot is rendered only on the user dashboard (profile page).
 // Moved rendering into the profile page so admin pages don't load the widget.
 
@@ -79,6 +83,8 @@ export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider>
       <LanguageSwitcher /> {/* Add this component */}
+      <SessionInitializer /> {/* Initialize session on client side */}
+      <SessionInfo /> {/* Development session info */}
       <Head>
         <title>Grant Union Investment</title>
         <meta charSet="UTF-8"/>

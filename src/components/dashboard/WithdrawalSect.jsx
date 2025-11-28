@@ -36,21 +36,21 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
       };
 
       const fetchKycStatus = async () => {
-        console.log('Fetching KYC status for user:', currentUser?.id);
+        // Removed console.log for security
         if (!currentUser?.id) {
-          console.log('No user ID available for KYC fetch');
+          // Removed console.log for security
           return;
         }
         
         try {
           const { data, error } = await supabaseDb.getKYCByUserId(currentUser.id);
-          console.log('KYC fetch result:', { data, error });
+          // Removed console.log for security
                     if (!error && data && data.length > 0) {
                         const status = (data[0].status || 'pending').toLowerCase();
-                        console.log('Setting KYC status to:', status);
+                        // Removed console.log for security
                         setKycStatus(status);
           } else {
-            console.log('No KYC data found, setting to pending');
+            // Removed console.log for security
             setKycStatus('pending');
           }
         } catch (err) {
@@ -68,7 +68,7 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
       
       if (currentUser?.idnum) {
         withdrawalsSubscription = supabaseRealtime.subscribeToWithdrawals(currentUser.idnum, (payload) => {
-          console.log('Withdrawal change:', payload);
+          // Removed console.log for security
           // Refresh withdrawals when there's a change
           fetchWithdrawals();
         });
@@ -83,13 +83,13 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
             table: 'kyc',
             filter: `user_id=eq.${currentUser.id}`
           }, (payload) => {
-            console.log('🔄 KYC status change in withdrawal:', payload);
+            // Removed console.log for security
             if (payload.new) {
               const newStatus = (payload.new.status || 'pending').toLowerCase();
-              console.log('📝 Updating KYC status in WithdrawalSect to:', newStatus);
+              // Removed console.log for security
               setKycStatus(newStatus);
             } else if (payload.eventType === 'DELETE') {
-              console.log('🗑️ KYC deleted, setting to pending');
+              // Removed console.log for security
               setKycStatus('pending');
             }
           })

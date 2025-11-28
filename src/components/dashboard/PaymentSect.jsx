@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { supabaseDb } from "../../database/supabaseUtils";
+import { createInvestmentWithSession } from "../../utils/transactionManager";
 import Modal from "../Modal";
 
-const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvestments}) => {
+const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvestments, startTransactionTracking}) => {
     const [copystate, setCopystate] = useState("Copy");
     const [modalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
@@ -11,23 +12,17 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
 
     // Debug logging for prices
     useEffect(() => {
-        console.log('PaymentSect Prices:', { 
-            bitPrice, 
-            ethPrice, 
-            bitPriceType: typeof bitPrice, 
-            ethPriceType: typeof ethPrice,
-            investAmount: investData?.capital 
-        });
+        // Removed console.log for security
     }, [bitPrice, ethPrice, investData?.capital]);
 
     // Helper function to calculate crypto amount
     const calculateCryptoAmount = (amount, price, crypto) => {
         if (!price || price <= 0 || !amount || amount <= 0) {
-            console.warn(`Invalid ${crypto} calculation:`, { amount, price });
+            // Removed console.warn for security
             return '0.000';
         }
         const result = (amount / price).toFixed(8);
-        console.log(`${crypto} calculation:`, { amount, price, result });
+        // Removed console.log for security
         return parseFloat(result).toFixed(3); // Show 3 decimals for investment
     };
 
@@ -59,9 +54,7 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
             credited_bonus: 0
         };
 
-        console.log('Creating investment with pending status:', investmentToCreate);
-
-        const { data, error } = await supabaseDb.createInvestment(investmentToCreate);
+        const { data, error } = await createInvestmentWithSession(investmentToCreate);
         if (error) {
             console.error('Error creating investment:', error);
             setModalTitle("Error");
@@ -71,8 +64,6 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
             return;
         }
 
-        console.log('Investment created successfully with ID:', data?.id);
-        
         // Update local state immediately
         if (setInvestments && data) {
             setInvestments(prev => [data, ...prev]);
@@ -85,6 +76,11 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
         setModalMessage("Investment submitted successfully! Your investment is now pending admin approval. You can check the status in your Investment History.");
         setModalType("success");
         setModalOpen(true);
+
+        // Start transaction tracking if function is provided
+        if (startTransactionTracking && data?.session_id) {
+            startTransactionTracking(data.session_id);
+        }
     }
 
     const handleModalClose = () => {

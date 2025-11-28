@@ -100,7 +100,7 @@ export default function LoanSect({ currentUser }) {
 
     // Set up real-time subscription for loans
     const subscription = supabaseRealtime.subscribeToLoans(currentUser.idnum, (payload) => {
-      console.log('Loan change:', payload);
+      // Removed console.log for security
       // Refresh loans when there's a change
       fetchLoans();
     });
