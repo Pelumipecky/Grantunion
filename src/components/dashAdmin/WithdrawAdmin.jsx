@@ -91,6 +91,12 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
             >
               Pending
             </button>
+            <button 
+              className={filterStatus === 'Rejected' ? 'active' : ''} 
+              onClick={() => setFilterStatus('Rejected')}
+            >
+              Rejected
+            </button>
           </div>
         </div>
       </div>
@@ -119,7 +125,7 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
                               <div className="unitheadsect">{elem?.amount}</div>
                               <div className="unitheadsect">{elem?.id}</div>
                               <div className="unitheadsect">{elem?.idnum}</div>
-                              <div className="unitheadsect"><span style={{color: `${elem?.status === "Pending" ? "#F9F871" : elem?.status === "Expired" ? "#DC1262" : "#2DC194"}`}}>{elem?.status}</span></div>
+                              <div className="unitheadsect"><span style={{color: `${elem?.status === "Pending" ? "#F9F871" : elem?.status === "Rejected" ? "#DC1262" : elem?.status === "Expired" ? "#DC1262" : "#2DC194"}`}}>{elem?.status}</span></div>
                               <div className="unitheadsect">{new Date(elem?.date).toLocaleDateString("en-US", {
                                     day: "numeric",
                                     month: "short",

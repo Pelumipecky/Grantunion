@@ -33,7 +33,7 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
 
     const handleActiveInvestment = async () => {
         try {
-            await supabaseDb.updateWithdrawalStatus(withdrawData?.id, {
+            await supabaseDb.updateWithdrawal(withdrawData?.id, {
                 status: "Active",
                 date: new Date().toISOString(),
                 authStatus: "seen"
@@ -63,7 +63,7 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
                             <li><strong>Amount:</strong> $${withdrawData?.amount}</li>
                             <li><strong>Fee:</strong> $${withdrawData?.widthrawalFee}</li>
                             <li><strong>Payment Method:</strong> ${withdrawData?.paymentOption}</li>
-                            <li><strong>Wallet Address:</strong> ${withdrawData?.address}</li>
+                            <li><strong>Wallet Address:</strong> ${withdrawData?.wallet_address}</li>
                           </ul>
                         </div>
                         <p>Your funds are now being processed and will be sent to your wallet shortly. Processing times may vary depending on the payment method.</p>
@@ -100,13 +100,47 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
                 // Don't throw here - email failure shouldn't block withdrawal confirmation
             }
 
-            showModal('success', 'Success', 'Withdrawal confirmed successfully');
+    const handleRejectWithdrawal = async () => {
+        try {
+            await supabaseDb.updateWithdrawal(withdrawData?.id, {
+                status: "Rejected",
+                date: new Date().toISOString(),
+                authStatus: "seen"
+            });
+
+            // Refund the user's balance
+            const { data: userData, error: userError } = await supabase
+                .from('userlogs')
+                .select('balance')
+                .eq('idnum', withdrawData.idnum)
+                .single();
+
+            if (!userError && userData) {
+                const currentBalance = parseFloat(userData.balance || 0);
+                const refundAmount = parseFloat(withdrawData?.amount || 0);
+                const newBalance = currentBalance + refundAmount;
+
+                await supabase
+                    .from('userlogs')
+                    .update({ balance: newBalance, updated_at: new Date().toISOString() })
+                    .eq('idnum', withdrawData.idnum);
+            }
+
+            // Send rejection notification
+            const rejectionNotification = {
+                message: `Your $${withdrawData?.amount} withdrawal request has been rejected. The amount has been refunded to your account.`,
+                idnum: withdrawData.idnum,
+                status: "unseen"
+            };
+            await supabaseDb.createNotification(rejectionNotification);
+
+            showModal('success', 'Success', 'Withdrawal rejected and amount refunded');
             setTimeout(() => {
                 setProfileState("Withdrawals");
             }, 1500);
         } catch (error) {
-            console.error("Error confirming withdrawal:", error);
-            showModal('error', 'Error', 'Failed to confirm withdrawal');
+            console.error("Error rejecting withdrawal:", error);
+            showModal('error', 'Error', 'Failed to reject withdrawal');
         }
     };
 
@@ -142,7 +176,7 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Wallet Address</label>
-              <input type="text" disabled value={withdrawData?.address} />
+              <input type="text" disabled value={withdrawData?.wallet_address} />
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Date</label>
@@ -158,16 +192,35 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             <div className="flex-align-jusc">
                 {
                     withdrawData?.status === "Pending" && (
-                        <button 
-                            type="button" 
-                            onClick={() => showModal('confirm', 'Confirm Withdrawal', 
-                                `Are you sure you want to confirm this withdrawal of $${withdrawData?.amount}?`,
-                                handleActiveInvestment
-                            )} 
-                            className='activateBtn'
-                        >
-                            Confirm Withdrawal
-                        </button>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <button 
+                                type="button" 
+                                onClick={() => showModal('confirm', 'Confirm Withdrawal', 
+                                    `Are you sure you want to confirm this withdrawal of $${withdrawData?.amount}?`,
+                                    handleActiveInvestment
+                                )} 
+                                className='activateBtn'
+                            >
+                                Confirm Withdrawal
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => showModal('confirm', 'Reject Withdrawal', 
+                                    `Are you sure you want to reject this withdrawal of $${withdrawData?.amount}? The amount will be refunded to the user's account.`,
+                                    handleRejectWithdrawal
+                                )} 
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#dc3545',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Reject Withdrawal
+                            </button>
+                        </div>
                     )
                 }
             </div>

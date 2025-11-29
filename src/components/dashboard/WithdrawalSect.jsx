@@ -306,7 +306,7 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
                                     <div data-label="Transaction ID">{elem?.id}</div>
                                     <div data-label="Amount">${elem?.amount}</div>
                                     <div data-label="Status">
-                                        <span className={`${styles.status} ${elem?.status === "Pending" ? styles.statusPending : styles.statusCompleted}`}>
+                                        <span className={`${styles.status} ${elem?.status === "Pending" ? styles.statusPending : elem?.status === "Rejected" ? styles.statusRejected : styles.statusCompleted}`}>
                                             {elem?.status}
                                         </span>
                                     </div>

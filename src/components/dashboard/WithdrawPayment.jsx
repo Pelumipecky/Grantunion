@@ -99,6 +99,12 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
             return;
         }
 
+        // Validate wallet address for crypto payments
+        if (withdrawData?.paymentOption !== 'Bank Transfer' && !walletAddress.trim()) {
+            showModal('error', 'Error', 'Please enter your wallet address before confirming');
+            return;
+        }
+
         showModal('confirm', 'Confirm Withdrawal', '');
     }
 
@@ -122,6 +128,13 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 return;
             }
 
+            // Validate wallet address for crypto payments
+            if (withdrawData?.paymentOption !== 'Bank Transfer' && !walletAddress.trim()) {
+                showModal('error', 'Error', 'Please enter your wallet address');
+                setIsProcessing(false);
+                return;
+            }
+
             // Create withdrawal record
             const withdrawalData = {
                 ...withdrawData,
@@ -130,11 +143,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
                 withdrawal_code: "N/A", // No longer using withdrawal codes
-                widthrawal_fee: withdrawData?.paymentOption === "Bitcoin"
-                    ? `${calculateCryptoAmount(amount, bitPrice, 'BTC')} BTC`
-                    : withdrawData?.paymentOption === "Ethereum"
-                    ? `${calculateCryptoAmount(amount, ethPrice, 'ETH')} ETH`
-                    : 'N/A',
+                widthrawal_fee: '0', // No fee for now
                 idnum: currentUser?.idnum,
                 status: "Pending"
             };

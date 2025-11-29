@@ -282,6 +282,12 @@
   border: 1px solid rgba(40, 167, 69, 0.3);
 }
 
+.statusRejected {
+  background: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
 .statusFailed {
   background: rgba(220, 53, 69, 0.15);
   color: #dc3545;

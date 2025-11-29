@@ -188,6 +188,12 @@ const Signin = () => {
                                 'Sign In'
                             )}
                         </button>
+
+                        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                            <Link href="/signin" className="userSigninLink">
+                                Not an admin? Sign in as user
+                            </Link>
+                        </div>
                     </div>
                 </form>
             </div>
