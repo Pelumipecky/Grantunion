@@ -237,6 +237,7 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                 <th>Bonus (Credited/Total)</th>
                                 <th>Duration</th>
                                 <th>Payment</th>
+                                <th>Transaction Hash</th>
                                 <th>Status</th>
                                 <th>Date</th>
                                 <th>Actions</th>
@@ -271,6 +272,24 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                         </td>
                                         <td>{elem?.duration || 0} days</td>
                                         <td>{elem?.paymentOption || 'N/A'}</td>
+                                        <td style={{ fontFamily: 'monospace', fontSize: '0.8rem', maxWidth: '150px', wordBreak: 'break-all' }}>
+                                            {elem?.transaction_hash ? (
+                                                <a 
+                                                    href={
+                                                        elem?.paymentOption === 'Bitcoin' 
+                                                            ? `https://blockchain.com/btc/tx/${elem.transaction_hash}`
+                                                            : elem?.paymentOption === 'Ethereum' || elem?.paymentOption === 'USDT'
+                                                            ? `https://etherscan.io/tx/${elem.transaction_hash}`
+                                                            : '#'
+                                                    } 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: '#FFB347', textDecoration: 'none' }}
+                                                >
+                                                    {elem.transaction_hash.substring(0, 10)}...
+                                                </a>
+                                            ) : 'Not provided'}
+                                        </td>
                                         <td>
                                             <span className={`investment-status ${elem?.status?.toLowerCase() || 'pending'}`}>
                                                 {elem?.status || 'Pending'}

@@ -48,6 +48,7 @@ const normalizeInvestmentPayload = (investmentData = {}) => ({
   bonus: investmentData.bonus ?? 0,
   duration: investmentData.duration ?? 5,
   paymentoption: investmentData.paymentOption ?? investmentData.paymentoption ?? 'Bitcoin',
+  transaction_hash: investmentData.transactionHash ?? investmentData.transaction_hash ?? null,
   authstatus: investmentData.authStatus ?? investmentData.authstatus ?? 'unseen',
   credited_roi: investmentData.credited_roi ?? 0,
   credited_bonus: investmentData.credited_bonus ?? 0,

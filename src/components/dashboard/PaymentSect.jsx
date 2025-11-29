@@ -9,6 +9,7 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
     const [modalType, setModalType] = useState("success");
+    const [transactionHash, setTransactionHash] = useState("");
 
     // Debug logging for prices
     useEffect(() => {
@@ -44,6 +45,14 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
     }
 
     const handleTransacConfirmation = async () => {
+        if (!transactionHash.trim()) {
+            setModalTitle("Error");
+            setModalMessage("Please enter the transaction hash from your blockchain transaction.");
+            setModalType("error");
+            setModalOpen(true);
+            return;
+        }
+
         // Ensure the investment is created with "Pending" status and no pre-calculated bonus
         const investmentToCreate = {
             ...investData,
@@ -51,7 +60,8 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
             roi: 0, // Will be calculated during admin approval
             bonus: 0, // Will be calculated during admin approval
             credited_roi: 0, // Track credited amounts
-            credited_bonus: 0
+            credited_bonus: 0,
+            transactionHash: transactionHash.trim()
         };
 
         const { data, error } = await createInvestment(investmentToCreate);
@@ -146,6 +156,32 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
             </p>
             <p style={{ color: '#aaa', fontSize: '0.9rem', lineHeight: '1.5' }}>
                 The completion of the transaction process might take between a couple of minutes to several hours. You can check the status of your investment in the Investment section of your dashboard.
+            </p>
+        </div>
+
+        <div style={{ marginTop: '2rem', background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc', fontSize: '0.9rem' }}>
+                Transaction Hash <span style={{ color: '#FFB347' }}>*</span>
+            </label>
+            <input
+                type="text"
+                value={transactionHash}
+                onChange={(e) => setTransactionHash(e.target.value)}
+                placeholder="Enter the transaction hash from your blockchain transaction"
+                style={{
+                    width: '100%',
+                    padding: '1rem',
+                    background: 'rgba(0,0,0,0.3)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '8px',
+                    color: '#fff',
+                    fontFamily: 'monospace',
+                    fontSize: '0.9rem'
+                }}
+                required
+            />
+            <p style={{ marginTop: '0.5rem', color: '#aaa', fontSize: '0.8rem' }}>
+                This hash will be used by admins to verify your transaction on the blockchain.
             </p>
         </div>
 

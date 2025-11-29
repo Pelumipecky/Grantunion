@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS investments (
   credited_bonus DECIMAL(15,2) DEFAULT 0,
   duration INTEGER DEFAULT 5,
   paymentoption TEXT DEFAULT 'Bitcoin',
+  transaction_hash TEXT,
   authstatus TEXT DEFAULT 'unseen',
   approved_by TEXT,
   approved_at TIMESTAMPTZ,
