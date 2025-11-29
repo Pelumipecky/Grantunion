@@ -506,3 +506,17 @@ video {
     min-width: 44px;
   }
 }
+
+/* Global table cell text wrapping to prevent overflow */
+td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* Ensure investment buttons are full-width on mobile */
+@media (max-width: 768px) {
+  .investButton {
+    width: 100% !important;
+  }
+}

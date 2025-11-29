@@ -86,7 +86,7 @@
     background-color: var(--dark-clr2);
     height: calc(100dvh - 20px);
     width: 17.5%;
-    min-width: 250px;
+    max-width: 250px;
     position: fixed;
     top: 10px;
     left: 10px;
@@ -1096,6 +1096,11 @@ button.logoutBtn i{
     }
     .panelPrfileDisp .right p{
         font-size: 0.79em;
+    }
+
+    /* Hide fixed sidebar on mobile */
+    .mainprofileSect .leftProfile {
+        display: none;
     }
 
     .centerRightProfile ul li span{

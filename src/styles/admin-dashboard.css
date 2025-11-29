@@ -110,6 +110,9 @@
   vertical-align: middle;
   color: var(--text-clr1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .usersTable td:first-child {
@@ -271,6 +274,7 @@
 @media (max-width: 1200px) {
   .usersTable {
     font-size: 12px;
+    min-width: 100%;
   }
   
   .usersTable th,
@@ -286,7 +290,8 @@
   .action-btn {
     padding: 4px 8px;
     font-size: 10px;
-    min-width: 60px;
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
@@ -298,7 +303,7 @@
   
   .usersTable {
     font-size: 11px;
-    min-width: 1000px;
+    min-width: 100%;
   }
   
   .usersTable th,
@@ -456,6 +461,9 @@
   vertical-align: middle;
   color: var(--text-clr1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .kycTable td:first-child {
@@ -567,6 +575,7 @@
 @media (max-width: 1200px) {
   .kycTable {
     font-size: 12px;
+    min-width: 100%;
   }
   
   .kycTable th,
@@ -582,7 +591,8 @@
   .kycTable .action-btn {
     padding: 4px 8px;
     font-size: 10px;
-    min-width: 60px;
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
@@ -594,7 +604,7 @@
   
   .kycTable {
     font-size: 11px;
-    min-width: 900px;
+    min-width: 100%;
   }
   
   .kycTable th,
@@ -682,6 +692,9 @@
   vertical-align: middle;
   color: var(--text-clr1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .investmentsTable td:first-child {
@@ -783,6 +796,7 @@
 @media (max-width: 1200px) {
   .investmentsTable {
     font-size: 12px;
+    min-width: 100%;
   }
   
   .investmentsTable th,
@@ -798,7 +812,8 @@
   .investmentsTable .action-btn {
     padding: 4px 8px;
     font-size: 10px;
-    min-width: 60px;
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
@@ -810,7 +825,7 @@
   
   .investmentsTable {
     font-size: 11px;
-    min-width: 1000px;
+    min-width: 100%;
   }
   
   .investmentsTable th,

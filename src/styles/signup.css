@@ -37,7 +37,7 @@
     height: 100dvh;
     gap: 20px;
     position: relative;
-    display: flex;
+    display: block;
     overflow-x: hidden;
 }
 
@@ -194,7 +194,10 @@
 
     .form-control2{
         width: 100%;
-        font-size: 0.9em;
+        font-size: 16px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
     }
 
     .haveanaccount{
@@ -227,6 +230,23 @@
     .signupForm button {
         min-height: 48px;
         font-size: 16px;
+    }
+}
+
+/* Large screens: show two-column layout */
+@media screen and (min-width: 701px) {
+    .signupCntn {
+        display: flex;
+    }
+
+    .rightSide {
+        width: 50%;
+        margin-left: 50%;
+        padding-inline: 10%;
+    }
+
+    .leftSide {
+        display: block;
     }
 }
 
@@ -404,7 +424,7 @@ form .inputcontainer{
 
 .inputCntn input{
     background-color: transparent;
-    font-size: 1.1em;
+    font-size: 16px;
     color: var(--text-clr1);
     padding-left: 40px;
     width: 100%;
@@ -415,7 +435,7 @@ form .inputcontainer{
 
 .passcntn input{
     background-color: transparent;
-    font-size: 1.1em;
+    font-size: 16px;
     color: var(--text-clr1);
     padding-right: 40px;
     width: 100%;
