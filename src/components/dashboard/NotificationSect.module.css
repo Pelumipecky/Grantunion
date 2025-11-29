@@ -6,11 +6,11 @@
 }
 
 .sectionTitle {
-  color: #60a5fa;
+  color: #FFB347;
   font-size: 1.5em;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+  border-bottom: 1px solid rgba(255, 179, 71, 0.2);
 }
 
 .notificationList {
@@ -38,8 +38,8 @@
 }
 
 .notificationCard.unread {
-  border-left: 4px solid #60a5fa;
-  background: linear-gradient(90deg, rgba(96, 165, 250, 0.05), transparent);
+  border-left: 4px solid #FFB347;
+  background: linear-gradient(90deg, rgba(255, 179, 71, 0.05), transparent);
 }
 
 .iconWrapper {
@@ -55,7 +55,7 @@
 
 .iconWrapper i {
   font-size: 1.5rem;
-  color: #60a5fa;
+  color: #FFB347;
 }
 
 .content {
@@ -159,7 +159,7 @@
   margin-bottom: 3rem;
   font-size: 2.5em;
   font-weight: 600;
-  background: linear-gradient(135deg, #60a5fa 0%, #FEF9FF 100%);
+  background: linear-gradient(135deg, #FFB347 0%, #FEF9FF 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -203,7 +203,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #60a5fa, #93c5fd);
+  background: linear-gradient(90deg, #FFB347, #FFD700);
   border-radius: 24px 24px 0 0;
 }
 
@@ -234,8 +234,8 @@
 .packagePrice span:first-child {
   font-size: 1.8em;
   font-weight: 700;
-  color: #60a5fa;
-  text-shadow: 0 0 20px rgba(96,165,250,0.3);
+  color: #FFB347;
+  text-shadow: 0 0 20px rgba(255,179,71,0.3);
 }
 
 .packagePrice span:last-child {
@@ -260,10 +260,10 @@
 }
 
 .featureIcon {
-  color: #60a5fa;
+  color: #FFB347;
   margin-right: 1rem;
   font-size: 1.2em;
-  background: rgba(96,165,250,0.1);
+  background: rgba(255,179,71,0.1);
   padding: 5px;
   border-radius: 50%;
 }
@@ -292,10 +292,10 @@
 }
 
 .diamondButton {
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #FFB347 0%, #FF8C00 100%);
   border: none;
   color: #000;
-  box-shadow: 0 10px 20px rgba(96,165,250,0.2);
+  box-shadow: 0 10px 20px rgba(255,179,71,0.2);
 }
 
 .diamondButton:hover {

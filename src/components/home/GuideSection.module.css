@@ -17,7 +17,7 @@
 .header h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  background: linear-gradient(120deg, #FEF9FF, #60a5fa);
+  background: linear-gradient(120deg, #FEF9FF, #FF8C37);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -46,7 +46,7 @@
 .videoCard h3 {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  color: #60a5fa;
+  color: #FF8C37;
 }
 
 .videoWrapper {
@@ -84,7 +84,7 @@
 .downloadCard h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  color: #60a5fa;
+  color: #FF8C37;
 }
 
 .downloadDesc {
@@ -113,8 +113,8 @@
 }
 
 .langButton:hover {
-  background: rgba(96, 165, 250, 0.2);
-  border-color: #60a5fa;
+  background: rgba(255, 140, 55, 0.2);
+  border-color: #FF8C37;
   transform: translateY(-2px);
 }
 
@@ -128,7 +128,7 @@
 }
 
 .langButton i {
-  color: #60a5fa;
+  color: #FF8C37;
 }
 
 @media (max-width: 968px) {
