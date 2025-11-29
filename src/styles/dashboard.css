@@ -252,32 +252,61 @@
 button.logoutBtn {
     align-items: center;
     justify-content: center;
-    padding-block: 8px;
-    border-radius: 6px;
-    font-size: 0.98em;
-    color: var(--text-deco);
-    font-weight: 300;
-    background-color: #dc126326;
-    padding-inline: 12px;
-    font-weight: 400;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 1em;
+    color: var(--text-clr1);
+    font-weight: 500;
+    background: linear-gradient(135deg, var(--danger-clr) 0%, #b91c1c 100%);
+    border: 1px solid var(--danger-clr);
     margin-bottom: 20px;
-    transition: background-color 0.4s ease;
+    transition: all 0.3s ease;
     opacity: 1;
     visibility: visible;
     display: flex;
-    border: none;
     outline: none;
     cursor: pointer;
-    gap: 16px;
+    gap: 12px;
     width: 100%;
+    box-shadow: 0 2px 8px rgba(220, 18, 98, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+button.logoutBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+button.logoutBtn:hover::before {
+    left: 100%;
 }
 
 button.logoutBtn:hover{
-    background-color:  #dc126348;
+    background: linear-gradient(135deg, #b91c1c 0%, var(--danger-clr) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(220, 18, 98, 0.4);
+}
+
+button.logoutBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(220, 18, 98, 0.2);
 }
 
 button.logoutBtn i{
-    color: var(--danger-clr);
+    color: var(--text-clr1);
+    font-size: 1.1em;
+    transition: transform 0.3s ease;
+}
+
+button.logoutBtn:hover i {
+    transform: translateX(3px);
 }
 
 .rightProfile{
@@ -1124,6 +1153,19 @@ button.logoutBtn i{
         width: 100%;
         padding-inline: 3%;
         padding-top: calc(3% + 30px);
+    }
+
+    /* Mobile logout button styling */
+    button.logoutBtn {
+        padding: 14px 24px;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-shadow: 0 3px 12px rgba(220, 18, 98, 0.3);
+    }
+
+    button.logoutBtn:hover {
+        transform: translateY(-1px);
     }
 
     .lengthyAnalytics{

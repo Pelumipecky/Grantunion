@@ -413,14 +413,40 @@ nav .logoCntn img{
 
 .bottomMobiNavSect .logout{
     width: 100%;
-    border: none;
+    border: 1px solid var(--danger-clr);
     outline: none;
     margin-top: 30%;
+    background: linear-gradient(135deg, var(--danger-clr) 0%, #b91c1c 100%);
+    color: var(--text-clr1);
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 3px 12px rgba(220, 18, 98, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.bottomMobiNavSect .logout:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, var(--danger-clr) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(220, 18, 98, 0.4);
+}
+
+.bottomMobiNavSect .logout i {
+    color: var(--text-clr1);
+    font-size: 1.1em;
 }
 
 @media screen and (max-height: 670px) {
     .bottomMobiNavSect .logout{
         margin-top: 10%;
+        padding: 14px 18px;
+        font-size: 1.1em;
     }
 }
 
