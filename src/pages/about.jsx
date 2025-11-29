@@ -222,11 +222,26 @@ const About = () => {
                   <div className="language-links">
                     <a href="/downloads/guide-en.pdf" className="lang-link" download>🇬🇧 English</a>
                     <a href="/downloads/guide-es.pdf" className="lang-link" download>🇪🇸 Spanish</a>
+                    <a href="/downloads/guide-pt.pdf" className="lang-link" download>🇵🇹 Portuguese</a>
                     <a href="/downloads/guide-fr.pdf" className="lang-link" download>🇫🇷 French</a>
                     <a href="/downloads/guide-de.pdf" className="lang-link" download>🇩🇪 German</a>
+                    <a href="/downloads/guide-it.pdf" className="lang-link" download>🇮🇹 Italian</a>
                     <a href="/downloads/guide-zh.pdf" className="lang-link" download>🇨🇳 Chinese</a>
+                    <a href="/downloads/guide-ja.pdf" className="lang-link" download>🇯🇵 Japanese</a>
+                    <a href="/downloads/guide-ko.pdf" className="lang-link" download>🇰🇷 Korean</a>
                     <a href="/downloads/guide-ru.pdf" className="lang-link" download>🇷🇺 Russian</a>
                     <a href="/downloads/guide-ar.pdf" className="lang-link" download>🇸🇦 Arabic</a>
+                    <a href="/downloads/guide-hi.pdf" className="lang-link" download>🇮🇳 Hindi</a>
+                    <a href="/downloads/guide-nl.pdf" className="lang-link" download>🇳🇱 Dutch</a>
+                    <a href="/downloads/guide-tr.pdf" className="lang-link" download>🇹🇷 Turkish</a>
+                    <a href="/downloads/guide-id.pdf" className="lang-link" download>🇮🇩 Indonesian</a>
+                    <a href="/downloads/guide-th.pdf" className="lang-link" download>🇹🇭 Thai</a>
+                    <a href="/downloads/guide-vi.pdf" className="lang-link" download>🇻🇳 Vietnamese</a>
+                    <a href="/downloads/guide-pl.pdf" className="lang-link" download>🇵🇱 Polish</a>
+                    <a href="/downloads/guide-sv.pdf" className="lang-link" download>🇸🇪 Swedish</a>
+                    <a href="/downloads/guide-no.pdf" className="lang-link" download>🇳🇴 Norwegian</a>
+                    <a href="/downloads/guide-da.pdf" className="lang-link" download>🇩🇰 Danish</a>
+                    <a href="/downloads/guide-fi.pdf" className="lang-link" download>🇫🇮 Finnish</a>
                   </div>
                 </div>
               </div>

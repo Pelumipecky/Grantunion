@@ -13,7 +13,7 @@ const TranslateWidget = () => {
         window.__grantUnionTranslator = new window.google.translate.TranslateElement(
           {
             pageLanguage: 'en',
-            includedLanguages: 'en,es,fr,de,pt,it,ar,zh-CN,hi',
+            includedLanguages: 'en,es,fr,de,pt,it,ar,zh-CN,hi,ja,ko,ru,nl,tr,id,th,vi,pl,sv,no,da,fi,cs,hu,bg,hr,sl,sk,et,lv,lt,mt,eu,gl,ca,eo',
           },
           WIDGET_CONTAINER_ID
         );

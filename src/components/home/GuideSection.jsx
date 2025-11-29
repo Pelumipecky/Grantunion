@@ -5,11 +5,26 @@ const GuideSection = () => {
   const languages = [
     { name: 'English', code: 'en', flag: '🇬🇧' },
     { name: 'Spanish', code: 'es', flag: '🇪🇸' },
+    { name: 'Portuguese', code: 'pt', flag: '🇵🇹' },
     { name: 'French', code: 'fr', flag: '🇫🇷' },
     { name: 'German', code: 'de', flag: '🇩🇪' },
+    { name: 'Italian', code: 'it', flag: '🇮🇹' },
     { name: 'Chinese', code: 'zh', flag: '🇨🇳' },
+    { name: 'Japanese', code: 'ja', flag: '🇯🇵' },
+    { name: 'Korean', code: 'ko', flag: '🇰🇷' },
     { name: 'Russian', code: 'ru', flag: '🇷🇺' },
     { name: 'Arabic', code: 'ar', flag: '🇸🇦' },
+    { name: 'Hindi', code: 'hi', flag: '🇮🇳' },
+    { name: 'Dutch', code: 'nl', flag: '🇳🇱' },
+    { name: 'Turkish', code: 'tr', flag: '🇹🇷' },
+    { name: 'Indonesian', code: 'id', flag: '🇮🇩' },
+    { name: 'Thai', code: 'th', flag: '🇹🇭' },
+    { name: 'Vietnamese', code: 'vi', flag: '🇻🇳' },
+    { name: 'Polish', code: 'pl', flag: '🇵🇱' },
+    { name: 'Swedish', code: 'sv', flag: '🇸🇪' },
+    { name: 'Norwegian', code: 'no', flag: '🇳🇴' },
+    { name: 'Danish', code: 'da', flag: '🇩🇰' },
+    { name: 'Finnish', code: 'fi', flag: '🇫🇮' },
   ];
 
   return (
@@ -44,7 +59,7 @@ const GuideSection = () => {
           <div className={styles.downloadCard}>
             <h3>Official Investment Guide (PDF)</h3>
             <p className={styles.downloadDesc}>
-              Download our detailed investment presentation. Available in 7 languages for our global community.
+              Download our detailed investment presentation. Available in 22 languages for our global community.
             </p>
             
             <div className={styles.languageGrid}>
