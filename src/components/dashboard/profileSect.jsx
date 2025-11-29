@@ -63,6 +63,8 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
     const [deletePassword, setDeletePassword] = useState("");
     const [deleteError, setDeleteError] = useState("");
     const [isDeleting, setIsDeleting] = useState(false);
+    const [deletionReason, setDeletionReason] = useState("");
+    const [hasPendingRequest, setHasPendingRequest] = useState(false);
     
     const [profileForm, setProfileForm] = useState(buildProfileForm(currentUser));
     const [initialUsername, setInitialUsername] = useState(currentUser?.userName ?? currentUser?.user_name ?? "");
@@ -90,6 +92,17 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
       setProfileForm(buildProfileForm(currentUser));
       setInitialUsername(currentUser?.userName ?? currentUser?.user_name ?? "");
       setUsernameLocked(Boolean(currentUser?.username_locked ?? currentUser?.usernameLocked ?? false));
+
+      // Check for pending deletion requests
+      if (currentUser?.id) {
+        supabaseDb.getDeletionRequestByUserId(currentUser.id).then(({ data, error }) => {
+          if (!error && data && data.status === 'pending') {
+            setHasPendingRequest(true);
+          } else {
+            setHasPendingRequest(false);
+          }
+        });
+      }
     }, [currentUser]);
 
     const usernameChanged = useMemo(() => {
@@ -99,50 +112,55 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
     }, [initialUsername, profileForm?.userName]);
 
     const handleDetailUpdate = async () => {
-      if (!currentUser?.id) {
-        setDetailStatus({ message: "Unable to locate your profile", tone: "error" });
-        return;
+      try {
+        if (!currentUser?.id) {
+          setDetailStatus({ message: "Unable to locate your profile", tone: "error" });
+          return;
+        }
+
+        if (usernameLocked && usernameChanged) {
+          setDetailStatus({ message: "Username has already been updated once", tone: "error" });
+          return;
+        }
+
+        const payload = {
+          name: profileForm.name?.trim() ?? "",
+          user_name: profileForm.userName?.trim() ?? "",
+          phone: profileForm.phone?.trim() ?? "",
+          country: profileForm.country?.trim() ?? "",
+          city: profileForm.city?.trim() ?? "",
+          mailing_address: profileForm.address?.trim() ?? "",
+          username_locked: usernameLocked || usernameChanged,
+          avatar: currentUser?.avatar || 'avatar_1',
+          updated_at: new Date().toISOString()
+        };
+
+        setDetailStatus({ message: "Updating profile...", tone: "pending" });
+
+        // Use updateUserDetails instead of updateUser to match supabaseUtils
+        const { data, error } = await supabaseDb.updateUserDetails(currentUser?.id, payload);
+
+        if (error) {
+          console.error("Profile update error:", error);
+          setDetailStatus({ message: "Could not save changes. Please try again.", tone: "error" });
+          return;
+        }
+
+        const normalized = normalizeUser(currentUser, profileForm, {
+          ...data,
+          username_locked: payload.username_locked
+        });
+
+        setCurrentUser(normalized);
+        setProfileForm(buildProfileForm(normalized));
+        setInitialUsername(normalized?.userName ?? "");
+        setUsernameLocked(Boolean(normalized?.username_locked));
+        sessionStorage.setItem("activeUser", JSON.stringify(normalized));
+        setDetailStatus({ message: "Profile updated successfully", tone: "success" });
+      } catch (err) {
+        console.error("Unexpected error during profile update:", err);
+        setDetailStatus({ message: "An unexpected error occurred. Please try again.", tone: "error" });
       }
-
-      if (usernameLocked && usernameChanged) {
-        setDetailStatus({ message: "Username has already been updated once", tone: "error" });
-        return;
-      }
-
-      const payload = {
-        name: profileForm.name?.trim() ?? "",
-        user_name: profileForm.userName?.trim() ?? "",
-        phone: profileForm.phone?.trim() ?? "",
-        country: profileForm.country?.trim() ?? "",
-        city: profileForm.city?.trim() ?? "",
-        mailing_address: profileForm.address?.trim() ?? "",
-        username_locked: usernameLocked || usernameChanged,
-        avatar: currentUser?.avatar || 'avatar_1',
-        updated_at: new Date().toISOString()
-      };
-
-      setDetailStatus({ message: "Updating profile...", tone: "pending" });
-
-      // Use updateUserDetails instead of updateUser to match supabaseUtils
-      const { data, error } = await supabaseDb.updateUserDetails(currentUser?.id, payload);
-
-      if (error) {
-        console.error("Profile update error:", error);
-        setDetailStatus({ message: "Could not save changes. Please try again.", tone: "error" });
-        return;
-      }
-
-      const normalized = normalizeUser(currentUser, profileForm, {
-        ...data,
-        username_locked: payload.username_locked
-      });
-
-      setCurrentUser(normalized);
-      setProfileForm(buildProfileForm(normalized));
-      setInitialUsername(normalized?.userName ?? "");
-      setUsernameLocked(Boolean(normalized?.username_locked));
-      sessionStorage.setItem("activeUser", JSON.stringify(normalized));
-      setDetailStatus({ message: "Profile updated successfully", tone: "success" });
     }
 
     const handleInputChange = (field, value) => {
@@ -217,9 +235,14 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
         }
     }
 
-    const handleDeleteAccount = async () => {
+    const handleRequestDeletion = async () => {
         if (!deletePassword) {
-            setDeleteError("Please enter your password to confirm deletion");
+            setDeleteError("Please enter your password to confirm the request");
+            return;
+        }
+
+        if (!deletionReason.trim()) {
+            setDeleteError("Please provide a reason for your deletion request");
             return;
         }
 
@@ -235,36 +258,36 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
                 return;
             }
 
-            // Delete user data from Supabase
-            // Note: In Supabase, we would typically use foreign key constraints and CASCADE delete
-            // For now, we'll manually delete related records if needed
+            // Create deletion request
+            const requestData = {
+                user_id: currentUser.id,
+                idnum: currentUser.idnum,
+                user_name: currentUser.userName || currentUser.user_name,
+                email: currentUser.email,
+                reason: deletionReason.trim(),
+                status: 'pending'
+            };
 
-            // Delete user document from userlogs table
-            const { error: deleteError } = await supabase
-                .from('userlogs')
-                .delete()
-                .eq('id', currentUser?.id);
+            const { data, error } = await supabaseDb.createDeletionRequest(requestData);
 
-            if (deleteError) throw deleteError;
-
-            // Delete from Supabase Auth
-            const { error: authError } = await supabase.auth.admin.deleteUser(currentUser?.id);
-            if (authError) {
-                console.warn('Failed to delete from auth, but user data deleted:', authError);
+            if (error) {
+                console.error('Error creating deletion request:', error);
+                setDeleteError("Failed to submit deletion request. Please try again.");
+            } else {
+                setHasPendingRequest(true);
+                setShowDeleteModal(false);
+                setDeletePassword("");
+                setDeletionReason("");
+                // Show success message
+                alert("Your account deletion request has been submitted and is pending admin approval.");
             }
-
-            // Clear local storage
-            localStorage.clear();
-            sessionStorage.clear();
-
-            // Redirect to home
-            router.push('/');
         } catch (error) {
-            console.error('Error deleting account:', error);
-            setDeleteError("Failed to delete account. Please contact support.");
+            console.error('Error requesting account deletion:', error);
+            setDeleteError("An error occurred. Please try again.");
+        } finally {
             setIsDeleting(false);
         }
-    }
+    };
   return (
 
     <>
@@ -345,118 +368,122 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
 
         <div className={profileStyles.formSection}>
           <h2>Edit Profile & Contact</h2>
-          <div className={profileStyles.formGrid}>
-            <div className={profileStyles.inputGroup}>
-              <label htmlFor="name">Full Name</label>
-              <input
-                type="text"
-                value={profileForm?.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-              />
+          <form onSubmit={(e) => { e.preventDefault(); handleDetailUpdate(); }}>
+            <div className={profileStyles.formGrid}>
+              <div className={profileStyles.inputGroup}>
+                <label htmlFor="name">Full Name</label>
+                <input
+                  type="text"
+                  value={profileForm?.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                />
+              </div>
+              <div className={profileStyles.inputGroup}>
+                <label htmlFor="username">
+                  Username {usernameLocked && <span className={profileStyles.lockTag}>Locked</span>}
+                </label>
+                <input
+                  id="username"
+                  type="text"
+                  value={profileForm?.userName}
+                  onChange={(e) => handleInputChange("userName", e.target.value)}
+                  disabled={usernameLocked}
+                />
+              </div>
+              <div className={profileStyles.inputGroup}>
+                <label htmlFor="phone">Phone Number</label>
+                <input
+                  id="phone"
+                  type="tel"
+                  value={profileForm?.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  placeholder="e.g. +1 555 555 5555"
+                />
+              </div>
+              <div className={profileStyles.inputGroup}>
+                <label htmlFor="country">Country</label>
+                <select
+                  id="country"
+                  value={profileForm?.country}
+                  onChange={(e) => handleInputChange("country", e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: 'rgba(0, 0, 0, 0.2)',
+                    color: 'var(--text-clr1)',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="" disabled>Select your country</option>
+                  {COUNTRIES.map((country) => (
+                    <option key={country} value={country} style={{ color: '#000' }}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className={profileStyles.inputGroup}>
+                <label htmlFor="city">City</label>
+                <input
+                  id="city"
+                  type="text"
+                  value={profileForm?.city}
+                  onChange={(e) => handleInputChange("city", e.target.value)}
+                />
+              </div>
+              <div className={profileStyles.inputGroup} style={{ gridColumn: "span 2" }}>
+                <label htmlFor="address">Mailing Address</label>
+                <input
+                  id="address"
+                  type="text"
+                  value={profileForm?.address}
+                  onChange={(e) => handleInputChange("address", e.target.value)}
+                  placeholder="Street, State, Zip"
+                />
+              </div>
             </div>
-            <div className={profileStyles.inputGroup}>
-              <label htmlFor="username">
-                Username {usernameLocked && <span className={profileStyles.lockTag}>Locked</span>}
-              </label>
-              <input
-                id="username"
-                type="text"
-                value={profileForm?.userName}
-                onChange={(e) => handleInputChange("userName", e.target.value)}
-                disabled={usernameLocked}
-              />
-            </div>
-            <div className={profileStyles.inputGroup}>
-              <label htmlFor="phone">Phone Number</label>
-              <input
-                id="phone"
-                type="tel"
-                value={profileForm?.phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-                placeholder="e.g. +1 555 555 5555"
-              />
-            </div>
-            <div className={profileStyles.inputGroup}>
-              <label htmlFor="country">Country</label>
-              <select
-                id="country"
-                value={profileForm?.country}
-                onChange={(e) => handleInputChange("country", e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  background: 'rgba(0, 0, 0, 0.2)',
-                  color: 'var(--text-clr1)',
-                  outline: 'none',
-                  cursor: 'pointer'
-                }}
+
+            {detailStatus?.message && (
+              <p
+                className={`${profileStyles.statusMessage} ${
+                  detailStatus.tone === "success"
+                    ? profileStyles.statusSuccess
+                    : detailStatus.tone === "error"
+                    ? profileStyles.statusError
+                    : profileStyles.statusPending
+                }`}
               >
-                <option value="" disabled>Select your country</option>
-                {COUNTRIES.map((country) => (
-                  <option key={country} value={country} style={{ color: '#000' }}>
-                    {country}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className={profileStyles.inputGroup}>
-              <label htmlFor="city">City</label>
-              <input
-                id="city"
-                type="text"
-                value={profileForm?.city}
-                onChange={(e) => handleInputChange("city", e.target.value)}
-              />
-            </div>
-            <div className={profileStyles.inputGroup} style={{ gridColumn: "span 2" }}>
-              <label htmlFor="address">Mailing Address</label>
-              <input
-                id="address"
-                type="text"
-                value={profileForm?.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-                placeholder="Street, State, Zip"
-              />
-            </div>
-          </div>
+                {detailStatus.message}
+              </p>
+            )}
 
-          {detailStatus?.message && (
-            <p
-              className={`${profileStyles.statusMessage} ${
-                detailStatus.tone === "success"
-                  ? profileStyles.statusSuccess
-                  : detailStatus.tone === "error"
-                  ? profileStyles.statusError
-                  : profileStyles.statusPending
-              }`}
-            >
-              {detailStatus.message}
-            </p>
-          )}
-
-          <button type="button" onClick={handleDetailUpdate} className={profileStyles.saveBtn}>
-            Save Profile
-          </button>
+            <button type="submit" className={profileStyles.saveBtn}>
+              Save Profile
+            </button>
+          </form>
         </div>
         <div className={profileStyles.formSection}>
           <h2>Change Password</h2>
-          <div className={profileStyles.formGrid}>
-            <div className={profileStyles.inputGroup}>
-              <label htmlFor="name">Old Password</label>
-              <input type="text" onChange={(e) => {setpasswordchange({...passwordchange, old: e.target.value})}}/>
-            </div>
-            <div className={profileStyles.inputGroup}>
-              <label htmlFor="name">New Password</label>
-              <div className={profileStyles.relativeInput}>
-                <input type={passwordShow ? "text": "password"} onChange={(e) => {setpasswordchange({...passwordchange, new: e.target.value})}}/>
-                <span className={profileStyles.passwordToggle} onClick={() => {setPasswordShow(prev => !prev)}}><i className={`icofont-eye-${!passwordShow? "alt": "blocked"}`}></i></span>
+          <form onSubmit={(e) => { e.preventDefault(); handlePasswordChnage(); }}>
+            <div className={profileStyles.formGrid}>
+              <div className={profileStyles.inputGroup}>
+                <label htmlFor="oldPassword">Old Password</label>
+                <input id="oldPassword" type="password" onChange={(e) => {setpasswordchange({...passwordchange, old: e.target.value})}}/>
               </div>
+              <div className={profileStyles.inputGroup}>
+                <label htmlFor="newPassword">New Password</label>
+                <div className={profileStyles.relativeInput}>
+                  <input id="newPassword" type={passwordShow ? "text": "password"} onChange={(e) => {setpasswordchange({...passwordchange, new: e.target.value})}}/>
+                  <span className={profileStyles.passwordToggle} onClick={() => {setPasswordShow(prev => !prev)}}><i className={`icofont-eye-${!passwordShow? "alt": "blocked"}`}></i></span>
+                </div>
+              </div>
+              <p style={{color: `${passwordchange?.color}`, gridColumn: "span 2"}}>{passwordchange?.msg}</p>
             </div>
-            <p style={{color: `${passwordchange?.color}`, gridColumn: "span 2"}}>{passwordchange?.msg}</p>
-          </div>
-          <button type="button" onClick={handlePasswordChnage} className={profileStyles.saveBtn}>Update Password</button>
+            <button type="submit" className={profileStyles.saveBtn}>Update Password</button>
+          </form>
         </div>
 
         {/* Delete Account Section */}
@@ -465,22 +492,37 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
             <i className="icofont-warning"></i>
             <h2>Danger Zone</h2>
           </div>
-          <p className={profileStyles.dangerText}>
-            Once you delete your account, there is no going back. This action <strong>cannot be undone</strong>.
-            All your data including investments, withdrawals, and account information will be permanently deleted.
-          </p>
-          <button 
-            type="button" 
-            onClick={() => setShowDeleteModal(true)}
-            className={profileStyles.deleteBtn}
-          >
-            <i className="icofont-trash"></i>
-            Delete My Account
-          </button>
+          {hasPendingRequest ? (
+            <div>
+              <p className={profileStyles.dangerText}>
+                You have a <strong>pending deletion request</strong>. Your account will be deleted once an admin approves it.
+                You can contact support if you need to cancel this request.
+              </p>
+              <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#FFB347'}}>
+                <i className="icofont-clock-time"></i>
+                <span>Request Pending Admin Approval</span>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <p className={profileStyles.dangerText}>
+                Request account deletion. This action requires <strong>admin approval</strong> before your account is permanently deleted.
+                All your data including investments, withdrawals, and account information will be permanently deleted.
+              </p>
+              <button 
+                type="button" 
+                onClick={() => setShowDeleteModal(true)}
+                className={profileStyles.deleteBtn}
+              >
+                <i className="icofont-trash"></i>
+                Request Account Deletion
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Delete Account Confirmation Modal */}
+      {/* Delete Account Request Modal */}
       {showDeleteModal && (
         <div className={profileStyles.modalOverlay}>
           <div className={profileStyles.modalCard}>
@@ -489,13 +531,14 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
                 ⚠️
               </div>
               <h3 className={profileStyles.modalTitle}>
-                Delete Account
+                Request Account Deletion
               </h3>
             </div>
             
             <div className={profileStyles.modalWarning}>
               <p>
-                <strong>Warning:</strong> This action is permanent. All data will be deleted:
+                <strong>Warning:</strong> This action will submit a deletion request to administrators. 
+                Your account will only be deleted after admin approval:
               </p>
               <ul>
                 <li>Account profile</li>
@@ -503,6 +546,24 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
                 <li>Withdrawal history</li>
                 <li>Notifications</li>
               </ul>
+              <p style={{marginTop: '1rem', color: '#FFB347'}}>
+                <strong>Note:</strong> This request can be cancelled by contacting support before admin approval.
+              </p>
+            </div>
+            
+            <div className={profileStyles.modalInputGroup}>
+              <label htmlFor="deletionReason">
+                Reason for deletion (required):
+              </label>
+              <textarea
+                id="deletionReason"
+                value={deletionReason}
+                onChange={(e) => setDeletionReason(e.target.value)}
+                placeholder="Please provide a reason for your account deletion request..."
+                className={profileStyles.modalTextarea}
+                disabled={isDeleting}
+                rows={3}
+              />
             </div>
             
             <div className={profileStyles.modalInputGroup}>
@@ -533,6 +594,7 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
                 onClick={() => {
                   setShowDeleteModal(false);
                   setDeletePassword("");
+                  setDeletionReason("");
                   setDeleteError("");
                 }}
                 disabled={isDeleting}
@@ -542,17 +604,17 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
               </button>
               <button
                 type="button"
-                onClick={handleDeleteAccount}
+                onClick={handleRequestDeletion}
                 disabled={isDeleting}
                 className={profileStyles.modalDeleteBtn}
               >
                 {isDeleting ? (
                   <>
                     <i className="icofont-spinner icofont-spin" style={{ marginRight: '0.4rem' }}></i>
-                    Deleting...
+                    Submitting...
                   </>
                 ) : (
-                  'Delete Permanently'
+                  'Submit Request'
                 )}
               </button>
             </div>

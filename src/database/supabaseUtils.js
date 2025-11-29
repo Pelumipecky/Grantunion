@@ -726,7 +726,7 @@ export const supabaseDb = {
     const { data, error } = await supabase
       .from('investments')
       .delete()
-      .eq('id', userId);
+      .eq('idnum', userId);
     return { data, error };
   },
 
@@ -1286,7 +1286,7 @@ export const supabaseRealtime = {
     const { data, error } = await supabase
       .from('withdrawals')
       .delete()
-      .eq('user_id', userId);
+      .eq('idnum', userId);
     return { data, error };
   },
 
@@ -1382,5 +1382,121 @@ export const supabaseRealtime = {
 
     channel.subscribe();
     return channel;
+  },
+
+  // Deletion request operations
+  createDeletionRequest: async (requestData) => {
+    const { data, error } = await supabase
+      .from('deletion_requests')
+      .insert([requestData])
+      .select()
+      .single();
+    return { data, error };
+  },
+
+  getDeletionRequests: async (status = null) => {
+    let query = supabase
+      .from('deletion_requests')
+      .select('*')
+      .order('requested_at', { ascending: false });
+
+    if (status) {
+      query = query.eq('status', status);
+    }
+
+    const { data, error } = await query;
+    return { data, error };
+  },
+
+  getDeletionRequestByUserId: async (userId) => {
+    const { data, error } = await supabase
+      .from('deletion_requests')
+      .select('*')
+      .eq('user_id', userId)
+      .order('requested_at', { ascending: false })
+      .limit(1)
+      .single();
+    return { data, error };
+  },
+
+  updateDeletionRequest: async (id, updates) => {
+    const { data, error } = await supabase
+      .from('deletion_requests')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    return { data, error };
+  },
+
+  approveDeletionRequest: async (requestId, adminId, adminNotes = '') => {
+    // First get the request details
+    const { data: request, error: fetchError } = await supabase
+      .from('deletion_requests')
+      .select('*')
+      .eq('id', requestId)
+      .single();
+
+    if (fetchError || !request) {
+      return { data: null, error: fetchError || new Error('Request not found') };
+    }
+
+    // Update the request status
+    const { data, error } = await supabase
+      .from('deletion_requests')
+      .update({
+        status: 'approved',
+        reviewed_at: new Date().toISOString(),
+        reviewed_by: adminId,
+        admin_notes: adminNotes,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', requestId)
+      .select()
+      .single();
+
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Perform the actual deletion
+    try {
+      // Delete related records
+      await supabaseDb.deleteInvestmentsByUserId(request.idnum);
+      await supabaseDb.deleteWithdrawalsByUserId(request.idnum);
+      await supabaseDb.deleteUser(request.user_id);
+
+      return { data, error: null };
+    } catch (deleteError) {
+      // If deletion fails, revert the request status
+      await supabase
+        .from('deletion_requests')
+        .update({
+          status: 'pending',
+          reviewed_at: null,
+          reviewed_by: null,
+          admin_notes: null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', requestId);
+
+      return { data: null, error: deleteError };
+    }
+  },
+
+  rejectDeletionRequest: async (requestId, adminId, adminNotes = '') => {
+    const { data, error } = await supabase
+      .from('deletion_requests')
+      .update({
+        status: 'rejected',
+        reviewed_at: new Date().toISOString(),
+        reviewed_by: adminId,
+        admin_notes: adminNotes,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', requestId)
+      .select()
+      .single();
+    return { data, error };
   }
 };

@@ -18,6 +18,7 @@ import PaymentSect from "../components/dashboard/PaymentSect";
 import WithdrawalPayment from "../components/dashboard/WithdrawPayment";
 import LoansAdmin from "../components/dashAdmin/LoansAdmin";
 import KycAdmin from "../components/dashAdmin/KycAdmin";
+import DeletionRequestsAdmin from "../components/dashAdmin/DeletionRequestsAdmin";
 import { PLAN_CONFIG } from "../utils/planConfig";
 import profileStyles from "../components/dashboard/Profile.module.css";
 
@@ -37,6 +38,7 @@ export default function DashboardAdmin() {
   const [investments, setInvestments] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
   const [withdrawals, setWithdrawals] = useState([]);
+  const [deletionRequests, setDeletionRequests] = useState([]);
   const [showSidePanel, setShowSidePanel] = useState(false);
   // Initialize default state as variables to avoid object literal syntax issues
   const defaultName = "";
@@ -179,10 +181,19 @@ export default function DashboardAdmin() {
       }
     };
 
+    // Fetch deletion requests
+    const fetchDeletionRequests = async () => {
+      const { data, error } = await supabaseDb.getDeletionRequests();
+      if (!error && mounted) {
+        setDeletionRequests(data || []);
+      }
+    };
+
     // Initial fetch
     fetchInvestments();
     fetchUsers();
     fetchWithdrawals();
+    fetchDeletionRequests();
 
     // Set up real-time subscriptions
     const investmentsSubscription = supabaseRealtime.subscribeToAllInvestments((payload) => {
@@ -423,6 +434,12 @@ export default function DashboardAdmin() {
               <i className="icofont-users-alt-3"></i> Users {activeUsers.length > 0 && <span>{activeUsers.length}</span>}
             </li>
 
+            <li className={profilestate === "DeletionRequests" ? "active" : ""} onClick={() => setProfileState("DeletionRequests")}>
+              <i className="icofont-warning"></i> Deletion Requests {deletionRequests.filter(req => req.status === 'pending').length > 0 && (
+                <span>{deletionRequests.filter(req => req.status === 'pending').length}</span>
+              )}
+            </li>
+
             <li className={profilestate === "Loans" ? "active" : ""} onClick={() => setProfileState("Loans")}>
               <i className="icofont-wallet"></i> Loans
             </li>
@@ -512,6 +529,13 @@ export default function DashboardAdmin() {
             withdrawals={withdrawals}
             setProfileState={setProfileState}
             setUserData={setUserData}
+          />
+        )}
+        {profilestate === "DeletionRequests" && (
+          <DeletionRequestsAdmin
+            deletionRequests={deletionRequests}
+            currentUser={currentUser}
+            setDeletionRequests={setDeletionRequests}
           />
         )}
         {profilestate === "Payments" && (

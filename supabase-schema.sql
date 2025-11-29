@@ -253,6 +253,57 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('avatars', 'avatars', true)
 ON CONFLICT (id) DO NOTHING;
 
+-- Create deletion_requests table for user account deletion requests
+CREATE TABLE IF NOT EXISTS deletion_requests (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES userlogs(id) ON DELETE CASCADE,
+  idnum INTEGER NOT NULL REFERENCES userlogs(idnum),
+  user_name TEXT,
+  email TEXT,
+  reason TEXT,
+  status TEXT DEFAULT 'pending', -- pending, approved, rejected
+  requested_at TIMESTAMPTZ DEFAULT NOW(),
+  reviewed_at TIMESTAMPTZ,
+  reviewed_by TEXT,
+  admin_notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Create index for better performance
+CREATE INDEX IF NOT EXISTS idx_deletion_requests_user_id ON deletion_requests(user_id);
+CREATE INDEX IF NOT EXISTS idx_deletion_requests_status ON deletion_requests(status);
+CREATE INDEX IF NOT EXISTS idx_deletion_requests_idnum ON deletion_requests(idnum);
+
+-- Add RLS policies for deletion_requests
+ALTER TABLE deletion_requests ENABLE ROW LEVEL SECURITY;
+
+-- Users can view their own deletion requests
+CREATE POLICY "Users can view own deletion requests" ON deletion_requests
+FOR SELECT USING (auth.uid() = user_id);
+
+-- Admins can view all deletion requests
+CREATE POLICY "Admins can view all deletion requests" ON deletion_requests
+FOR SELECT USING (
+  EXISTS (
+    SELECT 1 FROM userlogs 
+    WHERE id = auth.uid() AND admin = true
+  )
+);
+
+-- Users can create their own deletion requests
+CREATE POLICY "Users can create own deletion requests" ON deletion_requests
+FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Admins can update deletion requests
+CREATE POLICY "Admins can update deletion requests" ON deletion_requests
+FOR UPDATE USING (
+  EXISTS (
+    SELECT 1 FROM userlogs 
+    WHERE id = auth.uid() AND admin = true
+  )
+);
+
 -- Storage policies (allow authenticated users to upload)
 CREATE POLICY "Allow authenticated users to upload KYC documents" ON storage.objects
 FOR INSERT WITH CHECK (bucket_id = 'kyc-documents' AND auth.role() = 'authenticated');

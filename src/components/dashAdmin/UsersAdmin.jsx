@@ -61,16 +61,23 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
 
     // Handle delete user
     const handleDeleteUser = async () => {
-        if (!selectedUser) return;
+        console.log('handleDeleteUser called with selectedUser:', selectedUser);
+        if (!selectedUser) {
+            console.error('No selectedUser found');
+            return;
+        }
         
         setIsProcessing(true);
         try {
+            console.log('Deleting investments for idnum:', selectedUser.idnum);
             // Delete related investments
-            await supabaseDb.deleteInvestmentsByUserId(selectedUser.id);
+            await supabaseDb.deleteInvestmentsByUserId(selectedUser.idnum);
             
+            console.log('Deleting withdrawals for idnum:', selectedUser.idnum);
             // Delete related withdrawals
-            await supabaseDb.deleteWithdrawalsByUserId(selectedUser.id);
+            await supabaseDb.deleteWithdrawalsByUserId(selectedUser.idnum);
             
+            console.log('Deleting user with id:', selectedUser.id);
             // Delete user document
             await supabaseDb.deleteUser(selectedUser.id);
             
@@ -275,7 +282,11 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
                 <p style={{color: 'var(--text-clr1)', marginBottom: '20px'}}>{modalConfig.message}</p>
                 <div style={{display: 'flex', gap: '12px', justifyContent: 'center'}}>
                     <button
-                        onClick={closeModal}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            closeModal();
+                        }}
                         disabled={isProcessing}
                         style={{
                             padding: '10px 24px',
@@ -290,7 +301,11 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
                         Cancel
                     </button>
                     <button
-                        onClick={modalConfig.onConfirm}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            modalConfig.onConfirm();
+                        }}
                         disabled={isProcessing}
                         style={{
                             padding: '10px 24px',
