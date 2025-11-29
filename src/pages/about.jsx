@@ -210,7 +210,7 @@ const About = () => {
                   <h4>Important Notes</h4>
                   <ul>
                     <li>All investments carry risk of loss</li>
-                    <li>Past performance doesn't guarantee future results</li>
+                    <li>Past performance doesn&apos;t guarantee future results</li>
                     <li>Minimum investment period applies</li>
                     <li>Withdrawals processed within 24-48 hours</li>
                     <li>Platform reserves right to modify terms</li>
