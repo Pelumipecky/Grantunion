@@ -77,7 +77,162 @@ const About = () => {
               </div>
             </div>
           </section>
-        <IframeSect/>
+        <section className="pdf-content-section">
+          <div className="pdf-content-container">
+            <h2>Investment Guide & Platform Overview</h2>
+            <div className="pdf-content-grid">
+              <div className="pdf-section">
+                <h3>Getting Started</h3>
+                <div className="content-block">
+                  <h4>Account Registration</h4>
+                  <ul>
+                    <li>Create your account with valid email and phone number</li>
+                    <li>Complete KYC verification for full access</li>
+                    <li>Set up two-factor authentication for security</li>
+                    <li>Verify your identity documents</li>
+                  </ul>
+                </div>
+                <div className="content-block">
+                  <h4>Making Your First Deposit</h4>
+                  <ul>
+                    <li>Choose your preferred cryptocurrency (BTC/ETH)</li>
+                    <li>Select investment plan based on your goals</li>
+                    <li>Send exact amount to provided wallet address</li>
+                    <li>Wait for 1-3 confirmations on blockchain</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="pdf-section">
+                <h3>Investment Plans</h3>
+                <div className="plans-overview">
+                  <div className="plan-card">
+                    <h4>Starter Plan</h4>
+                    <p className="plan-amount">$200 - $999</p>
+                    <p className="plan-roi">5% Daily ROI</p>
+                    <p className="plan-duration">5 Days Duration</p>
+                  </div>
+                  <div className="plan-card">
+                    <h4>Professional Plan</h4>
+                    <p className="plan-amount">$1,000 - $4,999</p>
+                    <p className="plan-roi">7% Daily ROI</p>
+                    <p className="plan-duration">7 Days Duration</p>
+                  </div>
+                  <div className="plan-card">
+                    <h4>Premium Plan</h4>
+                    <p className="plan-amount">$5,000 - $9,999</p>
+                    <p className="plan-roi">10% Daily ROI</p>
+                    <p className="plan-duration">10 Days Duration</p>
+                  </div>
+                  <div className="plan-card">
+                    <h4>VIP Plan</h4>
+                    <p className="plan-amount">$10,000+</p>
+                    <p className="plan-roi">15% Daily ROI</p>
+                    <p className="plan-duration">15 Days Duration</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pdf-section">
+                <h3>How It Works</h3>
+                <div className="content-block">
+                  <h4>Investment Process</h4>
+                  <ol>
+                    <li><strong>Deposit:</strong> Send cryptocurrency to your personal wallet address</li>
+                    <li><strong>Confirmation:</strong> Wait for blockchain confirmation (1-3 blocks)</li>
+                    <li><strong>Activation:</strong> Admin approves and activates your investment</li>
+                    <li><strong>Earnings:</strong> Start receiving daily ROI payments automatically</li>
+                    <li><strong>Withdrawal:</strong> Withdraw profits anytime after 24 hours</li>
+                  </ol>
+                </div>
+                <div className="content-block">
+                  <h4>Payment Methods</h4>
+                  <ul>
+                    <li><strong>Bitcoin (BTC):</strong> Most popular cryptocurrency</li>
+                    <li><strong>Ethereum (ETH):</strong> Smart contract platform</li>
+                    <li><strong>Minimum Deposit:</strong> $200 USD equivalent</li>
+                    <li><strong>Withdrawal Fee:</strong> Network fees only</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="pdf-section">
+                <h3>Security & Safety</h3>
+                <div className="content-block">
+                  <h4>Platform Security</h4>
+                  <ul>
+                    <li>Bank-level SSL encryption</li>
+                    <li>Cold storage for funds</li>
+                    <li>Multi-signature wallets</li>
+                    <li>Regular security audits</li>
+                    <li>DDoS protection</li>
+                  </ul>
+                </div>
+                <div className="content-block">
+                  <h4>Blockchain Technology</h4>
+                  <ul>
+                    <li>All transactions recorded on blockchain</li>
+                    <li>Transparent and immutable ledger</li>
+                    <li>No third-party interference</li>
+                    <li>Ultra-secure financial data</li>
+                    <li>Real-time transaction monitoring</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="pdf-section">
+                <h3>Support & Resources</h3>
+                <div className="content-block">
+                  <h4>Customer Support</h4>
+                  <ul>
+                    <li>24/7 Live Chat Support</li>
+                    <li>Email: contact@grantunioninvestment.com</li>
+                    <li>Telegram: @GrantUnionInvestment</li>
+                    <li>Discord Community</li>
+                    <li>Comprehensive FAQ Section</li>
+                  </ul>
+                </div>
+                <div className="content-block">
+                  <h4>Educational Resources</h4>
+                  <ul>
+                    <li>Investment Strategy Guides</li>
+                    <li>Cryptocurrency Basics</li>
+                    <li>Risk Management Tips</li>
+                    <li>Market Analysis Reports</li>
+                    <li>Weekly Webinars</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="pdf-section">
+                <h3>Terms & Conditions</h3>
+                <div className="content-block">
+                  <h4>Important Notes</h4>
+                  <ul>
+                    <li>All investments carry risk of loss</li>
+                    <li>Past performance doesn't guarantee future results</li>
+                    <li>Minimum investment period applies</li>
+                    <li>Withdrawals processed within 24-48 hours</li>
+                    <li>Platform reserves right to modify terms</li>
+                  </ul>
+                </div>
+                <div className="download-section">
+                  <h4>Download Full Guide</h4>
+                  <p>Get the complete investment guide in your preferred language:</p>
+                  <div className="language-links">
+                    <a href="/downloads/guide-en.pdf" className="lang-link" download>🇬🇧 English</a>
+                    <a href="/downloads/guide-es.pdf" className="lang-link" download>🇪🇸 Spanish</a>
+                    <a href="/downloads/guide-fr.pdf" className="lang-link" download>🇫🇷 French</a>
+                    <a href="/downloads/guide-de.pdf" className="lang-link" download>🇩🇪 German</a>
+                    <a href="/downloads/guide-zh.pdf" className="lang-link" download>🇨🇳 Chinese</a>
+                    <a href="/downloads/guide-ru.pdf" className="lang-link" download>🇷🇺 Russian</a>
+                    <a href="/downloads/guide-ar.pdf" className="lang-link" download>🇸🇦 Arabic</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
         <Testimonies/>
         <Footer/>
     </div>
