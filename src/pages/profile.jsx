@@ -20,7 +20,6 @@ import KYC from "../components/dashboard/KYC";
 import Head from "next/head";
 import Script from "next/script";
 import { PLAN_CONFIG } from "../utils/planConfig";
-import TransactionTracker from "../components/TransactionTracker";
 
 const DEFAULT_PLAN = PLAN_CONFIG[0];
 
@@ -50,23 +49,6 @@ const Profile = () => {
     localStorage.clear();
     sessionStorage.clear();
     router.replace("/signin");
-  };
-
-  // Transaction Tracker functions
-  const startTransactionTracking = (transactionId = null) => {
-    if (transactionId) {
-      setCurrentTransactionId(transactionId);
-    } else {
-      // Generate a new transaction ID
-      const hexChars = '0123456789abcdef';
-      let id = '0x';
-      for (let i = 0; i < 64; i++) {
-        id += hexChars[Math.floor(Math.random() * hexChars.length)];
-      }
-      setCurrentTransactionId(id);
-    }
-    setShowTransactionTracker(true);
-    setProfileState('Transactions');
   };
 
   const [notifications, setNotifications] = useState([]);
@@ -129,10 +111,6 @@ const Profile = () => {
   });
 
   const [kycStatus, setKycStatus] = useState('pending');
-
-  // Transaction Tracker state
-  const [showTransactionTracker, setShowTransactionTracker] = useState(false);
-  const [currentTransactionId, setCurrentTransactionId] = useState('');
 
   const openTawkChat = useCallback((detail = {}) => {
     if (typeof window === 'undefined' || currentUser?.admin) {
@@ -580,14 +558,6 @@ const Profile = () => {
               <i className="icofont-wallet"></i> Loans
             </li>
             <li
-              className={profilestate === "Transactions" ? "active" : ""}
-              onClick={() => {
-                setProfileState("Transactions");
-              }}
-            >
-              <i className="icofont-transaction"></i> Transactions
-            </li>
-            <li
               className={profilestate === "KYC" ? "active" : ""}
               onClick={() => {
                 setProfileState("KYC");
@@ -724,35 +694,6 @@ const Profile = () => {
         {profilestate === "Loans" && (
           <LoanSect currentUser={currentUser} />
         )}
-        {profilestate === "Transactions" && (
-          <div className="transactionSection">
-            <div className="sectionHeader">
-              <h2>Transaction Tracker</h2>
-              <p>Monitor your blockchain transactions in real-time</p>
-            </div>
-            <div className="transactionActions">
-              <button
-                className="startTransactionBtn"
-                onClick={() => startTransactionTracking()}
-              >
-                <i className="icofont-plus"></i> Start New Transaction
-              </button>
-            </div>
-            {showTransactionTracker && currentTransactionId && (
-              <TransactionTracker
-                transactionId={currentTransactionId}
-                initialStatus="pending"
-              />
-            )}
-            {!showTransactionTracker && (
-              <div className="noTransactions">
-                <i className="icofont-transaction"></i>
-                <h3>No Active Transactions</h3>
-                <p>Click the button above to start tracking a new transaction</p>
-              </div>
-            )}
-          </div>
-        )}
         {profilestate === "KYC" && (
           <KYC currentUser={currentUser} />
         )}
@@ -774,7 +715,6 @@ const Profile = () => {
             bitPrice={bitPrice}
             ethPrice={ethPrice}
             setInvestments={setInvestments}
-            startTransactionTracking={startTransactionTracking}
           />
         )}
         {profilestate === "Withdrawal Payment" && (
@@ -784,7 +724,6 @@ const Profile = () => {
             bitPrice={bitPrice}
             ethPrice={ethPrice}
             currentUser={currentUser}
-            startTransactionTracking={startTransactionTracking}
           />
         )}
         <footer className="profilefooter">

@@ -3,7 +3,7 @@ import { supabaseDb } from "../../database/supabaseUtils";
 import { createInvestment } from "../../utils/transactionManager";
 import Modal from "../Modal";
 
-const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvestments, startTransactionTracking}) => {
+const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvestments}) => {
     const [copystate, setCopystate] = useState("Copy");
     const [modalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState("");

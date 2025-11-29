@@ -5,7 +5,7 @@ import { createWithdrawal } from "../../utils/transactionManager";
 import styles from "./WithdrawPayment.module.css";
 import Modal from "../Modal";
 
-const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, currentUser, startTransactionTracking}) => {
+const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, currentUser}) => {
     const router = useRouter();
     const [copystate, setCopystate] = useState("Copy");
     const [walletAddress, setWalletAddress] = useState(""); // New state for wallet address
