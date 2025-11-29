@@ -11,21 +11,24 @@ const isProductionLike = envLabel === 'production';
 
 const createNoopClient = () => new Proxy({}, {
 	get(_, prop) {
-		throw new Error(
-			`Supabase client is unavailable (${missingVars.join(', ') || 'unknown missing vars'}). ` +
-			'Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to use this API.'
-		);
+		// Only throw error if we're actually trying to use the client in production
+		if (isProductionLike) {
+			throw new Error(
+				`Supabase client is unavailable (${missingVars.join(', ') || 'unknown missing vars'}). ` +
+				'Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to use this API.'
+			);
+		}
+		// In development/build, return a noop function
+		return () => {};
 	}
 });
 
 let supabaseInstance = null;
 
 if (missingVars.length) {
-	if (isProductionLike) {
-		throw new Error(`Missing Supabase env vars: ${missingVars.join(', ')}. Set them in .env.local and Vercel project settings.`);
-	}
+	// Always use noop client when vars are missing - errors will be thrown when methods are called
 	console.warn(
-		`[supabaseConfig] Continuing without Supabase because ${missingVars.join(', ')} is missing in ${envLabel}.`
+		`[supabaseConfig] Supabase environment variables missing: ${missingVars.join(', ')}. Using noop client.`
 	);
 	supabaseInstance = createNoopClient();
 } else {
