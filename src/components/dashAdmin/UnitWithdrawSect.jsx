@@ -100,6 +100,16 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
                 // Don't throw here - email failure shouldn't block withdrawal confirmation
             }
 
+            showModal('success', 'Success', 'Withdrawal confirmed successfully');
+            setTimeout(() => {
+                setProfileState("Withdrawals");
+            }, 1500);
+        } catch (error) {
+            console.error("Error confirming withdrawal:", error);
+            showModal('error', 'Error', 'Failed to confirm withdrawal');
+        }
+    };
+
     const handleRejectWithdrawal = async () => {
         try {
             await supabaseDb.updateWithdrawal(withdrawData?.id, {
