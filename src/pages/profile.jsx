@@ -286,6 +286,16 @@ const Profile = () => {
     };
   }, [currentUser?.idnum, currentUser?.id]);
 
+  // Update investData when currentUser changes
+  useEffect(() => {
+    if (currentUser?.idnum) {
+      setInvestData(prev => ({
+        ...prev,
+        idnum: currentUser.idnum
+      }));
+    }
+  }, [currentUser?.idnum]);
+
   // Router moved to top of component
   async function fetchData(path, stateSetter) {
     try {
