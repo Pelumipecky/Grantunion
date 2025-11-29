@@ -177,6 +177,7 @@ export default function LoanSect({ currentUser }) {
       };
 
       const { error } = await supabaseDb.createLoan(loanSubmitData);
+      console.log('[LoanSect] createLoan result:', { error, data: 'omitted for brevity' });
       if (error) throw error;
       
       setLoanData({

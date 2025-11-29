@@ -1125,6 +1125,7 @@ export const supabaseRealtime = {
 
   // Loan operations
   createLoan: async (loanData) => {
+    console.log('[createLoan] Called with:', loanData);
     const numberOrNull = (value) => {
       if (value === null || value === undefined || value === '') return null;
       const parsed = Number(value);

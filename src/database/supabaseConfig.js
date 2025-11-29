@@ -7,6 +7,14 @@ const missingVars = [
 	!supabaseUrl && 'NEXT_PUBLIC_SUPABASE_URL',
 	!supabaseAnonKey && 'NEXT_PUBLIC_SUPABASE_ANON_KEY'
 ].filter(Boolean);
+
+// Debug logging
+console.log('[supabaseConfig] Environment check:', {
+	envLabel,
+	supabaseUrl: supabaseUrl ? 'SET' : 'NOT SET',
+	supabaseAnonKey: supabaseAnonKey ? 'SET' : 'NOT SET',
+	missingVars
+});
 const isProductionLike = envLabel === 'production';
 
 const createNoopClient = () => new Proxy({}, {
