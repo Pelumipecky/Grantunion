@@ -1,32 +1,19 @@
 /**
  * Transaction Management Utility
- * Handles creation of investments and withdrawals with session tracking
+ * Handles creation of investments and withdrawals
  */
 
 import { supabaseDb } from '../database/supabaseUtils';
-import { getCurrentSessionId, extendSession } from './sessionManager';
 
 /**
- * Create an investment with session tracking
+ * Create an investment
  * @param {object} investmentData - Investment data
  * @returns {Promise} Investment creation result
  */
-export const createInvestmentWithSession = async (investmentData) => {
+export const createInvestment = async (investmentData) => {
   try {
-    // Get current session ID
-    const sessionId = getCurrentSessionId();
-
-    // Extend session on transaction
-    extendSession();
-
-    // Add session ID to investment data
-    const investmentWithSession = {
-      ...investmentData,
-      sessionId
-    };
-
     // Create investment
-    const result = await supabaseDb.createInvestment(investmentWithSession);
+    const result = await supabaseDb.createInvestment(investmentData);
 
     if (result.error) {
       console.error('Failed to create investment:', result.error);
@@ -34,32 +21,20 @@ export const createInvestmentWithSession = async (investmentData) => {
 
     return result;
   } catch (error) {
-    console.error('Error in createInvestmentWithSession:', error);
+    console.error('Error in createInvestment:', error);
     return { data: null, error };
   }
 };
 
 /**
- * Create a withdrawal with session tracking
+ * Create a withdrawal
  * @param {object} withdrawalData - Withdrawal data
  * @returns {Promise} Withdrawal creation result
  */
-export const createWithdrawalWithSession = async (withdrawalData) => {
+export const createWithdrawal = async (withdrawalData) => {
   try {
-    // Get current session ID
-    const sessionId = getCurrentSessionId();
-
-    // Extend session on transaction
-    extendSession();
-
-    // Add session ID to withdrawal data
-    const withdrawalWithSession = {
-      ...withdrawalData,
-      sessionId
-    };
-
     // Create withdrawal
-    const result = await supabaseDb.createWithdrawal(withdrawalWithSession);
+    const result = await supabaseDb.createWithdrawal(withdrawalData);
 
     if (result.error) {
       console.error('Failed to create withdrawal:', result.error);
@@ -67,17 +42,17 @@ export const createWithdrawalWithSession = async (withdrawalData) => {
 
     return result;
   } catch (error) {
-    console.error('Error in createWithdrawalWithSession:', error);
+    console.error('Error in createWithdrawal:', error);
     return { data: null, error };
   }
 };
 
 /**
- * Get all transactions (investments and withdrawals) for a user with session info
+ * Get all transactions (investments and withdrawals) for a user
  * @param {string} idnum - User ID number
  * @returns {Promise} Combined transaction data
  */
-export const getUserTransactionsWithSessions = async (idnum) => {
+export const getUserTransactions = async (idnum) => {
   try {
     const [investmentsResult, withdrawalsResult] = await Promise.all([
       supabaseDb.getInvestmentsByIdnum(idnum),
@@ -94,7 +69,6 @@ export const getUserTransactionsWithSessions = async (idnum) => {
           type: 'investment',
           amount: investment.capital,
           status: investment.status,
-          sessionId: investment.session_id,
           createdAt: investment.created_at,
           plan: investment.plan,
           paymentOption: investment.paymentOption,
@@ -113,7 +87,6 @@ export const getUserTransactionsWithSessions = async (idnum) => {
           type: 'withdrawal',
           amount: withdrawal.amount,
           status: withdrawal.status,
-          sessionId: withdrawal.session_id,
           createdAt: withdrawal.created_at,
           walletAddress: withdrawal.wallet_address,
           paymentOption: withdrawal.payment_option
@@ -129,64 +102,8 @@ export const getUserTransactionsWithSessions = async (idnum) => {
       error: investmentsResult.error || withdrawalsResult.error
     };
   } catch (error) {
-    console.error('Error in getUserTransactionsWithSessions:', error);
+    console.error('Error in getUserTransactions:', error);
     return { data: null, error };
   }
 };
 
-/**
- * Get session statistics for a user
- * @param {string} idnum - User ID number
- * @returns {Promise} Session statistics
- */
-export const getUserSessionStats = async (idnum) => {
-  try {
-    const transactionsResult = await getUserTransactionsWithSessions(idnum);
-
-    if (transactionsResult.error) {
-      return { data: null, error: transactionsResult.error };
-    }
-
-    const transactions = transactionsResult.data;
-    const sessionStats = {};
-
-    // Group transactions by session
-    transactions.forEach(transaction => {
-      const sessionId = transaction.sessionId || 'unknown';
-      if (!sessionStats[sessionId]) {
-        sessionStats[sessionId] = {
-          sessionId,
-          transactionCount: 0,
-          totalInvested: 0,
-          totalWithdrawn: 0,
-          firstTransaction: transaction.createdAt,
-          lastTransaction: transaction.createdAt
-        };
-      }
-
-      sessionStats[sessionId].transactionCount++;
-
-      if (transaction.type === 'investment') {
-        sessionStats[sessionId].totalInvested += transaction.amount;
-      } else if (transaction.type === 'withdrawal') {
-        sessionStats[sessionId].totalWithdrawn += transaction.amount;
-      }
-
-      // Update date range
-      if (new Date(transaction.createdAt) < new Date(sessionStats[sessionId].firstTransaction)) {
-        sessionStats[sessionId].firstTransaction = transaction.createdAt;
-      }
-      if (new Date(transaction.createdAt) > new Date(sessionStats[sessionId].lastTransaction)) {
-        sessionStats[sessionId].lastTransaction = transaction.createdAt;
-      }
-    });
-
-    return {
-      data: Object.values(sessionStats),
-      error: null
-    };
-  } catch (error) {
-    console.error('Error in getUserSessionStats:', error);
-    return { data: null, error };
-  }
-};

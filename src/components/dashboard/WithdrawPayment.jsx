@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { supabaseDb, supabase } from "../../database/supabaseUtils";
-import { createWithdrawalWithSession } from "../../utils/transactionManager";
+import { createWithdrawal } from "../../utils/transactionManager";
 import styles from "./WithdrawPayment.module.css";
 import Modal from "../Modal";
 
@@ -139,7 +139,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 status: "Pending"
             };
 
-            const { error: withdrawalError } = await createWithdrawalWithSession(withdrawalData);
+            const { error: withdrawalError } = await createWithdrawal(withdrawalData);
             if (withdrawalError) throw withdrawalError;
 
             // Deduct amount from user's available balance
@@ -169,11 +169,6 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
             }
 
             showModal('success', 'Success', "Withdrawal request submitted successfully.");
-
-            // Start transaction tracking if function is provided
-            if (startTransactionTracking && withdrawalData?.session_id) {
-                startTransactionTracking(withdrawalData.session_id);
-            }
 
             // small delay so user can see success message before routing
             setTimeout(() => {

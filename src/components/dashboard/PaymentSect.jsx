@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabaseDb } from "../../database/supabaseUtils";
-import { createInvestmentWithSession } from "../../utils/transactionManager";
+import { createInvestment } from "../../utils/transactionManager";
 import Modal from "../Modal";
 
 const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvestments, startTransactionTracking}) => {
@@ -54,7 +54,7 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
             credited_bonus: 0
         };
 
-        const { data, error } = await createInvestmentWithSession(investmentToCreate);
+        const { data, error } = await createInvestment(investmentToCreate);
         if (error) {
             console.error('Error creating investment:', error);
             setModalTitle("Error");
@@ -76,11 +76,6 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
         setModalMessage("Investment submitted successfully! Your investment is now pending admin approval. You can check the status in your Investment History.");
         setModalType("success");
         setModalOpen(true);
-
-        // Start transaction tracking if function is provided
-        if (startTransactionTracking && data?.session_id) {
-            startTransactionTracking(data.session_id);
-        }
     }
 
     const handleModalClose = () => {
