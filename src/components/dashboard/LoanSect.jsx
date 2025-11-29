@@ -3,6 +3,8 @@ import { supabase, supabaseRealtime, supabaseDb } from '../../database/supabaseU
 import styles from './LoanSect.module.css';
 import Modal from "../Modal";
 
+console.log('[LoanSect] Imported supabaseDb:', supabaseDb);
+
 export default function LoanSect({ currentUser }) {
   const [loans, setLoans] = useState([]);
   const [formStep, setFormStep] = useState(1);
@@ -176,6 +178,9 @@ export default function LoanSect({ currentUser }) {
         status: 'Pending'
       };
 
+      console.log('[LoanSect] supabaseDb:', supabaseDb);
+      console.log('[LoanSect] supabaseDb keys:', Object.keys(supabaseDb));
+      console.log('[LoanSect] supabaseDb.createLoan:', supabaseDb.createLoan);
       const { error } = await supabaseDb.createLoan(loanSubmitData);
       console.log('[LoanSect] createLoan result:', { error, data: 'omitted for brevity' });
       if (error) throw error;

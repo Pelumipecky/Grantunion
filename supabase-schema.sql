@@ -193,19 +193,19 @@ CREATE TABLE IF NOT EXISTS referral_rewards (
 );
 
 -- Create indexes for better performance
-CREATE INDEX idx_userlogs_email ON userlogs(email);
-CREATE INDEX idx_userlogs_idnum ON userlogs(idnum);
-CREATE INDEX idx_investments_idnum ON investments(idnum);
-CREATE INDEX idx_notifications_idnum ON notifications(idnum);
-CREATE INDEX idx_kyc_user_id ON kyc(user_id);
-CREATE INDEX idx_chats_user_id ON chats(user_id);
-CREATE INDEX idx_chats_timestamp ON chats(timestamp);
-CREATE INDEX idx_userlogs_referral_code ON userlogs(referral_code);
-CREATE INDEX idx_userlogs_referred_by ON userlogs(referred_by_idnum);
-CREATE INDEX idx_referrals_code ON referrals(referral_code);
-CREATE INDEX idx_referrals_referrer_idnum ON referrals(referrer_idnum);
-CREATE INDEX idx_referrals_referred_idnum ON referrals(referred_idnum);
-CREATE INDEX idx_referral_rewards_ref_id ON referral_rewards(referral_id);
+CREATE INDEX IF NOT EXISTS idx_userlogs_email ON userlogs(email);
+CREATE INDEX IF NOT EXISTS idx_userlogs_idnum ON userlogs(idnum);
+CREATE INDEX IF NOT EXISTS idx_investments_idnum ON investments(idnum);
+CREATE INDEX IF NOT EXISTS idx_notifications_idnum ON notifications(idnum);
+CREATE INDEX IF NOT EXISTS idx_kyc_user_id ON kyc(user_id);
+CREATE INDEX IF NOT EXISTS idx_chats_user_id ON chats(user_id);
+CREATE INDEX IF NOT EXISTS idx_chats_timestamp ON chats(timestamp);
+CREATE INDEX IF NOT EXISTS idx_userlogs_referral_code ON userlogs(referral_code);
+CREATE INDEX IF NOT EXISTS idx_userlogs_referred_by ON userlogs(referred_by_idnum);
+CREATE INDEX IF NOT EXISTS idx_referrals_code ON referrals(referral_code);
+CREATE INDEX IF NOT EXISTS idx_referrals_referrer_idnum ON referrals(referrer_idnum);
+CREATE INDEX IF NOT EXISTS idx_referrals_referred_idnum ON referrals(referred_idnum);
+CREATE INDEX IF NOT EXISTS idx_referral_rewards_ref_id ON referral_rewards(referral_id);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE userlogs ENABLE ROW LEVEL SECURITY;
@@ -244,11 +244,13 @@ CREATE POLICY "Allow all operations on referral_rewards" ON referral_rewards FOR
 
 -- Create storage bucket for KYC documents
 INSERT INTO storage.buckets (id, name, public)
-VALUES ('kyc-documents', 'kyc-documents', true);
+VALUES ('kyc-documents', 'kyc-documents', true)
+ON CONFLICT (id) DO NOTHING;
 
 -- Create storage bucket for user avatars (if needed)
 INSERT INTO storage.buckets (id, name, public)
-VALUES ('avatars', 'avatars', true);
+VALUES ('avatars', 'avatars', true)
+ON CONFLICT (id) DO NOTHING;
 
 -- Storage policies (allow authenticated users to upload)
 CREATE POLICY "Allow authenticated users to upload KYC documents" ON storage.objects

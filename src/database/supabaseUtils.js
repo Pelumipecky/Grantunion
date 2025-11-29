@@ -625,6 +625,68 @@ export const supabaseDb = {
     return { data: mapUserRecord(data), error };
   },
 
+  createLoan: async (loanData) => {
+    console.log('[createLoan] Called with:', loanData);
+    const numberOrNull = (value) => {
+      if (value === null || value === undefined || value === '') return null;
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : null;
+    };
+
+    const stringOrNull = (value) => {
+      if (value === null || value === undefined) return null;
+      const trimmed = value.toString().trim();
+      return trimmed.length ? trimmed : null;
+    };
+
+    const referencesPayload = {
+      contacts: Array.isArray(loanData.references) ? loanData.references : [],
+      emergencyContact: loanData.emergencyContact || null,
+      dependents: loanData.dependents ?? null,
+      preferredPaymentDate: loanData.preferredPaymentDate ?? null
+    };
+
+    const now = new Date().toISOString();
+    const cleanLoanData = {
+      idnum: loanData.idnum,
+      user_id: loanData.user_id || null,
+      user_name: stringOrNull(loanData.user_name) || stringOrNull(loanData.userName),
+      amount: numberOrNull(loanData.amount),
+      purpose: stringOrNull(loanData.purpose),
+      employment_status: stringOrNull(loanData.employmentStatus),
+      employer: stringOrNull(loanData.employer),
+      monthly_income: numberOrNull(loanData.monthlyIncome),
+      payment_frequency: loanData.paymentFrequency || 'Monthly',
+      employment_duration: stringOrNull(loanData.employmentDuration),
+      previous_loans: loanData.previousLoans || 'No',
+      collateral: loanData.collateral || 'No',
+      collateral_type: stringOrNull(loanData.collateralType),
+      collateral_value: numberOrNull(loanData.collateralValue),
+      credit_score: stringOrNull(loanData.creditScore),
+      references: referencesPayload,
+      bank_name: stringOrNull(loanData.bankName),
+      account_number: stringOrNull(loanData.accountNumber),
+      account_type: loanData.accountType || 'Savings',
+      residential_status: loanData.residentialStatus || null,
+      monthly_rent: numberOrNull(loanData.monthlyRent),
+      residence_duration: stringOrNull(loanData.residenceDuration),
+      status: loanData.status || 'Pending',
+      interest_rate: numberOrNull(loanData.interestRate),
+      duration: Number.isFinite(Number.parseInt(loanData.preferredDuration, 10))
+        ? Number.parseInt(loanData.preferredDuration, 10)
+        : numberOrNull(loanData.duration),
+      created_at: now,
+      updated_at: now
+    };
+
+    const { data, error } = await supabase
+      .from('loans')
+      .insert([cleanLoanData])
+      .select()
+      .single();
+    return { data, error };
+  },
+
   // Investment operations
   getInvestmentsByIdnum: async (idnum) => {
     const { data, error } = await supabase
