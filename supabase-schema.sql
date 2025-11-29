@@ -268,3 +268,4 @@ FOR SELECT USING (bucket_id = 'avatars');
 
 -- Add missing columns if they don't exist (for existing databases)
 ALTER TABLE userlogs ADD COLUMN IF NOT EXISTS phone TEXT;
+ALTER TABLE investments ADD COLUMN IF NOT EXISTS transaction_hash TEXT;
