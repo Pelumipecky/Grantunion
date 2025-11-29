@@ -33,7 +33,7 @@
 }
 
 .header h3 {
-  color: #FFB347;
+  color: #60a5fa;
   margin: 0;
   font-size: 1.2rem;
 }
@@ -48,7 +48,7 @@
 }
 
 .closeButton:hover {
-  color: #FFB347;
+  color: #60a5fa;
 }
 
 .content {
