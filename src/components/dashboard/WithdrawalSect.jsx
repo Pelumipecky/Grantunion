@@ -113,18 +113,16 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
                   // userBalance: Wallet balance (deposits)
                   // roi: Total earnings from investments
                   // totalBonus: Bonuses from investments
-                  // currentUser.bonus: Signup bonus ($50)
                   
                   const userBalance = parseFloat(currentUser?.balance || 0);
                   const roi = parseFloat(totalROI || 0);
                   const investmentBonus = parseFloat(totalBonus || 0);
-                  const signupBonus = parseFloat(currentUser?.bonus || 0);
                   
                   // Note: We do NOT add 'totalCapital' here because it's usually already part of userBalance 
                   // (if deposited) or tracked separately as "Active Investment". 
                   // Adding it would cause double counting.
                   
-                  const total = userBalance + roi + investmentBonus + signupBonus;
+                  const total = userBalance + roi + investmentBonus;
                   
                   return total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 })()}

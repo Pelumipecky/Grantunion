@@ -208,33 +208,23 @@
 }
 
 .packageTitle {
-  font-size: 2em;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+  font-size: clamp(2.2rem, 1.5vw + 1.8rem, 3.2rem);
+  font-weight: 800;
+  margin-bottom: 0.25rem;
   color: #fff;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.8px;
+  text-transform: uppercase;
+  line-height: 1.1;
+  text-shadow: 0 8px 25px rgba(0,0,0,0.45);
 }
 
 .planSubtitle {
-  color: rgba(255,255,255,0.6);
-  font-size: 1rem;
-  margin-bottom: 2rem;
-  font-weight: 400;
-}
-
-.packagePrice {
-  margin-bottom: 2.5rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.packagePrice span:first-child {
-  font-size: 1.8em;
+  color: rgba(255,255,255,0.85);
+  font-size: clamp(1.15rem, 0.6vw + 0.9rem, 1.6rem);
+  margin: 0 0 1.5rem 0;
   font-weight: 700;
-  color: #FFB347;
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
   text-shadow: 0 0 20px rgba(255,179,71,0.3);
 }
 

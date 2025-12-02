@@ -84,7 +84,7 @@ export default function Home() {
               <li><i className="icofont-cop-badge"></i> Trading with us guarantees <span>high profit margin</span></li>
               <li><i className="icofont-cop-badge"></i> Leader in <span>regulatory compliance</span> and <span>security certifications</span></li>
               <li><i className="icofont-cop-badge"></i> Trusted by over <span> over 1 million users</span> worldwide</li>
-              <li><i className="icofont-cop-badge"></i> Get <span>$50 bonus</span> when you register with us</li>
+              <li><i className="icofont-cop-badge"></i> Start earning as soon as you <span>fund your account</span></li>
             </ul>
             <div className="cta">
               <a href="#packages" className="fancyBtn">Invest Now</a>
@@ -222,10 +222,10 @@ export default function Home() {
                         <div>
                           <h3 className={dashboardStyles.packageTitle}>{plan.name}</h3>
                           <p className={dashboardStyles.planSubtitle}>{plan.subtitle}</p>
-                          <div className={dashboardStyles.packagePrice}>
-                            <span>{formatPercent(plan.dailyRate)} daily commission</span>
-                            <span>Term: {plan.durationLabel}</span>
-                          </div>
+                        </div>
+                        <div className={dashboardStyles.packagePrice}>
+                          <span>{formatPercent(plan.dailyRate)} daily commission</span>
+                          <span>Term: {plan.durationLabel}</span>
                         </div>
                         <ul className={dashboardStyles.featureList}>
                           <li className={dashboardStyles.featureItem}>

@@ -58,7 +58,7 @@ const Signup = () => {
     admin: false,
     idnum: 101010,
     userName: "",
-    bonus: 50,
+    bonus: 0,
     authStatus: "unseen",
     dateUpdated: new Date().toISOString()
   };
@@ -183,13 +183,12 @@ const Signup = () => {
       let candidateId = toLocaleStorage.idnum || generatePassword();
       // For fresh start, we'll just use the generated ID
 
-      // Build notification for sign up bonus
       const notificationPush = {
-        title: "Welcome Bonus",
-        message: "You just received $50 sign up bonus",
+        title: "Welcome to Grant Union",
+        message: "Your account is ready—make a deposit to start earning.",
         idnum: candidateId,
         status: "unseen",
-        type: "signup_bonus"
+        type: "welcome"
       };
 
       // Prepare Supabase user doc
@@ -200,8 +199,8 @@ const Signup = () => {
         user_name: toLocaleStorage.userName,
         phone: toLocaleStorage.phone,
         password: toLocaleStorage.password,
-        balance: toLocaleStorage.balance,
-        bonus: toLocaleStorage.bonus,
+        balance: 0,
+        bonus: 0,
         idnum: candidateId,
         avatar: toLocaleStorage.avatar,
         account_status: 'active',
