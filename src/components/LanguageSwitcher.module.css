@@ -89,6 +89,16 @@
   border-radius: 8px;
 }
 
+.hiddenTranslateContainer {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
+
 /* Mobile positioning - less intrusive */
 @media (max-width: 768px) {
   .languageSwitcher {
