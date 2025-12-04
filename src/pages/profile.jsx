@@ -17,6 +17,7 @@ import WithdrawalPayment from "../components/dashboard/WithdrawPayment";
 import NotificationSect from "../components/dashboard/NotificationSect";
 import LoanSect from "../components/dashboard/LoanSect";
 import KYC from "../components/dashboard/KYC";
+import DownlineSect from "../components/dashboard/DownlineSect";
 import Head from "next/head";
 import Script from "next/script";
 import { PLAN_CONFIG } from "../utils/planConfig";
@@ -565,6 +566,14 @@ const Profile = () => {
             >
               <i className="icofont-id-card"></i> Verification
             </li>
+            <li
+              className={profilestate === "Downline" ? "active" : ""}
+              onClick={() => {
+                setProfileState("Downline");
+              }}
+            >
+              <i className="icofont-people"></i> Downline
+            </li>
             <Link href={"/contact"}>
               <i className="icofont-ui-text-loading"></i> Feedback
             </Link>
@@ -696,6 +705,9 @@ const Profile = () => {
         )}
         {profilestate === "KYC" && (
           <KYC currentUser={currentUser} />
+        )}
+        {profilestate === "Downline" && (
+          <DownlineSect currentUser={currentUser} />
         )}
         {profilestate === "Withdrawals" && (
           <WithdrawalSect
@@ -867,6 +879,14 @@ const Profile = () => {
                   }}
                 >
                   <i className="icofont-id-card"></i> Verification
+                </li>
+                <li
+                  className={profilestate === "Downline" ? "active" : ""}
+                  onClick={() => {
+                    setProfileState("Downline");
+                  }}
+                >
+                  <i className="icofont-people"></i> Downline
                 </li>
                 <Link href={"/contact"}>
                   <i className="icofont-ui-text-loading"></i> Feedback

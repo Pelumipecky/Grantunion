@@ -1,0 +1,371 @@
+.downlineContainer {
+  width: 100%;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: clamp(1.5rem, 2vw, 2.2rem);
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #718096;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.statValue {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.statMeta {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  font-style: italic;
+}
+
+/* Table Section */
+.tableSection {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tableSection h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 1rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.downlineTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.downlineTable thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 600;
+  text-align: left;
+}
+
+.downlineTable th {
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.downlineTable th:last-child {
+  border-right: none;
+}
+
+.downlineTable tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 0.2s ease;
+}
+
+.downlineTable tbody tr:hover {
+  background-color: #f7fafc;
+}
+
+.downlineTable tbody tr:last-child {
+  border-bottom: none;
+}
+
+.downlineTable td {
+  padding: 1rem;
+  color: #2d3748;
+}
+
+.indexCell {
+  font-weight: 600;
+  color: #667eea;
+  text-align: center;
+  width: 50px;
+}
+
+.codeCell code {
+  background: #edf2f7;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.nameCell {
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.emailCell {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.levelCell {
+  text-align: center;
+}
+
+.levelBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.level1 {
+  background: #bee3f8;
+  color: #2c5aa0;
+}
+
+.level2 {
+  background: #feebc8;
+  color: #7c2d12;
+}
+
+.levelOther {
+  background: #e6fffa;
+  color: #234e52;
+}
+
+.statusCell {
+  text-align: center;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.active {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.inactive {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.pending {
+  background: #feebc8;
+  color: #7c2d12;
+}
+
+.dateCell {
+  font-size: 0.85rem;
+  color: #718096;
+  text-align: right;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: #718096;
+}
+
+.emptyState i {
+  font-size: 3rem;
+  color: #cbd5e0;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.emptyState p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.emptyState small {
+  display: block;
+  color: #a0aec0;
+  margin-top: 0.5rem;
+}
+
+/* Loading State */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #718096;
+}
+
+.loadingState i {
+  font-size: 2.5rem;
+  animation: spin 1s linear infinite;
+  color: #667eea;
+  margin-bottom: 1rem;
+}
+
+.loadingState p {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* Error State */
+.errorState {
+  text-align: center;
+  padding: 2rem;
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 8px;
+  color: #742a2a;
+}
+
+.errorState i {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.errorState p {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.retryBtn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.retryBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .downlineContainer {
+    padding: 1rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .downlineTable {
+    font-size: 0.8rem;
+  }
+
+  .downlineTable th,
+  .downlineTable td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .indexCell {
+    width: 40px;
+  }
+
+  .dateCell {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .downlineContainer {
+    padding: 1rem;
+    background: #f5f7fa;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .statCard {
+    padding: 1rem;
+  }
+
+  .tableWrapper {
+    overflow-x: scroll;
+  }
+
+  .downlineTable {
+    font-size: 0.75rem;
+    min-width: 600px;
+  }
+
+  .downlineTable th,
+  .downlineTable td {
+    padding: 0.5rem 0.25rem;
+  }
+}
