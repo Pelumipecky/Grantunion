@@ -209,7 +209,7 @@ const ProfileSect = ({ currentUser, setCurrentUser, widgetState, setWidgetState,
       { label: "Mailing Address", value: profileForm?.address || "Add address" },
     ];
 
-    const referralLink = `https://grantunionn.vercel.app/signup?ref=${currentUser?.referralCode || currentUser?.idnum || ''}`;
+    const referralLink = `https://grantunion.vercel.app/signup?ref=${currentUser?.referralCode || currentUser?.idnum || ''}`;
 
     const handlePasswordChnage = async () => {
         try {
