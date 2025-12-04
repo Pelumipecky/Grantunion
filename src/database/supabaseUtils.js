@@ -1114,6 +1114,55 @@ export const supabaseDb = {
       .select()
       .single();
     return { data, error };
+  },
+
+  getReferralStats: async (referrerIdnum) => {
+    if (!referrerIdnum) {
+      return { data: null, error: new Error('Referrer idnum is required for stats') };
+    }
+
+    const { data: referralRows, error: referralError } = await supabase
+      .from('referrals')
+      .select('*')
+      .eq('referrer_idnum', referrerIdnum)
+      .order('created_at', { ascending: false });
+
+    if (referralError) {
+      return { data: null, error: referralError };
+    }
+
+    const totalReferrals = referralRows?.length || 0;
+    const directCount = (referralRows || []).filter((row) => row.level === 1).length;
+    const indirectCount = totalReferrals - directCount;
+
+    const { data: rewardRows, error: rewardError } = await supabase
+      .from('referral_rewards')
+      .select('reward_amount, bonus_amount, status')
+      .eq('referrer_idnum', referrerIdnum);
+
+    if (rewardError) {
+      return { data: null, error: rewardError };
+    }
+
+    const totalRewards = (rewardRows || []).reduce((sum, row) => {
+      const rewardAmount = Number.parseFloat(row?.reward_amount) || 0;
+      const bonusAmount = Number.parseFloat(row?.bonus_amount) || 0;
+      return sum + rewardAmount + bonusAmount;
+    }, 0);
+
+    const pendingRewards = (rewardRows || []).filter((row) => row.status !== 'paid').length;
+
+    return {
+      data: {
+        referralCount: totalReferrals,
+        directCount,
+        indirectCount,
+        totalRewards: Number(totalRewards.toFixed(2)),
+        pendingRewards,
+        recentReferrals: (referralRows || []).slice(0, 10)
+      },
+      error: null
+    };
   }
 };
 
