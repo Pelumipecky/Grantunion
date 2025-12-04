@@ -61,40 +61,94 @@ const DownlineSect = ({ currentUser }) => {
     );
   }
 
+  const referralLink = currentUser?.referralCode 
+    ? `https://grantunion.vercel.app/signup?ref=${currentUser.referralCode}`
+    : '';
+
+  const copyReferralLink = () => {
+    if (referralLink) {
+      navigator.clipboard.writeText(referralLink);
+      alert('Referral link copied to clipboard!');
+    }
+  };
+
   return (
     <div className={styles.downlineContainer}>
       <h2 className={styles.title}>Your Referral Network</h2>
 
+      {/* Referral Link Section */}
+      {referralLink && (
+        <div className={styles.referralLinkSection}>
+          <div className={styles.linkHeader}>
+            <i className="icofont-link"></i>
+            <span>Your Referral Link</span>
+          </div>
+          <div className={styles.linkBox}>
+            <input 
+              type="text" 
+              value={referralLink} 
+              readOnly 
+              className={styles.linkInput}
+            />
+            <button onClick={copyReferralLink} className={styles.copyBtn}>
+              <i className="icofont-ui-copy"></i> Copy
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Stats Cards */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statLabel}>Total Referrals</div>
-          <div className={styles.statValue}>{stats.totalReferrals}</div>
-          <div className={styles.statMeta}>Active downline members</div>
+          <div className={styles.statIcon}>
+            <i className="icofont-users-alt-5"></i>
+          </div>
+          <div className={styles.statContent}>
+            <div className={styles.statLabel}>Total Referrals</div>
+            <div className={styles.statValue}>{stats.totalReferrals}</div>
+            <div className={styles.statMeta}>Active downline members</div>
+          </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statLabel}>Direct Referrals</div>
-          <div className={styles.statValue}>{stats.directCount}</div>
-          <div className={styles.statMeta}>Level 1</div>
+          <div className={styles.statIcon}>
+            <i className="icofont-user-suited"></i>
+          </div>
+          <div className={styles.statContent}>
+            <div className={styles.statLabel}>Direct Referrals</div>
+            <div className={styles.statValue}>{stats.directCount}</div>
+            <div className={styles.statMeta}>Level 1</div>
+          </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statLabel}>Indirect Referrals</div>
-          <div className={styles.statValue}>{stats.indirectCount}</div>
-          <div className={styles.statMeta}>Level 2+</div>
+          <div className={styles.statIcon}>
+            <i className="icofont-users"></i>
+          </div>
+          <div className={styles.statContent}>
+            <div className={styles.statLabel}>Indirect Referrals</div>
+            <div className={styles.statValue}>{stats.indirectCount}</div>
+            <div className={styles.statMeta}>Level 2+</div>
+          </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statLabel}>Total Rewards</div>
-          <div className={styles.statValue}>${stats.totalRewards.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-          <div className={styles.statMeta}>{stats.pendingRewards} pending</div>
+          <div className={styles.statIcon}>
+            <i className="icofont-dollar-true"></i>
+          </div>
+          <div className={styles.statContent}>
+            <div className={styles.statLabel}>Total Rewards</div>
+            <div className={styles.statValue}>${stats.totalRewards.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+            <div className={styles.statMeta}>{stats.pendingRewards} pending</div>
+          </div>
         </div>
       </div>
 
       {/* Downline Table */}
       <div className={styles.tableSection}>
-        <h3>Recent Referrals</h3>
+        <h3 className={styles.sectionTitle}>
+          <i className="icofont-people"></i> Recent Referrals
+        </h3>
         {downline && downline.length > 0 ? (
           <div className={styles.tableWrapper}>
             <table className={styles.downlineTable}>
