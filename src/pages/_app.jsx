@@ -81,15 +81,15 @@ export default function App({ Component, pageProps }) {
     <ThemeProvider>
       <LanguageSwitcher /> {/* Add this component */}
       <Head>
-        <title>Grant Union Investment</title>
+        <title>Grant Union</title>
         <meta charSet="UTF-8"/>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="theme-color" content='#1C0F36'/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="icon" href="/grant-union-icon.png"/>
         <link rel="apple-touch-icon" href="/grant-union-icon.png"/>
-        <meta property="og:title" content="grantunionsmall.png"/>
-        <meta property="og:description" content="Grant Union Investment is a trusted binary and cryptocurrency trading company delivering consistent, compliant returns."/>
+        <meta property="og:title" content="Grant Union"/>
+        <meta property="og:description" content="Grant Union is a trusted binary and cryptocurrency trading company delivering consistent, compliant returns."/>
       </Head>
       <AnimatePresence mode='wait'>
           <div className="app-wrapper" key="app-content">
