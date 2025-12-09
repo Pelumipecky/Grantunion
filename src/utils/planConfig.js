@@ -5,7 +5,7 @@ const BASE_PLANS = [
     subtitle: "Quick start daily income",
     durationDays: 3,
     durationLabel: "3 days",
-    dailyRate: 0.03,
+    dailyRate: 0.08,
     featured: false,
     minCapital: 100,
     maxCapital: 999,
