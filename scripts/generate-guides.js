@@ -2,57 +2,43 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
 
-// Plan Configuration (Hardcoded from src/utils/planConfig.js for script usage)
-const PLANS = [
-  {
-    name: "3-Day Plan",
-    duration: "3 days",
-    dailyRate: "8%",
-    min: "$100",
-    max: "$999",
-    bonus: "10%"
-  },
-  {
-    name: "7-Day Plan",
-    duration: "7 days",
-    dailyRate: "3%",
-    min: "$599",
-    max: "$3,999",
-    bonus: "10%"
-  },
-  {
-    name: "12-Day Plan",
-    duration: "12 days",
-    dailyRate: "3.5%",
-    min: "$1,000",
-    max: "$5,000",
-    bonus: "10%"
-  },
-  {
-    name: "15-Day Plan",
-    duration: "15 days",
-    dailyRate: "4%",
-    min: "$3,000",
-    max: "$9,000",
-    bonus: "10%"
-  },
-  {
-    name: "3-Month Plan",
-    duration: "90 days",
-    dailyRate: "4%",
-    min: "$5,000",
-    max: "$15,000",
-    bonus: "10%"
-  },
-  {
-    name: "6-Month Plan",
-    duration: "180 days",
-    dailyRate: "5%",
-    min: "$15,999",
-    max: "Unlimited",
-    bonus: "10%"
-  }
-];
+// Import plan configuration from src/utils/planConfig.js
+async function loadPlans() {
+  const { PLAN_CONFIG, formatPercent } = await import('../src/utils/planConfig.js');
+  
+  // Convert PLAN_CONFIG to the format expected by the script
+  const PLANS = PLAN_CONFIG.map(plan => ({
+    name: plan.name,
+    duration: plan.durationLabel,
+    dailyRate: formatPercent(plan.dailyRate),
+    min: `$${plan.minCapital.toLocaleString()}`,
+    max: plan.maxCapital ? `$${plan.maxCapital.toLocaleString()}` : 'Unlimited',
+    bonus: formatPercent(plan.referralBonus)
+  }));
+  
+  return PLANS;
+}
+
+// Function to update LANGUAGES with dynamic plan lists
+function updateLanguagesWithPlans(PLANS, LANGUAGES) {
+  const planList = PLANS.map(plan => `• ${plan.name}: ${plan.dailyRate} daily commission`).join('\n');
+  
+  // Update each language's aboutCompany content
+  Object.keys(LANGUAGES).forEach(lang => {
+    const content = LANGUAGES[lang].aboutCompany.content;
+    // Find the index of "Our Investment Plans:" or equivalent
+    const planSectionIndex = content.findIndex(line => line.includes('Investment Plans') || line.includes('Planes de Inversión') || line.includes('Plans d\'Investissement') || line.includes('Investitionspläne') || line.includes('投资计划') || line.includes('Инвестиционные планы') || line.includes('خطط الاستثمار'));
+    if (planSectionIndex !== -1) {
+      // Replace the next lines until empty line
+      let endIndex = planSectionIndex + 1;
+      while (endIndex < content.length && content[endIndex].startsWith('•')) {
+        endIndex++;
+      }
+      // Replace from planSectionIndex + 1 to endIndex - 1 with the new list
+      content.splice(planSectionIndex + 1, endIndex - planSectionIndex - 1, ...planList.split('\n'));
+    }
+  });
+}
 
 const LANGUAGES = {
   en: {
@@ -444,7 +430,9 @@ const LANGUAGES = {
 // Actually, to ensure it works for all languages, I should probably use a font that supports unicode if possible, but I don't have one handy in the env.
 // I will proceed with standard generation.
 
-const generatePDF = (langCode, content) => {
+const generatePDF = async (langCode, content) => {
+  const PLANS = await loadPlans();
+  
   const doc = new PDFDocument();
   const filePath = path.join(__dirname, '../public/downloads', `guide-${langCode}.pdf`);
   
@@ -506,16 +494,21 @@ const generatePDF = (langCode, content) => {
 };
 
 // Generate for all languages
-Object.keys(LANGUAGES).forEach(lang => {
-  // Note: For languages like Chinese (zh), Arabic (ar), Russian (ru), PDFKit requires a font that supports those characters.
-  // Without a custom font, these will likely render as squares or garbage.
-  // Since I cannot easily upload a font file here, I will generate them but they might be imperfect without the font.
-  // For a real deployment, you would need to add a font file (e.g. NotoSans.ttf) and load it: doc.font('path/to/font.ttf')
+(async () => {
+  const PLANS = await loadPlans();
+  updateLanguagesWithPlans(PLANS, LANGUAGES);
   
-  // For now, we generate.
-  try {
-      generatePDF(lang, LANGUAGES[lang]);
-  } catch (e) {
-      console.error(`Failed to generate for ${lang}:`, e);
-  }
-});
+  Object.keys(LANGUAGES).forEach(async (lang) => {
+    // Note: For languages like Chinese (zh), Arabic (ar), Russian (ru), PDFKit requires a font that supports those characters.
+    // Without a custom font, these will likely render as squares or garbage.
+    // Since I cannot easily upload a font file here, I will generate them but they might be imperfect without the font.
+    // For a real deployment, you would need to add a font file (e.g. NotoSans.ttf) and load it: doc.font('path/to/font.ttf')
+    
+    // For now, we generate.
+    try {
+        await generatePDF(lang, LANGUAGES[lang]);
+    } catch (e) {
+        console.error(`Failed to generate for ${lang}:`, e);
+    }
+  });
+})();
