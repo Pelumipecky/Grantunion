@@ -225,6 +225,33 @@ const Signup = () => {
         // Don't block signup success if notification fails
       }
 
+      // Create admin notification for new user registration
+      try {
+        const { data: adminUsers, error: adminError } = await supabaseDb.getAllAdminUsers();
+        if (!adminError && adminUsers && adminUsers.length > 0) {
+          const adminNotifications = adminUsers.map(admin => ({
+            title: "New User Registration",
+            message: `${toLocaleStorage.name} (${toLocaleStorage.email}) has just signed up for Grant Union.`,
+            idnum: admin.idnum,
+            status: "unseen",
+            type: "user_registration"
+          }));
+
+          // Create notifications for all admins
+          for (const adminNotification of adminNotifications) {
+            try {
+              await supabaseDb.createNotification(adminNotification);
+            } catch (adminNotifyError) {
+              console.error('Failed to create admin notification:', adminNotifyError);
+              // Continue with other notifications even if one fails
+            }
+          }
+        }
+      } catch (adminFetchError) {
+        console.error('Failed to fetch admin users for notifications:', adminFetchError);
+        // Don't block signup success if admin notifications fail
+      }
+
       // Store user data safely (no password) in localStorage
       const safeUserData = { ...userRecord };
       delete safeUserData.password;

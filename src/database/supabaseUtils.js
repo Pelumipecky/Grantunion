@@ -660,6 +660,15 @@ export const supabaseDb = {
     return { data: mapUserRecord(data), error };
   },
 
+  getAllAdminUsers: async () => {
+    const { data, error } = await supabase
+      .from('userlogs')
+      .select('*')
+      .eq('admin', true)
+      .order('created_at', { ascending: false });
+    return { data: data?.map(mapUserRecord) || [], error };
+  },
+
   createLoan: async (loanData) => {
     console.log('[createLoan] Called with:', loanData);
     const numberOrNull = (value) => {
