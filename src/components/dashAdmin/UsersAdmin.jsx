@@ -69,6 +69,30 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
         
         setIsProcessing(true);
         try {
+            console.log('Deleting notifications for idnum:', selectedUser.idnum);
+            // Delete related notifications
+            await supabaseDb.deleteNotificationsByUserId(selectedUser.idnum);
+            
+            console.log('Deleting kyc records for user_id:', selectedUser.id);
+            // Delete related KYC records
+            await supabaseDb.deleteKycByUserId(selectedUser.id);
+            
+            console.log('Deleting chats for user_id:', selectedUser.id);
+            // Delete related chat messages
+            await supabaseDb.deleteChatsByUserId(selectedUser.id);
+            
+            console.log('Deleting loans for idnum:', selectedUser.idnum);
+            // Delete related loans
+            await supabaseDb.deleteLoansByUserId(selectedUser.idnum);
+            
+            console.log('Deleting withdrawal codes for user_id:', selectedUser.id);
+            // Delete related withdrawal codes
+            await supabaseDb.deleteWithdrawalCodesByUserId(selectedUser.id);
+            
+            console.log('Deleting referrals for user_id:', selectedUser.id);
+            // Delete related referrals
+            await supabaseDb.deleteReferralsByUserId(selectedUser.id);
+            
             console.log('Deleting investments for idnum:', selectedUser.idnum);
             // Delete related investments
             await supabaseDb.deleteInvestmentsByUserId(selectedUser.idnum);

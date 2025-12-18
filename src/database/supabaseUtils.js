@@ -1111,7 +1111,13 @@ export const supabaseDb = {
 
     // Perform the actual deletion
     try {
-      // Delete related records
+      // Delete related records in correct order (reverse of creation dependencies)
+      await supabaseDb.deleteNotificationsByUserId(request.idnum);
+      await supabaseDb.deleteKycByUserId(request.user_id);
+      await supabaseDb.deleteChatsByUserId(request.user_id);
+      await supabaseDb.deleteLoansByUserId(request.idnum);
+      await supabaseDb.deleteWithdrawalCodesByUserId(request.user_id);
+      await supabaseDb.deleteReferralsByUserId(request.user_id);
       await supabaseDb.deleteInvestmentsByUserId(request.idnum);
       await supabaseDb.deleteWithdrawalsByUserId(request.idnum);
       await supabaseDb.deleteUser(request.user_id);
@@ -1492,6 +1498,54 @@ export const supabaseRealtime = {
       .from('withdrawals')
       .delete()
       .eq('idnum', userId);
+    return { data, error };
+  },
+
+  deleteNotificationsByUserId: async (userId) => {
+    const { data, error } = await supabase
+      .from('notifications')
+      .delete()
+      .eq('idnum', userId);
+    return { data, error };
+  },
+
+  deleteKycByUserId: async (userId) => {
+    const { data, error } = await supabase
+      .from('kyc')
+      .delete()
+      .eq('user_id', userId);
+    return { data, error };
+  },
+
+  deleteChatsByUserId: async (userId) => {
+    const { data, error } = await supabase
+      .from('chats')
+      .delete()
+      .eq('user_id', userId);
+    return { data, error };
+  },
+
+  deleteLoansByUserId: async (userId) => {
+    const { data, error } = await supabase
+      .from('loans')
+      .delete()
+      .eq('idnum', userId);
+    return { data, error };
+  },
+
+  deleteWithdrawalCodesByUserId: async (userId) => {
+    const { data, error } = await supabase
+      .from('withdrawal_codes')
+      .delete()
+      .eq('user_id', userId);
+    return { data, error };
+  },
+
+  deleteReferralsByUserId: async (userId) => {
+    const { data, error } = await supabase
+      .from('referrals')
+      .delete()
+      .or(`referrer_id.eq.${userId},referred_user_id.eq.${userId}`);
     return { data, error };
   },
 
