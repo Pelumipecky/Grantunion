@@ -17,6 +17,64 @@ export const createInvestment = async (investmentData) => {
 
     if (result.error) {
       console.error('Failed to create investment:', result.error);
+      return result;
+    }
+
+    // Send email notification to user
+    try {
+      // Get user details for email
+      const userResult = await supabaseDb.getUserByIdnum(investmentData.idnum);
+      if (userResult.data && userResult.data.email) {
+        const userEmail = userResult.data.email;
+        const userName = userResult.data.name || 'Valued Investor';
+
+        // Prepare email content
+        const emailSubject = 'Investment Created - Grant Union Investment';
+        const emailMessage = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #1C0F36;">Investment Created Successfully</h2>
+            <p>Dear ${userName},</p>
+            <p>Your investment has been successfully created and is now pending approval.</p>
+            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3>Investment Details:</h3>
+              <ul style="list-style: none; padding: 0;">
+                <li><strong>Plan:</strong> ${investmentData.plan}</li>
+                <li><strong>Amount:</strong> $${investmentData.capital}</li>
+                <li><strong>Duration:</strong> ${investmentData.duration} days</li>
+                <li><strong>Payment Method:</strong> ${investmentData.paymentOption}</li>
+                <li><strong>Status:</strong> Pending Approval</li>
+                <li><strong>Date:</strong> ${new Date(investmentData.date).toLocaleDateString()}</li>
+              </ul>
+            </div>
+            <p>You will receive another notification once your investment is approved and becomes active.</p>
+            <p>If you have any questions, please contact our support team.</p>
+            <p>Best regards,<br>Grant Union Investment Team</p>
+          </div>
+        `;
+
+        // Send email notification
+        const emailResponse = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: userEmail,
+            subject: emailSubject,
+            message: emailMessage,
+            type: 'investment-created'
+          })
+        });
+
+        if (emailResponse.ok) {
+          console.log('Investment creation email sent successfully to:', userEmail);
+        } else {
+          console.error('Failed to send investment creation email');
+        }
+      }
+    } catch (emailError) {
+      console.error('Error sending investment creation email:', emailError);
+      // Don't fail the investment creation if email fails
     }
 
     return result;
