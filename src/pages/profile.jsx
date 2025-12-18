@@ -348,22 +348,30 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    // Check both localStorage and sessionStorage for user
-    let user = null;
-    try {
-      user = JSON.parse(sessionStorage.getItem("activeUser")) || 
-             JSON.parse(localStorage.getItem("activeUser"));
-    } catch (e) {
-      console.warn("Error parsing user data:", e);
-    }
-    
-    // If no user data found at all, redirect to signin
-    if (!user || !user.email) {
-      console.log("No valid user data found, redirecting to signin");
-      setregisterFromPath("/profile");
-      router.push("/signin");
-      return;
-    }
+    // Function to check authentication
+    const checkAuth = () => {
+      let user = null;
+      try {
+        user = JSON.parse(sessionStorage.getItem("activeUser")) ||
+               JSON.parse(localStorage.getItem("activeUser"));
+      } catch (e) {
+        console.warn("Error parsing user data:", e);
+      }
+
+      // If no user data found at all, redirect to signin
+      if (!user || !user.email) {
+        console.log("No valid user data found, redirecting to signin");
+        setregisterFromPath("/profile");
+        router.push("/signin");
+        return false;
+      }
+      return user;
+    };
+
+    // Initial check
+    const user = checkAuth();
+    if (!user) return;
+
     let subscription = null;
     async function setupListener() {
       let userDocId = user.id;
@@ -404,7 +412,22 @@ const Profile = () => {
       }
     }
     setupListener();
-    return () => { if (subscription) subscription.unsubscribe(); };
+
+    // Handle page restoration from browser cache (back/forward navigation)
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        // Page was restored from bfcache, re-check authentication
+        console.log("Page restored from cache, re-checking authentication");
+        checkAuth();
+      }
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
+
+    return () => {
+      if (subscription) subscription.unsubscribe();
+      window.removeEventListener('pageshow', handlePageShow);
+    };
   }, [router, setregisterFromPath]);
 
 

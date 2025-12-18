@@ -132,15 +132,27 @@ export default function DashboardAdmin() {
     };
 
     let mounted = true;
-    
+
     // Only proceed if component is mounted
     if (mounted) {
       checkAdminAuth();
     }
 
+    // Handle page restoration from browser cache (back/forward navigation)
+    const handlePageShow = (event) => {
+      if (event.persisted && mounted) {
+        // Page was restored from bfcache, re-check authentication
+        console.log("Admin page restored from cache, re-checking authentication");
+        checkAdminAuth();
+      }
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
+
     // Cleanup function
     return () => {
       mounted = false;
+      window.removeEventListener('pageshow', handlePageShow);
     };
   }, [router]);
 
