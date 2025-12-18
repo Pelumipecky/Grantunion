@@ -165,6 +165,9 @@ export default function Signin() {
                         </label>
                         <button type='submit' className='fancyBtn'>Sign In</button>
                     </div>
+                    <div className='forgotPassword'>
+                        <Link href='/forgot-password'>Forgot Password?</Link>
+                    </div>
                     <p className='haveanaccount'>Are you an admin? <Link href='/signin_admin'>Sign In as admin</Link></p>
                     <p className='haveanaccount'>Don&apos;t have an account? <Link href='/signup'>Sign Up</Link></p>
                 </form>

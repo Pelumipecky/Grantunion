@@ -1,9 +1,45 @@
 // API endpoint for sending email notifications using Mailjet
 // Mailjet is a reliable email service provider with good deliverability
 
+import { supabase } from '../../database/supabaseConfig';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Special test endpoint for withdrawal debugging
+  if (req.body.testWithdrawal) {
+    console.log('🧪 Testing withdrawal creation...');
+    try {
+      const testData = {
+        idnum: 36720209,
+        amount: 100,
+        status: 'pending',
+        paymentoption: 'Bitcoin',
+        wallet_address: 'bc1qtest123456789'
+      };
+
+      console.log('🧪 Test data:', testData);
+
+      const { data, error } = await supabase
+        .from('withdrawals')
+        .insert([testData])
+        .select()
+        .single();
+
+      console.log('🧪 Test result - data:', data, 'error:', error);
+
+      return res.status(200).json({
+        success: !error,
+        data,
+        error,
+        message: 'Withdrawal test completed'
+      });
+    } catch (err) {
+      console.error('🧪 Test error:', err);
+      return res.status(500).json({ error: err.message });
+    }
   }
 
   try {

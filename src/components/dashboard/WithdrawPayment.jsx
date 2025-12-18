@@ -88,6 +88,17 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
     }
 
     const handleTransacConfirmation = async () => {
+        // Check if user data is properly loaded
+        if (!currentUser?.idnum || !currentUser?.id || currentUser.idnum === 101010) {
+            console.error('Invalid user data:', {
+                idnum: currentUser?.idnum,
+                id: currentUser?.id,
+                fullUser: currentUser
+            });
+            showModal('error', 'Error', "User data not loaded properly. Please refresh the page and try again.");
+            return;
+        }
+
         // Check KYC status before proceeding
         if (!isUserKycVerified) {
             showModal('error', 'KYC Required', "KYC verification required. Please complete KYC verification before making a withdrawal.");
@@ -116,6 +127,24 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
             return;
         }
 
+        // Check if user data is properly loaded
+        console.log('🔍 Checking user data for withdrawal:', {
+            currentUser,
+            idnum: currentUser?.idnum,
+            id: currentUser?.id,
+            balance: currentUser?.balance
+        });
+        if (!currentUser?.idnum || !currentUser?.id || currentUser.idnum === 101010) {
+            console.error('❌ Invalid user data for withdrawal:', {
+                idnum: currentUser?.idnum,
+                id: currentUser?.id,
+                fullUser: currentUser
+            });
+            showModal('error', 'Error', "User data not loaded properly. Please refresh the page and try again.");
+            setIsProcessing(false);
+            return;
+        }
+
         setIsProcessing(true);
 
         try {
@@ -128,6 +157,14 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 return;
             }
 
+            // Check if user has sufficient balance
+            const currentBalance = parseFloat(currentUser?.balance || 0);
+            if (currentBalance < parseFloat(amount)) {
+                showModal('error', 'Insufficient Balance', `You have insufficient balance. Available: $${currentBalance}, Required: $${amount}`);
+                setIsProcessing(false);
+                return;
+            }
+
             // Validate wallet address for crypto payments
             if (withdrawData?.paymentOption !== 'Bank Transfer' && !walletAddress.trim()) {
                 showModal('error', 'Error', 'Please enter your wallet address');
@@ -135,42 +172,84 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 return;
             }
 
-            // Create withdrawal record
-            const withdrawalData = {
+            console.log('Creating withdrawal with data:', {
                 amount,
-                wallet_address: walletAddress, // Add wallet address
+                wallet_address: walletAddress,
                 paymentoption: withdrawData?.paymentOption,
                 idnum: currentUser?.idnum,
-                status: "Pending"
+                status: "pending"
+            });
+
+            // Create withdrawal record
+            const parsedIdnum = parseInt(currentUser?.idnum, 10);
+            const withdrawalData = {
+                amount: parseFloat(amount), // Ensure it's a number
+                wallet_address: walletAddress,
+                paymentoption: withdrawData?.paymentOption,
+                idnum: parsedIdnum, // Ensure it's a number
+                status: "pending" // Use lowercase to match database default
             };
 
-            const { error: withdrawalError } = await createWithdrawal(withdrawalData);
-            if (withdrawalError) throw withdrawalError;
+            // Validate withdrawal data before sending
+            if (!withdrawalData.idnum || isNaN(withdrawalData.idnum) || withdrawalData.idnum === 101010) {
+                console.error('Invalid idnum for withdrawal:', withdrawalData.idnum, 'original:', currentUser?.idnum);
+                showModal('error', 'Error', 'Invalid user account. Please log out and log back in.');
+                setIsProcessing(false);
+                return;
+            }
 
-            // Deduct amount from user's available balance
+            if (!withdrawalData.amount || withdrawalData.amount < 200) {
+                console.error('Invalid amount for withdrawal:', withdrawalData.amount);
+                showModal('error', 'Error', 'Invalid withdrawal amount.');
+                setIsProcessing(false);
+                return;
+            }
+
+            const { error: withdrawalError } = await createWithdrawal(withdrawalData);
+            if (withdrawalError) {
+                console.error('❌ Withdrawal creation error:', withdrawalError);
+                console.error('❌ Withdrawal data that failed:', withdrawalData);
+                console.error('❌ Full error details:', JSON.stringify(withdrawalError, null, 2));
+                throw new Error(`Withdrawal creation failed: ${withdrawalError.message || JSON.stringify(withdrawalError)}`);
+            }
+
+            console.log('✅ Withdrawal created successfully');
+
+            console.log('Withdrawal created successfully');
+
+            // Deduct amount from user's available balance (non-blocking)
             try {
                 const currentBalance = parseFloat(currentUser?.balance || 0);
+                console.log('Current balance:', currentBalance, 'Withdrawal amount:', amount);
+                
                 const newBalance = Math.max(0, currentBalance - parseFloat(amount));
+                console.log('New balance will be:', newBalance);
                 
-                const { error: balanceError } = await supabaseDb.updateUser(currentUser.id, { 
-                    balance: newBalance,
-                    updated_at: new Date().toISOString()
-                });
-                
-                if (balanceError) {
-                    console.warn("Could not update user balance:", balanceError);
-                } else {
-                    // Update sessionStorage to reflect new balance immediately
-                    try {
-                        const activeUser = JSON.parse(sessionStorage.getItem('activeUser') || '{}');
-                        activeUser.balance = newBalance;
-                        sessionStorage.setItem('activeUser', JSON.stringify(activeUser));
-                    } catch (storageErr) {
-                        console.warn('Could not update sessionStorage:', storageErr);
+                if (currentUser?.id) {
+                    const { error: balanceError } = await supabaseDb.updateUser(currentUser.id, { 
+                        balance: newBalance,
+                        updated_at: new Date().toISOString()
+                    });
+                    
+                    if (balanceError) {
+                        console.warn("Could not update user balance:", balanceError);
+                    } else {
+                        console.log('Balance updated successfully');
+                        // Update sessionStorage to reflect new balance immediately
+                        try {
+                            const activeUser = JSON.parse(sessionStorage.getItem('activeUser') || '{}');
+                            activeUser.balance = newBalance;
+                            sessionStorage.setItem('activeUser', JSON.stringify(activeUser));
+                        } catch (storageErr) {
+                            console.warn('Could not update sessionStorage:', storageErr);
+                        }
                     }
+                } else {
+                    console.warn('No user ID available for balance update');
                 }
             } catch (balanceErr) {
                 console.warn("Could not update user balance:", balanceErr);
+                // Don't fail the withdrawal if balance update fails
             }
 
             showModal('success', 'Success', "Withdrawal request submitted successfully.");

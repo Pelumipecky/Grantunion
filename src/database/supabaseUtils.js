@@ -54,6 +54,25 @@ const normalizeInvestmentPayload = (investmentData = {}) => ({
   credited_bonus: investmentData.credited_bonus ?? 0,
 });
 
+const normalizeWithdrawalPayload = (withdrawalData = {}) => {
+  console.log('🔧 Normalizing withdrawal payload:', withdrawalData);
+  const idnum = Number(withdrawalData.idnum);
+  console.log('🔧 Parsed idnum:', idnum, 'isNaN:', isNaN(idnum), 'idnum <= 0:', idnum <= 0);
+  if (isNaN(idnum) || idnum <= 0) {
+    throw new Error('Invalid idnum for withdrawal');
+  }
+  
+  const normalized = {
+    idnum,
+    amount: Number(withdrawalData.amount) || 0,
+    status: withdrawalData.status || 'pending',
+    paymentoption: withdrawalData.paymentoption ?? withdrawalData.paymentOption ?? 'Bitcoin',
+    wallet_address: withdrawalData.wallet_address ?? withdrawalData.walletAddress ?? null,
+  };
+  console.log('🔧 Normalized withdrawal data:', normalized);
+  return normalized;
+};
+
 // Referral helpers
 const REFERRAL_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const REFERRAL_CODE_LENGTH = 8;
@@ -411,6 +430,21 @@ export const supabaseAuth = {
 
   onAuthStateChange: (callback) => {
     return supabase.auth.onAuthStateChange(callback);
+  },
+
+  resetPasswordForEmail: async (email, options = {}) => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, options);
+    return { data, error };
+  },
+
+  updateUser: async (updates) => {
+    const { data, error } = await supabase.auth.updateUser(updates);
+    return { data, error };
+  },
+
+  getSession: async () => {
+    const { data, error } = await supabase.auth.getSession();
+    return { data, error };
   }
 };
 
@@ -1435,15 +1469,21 @@ export const supabaseRealtime = {
 
   // Withdrawal operations
   createWithdrawal: async (withdrawalData) => {
+    console.log('💰 Creating withdrawal with data:', withdrawalData);
+    const cleanData = normalizeWithdrawalPayload(withdrawalData);
+    console.log('💰 Clean withdrawal data:', cleanData);
+
     const { data, error } = await supabase
       .from('withdrawals')
       .insert([{
-        ...withdrawalData,
+        ...cleanData,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }])
       .select()
       .single();
+      
+    console.log('💰 Supabase response - data:', data, 'error:', error);
     return { data, error };
   },
 

@@ -686,6 +686,22 @@ form button[type="submit"]{
     font-size: 1.1em;
 }
 
+.forgotPassword{
+    min-width: var(--input-width);
+    margin-bottom: 1rem;
+    text-align: right;
+}
+
+.forgotPassword a{
+    color: var(--text-accent);
+    font-size: 0.9em;
+    text-decoration: none;
+}
+
+.forgotPassword a:hover{
+    text-decoration: underline;
+}
+
 form .errorMsg{
     width: var(--input-width);
     color: var(--danger-clr);
