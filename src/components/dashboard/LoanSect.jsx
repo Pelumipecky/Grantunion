@@ -223,6 +223,33 @@ export default function LoanSect({ currentUser }) {
       });
       setFormStep(1);
       showModal('success', 'Success', 'Loan request submitted successfully');
+
+      // Create admin notification for new loan request
+      try {
+        const { data: adminUsers, error: adminError } = await supabaseDb.getAllAdminUsers();
+        if (!adminError && adminUsers && adminUsers.length > 0) {
+          const adminNotifications = adminUsers.map(admin => ({
+            title: "New Loan Request",
+            message: `${currentUser.name} has requested a loan of $${loanSubmitData.amount} for ${loanSubmitData.purpose || 'personal use'}.`,
+            idnum: admin.idnum,
+            status: "unseen",
+            type: "loan_request"
+          }));
+
+          // Create notifications for all admins
+          for (const adminNotification of adminNotifications) {
+            try {
+              await supabaseDb.createNotification(adminNotification);
+            } catch (adminNotifyError) {
+              console.error('Failed to create admin loan notification:', adminNotifyError);
+              // Continue with other notifications even if one fails
+            }
+          }
+        }
+      } catch (adminFetchError) {
+        console.error('Failed to fetch admin users for loan notifications:', adminFetchError);
+        // Don't block loan success if admin notifications fail
+      }
     } catch (err) {
       console.error('Loan request error', err);
       showModal('error', 'Error', `Error submitting loan request: ${err.message || 'Unknown error'}`);

@@ -762,6 +762,31 @@ export const supabaseDb = {
       console.error('Supabase error creating investment:', error);
     }
 
+    // Create notification for user about investment submission
+    if (!error && data) {
+      try {
+        const notificationMessage = `💰 Your investment of $${cleanData.capital} has been submitted successfully and is pending approval. You will be notified once it's activated and starts earning ROI.`;
+        
+        const { error: notificationError } = await supabase
+          .from('notifications')
+          .insert([{
+            idnum: cleanData.idnum,
+            title: 'Investment Submitted',
+            message: notificationMessage,
+            status: 'unseen',
+            type: 'investment_submitted',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }]);
+
+        if (notificationError) {
+          console.error('Failed to create investment submission notification:', notificationError);
+        }
+      } catch (notificationError) {
+        console.error('Error creating investment submission notification:', notificationError);
+      }
+    }
+
     return { data: mapInvestmentRecord(data), error };
   },
 
@@ -873,6 +898,29 @@ export const supabaseDb = {
     if (userUpdateError) {
       console.error('activateInvestment: user update failed', userUpdateError);
       throw userUpdateError;
+    }
+
+    // Create notification for user about investment activation
+    try {
+      const notificationMessage = `🎉 Your investment of $${capitalAmount.toFixed(2)} has been activated! You will start earning daily ROI of ${(roiAmount * 100 / capitalAmount).toFixed(2)}% and bonus of $${bonusAmount.toFixed(2)}.`;
+      
+      const { error: notificationError } = await supabase
+        .from('notifications')
+        .insert([{
+          idnum: idnum,
+          title: 'Investment Activated',
+          message: notificationMessage,
+          status: 'unseen',
+          type: 'investment_activated',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }]);
+
+      if (notificationError) {
+        console.error('Failed to create investment activation notification:', notificationError);
+      }
+    } catch (notificationError) {
+      console.error('Error creating investment activation notification:', notificationError);
     }
 
     return { investmentData: mapInvestmentRecord(investmentData), updatedUser: mapUserRecord(updatedUser), error: null };
@@ -1460,6 +1508,32 @@ export const supabaseRealtime = {
       .insert([cleanLoanData])
       .select()
       .single();
+
+    // Create notification for user about loan submission
+    if (!error && data) {
+      try {
+        const notificationMessage = `📋 Your loan request of $${cleanLoanData.amount} has been submitted successfully and is pending review. You will be notified once it's approved or requires additional information.`;
+        
+        const { error: notificationError } = await supabase
+          .from('notifications')
+          .insert([{
+            idnum: cleanLoanData.idnum,
+            title: 'Loan Request Submitted',
+            message: notificationMessage,
+            status: 'unseen',
+            type: 'loan_submitted',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }]);
+
+        if (notificationError) {
+          console.error('Failed to create loan submission notification:', notificationError);
+        }
+      } catch (notificationError) {
+        console.error('Error creating loan submission notification:', notificationError);
+      }
+    }
+
     return { data, error };
   },
 
@@ -1499,6 +1573,32 @@ export const supabaseRealtime = {
       .single();
       
     console.log('💰 Supabase response - data:', data, 'error:', error);
+
+    // Create notification for user about withdrawal request
+    if (!error && data) {
+      try {
+        const notificationMessage = `📤 Your withdrawal request of $${cleanData.amount} has been submitted and is pending review. You will be notified once it's processed.`;
+        
+        const { error: notificationError } = await supabase
+          .from('notifications')
+          .insert([{
+            idnum: cleanData.idnum,
+            title: 'Withdrawal Request Submitted',
+            message: notificationMessage,
+            status: 'unseen',
+            type: 'withdrawal_submitted',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }]);
+
+        if (notificationError) {
+          console.error('Failed to create withdrawal submission notification:', notificationError);
+        }
+      } catch (notificationError) {
+        console.error('Error creating withdrawal submission notification:', notificationError);
+      }
+    }
+
     return { data, error };
   },
 
@@ -1559,12 +1659,68 @@ export const supabaseRealtime = {
   },
 
   updateWithdrawal: async (id, updates) => {
+    // Get current withdrawal data first
+    const { data: currentWithdrawal, error: fetchError } = await supabase
+      .from('withdrawals')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) return { data: null, error: fetchError };
+
     const { data, error } = await supabase
       .from('withdrawals')
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq('id', id)
       .select()
       .single();
+
+    if (error) return { data, error };
+
+    // Create notification if status changed
+    if (updates.status && updates.status !== currentWithdrawal.status) {
+      try {
+        let notificationMessage = '';
+        let notificationType = 'withdrawal_update';
+
+        switch (updates.status) {
+          case 'Active':
+          case 'Completed':
+            notificationMessage = `✅ Your withdrawal request of $${currentWithdrawal.amount} has been processed successfully.`;
+            notificationType = 'withdrawal_completed';
+            break;
+          case 'Rejected':
+            notificationMessage = `❌ Your withdrawal request of $${currentWithdrawal.amount} has been rejected. Please contact support for more information.`;
+            notificationType = 'withdrawal_rejected';
+            break;
+          case 'Pending':
+            notificationMessage = `⏳ Your withdrawal request of $${currentWithdrawal.amount} is being processed.`;
+            notificationType = 'withdrawal_pending';
+            break;
+          default:
+            notificationMessage = `📝 Your withdrawal request status has been updated to: ${updates.status}`;
+        }
+
+        const { error: notificationError } = await supabase
+          .from('notifications')
+          .insert([{
+            idnum: currentWithdrawal.idnum,
+            title: 'Withdrawal Update',
+            message: notificationMessage,
+            status: 'unseen',
+            type: notificationType,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }]);
+
+        if (notificationError) {
+          console.error('Failed to create withdrawal status notification:', notificationError);
+        }
+      } catch (notificationError) {
+        console.error('Error creating withdrawal status notification:', notificationError);
+      }
+    }
+
     return { data, error };
   },
 

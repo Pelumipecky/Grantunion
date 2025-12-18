@@ -206,6 +206,33 @@ export default function KYC({ currentUser }) {
       setIdFile(null);
       setSelfieFile(null);
       setUploadStatus('');
+
+      // Create admin notification for new KYC submission
+      try {
+        const { data: adminUsers, error: adminError } = await supabaseDb.getAllAdminUsers();
+        if (!adminError && adminUsers && adminUsers.length > 0) {
+          const adminNotifications = adminUsers.map(admin => ({
+            title: "New KYC Submission",
+            message: `${currentUser.name} (${currentUser.email}) has submitted KYC documents for verification.`,
+            idnum: admin.idnum,
+            status: "unseen",
+            type: "kyc_submission"
+          }));
+
+          // Create notifications for all admins
+          for (const adminNotification of adminNotifications) {
+            try {
+              await supabaseDb.createNotification(adminNotification);
+            } catch (adminNotifyError) {
+              console.error('Failed to create admin KYC notification:', adminNotifyError);
+              // Continue with other notifications even if one fails
+            }
+          }
+        }
+      } catch (adminFetchError) {
+        console.error('Failed to fetch admin users for KYC notifications:', adminFetchError);
+        // Don't block KYC success if admin notifications fail
+      }
       
     } catch (err) {
       clearTimeout(timeoutId);
