@@ -96,6 +96,63 @@ export const createWithdrawal = async (withdrawalData) => {
 
     if (result.error) {
       console.error('Failed to create withdrawal:', result.error);
+      return result;
+    }
+
+    // Send email notification to user
+    try {
+      // Get user details for email
+      const userResult = await supabaseDb.getUserByIdnum(withdrawalData.idnum);
+      if (userResult.data && userResult.data.email) {
+        const userEmail = userResult.data.email;
+        const userName = userResult.data.name || 'Valued Investor';
+
+        // Prepare email content
+        const emailSubject = 'Withdrawal Request Submitted - Grant Union Investment';
+        const emailMessage = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #1C0F36;">Withdrawal Request Submitted</h2>
+            <p>Dear ${userName},</p>
+            <p>Your withdrawal request has been successfully submitted and is now pending approval.</p>
+            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3>Withdrawal Details:</h3>
+              <ul style="list-style: none; padding: 0;">
+                <li><strong>Amount:</strong> $${withdrawalData.amount}</li>
+                <li><strong>Payment Method:</strong> ${withdrawalData.paymentoption}</li>
+                ${withdrawalData.wallet_address ? `<li><strong>Wallet Address:</strong> ${withdrawalData.wallet_address}</li>` : ''}
+                <li><strong>Status:</strong> Pending Approval</li>
+                <li><strong>Date:</strong> ${new Date().toLocaleDateString()}</li>
+              </ul>
+            </div>
+            <p>You will receive another notification once your withdrawal is approved and processed.</p>
+            <p>If you have any questions, please contact our support team.</p>
+            <p>Best regards,<br>Grant Union Investment Team</p>
+          </div>
+        `;
+
+        // Send email notification
+        const emailResponse = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: userEmail,
+            subject: emailSubject,
+            message: emailMessage,
+            type: 'withdrawal-created'
+          })
+        });
+
+        if (emailResponse.ok) {
+          console.log('Withdrawal creation email sent successfully to:', userEmail);
+        } else {
+          console.error('Failed to send withdrawal creation email');
+        }
+      }
+    } catch (emailError) {
+      console.error('Error sending withdrawal creation email:', emailError);
+      // Don't fail the withdrawal creation if email fails
     }
 
     return result;
