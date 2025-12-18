@@ -137,13 +137,9 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
 
             // Create withdrawal record
             const withdrawalData = {
-                ...withdrawData,
                 amount,
                 wallet_address: walletAddress, // Add wallet address
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-                withdrawal_code: "N/A", // No longer using withdrawal codes
-                widthrawal_fee: '0', // No fee for now
+                paymentoption: withdrawData?.paymentOption,
                 idnum: currentUser?.idnum,
                 status: "Pending"
             };
