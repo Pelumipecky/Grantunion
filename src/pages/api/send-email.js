@@ -1,5 +1,5 @@
-// API endpoint for sending email notifications
-// Using a simple email service - in production, use SendGrid, Mailgun, etc.
+// API endpoint for sending email notifications using Mailjet
+// Mailjet is a reliable email service provider with good deliverability
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -13,38 +13,77 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields: to, subject, message' });
     }
 
-    // For now, we'll log the email and simulate sending
-    // In production, integrate with an email service like SendGrid
-    console.log('📧 Email Notification:', {
+    // Get Mailjet credentials from environment variables
+    const MAILJET_API_KEY = process.env.MAILJET_API_KEY;
+    const MAILJET_API_SECRET = process.env.MAILJET_API_SECRET;
+    const MAILJET_FROM_EMAIL = process.env.MAILJET_FROM_EMAIL || 'noreply@grantunioninvestment.com';
+    const MAILJET_FROM_NAME = process.env.MAILJET_FROM_NAME || 'Grant Union Investment';
+
+    if (!MAILJET_API_KEY || !MAILJET_API_SECRET) {
+      console.warn('Mailjet credentials not configured, falling back to logging only');
+      console.log('📧 Email Notification (not sent - Mailjet not configured):', {
+        to,
+        subject,
+        message,
+        type,
+        timestamp: new Date().toISOString()
+      });
+      return res.status(200).json({
+        success: true,
+        message: 'Email logged (Mailjet not configured)',
+        warning: 'Configure MAILJET_API_KEY and MAILJET_API_SECRET to send real emails'
+      });
+    }
+
+    // Prepare Mailjet API request
+    const mailjetData = {
+      Messages: [
+        {
+          From: {
+            Email: MAILJET_FROM_EMAIL,
+            Name: MAILJET_FROM_NAME
+          },
+          To: [
+            {
+              Email: to
+            }
+          ],
+          Subject: subject,
+          HTMLPart: message,
+          CustomID: type || 'grant-union-notification'
+        }
+      ]
+    };
+
+    // Send email via Mailjet API
+    const response = await fetch('https://api.mailjet.com/v3.1/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + Buffer.from(`${MAILJET_API_KEY}:${MAILJET_API_SECRET}`).toString('base64')
+      },
+      body: JSON.stringify(mailjetData)
+    });
+
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      console.error('Mailjet API error:', responseData);
+      throw new Error(`Mailjet API error: ${response.status} - ${responseData.ErrorMessage || 'Unknown error'}`);
+    }
+
+    console.log('📧 Email sent successfully via Mailjet:', {
       to,
       subject,
-      message,
+      messageId: responseData.Messages?.[0]?.To?.[0]?.MessageID,
       type,
       timestamp: new Date().toISOString()
     });
 
-    // Simulate email sending delay
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    // TODO: Integrate with actual email service
-    // Example with SendGrid:
-    /*
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-    const msg = {
-      to: to,
-      from: 'noreply@grantunioninvestment.com',
-      subject: subject,
-      html: message,
-    };
-
-    await sgMail.send(msg);
-    */
-
     res.status(200).json({
       success: true,
-      message: 'Email notification sent successfully'
+      message: 'Email sent successfully via Mailjet',
+      messageId: responseData.Messages?.[0]?.To?.[0]?.MessageID
     });
 
   } catch (error) {
