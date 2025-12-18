@@ -1,8 +1,8 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(
-  'https://inofcvykmbovozqwehin.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlub2ZjdnlrbWJvdm96cXdlaGluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNDk1OTksImV4cCI6MjA3ODcyNTU5OX0.n9auKPUX5K0YD4W1owC1XFNvxSLSFvMGsYNmZdJ1ELA'
+  'https://njsrlykklqqanqqcqklo.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qc3JseWtrbHFxYW5xcWNxa2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMTM2OTcsImV4cCI6MjA3ODg4OTY5N30.A30trZhFsazi9nzsdaZxKEUNLyOCmRJ49KjjjlUN9rU'
 );
 
 async function testConnection() {
@@ -44,7 +44,7 @@ async function testConnection() {
     .from('investments')
     .update({
       status: 'Active',
-      authStatus: 'seen',
+      authstatus: 'seen',
       updated_at: new Date().toISOString()
     })
     .eq('id', investment.id);
