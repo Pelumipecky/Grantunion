@@ -3,6 +3,396 @@
 
 import { supabase } from '../../database/supabaseConfig';
 
+// Email template builder with Grant Union branding
+const buildStyledEmailTemplate = (title, content, footer = null) => {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body {
+          font-family: 'Alegreya Sans', Arial, sans-serif;
+          background-color: #120524;
+          color: #FEF9FF;
+          margin: 0;
+          padding: 0;
+        }
+        .email-container {
+          max-width: 600px;
+          margin: 0 auto;
+          background: linear-gradient(180deg, #1C0F36 40%, #3A1A63);
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 8px 24px rgba(255, 140, 55, 0.15);
+        }
+        .header {
+          background: linear-gradient(120deg, #1C0F36, #FF8C37);
+          padding: 30px 20px;
+          text-align: center;
+          border-bottom: 3px solid #FF8C37;
+        }
+        .logo-section {
+          margin-bottom: 20px;
+        }
+        .logo-section img {
+          max-width: 150px;
+          height: auto;
+        }
+        .header h1 {
+          color: #FEF9FF;
+          font-size: 28px;
+          margin: 10px 0 0 0;
+          font-weight: 600;
+        }
+        .content {
+          padding: 30px 25px;
+          background: rgba(28, 15, 54, 0.8);
+        }
+        .content p {
+          margin: 15px 0;
+          line-height: 1.6;
+          font-size: 15px;
+          color: #F8EDFF;
+        }
+        .content h2 {
+          color: #FF8C37;
+          font-size: 22px;
+          margin: 20px 0 15px 0;
+          font-weight: 600;
+        }
+        .content h3 {
+          color: #FF8C37;
+          font-size: 16px;
+          margin: 15px 0 10px 0;
+          font-weight: 600;
+        }
+        .stats-box {
+          background: rgba(255, 140, 55, 0.1);
+          border-left: 4px solid #FF8C37;
+          padding: 20px;
+          border-radius: 8px;
+          margin: 20px 0;
+          backdrop-filter: blur(10px);
+        }
+        .stats-box ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+        .stats-box li {
+          padding: 8px 0;
+          display: flex;
+          justify-content: space-between;
+          border-bottom: 1px solid rgba(255, 140, 55, 0.2);
+          font-size: 14px;
+        }
+        .stats-box li:last-child {
+          border-bottom: none;
+        }
+        .stats-box strong {
+          color: #FF8C37;
+          font-weight: 600;
+        }
+        .stats-box .value {
+          color: #2DC194;
+          font-weight: 600;
+        }
+        .button {
+          display: inline-block;
+          background: linear-gradient(120deg, #FF8C37, #FF6B1B);
+          color: #FEF9FF;
+          padding: 14px 35px;
+          text-decoration: none;
+          border-radius: 8px;
+          font-weight: 600;
+          margin: 20px 0;
+          transition: transform 0.3s ease;
+          border: 2px solid #FF8C37;
+        }
+        .button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(255, 140, 55, 0.4);
+        }
+        .highlight {
+          color: #2DC194;
+          font-weight: 600;
+        }
+        .success-badge {
+          display: inline-block;
+          background: #2DC194;
+          color: #120524;
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          margin: 5px 0;
+        }
+        .info-box {
+          background: rgba(45, 193, 148, 0.1);
+          border-left: 4px solid #2DC194;
+          padding: 15px;
+          border-radius: 6px;
+          margin: 15px 0;
+          font-size: 14px;
+          color: #E0D5FF;
+        }
+        .footer {
+          background: rgba(58, 26, 99, 0.6);
+          padding: 25px;
+          text-align: center;
+          border-top: 2px solid #FF8C37;
+          font-size: 12px;
+          color: #B8A5D6;
+        }
+        .footer p {
+          margin: 8px 0;
+        }
+        .footer-link {
+          color: #FF8C37;
+          text-decoration: none;
+          font-weight: 600;
+        }
+        .footer-link:hover {
+          text-decoration: underline;
+        }
+        .divider {
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #FF8C37, transparent);
+          margin: 20px 0;
+        }
+        .warning-box {
+          background: rgba(255, 152, 55, 0.1);
+          border-left: 4px solid #FF9837;
+          padding: 15px;
+          border-radius: 6px;
+          margin: 15px 0;
+          font-size: 14px;
+          color: #FFD6B8;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="email-container">
+        <div class="header">
+          <div class="logo-section">
+            <img src="https://grantunion583.com/grantunionLogo.png" alt="Grant Union Investment Logo">
+          </div>
+          <h1>${title}</h1>
+        </div>
+        <div class="content">
+          ${content}
+        </div>
+        <div class="footer">
+          ${footer || `
+            <p style="margin-top: 0; font-weight: 600;">Grant Union Investment</p>
+            <p><a href="https://grantunion583.com" class="footer-link">Visit Our Website</a> | <a href="https://grantunion583.com/contact" class="footer-link">Contact Support</a></p>
+            <div class="divider" style="margin: 15px 0;"></div>
+            <p style="color: #8B7BA8; font-size: 11px; margin-bottom: 0;">This is an automated message from Grant Union Investment. Please do not reply to this email.</p>
+            <p style="color: #8B7BA8; font-size: 11px; margin: 5px 0 0 0;">© 2025 Grant Union Investment. All rights reserved.</p>
+          `}
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+};
+
+// Template generators for different email types
+const emailTemplates = {
+  roi_daily_credit: (data) => {
+    const { userName, dailyROI, totalROI, totalExpected, plan, progress } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Investor'}</strong>,</p>
+      <p>Excellent news! Your daily ROI has been successfully credited to your account.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #FF8C37;">💰 Today's Earnings Summary</h3>
+        <ul>
+          <li>
+            <span>Daily ROI Credited</span>
+            <span class="value">$${parseFloat(dailyROI).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Total ROI Credited</span>
+            <span class="value">$${parseFloat(totalROI).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Total Expected ROI</span>
+            <span class="value">$${parseFloat(totalExpected).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Investment Plan</span>
+            <span style="color: #FF8C37;">${plan}</span>
+          </li>
+          <li>
+            <span>Completion Progress</span>
+            <span class="value">${parseFloat(progress).toFixed(1)}%</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        ✨ Your investment is performing exceptionally well! Continue to monitor your dashboard for real-time updates on your portfolio growth.
+      </div>
+
+      <p>You can view your complete investment details and withdrawal options in your <a href="https://grantunion583.com/dashboard" style="color: #FF8C37; text-decoration: none; font-weight: 600;">account dashboard</a>.</p>
+      
+      <a href="https://grantunion583.com/dashboard" class="button">View Dashboard</a>
+
+      <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Daily ROI Credit Notification', content);
+  },
+
+  investment_approval: (data) => {
+    const { userName, plan, capital, roi, bonus, duration } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Investor'}</strong>,</p>
+      <p>🎉 Congratulations! Your investment request has been <span class="success-badge">APPROVED</span></p>
+      <p>Your capital has been credited to your account and your investment plan is now active. Earnings will be posted daily according to your investment schedule.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #FF8C37;">📊 Investment Details</h3>
+        <ul>
+          <li>
+            <span>Investment Plan</span>
+            <span style="color: #FF8C37;">${plan}</span>
+          </li>
+          <li>
+            <span>Capital Invested</span>
+            <span class="value">$${parseFloat(capital).toLocaleString()}</span>
+          </li>
+          <li>
+            <span>Projected Earnings</span>
+            <span class="value">$${parseFloat(roi).toFixed(2)}</span>
+          </li>
+          ${bonus ? `<li>
+            <span>Legacy Bonus</span>
+            <span class="value">$${parseFloat(bonus).toFixed(2)}</span>
+          </li>` : ''}
+          <li>
+            <span>Investment Duration</span>
+            <span style="color: #FF8C37;">${duration}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        ✨ Your ROI will be credited daily to your account balance. You can withdraw your capital plus commissions after the investment term completes.
+      </div>
+
+      <a href="https://grantunion583.com/dashboard" class="button">View Investment</a>
+
+      <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Investment Approved ✓', content);
+  },
+
+  kyc_verification: (data) => {
+    const { userName, status } = data;
+    const isVerified = status === 'Verified';
+    const icon = isVerified ? '✅' : '⚠️';
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'User'}</strong>,</p>
+      <p>${isVerified 
+        ? `Excellent news! Your KYC verification has been <span class="success-badge">APPROVED</span>` 
+        : `Your KYC verification status has been updated to <span style="color: #FF9837; font-weight: 600;">${status}</span>`
+      }</p>
+      
+      ${isVerified ? `
+        <div class="info-box">
+          ✨ You can now access all premium features including higher withdrawal limits and exclusive investment opportunities!
+        </div>
+      ` : `
+        <div class="warning-box">
+          Please review your submitted documents. If you have any questions, please contact our support team for assistance.
+        </div>
+      `}
+
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #FF8C37;">📋 Verification Status</h3>
+        <ul>
+          <li>
+            <span>KYC Status</span>
+            <span style="color: ${isVerified ? '#2DC194' : '#FF9837'};">${status}</span>
+          </li>
+          <li>
+            <span>Updated At</span>
+            <span style="color: #FF8C37;">${new Date().toLocaleDateString()}</span>
+          </li>
+        </ul>
+      </div>
+
+      <a href="https://grantunion583.com/dashboard" class="button">Go to Dashboard</a>
+
+      <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate(`${icon} KYC Verification Update`, content);
+  },
+
+  withdrawal_notification: (data) => {
+    const { userName, amount, status, method } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Investor'}</strong>,</p>
+      <p>Your withdrawal request has been <strong style="color: ${status === 'approved' ? '#2DC194' : '#FF9837'};">${status.toUpperCase()}</strong>.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #FF8C37;">💸 Withdrawal Details</h3>
+        <ul>
+          <li>
+            <span>Withdrawal Amount</span>
+            <span class="value">$${parseFloat(amount).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Payment Method</span>
+            <span style="color: #FF8C37;">${method}</span>
+          </li>
+          <li>
+            <span>Status</span>
+            <span style="color: ${status === 'approved' ? '#2DC194' : '#FF9837'};">${status.toUpperCase()}</span>
+          </li>
+        </ul>
+      </div>
+
+      ${status === 'approved' ? `
+        <div class="info-box">
+          ✨ Your withdrawal has been approved and will be processed within 24-48 hours. You will receive another notification once the funds are sent.
+        </div>
+      ` : `
+        <div class="warning-box">
+          Your withdrawal request is pending review. We will notify you once it has been processed.
+        </div>
+      `}
+
+      <a href="https://grantunion583.com/dashboard" class="button">View Status</a>
+
+      <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Withdrawal Notification', content);
+  },
+
+  password_reset: (data) => {
+    const { userName, resetLink } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'User'}</strong>,</p>
+      <p>We received a request to reset your password. Click the button below to create a new password:</p>
+      
+      <div class="info-box">
+        🔐 This link will expire in 1 hour for security purposes.
+      </div>
+
+      <center>
+        <a href="${resetLink || 'https://grantunion583.com/reset-password'}" class="button">Reset Password</a>
+      </center>
+
+      <p style="margin-bottom: 0;">If you didn't request this password reset, you can safely ignore this email.<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Password Reset Request', content);
+  }
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -43,10 +433,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { to, subject, message, type } = req.body;
+    let { to, subject, message, type, templateData } = req.body;
 
-    if (!to || !subject || !message) {
-      return res.status(400).json({ error: 'Missing required fields: to, subject, message' });
+    if (!to || !subject) {
+      return res.status(400).json({ error: 'Missing required fields: to, subject' });
+    }
+
+    // Use styled template if type is specified
+    if (type && emailTemplates[type] && templateData) {
+      message = emailTemplates[type](templateData);
+    } else if (!message) {
+      return res.status(400).json({ error: 'Missing message or templateData' });
     }
 
     // Get Mailjet credentials from environment variables
@@ -60,7 +457,6 @@ export default async function handler(req, res) {
       console.log('📧 Email Notification (not sent - Mailjet not configured):', {
         to,
         subject,
-        message,
         type,
         timestamp: new Date().toISOString()
       });

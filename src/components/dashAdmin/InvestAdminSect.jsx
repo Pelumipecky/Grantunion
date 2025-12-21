@@ -412,53 +412,40 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                                 try {
                                                                     if (userData?.email) {
                                                                         const emailSubject = 'Investment Approved - Grant Union Investment';
-                                                                        const emailMessage = `
-                                                                          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                                                                            <h2 style="color: #28a745;">🎉 Investment Approved!</h2>
-                                                                            <p>Dear ${userData.name || 'User'},</p>
-                                                                            <p>Congratulations! Your investment has been approved and activated.</p>
-                                                                            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                                                                              <h3 style="margin-top: 0;">Investment Details:</h3>
-                                                                              <ul style="list-style: none; padding: 0;">
-                                                                                <li><strong>Plan:</strong> ${elem.plan}</li>
-                                                                                <li><strong>Capital:</strong> $${capitalFormatted}</li>
-                                                                                <li><strong>Projected Earnings:</strong> $${roiFormatted}</li>
-                                                                                ${calculatedBonus > 0 ? `<li><strong>Legacy Bonus:</strong> $${bonusFormatted}</li>` : ''}
-                                                                                <li><strong>Payout Schedule:</strong> ${payoutSummary}</li>
-                                                                                <li><strong>Daily Rate:</strong> ${dailyRateLabel}</li>
-                                                                                <li><strong>Term:</strong> ${termLabel}</li>
-                                                                              </ul>
-                                                                            </div>
-                                                                            <p>Your capital has been credited to your account balance. Earnings will be posted daily according to the schedule above, and you can withdraw capital plus commissions once the term is complete.</p>
-                                                                            <p>Best regards,<br>Grant Union Investment Team</p>
-                                                                            <hr>
-                                                                            <p style="font-size: 12px; color: #666;">
-                                                                              This is an automated message. Please do not reply to this email.
-                                                                            </p>
-                                                                          </div>
-                                                                        `;
+                                                                        
+                                                                        // Prepare email data with all required fields for the template
+                                                                        const emailData = {
+                                                                            to: userData.email,
+                                                                            subject: emailSubject,
+                                                                            type: 'investment_approval',
+                                                                            templateData: {
+                                                                                userName: userData.name || userData.email.split('@')[0] || 'Investor',
+                                                                                plan: elem.plan,
+                                                                                capital: capital,
+                                                                                roi: calculatedROI,
+                                                                                bonus: calculatedBonus,
+                                                                                duration: termLabel
+                                                                            }
+                                                                        };
 
                                                                         const emailResponse = await fetch('/api/send-email', {
                                                                           method: 'POST',
                                                                           headers: {
                                                                             'Content-Type': 'application/json',
                                                                           },
-                                                                          body: JSON.stringify({
-                                                                            to: userData.email,
-                                                                            subject: emailSubject,
-                                                                            message: emailMessage,
-                                                                            type: 'investment_approval'
-                                                                          })
+                                                                          body: JSON.stringify(emailData)
                                                                         });
 
+                                                                        const emailResult = await emailResponse.json();
                                                                         if (emailResponse.ok) {
-                                                                          console.log('Investment approval email sent successfully');
+                                                                          console.log('✅ Investment approval email sent successfully to:', userData.email);
+                                                                          console.log('Message ID:', emailResult.messageId);
                                                                         } else {
-                                                                          console.error('Failed to send investment approval email');
+                                                                          console.error('❌ Failed to send investment approval email:', emailResult);
                                                                         }
                                                                     }
                                                                 } catch (emailError) {
-                                                                    console.error('Error sending investment approval email:', emailError);
+                                                                    console.error('❌ Error sending investment approval email:', emailError);
                                                                     // Don't throw here - email failure shouldn't block approval
                                                                 }
 
