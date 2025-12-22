@@ -109,7 +109,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
         {
             shownavOptions && (
                 <div id="mobilenone" className="centerBox">
-                    <a  href="#about">{t('nav.about')}</a>
+                    <a suppressHydrationWarning href="#about">{t('nav.about')}</a>
                     <a onClick={() => {
                         const user = JSON.parse(sessionStorage.getItem("activeUser") || localStorage.getItem("activeUser") || "null");
                         if (user?.id) {
@@ -118,7 +118,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                             window.location.href = "/signin";
                         }
                     }} style={{cursor: 'pointer'}}>Our Packages</a>
-                    <Link  href={"/contact"}>{t('nav.contact')}</Link>
+                    <Link suppressHydrationWarning href={"/contact"}>{t('nav.contact')}</Link>
                 </div>
             )
         }
@@ -175,7 +175,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                                         </div>
                                         <div className="bottomDisplay">
                                             <Link href={currentUser?.admin ? "/dashboard_admin": "/profile" } title='profile'>Dashboard <i className="icofont-dashboard-web"></i></Link>
-                                            <button type="button" title='log Out' onClick={handleLogOut}>{t('nav.logout')} <i className="icofont-logout"></i></button>
+                                            <button suppressHydrationWarning type="button" title='log Out' onClick={handleLogOut}>{t('nav.logout')} <i className="icofont-logout"></i></button>
                                         </div>
                                     </motion.div>
 
@@ -186,8 +186,8 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                     </div>
                 ) : (
                     <>
-                        <Link id="mobilenone" href={"/signup"} className="fancyBtn" onClick={() => {setregisterFromPath("/")}}>{t('nav.register')}</Link>
-                        <Link id="mobilenone" href={"/signin"} className="borderBtn" onClick={() => {setregisterFromPath("/")}}>{t('nav.login')}</Link>
+                        <Link suppressHydrationWarning id="mobilenone" href={"/signup"} className="fancyBtn" onClick={() => {setregisterFromPath("/")}}>{t('nav.register')}</Link>
+                        <Link suppressHydrationWarning id="mobilenone" href={"/signin"} className="borderBtn" onClick={() => {setregisterFromPath("/")}}>{t('nav.login')}</Link>
                     </>
                 )
             }
@@ -218,7 +218,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                                                 <p><span>{currentUser?.idnum}</span> | <span>{currentUser?.accountStatus}</span></p>
                                             </>
                                         ) : (
-                                            <p><Link href={"/signup"} onClick={() => {setregisterFromPath("/")}}>{t('nav.register')}</Link> | <Link href={"/signin"} onClick={() => {setregisterFromPath("/")}}>{t('nav.login')}</Link></p>
+                                            <p><Link suppressHydrationWarning href={"/signup"} onClick={() => {setregisterFromPath("/")}}>{t('nav.register')}</Link> | <Link suppressHydrationWarning href={"/signin"} onClick={() => {setregisterFromPath("/")}}>{t('nav.login')}</Link></p>
                                         )
                                     }
                                 </div>
@@ -283,13 +283,13 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                                         <Link href={`${!currentUser?.admin ? "/profile" : "/dashboard_admin"}`}>Dashboard</Link>
                                     )
                                 }
-                                <Link href={"/about"}>{t('nav.about')}</Link>
+                                <Link suppressHydrationWarning href={"/about"}>{t('nav.about')}</Link>
                                 <a href="#FAQ">FAQs</a>
-                                <Link href={"/contact"}>{t('nav.contact')}</Link>
+                                <Link suppressHydrationWarning href={"/contact"}>{t('nav.contact')}</Link>
 
                                 {
                                     isHydrated && currentUser?.id && (
-                                        <button className="logout borderBtn" onClick={() => {handleLogOut()}}>{t('nav.logout')} <i className="icofont-logout"></i></button>
+                                        <button suppressHydrationWarning className="logout borderBtn" onClick={() => {handleLogOut()}}>{t('nav.logout')} <i className="icofont-logout"></i></button>
                                     )
                                 }
 
