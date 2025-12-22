@@ -46,7 +46,7 @@ export default function DashboardAdmin() {
   const defaultEmail = "";
   const defaultPassword = "";
   const defaultBalance = 50;
-  const defaultDate = new Date().toISOString().split("T")[0];
+  const defaultDate = "";
   const defaultInvestmentCount = 0;
   const defaultReferralCount = 0;
   const defaultAdmin = true;

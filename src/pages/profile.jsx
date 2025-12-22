@@ -37,6 +37,19 @@ const Profile = () => {
     }
   }, []);
 
+  // Initialize dates to avoid hydration mismatch
+  useEffect(() => {
+    const currentDate = new Date();
+    const currentDayOfMonth = currentDate.getDate();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    const newDateString = currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
+    
+    setDateString(newDateString);
+    setInvestData(prev => ({ ...prev, date: new Date().toISOString() }));
+    setWithdrawData(prev => ({ ...prev, date: new Date().toISOString() }));
+  }, []);
+
   useEffect(() => {
     if (profilestate) {
       sessionStorage.setItem('currentProfileState', profilestate);
@@ -56,17 +69,10 @@ const Profile = () => {
 
   const [showsidePanel, setShowSidePanel] = useState(true);
 
+  const [dateString, setDateString] = useState("");
 
   const ctx = useContext(themeContext);
   const { setregisterFromPath } = ctx;
-  const currentDate = new Date();
-
-  const currentDayOfMonth = currentDate.getDate();
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-
-  const dateString =
-    currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
   const [currentUser, setCurrentUser] = useState({
     name: "",
     avatar: "avatar_1",
@@ -88,7 +94,7 @@ const Profile = () => {
     plan: DEFAULT_PLAN?.name || "7-Day Plan",
     status: "Pending",
     capital: DEFAULT_PLAN?.minCapital || 100,
-    date: new Date().toISOString(),
+    date: "",
     duration: DEFAULT_PLAN?.durationDays || 7,
     paymentOption: "Bitcoin",
     roi: 0,
@@ -100,7 +106,7 @@ const Profile = () => {
     idnum: currentUser?.idnum,
     status: "Pending",
     amount: 200,
-    date: new Date().toISOString(),
+    date: "",
     paymentOption: "Bitcoin",
     authStatus: "unseen",
     admin: false,
@@ -358,6 +364,8 @@ const Profile = () => {
         console.warn("Error parsing user data:", e);
       }
 
+      console.log("🔍 Profile: Loaded user from storage:", user);
+
       // If no user data found at all, redirect to signin
       if (!user || !user.email) {
         console.log("No valid user data found, redirecting to signin");
@@ -375,15 +383,22 @@ const Profile = () => {
     let subscription = null;
     async function setupListener() {
       let userDocId = user.id;
+      console.log("🔍 Profile: Initial userDocId from storage:", userDocId);
+      console.log("🔍 Profile: User idnum from storage:", user.idnum);
+
       // If no doc ID, query by idnum
       if (!userDocId && user.idnum) {
+        console.log("🔍 Profile: No userDocId, querying by idnum:", user.idnum);
         const { data, error } = await supabaseDb.getUserByIdnum(user.idnum);
+        console.log("🔍 Profile: getUserByIdnum result:", { data, error });
         if (!error && data) {
           userDocId = data.id;
+          console.log("🔍 Profile: Found userDocId from idnum query:", userDocId);
         }
       }
 
       if (userDocId) {
+        console.log("🔍 Profile: Setting up subscription for userDocId:", userDocId);
         // Subscribe to user data changes
         subscription = supabaseRealtime.subscribeToUser(userDocId, (payload) => {
           console.log('🔄 User data change in profile setupListener:', payload);
@@ -397,17 +412,37 @@ const Profile = () => {
         });
 
         // Initial load
+        console.log("🔍 Profile: Fetching fresh user data with getUserById:", userDocId);
         const { data, error } = await supabaseDb.getUserById(userDocId);
+        console.log("🔍 Profile: getUserById result:", { data: data ? "SUCCESS" : "NO DATA", error });
+
         if (!error && data) {
           const userData = data;
+          console.log("🔍 Profile: Setting currentUser with fresh data:", userData);
           setCurrentUser(userData);
           sessionStorage.setItem("activeUser", JSON.stringify(userData));
         } else {
-          console.warn("User document not found, using cached data");
-          setCurrentUser(user);
+          console.warn("User document not found by ID, trying email lookup");
+          console.log("🔍 Profile: Attempting fallback with email:", user.email);
+          
+          // Fallback: try to get user by email
+          const { data: emailData, error: emailError } = await supabaseDb.getUserByEmail(user.email);
+          console.log("🔍 Profile: getUserByEmail result:", { data: emailData ? "SUCCESS" : "NO DATA", error: emailError });
+          
+          if (!emailError && emailData) {
+            const userData = emailData;
+            console.log("🔍 Profile: Setting currentUser with email fallback data:", userData);
+            setCurrentUser(userData);
+            sessionStorage.setItem("activeUser", JSON.stringify(userData));
+          } else {
+            console.warn("Email lookup also failed, using cached data");
+            console.log("🔍 Profile: Using cached data:", user);
+            setCurrentUser(user);
+          }
         }
       } else {
         console.warn("No user document ID found, using cached data");
+        console.log("🔍 Profile: No userDocId found, using cached data:", user);
         setCurrentUser(user);
       }
     }
