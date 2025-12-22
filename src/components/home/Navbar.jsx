@@ -10,6 +10,7 @@ import styles from './Navbar.module.css';
 const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard }) => {
     const [currentUser, setCurrentUser] = useState({});
     const [unreadChats, setUnreadChats] = useState(0);
+    const [isHydrated, setIsHydrated] = useState(false);
     const ctx = useContext(themeContext);
     const { setregisterFromPath } = ctx;
     const { t } = useTranslation('common');
@@ -24,12 +25,16 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
     useEffect(() => {
         if (typeof window === 'undefined') return;
         const storedUser = sessionStorage.getItem("activeUser") || localStorage.getItem("activeUser");
-        if (!storedUser) return;
+        if (!storedUser) {
+            setIsHydrated(true);
+            return;
+        }
         try {
             setCurrentUser(JSON.parse(storedUser));
         } catch (err) {
             console.warn('Invalid cached user payload', err);
         }
+        setIsHydrated(true);
     }, []);
 
     useEffect(() => {
@@ -119,7 +124,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
         }
         <div className="rightBox">
             {
-                currentUser?.idnum ? (
+                isHydrated && currentUser?.idnum ? (
                     <div id="mobilenone" className="profileIcon">
                         <Link href={currentUser?.admin ? '/dashboard_admin' : '/profile'}>
                             <div style={{position: 'relative', display: 'inline-block', marginRight: '12px'}} title="Chats">
@@ -206,7 +211,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                             <div className="topMobiNavSect">
                                 <div className="profileDisplay">
                                     {
-                                        currentUser?.id ? (
+                                        isHydrated && currentUser?.id ? (
                                             <>
                                                 <h2>{currentUser?.name}</h2>
                                 
@@ -274,7 +279,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                             </div>
                             <div className="bottomMobiNavSect">
                                 {
-                                    currentUser?.id && (
+                                    isHydrated && currentUser?.id && (
                                         <Link href={`${!currentUser?.admin ? "/profile" : "/dashboard_admin"}`}>Dashboard</Link>
                                     )
                                 }
@@ -283,7 +288,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                                 <Link href={"/contact"}>{t('nav.contact')}</Link>
 
                                 {
-                                    currentUser?.id && (
+                                    isHydrated && currentUser?.id && (
                                         <button className="logout borderBtn" onClick={() => {handleLogOut()}}>{t('nav.logout')} <i className="icofont-logout"></i></button>
                                     )
                                 }

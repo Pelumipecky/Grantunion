@@ -14,6 +14,7 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState({});
   const [showsidecard, setShowsideCard] = useState(false);
   const [showDisplayCard, setShowDisplayCard] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     // Removed CoinGecko widget
@@ -22,6 +23,7 @@ export default function Home() {
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem('activeUser')) || JSON.parse(localStorage.getItem('activeUser'));
     setCurrentUser(user);
+    setIsHydrated(true);
   }, []);
 
   const handleGrandMovementTraffic = (event) => {
@@ -193,7 +195,7 @@ export default function Home() {
 
         <GuideSection />
 
-        {!currentUser?.admin && (
+        {isHydrated && !currentUser?.admin && (
           <section id="packages" className={`homePackagesSection ${dashboardStyles.packages}`}>
             <h2 className={dashboardStyles.packagesTitle}>Kickstart Your Journey To Financial Freedom</h2>
             <p className="packageSummary">
