@@ -46,6 +46,7 @@ const Profile = () => {
     const newDateString = currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
     
     setDateString(newDateString);
+    setCurrentUser(prev => ({ ...prev, date: newDateString }));
     setInvestData(prev => ({ ...prev, date: new Date().toISOString() }));
     setWithdrawData(prev => ({ ...prev, date: new Date().toISOString() }));
   }, []);
@@ -79,7 +80,7 @@ const Profile = () => {
     email: "",
     password: "",
     balance: 50,
-    date: dateString,
+    date: "",
     accountStatus: "No Active Plan",
     investmentCount: 0,
     referralCount: 0,
