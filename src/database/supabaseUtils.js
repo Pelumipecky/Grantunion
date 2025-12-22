@@ -3,6 +3,28 @@ import { supabase } from './supabaseConfig';
 // Export the supabase instance for direct use
 export { supabase };
 
+// Safe query wrapper with error handling
+const safeQuery = async (queryFn, context = '') => {
+  try {
+    if (!supabase || typeof supabase.from !== 'function') {
+      const error = new Error('[supabaseUtils] Supabase client not initialized');
+      console.error(context, error);
+      return { data: null, error };
+    }
+    
+    const result = await queryFn();
+    
+    if (result.error) {
+      console.error(`[supabaseUtils] Query error (${context}):`, result.error);
+    }
+    
+    return result;
+  } catch (error) {
+    console.error(`[supabaseUtils] Unexpected error (${context}):`, error);
+    return { data: null, error };
+  }
+};
+
 const mapUserRecord = (record) => {
   if (!record || typeof record !== 'object') return record;
   const {
@@ -479,11 +501,25 @@ export const supabaseDb = {
   },
 
   getAllUsers: async () => {
-    const { data, error } = await supabase
-      .from('userlogs')
-      .select('*')
-      .order('created_at', { ascending: false });
-    return { data: data?.map(mapUserRecord) || [], error };
+    return safeQuery(async () => {
+      const { data, error } = await supabase
+        .from('userlogs')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('[supabaseDb.getAllUsers] Database error:', error);
+        return { data: [], error };
+      }
+      
+      if (!data) {
+        console.warn('[supabaseDb.getAllUsers] No data returned from database');
+        return { data: [], error: null };
+      }
+      
+      console.log(`[supabaseDb.getAllUsers] Retrieved ${data.length} users`);
+      return { data: data.map(mapUserRecord), error: null };
+    }, 'getAllUsers');
   },
 
   updateUser: async (id, updates = {}) => {
@@ -742,11 +778,25 @@ export const supabaseDb = {
   },
 
   getAllInvestments: async () => {
-    const { data, error } = await supabase
-      .from('investments')
-      .select('*')
-      .order('created_at', { ascending: false });
-    return { data: data?.map(mapInvestmentRecord) || [], error };
+    return safeQuery(async () => {
+      const { data, error } = await supabase
+        .from('investments')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('[supabaseDb.getAllInvestments] Database error:', error);
+        return { data: [], error };
+      }
+      
+      if (!data) {
+        console.warn('[supabaseDb.getAllInvestments] No data returned from database');
+        return { data: [], error: null };
+      }
+      
+      console.log(`[supabaseDb.getAllInvestments] Retrieved ${data.length} investments`);
+      return { data: data.map(mapInvestmentRecord), error: null };
+    }, 'getAllInvestments');
   },
 
   createInvestment: async (investmentData) => {
@@ -1102,17 +1152,31 @@ export const supabaseDb = {
   },
 
   getDeletionRequests: async (status = null) => {
-    let query = supabase
-      .from('deletion_requests')
-      .select('*')
-      .order('requested_at', { ascending: false });
+    return safeQuery(async () => {
+      let query = supabase
+        .from('deletion_requests')
+        .select('*')
+        .order('requested_at', { ascending: false });
 
-    if (status) {
-      query = query.eq('status', status);
-    }
+      if (status) {
+        query = query.eq('status', status);
+      }
 
-    const { data, error } = await query;
-    return { data, error };
+      const { data, error } = await query;
+      
+      if (error) {
+        console.error('[supabaseDb.getDeletionRequests] Database error:', error);
+        return { data: [], error };
+      }
+      
+      if (!data) {
+        console.warn('[supabaseDb.getDeletionRequests] No data returned from database');
+        return { data: [], error: null };
+      }
+      
+      console.log(`[supabaseDb.getDeletionRequests] Retrieved ${data.length} deletion requests`);
+      return { data, error: null };
+    }, 'getDeletionRequests');
   },
 
   getDeletionRequestByUserId: async (userId) => {
@@ -1287,11 +1351,25 @@ export const supabaseStorage = {
   },
 
   getAllWithdrawals: async () => {
-    const { data, error } = await supabase
-      .from('withdrawals')
-      .select('*')
-      .order('created_at', { ascending: false });
-    return { data, error };
+    return safeQuery(async () => {
+      const { data, error } = await supabase
+        .from('withdrawals')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('[supabaseDb.getAllWithdrawals] Database error:', error);
+        return { data: [], error };
+      }
+      
+      if (!data) {
+        console.warn('[supabaseDb.getAllWithdrawals] No data returned from database');
+        return { data: [], error: null };
+      }
+      
+      console.log(`[supabaseDb.getAllWithdrawals] Retrieved ${data.length} withdrawals`);
+      return { data, error: null };
+    }, 'getAllWithdrawals');
   }
 };
 
