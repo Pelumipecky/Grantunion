@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "about": "حول",
+    "contact": "اتصل بنا",
+    "register": "تسجيل",
+    "login": "دخول",
+    "logout": "تسجيل الخروج"
+  },
+  "auth": {
+    "welcome": "أهلا وسهلا",
+    "signin": "دخول",
+    "signup": "تسجيل",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور"
+  },
+  "dashboard": {
+    "overview": "نظرة عامة",
+    "investments": "الاستثمارات",
+    "withdrawals": "الانسحابات",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات"
+  }
+}

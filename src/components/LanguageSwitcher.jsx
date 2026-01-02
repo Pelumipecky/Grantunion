@@ -4,13 +4,20 @@ import styles from './LanguageSwitcher.module.css';
 
 const SCRIPT_ID = 'google-translate-script';
 const WIDGET_CONTAINER_ID = 'google_translate_element';
-const HIDE_DELAY_MS = 30 * 1000;
 
 const SUPPORTED_LANGUAGES = [
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  { code: 'pt', name: 'Português', flag: '🇵🇹' },
+  { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸', region: 'Americas' },
+  { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', region: 'Europe' },
+  { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷', region: 'Europe' },
+  { code: 'pt', name: 'Portuguese', nativeName: 'Português', flag: '🇵🇹', region: 'Europe' },
+  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', region: 'Europe' },
+  { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹', region: 'Europe' },
+  { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵', region: 'Asia' },
+  { code: 'zh', name: 'Chinese', nativeName: '中文', flag: '🇨🇳', region: 'Asia' },
+  { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦', region: 'Middle East' },
+  { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺', region: 'Europe' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳', region: 'Asia' },
+  { code: 'ko', name: 'Korean', nativeName: '한국어', flag: '🇰🇷', region: 'Asia' },
 ];
 
 const LanguageSwitcher = () => {
@@ -18,34 +25,41 @@ const LanguageSwitcher = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isGoogleReady, setIsGoogleReady] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const hideTimerRef = useRef(null);
   const pendingLanguageRef = useRef(null);
+  const searchInputRef = useRef(null);
 
   const languages = useMemo(() => SUPPORTED_LANGUAGES, []);
 
   const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];
 
+  const filteredLanguages = useMemo(() => {
+    return languages.filter(
+      (lang) =>
+        lang.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lang.nativeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lang.code.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [languages, searchTerm]);
+
   const scheduleHide = useCallback(() => {
     if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
-    hideTimerRef.current = setTimeout(() => {
-      setIsVisible(false);
-    }, HIDE_DELAY_MS);
   }, []);
 
-  // Show language switcher on page load and hide after 30 seconds
+  // Show language switcher on page load
   useEffect(() => {
     setIsVisible(true);
-    scheduleHide();
 
     return () => {
       if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
     };
-  }, [scheduleHide]);
+  }, []);
 
   const handleInteraction = useCallback(() => {
     setIsVisible(true);
-    scheduleHide();
-  }, [scheduleHide]);
+  }, []);
 
   const applyGoogleLanguage = useCallback((langCode) => {
     if (typeof window === 'undefined') return false;
@@ -56,6 +70,7 @@ const LanguageSwitcher = () => {
     }
     combo.dispatchEvent(new Event('change'));
     document.documentElement.setAttribute('lang', langCode);
+    document.documentElement.dir = langCode === 'ar' ? 'rtl' : 'ltr'; // RTL support for Arabic
     return true;
   }, []);
 
@@ -101,17 +116,50 @@ const LanguageSwitcher = () => {
     };
   }, [initGoogleTranslate]);
 
+  // Focus search input when dropdown opens
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isOpen]);
+
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback((e) => {
+    if (!isOpen) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev + 1) % filteredLanguages.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev - 1 + filteredLanguages.length) % filteredLanguages.length);
+    } else if (e.key === 'Enter' && filteredLanguages[selectedIndex]) {
+      e.preventDefault();
+      changeLanguage(filteredLanguages[selectedIndex].code);
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      setIsOpen(false);
+      setSearchTerm('');
+    }
+  }, [isOpen, filteredLanguages, selectedIndex]);
+
   const changeLanguage = (langCode) => {
     i18n.changeLanguage(langCode);
     setIsOpen(false);
+    setSearchTerm('');
+    setSelectedIndex(0);
     handleInteraction();
 
     if (!applyGoogleLanguage(langCode)) {
       pendingLanguageRef.current = langCode;
       if (!isGoogleReady) {
-        // Retry shortly in case the widget loads right after selection
         setTimeout(() => applyGoogleLanguage(langCode), 500);
       }
+    }
+
+    // Save language preference to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('i18nextLng', langCode);
     }
   };
 
@@ -120,14 +168,16 @@ const LanguageSwitcher = () => {
   );
 
   return (
-    <div className={styles.languageSwitcher} onMouseEnter={handleInteraction}>
+    <div className={styles.languageSwitcher} onMouseEnter={handleInteraction} onKeyDown={handleKeyDown}>
       <button
         className={styles.languageButton}
         onClick={() => {
           handleInteraction();
           setIsOpen(!isOpen);
+          setSearchTerm('');
         }}
         aria-label="Change language"
+        title={`Current language: ${currentLanguage.nativeName}`}
       >
         <span className={styles.flag}>{currentLanguage.flag}</span>
         <span className={styles.langCode}>{currentLanguage.code.toUpperCase()}</span>
@@ -136,19 +186,44 @@ const LanguageSwitcher = () => {
 
       {isOpen && (
         <div className={styles.dropdown}>
-          {languages.map((lang) => (
-            <button
-              key={lang.code}
-              className={`${styles.dropdownItem} ${i18n.language === lang.code ? styles.active : ''}`}
-              onClick={() => {
-                changeLanguage(lang.code);
-                handleInteraction();
-              }}
-            >
-              <span className={styles.flag}>{lang.flag}</span>
-              <span>{lang.name}</span>
-            </button>
-          ))}
+          <input
+            ref={searchInputRef}
+            type="text"
+            className={styles.searchInput}
+            placeholder="Search languages..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setSelectedIndex(0);
+            }}
+            aria-label="Search languages"
+          />
+
+          <div className={styles.languageList}>
+            {filteredLanguages.length > 0 ? (
+              filteredLanguages.map((lang, index) => (
+                <button
+                  key={lang.code}
+                  className={`${styles.dropdownItem} ${
+                    i18n.language === lang.code ? styles.active : ''
+                  } ${selectedIndex === index ? styles.focused : ''}`}
+                  onClick={() => changeLanguage(lang.code)}
+                  onMouseEnter={() => setSelectedIndex(index)}
+                  title={`${lang.name} - ${lang.region}`}
+                >
+                  <span className={styles.flag}>{lang.flag}</span>
+                  <div className={styles.langInfo}>
+                    <span className={styles.langName}>{lang.name}</span>
+                    <span className={styles.nativeName}>{lang.nativeName}</span>
+                  </div>
+                </button>
+              ))
+            ) : (
+              <div className={styles.noResults}>
+                No languages match "{searchTerm}"
+              </div>
+            )}
+          </div>
         </div>
       )}
 

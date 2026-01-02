@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { supabaseDb } from '../../database/supabaseUtils';
 import { useTranslation } from 'react-i18next';
 import styles from './Navbar.module.css';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard }) => {
     const [currentUser, setCurrentUser] = useState({});
@@ -192,6 +193,8 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                 )
             }
 
+            <LanguageSwitcher />
+
             <button id="showmobile" type="button" className="menuBtn" onClick={() => {setShowsideCard(true)}}>
                 <span></span>
                 <span></span>
@@ -286,6 +289,8 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                                 <Link suppressHydrationWarning href={"/about"}>{t('nav.about')}</Link>
                                 <a href="#FAQ">FAQs</a>
                                 <Link suppressHydrationWarning href={"/contact"}>{t('nav.contact')}</Link>
+
+                                <LanguageSwitcher />
 
                                 {
                                     isHydrated && currentUser?.id && (

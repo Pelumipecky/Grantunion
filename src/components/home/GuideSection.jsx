@@ -40,15 +40,27 @@ const GuideSection = () => {
           <div className={styles.videoCard}>
             <h3>Video Tutorial</h3>
             <div className={styles.videoWrapper}>
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://youtube.com/@grantunion308?si=qa_rbv59ICycx0kK" 
-                title="Grant Union Investment Guide"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+              <a 
+                href="https://www.youtube.com/@grantunion308?si=qa_rbv59ICycx0kK"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#1C0F36',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  color: '#FF8C37',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                ▶ Watch on YouTube
+              </a>
             </div>
             <p className={styles.videoDesc}>
               Watch our comprehensive guide on how to create an account, make a deposit, and understand our investment packages.

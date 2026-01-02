@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Your GrantUnion Account</title>
+    <style>
+        body {
+            font-family: 'Alegreya Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: #0F0517;
+            color: #FEF9FF;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .email-wrapper {
+            background-color: #0F0517;
+            padding: 20px;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, #1C0F36 0%, #2A1548 50%, #1C0F36 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(255, 140, 55, 0.2);
+            border: 1px solid rgba(255, 140, 55, 0.15);
+        }
+
+        /* HEADER SECTION */
+        .header {
+            background: linear-gradient(120deg, #FF8C37 0%, #FF6B1A 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin: 0 0 15px 0;
+            letter-spacing: 1px;
+        }
+        .logo-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* CONTENT SECTION */
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .greeting {
+            font-size: 24px;
+            color: #FEF9FF;
+            margin: 0 0 15px 0;
+            font-weight: 600;
+        }
+        .greeting-highlight {
+            color: #FF8C37;
+        }
+        .intro-text {
+            font-size: 16px;
+            color: #D4BFE0;
+            margin: 0 0 30px 0;
+            line-height: 1.8;
+        }
+        .info-box {
+            background: rgba(255, 140, 55, 0.1);
+            border-left: 4px solid #FF8C37;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .info-box p {
+            margin: 8px 0;
+            font-size: 15px;
+            color: #E8D9F0;
+        }
+        .info-box strong {
+            color: #FF8C37;
+        }
+
+        /* CTA BUTTON */
+        .cta-section {
+            margin: 40px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(120deg, #FF8C37 0%, #FF6B1A 100%);
+            color: white;
+            padding: 16px 50px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 140, 55, 0.3);
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .cta-button:hover {
+            background: linear-gradient(120deg, #FF6B1A 0%, #FF5500 100%);
+            box-shadow: 0 12px 30px rgba(255, 140, 55, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* ALTERNATIVE LINK */
+        .alt-link-section {
+            margin: 30px 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 140, 55, 0.2);
+        }
+        .alt-link-text {
+            font-size: 14px;
+            color: #B8A0CC;
+            margin-bottom: 10px;
+        }
+        .alt-link {
+            color: #FF8C37;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 13px;
+        }
+        .alt-link:hover {
+            text-decoration: underline;
+        }
+
+        /* FEATURES SECTION */
+        .features-section {
+            margin: 40px 0 0 0;
+            padding: 30px;
+            background: rgba(255, 140, 55, 0.08);
+            border-top: 1px solid rgba(255, 140, 55, 0.15);
+        }
+        .features-title {
+            font-size: 16px;
+            color: #FF8C37;
+            margin: 0 0 20px 0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .feature-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #D4BFE0;
+        }
+        .feature-icon {
+            color: #FF8C37;
+            margin-right: 12px;
+            font-size: 16px;
+            min-width: 20px;
+            font-weight: bold;
+        }
+
+        /* FOOTER SECTION */
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 140, 55, 0.15);
+        }
+        .footer-text {
+            font-size: 13px;
+            color: #B8A0CC;
+            margin: 10px 0;
+        }
+        .footer-links {
+            margin: 15px 0;
+            font-size: 13px;
+        }
+        .footer-links a {
+            color: #FF8C37;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .footer-notice {
+            font-size: 12px;
+            color: #8B6B9E;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        /* SOCIAL LINKS */
+        .social-section {
+            margin: 20px 0;
+        }
+        .social-links {
+            display: inline-flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .social-link {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 140, 55, 0.2);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            color: #FF8C37;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .social-link:hover {
+            background: #FF8C37;
+            color: #1C0F36;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .email-container {
+                border-radius: 8px;
+            }
+            .header {
+                padding: 30px 20px;
+            }
+            .content {
+                padding: 25px 20px;
+            }
+            .greeting {
+                font-size: 20px;
+            }
+            .intro-text {
+                font-size: 15px;
+            }
+            .cta-button {
+                padding: 14px 40px;
+                font-size: 15px;
+            }
+            .footer {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="email-container">
+            
+            <!-- HEADER -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="logo">🚀 GrantUnion</div>
+                    <p class="logo-subtitle">Investment Platform</p>
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="content">
+                <h1 class="greeting">Welcome to <span class="greeting-highlight">GrantUnion</span>!</h1>
+                
+                <p class="intro-text">
+                    Thank you for signing up. To complete your account setup and start investing, please confirm your email address by clicking the button below.
+                </p>
+
+                <!-- CTA BUTTON -->
+                <div class="cta-section">
+                    <a href="{{ .ConfirmationURL }}" class="cta-button">Confirm Your Email</a>
+                </div>
+
+                <!-- ALTERNATIVE LINK -->
+                <div class="alt-link-section">
+                    <p class="alt-link-text">Or copy and paste this link in your browser:</p>
+                    <a href="{{ .ConfirmationURL }}" class="alt-link">{{ .ConfirmationURL }}</a>
+                </div>
+
+                <!-- INFO BOX -->
+                <div class="info-box">
+                    <p>
+                        <strong>Link Expiration:</strong><br>
+                        This confirmation link will expire in 24 hours for security purposes.
+                    </p>
+                    <p style="margin-top: 15px;">
+                        <strong>Account Security:</strong><br>
+                        Never share this link with anyone. GrantUnion will never ask for your password via email.
+                    </p>
+                </div>
+            </div>
+
+            <!-- FEATURES SECTION -->
+            <div class="features-section">
+                <h3 class="features-title">🎯 What You Can Do Now</h3>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Start investing with multiple portfolio options</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Track real-time ROI and investment performance</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Access your personal investment dashboard</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Earn referral bonuses by inviting friends</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Withdraw profits anytime</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer">
+                <p class="footer-text">
+                    <strong>Need Help?</strong><br>
+                    Our support team is here to assist you 24/7
+                </p>
+                
+                <div class="footer-links">
+                    <a href="https://grantunion.com/support">Support</a> •
+                    <a href="https://grantunion.com/faq">FAQ</a> •
+                    <a href="https://grantunion.com/about">About Us</a>
+                </div>
+
+                <div class="social-section">
+                    <div class="social-links">
+                        <a href="https://twitter.com/grantunion" class="social-link" title="Twitter">𝕏</a>
+                        <a href="https://facebook.com/grantunion" class="social-link" title="Facebook">f</a>
+                        <a href="https://instagram.com/grantunion" class="social-link" title="Instagram">📷</a>
+                        <a href="https://linkedin.com/company/grantunion" class="social-link" title="LinkedIn">in</a>
+                    </div>
+                </div>
+
+                <p class="footer-notice">
+                    © {{ .Year }} GrantUnion. All rights reserved.<br>
+                    This is an automated email. Please do not reply directly to this message.
+                </p>
+                
+                <p class="footer-notice">
+                    You received this email because you created an account with GrantUnion.<br>
+                    <a href="{{ .UnsubscribeURL }}" style="color: #FF8C37; text-decoration: none;">Manage preferences</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

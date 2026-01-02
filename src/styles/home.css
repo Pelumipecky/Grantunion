@@ -450,6 +450,20 @@ nav .logoCntn img{
     }
 }
 
+/* Language Switcher in Mobile Hamburger Menu */
+.bottomMobiNavSect .languageSwitcher {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.bottomMobiNavSect .languageSwitcher button {
+    width: 100%;
+    padding: 12px 16px !important;
+    font-size: 1.1em !important;
+    min-width: 100% !important;
+}
+
 .homeIntro{
     min-height: 530px;
     height: 100%;
@@ -828,6 +842,11 @@ nav .logoCntn img{
 
     #mobilenone{
         display: none;
+    }
+
+    /* Hide language switcher from navbar on mobile, will show in hamburger menu */
+    .rightBox > div:nth-child(2) {
+        display: none !important;
     }
 
     .homeIntro{

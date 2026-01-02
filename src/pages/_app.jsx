@@ -14,7 +14,6 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import { config } from '../utils/config';
 import dynamic from 'next/dynamic';
 import '../i18n'; // Add this import
-import LanguageSwitcher from '../components/LanguageSwitcher';
 
 // Dynamically import client-side components
 // ChatBot is rendered only on the user dashboard (profile page).
@@ -79,7 +78,6 @@ export default function App({ Component, pageProps }) {
 
   return (
     <ThemeProvider>
-      <LanguageSwitcher /> {/* Add this component */}
       <Head>
         <title>Grant Union</title>
         <meta charSet="UTF-8"/>

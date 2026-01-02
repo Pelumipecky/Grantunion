@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "about": "Über",
+    "contact": "Kontakt",
+    "register": "Registrieren",
+    "login": "Anmelden",
+    "logout": "Abmelden"
+  },
+  "auth": {
+    "welcome": "Willkommen",
+    "signin": "Anmelden",
+    "signup": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen"
+  },
+  "dashboard": {
+    "overview": "Übersicht",
+    "investments": "Investitionen",
+    "withdrawals": "Abhebungen",
+    "profile": "Profil",
+    "settings": "Einstellungen"
+  }
+}

@@ -6,6 +6,14 @@ import en from '../public/locales/en/common.json';
 import es from '../public/locales/es/common.json';
 import fr from '../public/locales/fr/common.json';
 import pt from '../public/locales/pt/common.json';
+import de from '../public/locales/de/common.json';
+import it from '../public/locales/it/common.json';
+import ja from '../public/locales/ja/common.json';
+import zh from '../public/locales/zh/common.json';
+import ar from '../public/locales/ar/common.json';
+import ru from '../public/locales/ru/common.json';
+import hi from '../public/locales/hi/common.json';
+import ko from '../public/locales/ko/common.json';
 
 i18n
   .use(LanguageDetector)
@@ -16,6 +24,14 @@ i18n
       es: { common: es },
       fr: { common: fr },
       pt: { common: pt },
+      de: { common: de },
+      it: { common: it },
+      ja: { common: ja },
+      zh: { common: zh },
+      ar: { common: ar },
+      ru: { common: ru },
+      hi: { common: hi },
+      ko: { common: ko },
     },
     fallbackLng: 'en',
     debug: false,

@@ -1324,6 +1324,62 @@ export const supabaseDb = {
       },
       error: null
     };
+  },
+
+  getAllWithdrawals: async () => {
+    return safeQuery(async () => {
+      const { data, error } = await supabase
+        .from('withdrawals')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('[supabaseDb.getAllWithdrawals] Database error:', error);
+        return { data: [], error };
+      }
+      
+      if (!data) {
+        console.warn('[supabaseDb.getAllWithdrawals] No data returned from database');
+        return { data: [], error: null };
+      }
+      
+      console.log(`[supabaseDb.getAllWithdrawals] Retrieved ${data.length} withdrawals`);
+      return { data, error: null };
+    }, 'getAllWithdrawals');
+  },
+
+  getChatMessages: async (userId) => {
+    const { data, error } = await supabase
+      .from('chats')
+      .select('*')
+      .eq('user_id', userId)
+      .order('timestamp', { ascending: true });
+    return { data, error };
+  },
+
+  getChatCounts: async (userId, isAdmin) => {
+    try {
+      const { data, error } = await supabase
+        .from('chats')
+        .select('is_admin')
+        .eq('user_id', userId);
+
+      if (error) {
+        console.error('Error fetching chat counts:', error);
+        return 0;
+      }
+
+      if (isAdmin) {
+        // Admin sees count of user messages (non-admin messages)
+        return data.filter(msg => !msg.is_admin).length;
+      } else {
+        // User sees count of admin messages
+        return data.filter(msg => msg.is_admin).length;
+      }
+    } catch (err) {
+      console.error('Chat counts error:', err);
+      return 0;
+    }
   }
 };
 
@@ -1348,28 +1404,6 @@ export const supabaseStorage = {
       .from(bucket)
       .remove([path]);
     return { data, error };
-  },
-
-  getAllWithdrawals: async () => {
-    return safeQuery(async () => {
-      const { data, error } = await supabase
-        .from('withdrawals')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('[supabaseDb.getAllWithdrawals] Database error:', error);
-        return { data: [], error };
-      }
-      
-      if (!data) {
-        console.warn('[supabaseDb.getAllWithdrawals] No data returned from database');
-        return { data: [], error: null };
-      }
-      
-      console.log(`[supabaseDb.getAllWithdrawals] Retrieved ${data.length} withdrawals`);
-      return { data, error: null };
-    }, 'getAllWithdrawals');
   }
 };
 
@@ -1499,31 +1533,6 @@ export const supabaseRealtime = {
     
     channel.subscribe();
     return channel;
-  },
-
-  getChatCounts: async (userId, isAdmin) => {
-    try {
-      const { data, error } = await supabase
-        .from('chats')
-        .select('is_admin')
-        .eq('user_id', userId);
-
-      if (error) {
-        console.error('Error fetching chat counts:', error);
-        return 0;
-      }
-
-      if (isAdmin) {
-        // Admin sees count of user messages (non-admin messages)
-        return data.filter(msg => !msg.is_admin).length;
-      } else {
-        // User sees count of admin messages
-        return data.filter(msg => msg.is_admin).length;
-      }
-    } catch (err) {
-      console.error('Chat counts error:', err);
-      return 0;
-    }
   },
 
   // Loan operations
