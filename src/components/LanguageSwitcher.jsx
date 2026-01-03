@@ -53,7 +53,8 @@ const LanguageSwitcher = () => {
     setIsVisible(true);
 
     return () => {
-      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+      const timerId = hideTimerRef.current;
+      if (timerId) clearTimeout(timerId);
     };
   }, []);
 
@@ -141,7 +142,7 @@ const LanguageSwitcher = () => {
       setIsOpen(false);
       setSearchTerm('');
     }
-  }, [isOpen, filteredLanguages, selectedIndex]);
+  }, [isOpen, filteredLanguages, selectedIndex, changeLanguage]);
 
   const changeLanguage = (langCode) => {
     i18n.changeLanguage(langCode);
@@ -220,7 +221,7 @@ const LanguageSwitcher = () => {
               ))
             ) : (
               <div className={styles.noResults}>
-                No languages match "{searchTerm}"
+                No languages match &quot;{searchTerm}&quot;
               </div>
             )}
           </div>

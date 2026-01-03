@@ -237,7 +237,7 @@ const ensureReferralCodeForUser = async ({
   let nextCode = null;
 
   while (attempts < REFERRAL_CODE_RETRY_LIMIT) {
-    nextCode = randomReferralCode(seed || record.email || record.name || 'GRANT');
+    nextCode = randomReferralCode(seed || record. email || record.name || 'GRANT');
     const exists = await referralCodeExists(nextCode);
     if (!exists) break;
     attempts += 1;

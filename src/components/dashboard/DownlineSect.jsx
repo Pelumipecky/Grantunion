@@ -14,10 +14,6 @@ const DownlineSect = ({ currentUser }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchDownlineData();
-  }, [currentUser?.idnum]);
-
   const fetchDownlineData = async () => {
     if (!currentUser?.idnum) {
       setLoading(false);
@@ -51,6 +47,10 @@ const DownlineSect = ({ currentUser }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchDownlineData();
+  }, [currentUser?.idnum]);
 
   if (loading) {
     return (
