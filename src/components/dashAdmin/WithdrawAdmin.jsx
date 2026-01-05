@@ -44,13 +44,7 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
             }
 
             alert('Withdrawal approved successfully!');
-            // Reload or update the withdrawal list
-            if (setProfileState) {
-                setProfileState(prev => ({
-                    ...prev,
-                    refreshWithdrawals: true
-                }));
-            }
+            // Withdrawal list will be refreshed by the parent component
         } catch (error) {
             console.error("Error approving withdrawal:", error);
             alert('Failed to approve withdrawal: ' + error.message);
@@ -81,13 +75,7 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
             }
 
             alert('Withdrawal rejected and amount refunded!');
-            // Reload or update the withdrawal list
-            if (setProfileState) {
-                setProfileState(prev => ({
-                    ...prev,
-                    refreshWithdrawals: true
-                }));
-            }
+            // Withdrawal list will be refreshed by the parent component
         } catch (error) {
             console.error("Error rejecting withdrawal:", error);
             alert('Failed to reject withdrawal: ' + error.message);
