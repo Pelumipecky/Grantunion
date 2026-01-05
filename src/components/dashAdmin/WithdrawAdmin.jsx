@@ -213,24 +213,24 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
                   </div>
                   {
                       withdrawals.sort((a, b) => {
-                          const dateA = new Date(a.date || 0);
-                          const dateB = new Date(b.date || 0);
+                          const dateA = new Date(a.created_at || a.date || 0);
+                          const dateB = new Date(b.created_at || b.date || 0);
                           
                           const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
                           const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
                         
                           return timeB - timeA;
                       }).map((elem, idx) => {
-                          const elemDate = new Date(elem?.date || 0);
+                          const elemDate = new Date(elem?.created_at || elem?.date || 0);
                           const isValidDate = !isNaN(elemDate.getTime());
-                          const isPending = elem?.status === "Pending";
+                          const isPending = (elem?.status || '').toLowerCase() === "pending";
                           return (
                           <div className="investmentTablehead" key={`${elem.idnum}-UWithdraw_${idx}`} style={{display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '10px', alignItems: 'center'}}>
                               <div className="unitheadsect">{idx + 1}</div>
                               <div className="unitheadsect">${elem?.amount}</div>
                               <div className="unitheadsect" title={elem?.id}>{elem?.id?.substring(0, 8)}...</div>
                               <div className="unitheadsect">{elem?.idnum}</div>
-                              <div className="unitheadsect"><span style={{color: `${elem?.status === "Pending" ? "#F9F871" : elem?.status === "Rejected" ? "#DC1262" : elem?.status === "Expired" ? "#DC1262" : "#2DC194"}`}}>{elem?.status}</span></div>
+                              <div className="unitheadsect"><span style={{color: `${(elem?.status || '').toLowerCase() === "pending" ? "#F9F871" : (elem?.status || '').toLowerCase() === "rejected" ? "#DC1262" : (elem?.status || '').toLowerCase() === "expired" ? "#DC1262" : "#2DC194"}`}}>{elem?.status}</span></div>
                               <div className="unitheadsect">{isValidDate ? `${elemDate.toLocaleDateString("en-US", {
                                     day: "numeric",
                                     month: "short",
