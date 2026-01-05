@@ -98,168 +98,192 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
     return (
     <div className="investmentMainCntn">
       <style>{`
-        .withdrawalTableWrapper {
+        .historyTable {
           width: 100%;
           overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scroll-behavior: smooth;
         }
 
-        .withdrawalTable {
-          width: 100%;
-          border-collapse: collapse;
+        .investmentTablehead {
+          display: grid;
+          gap: 12px;
+          align-items: center;
+          padding: 0 10px;
         }
 
-        .withdrawalTable thead {
+        .investmentTablehead.header {
           background-color: var(--bg-clr);
           border-bottom: 2px solid var(--text-deco);
           position: sticky;
           top: 0;
           z-index: 10;
+          padding: 10px;
+          min-width: 100%;
         }
 
-        .withdrawalTable th {
-          padding: 12px;
+        .unitheadsect {
+          padding: 10px 8px;
           text-align: left;
-          font-weight: 600;
-          color: var(--text-clr1);
-          white-space: nowrap;
-        }
-
-        .withdrawalTable td {
-          padding: 12px;
-          border-bottom: 1px solid var(--text-deco);
-          color: var(--text-clr1);
-        }
-
-        .withdrawalTable tr:hover {
-          background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .copyButtonSmall {
-          background: transparent;
-          border: 1px solid #ccc;
-          border-radius: 3px;
-          padding: 2px 6px;
-          cursor: pointer;
-          font-size: 0.75em;
-          transition: all 0.3s;
-          color: #666;
-          margin-left: 4px;
-        }
-
-        .copyButtonSmall:hover {
-          background-color: #f0f0f0;
-        }
-
-        .copyButtonSmall.copied {
-          background-color: #28a745;
-          color: white;
-          border-color: #28a745;
-        }
-
-        .statusBadge {
-          display: inline-block;
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-size: 0.9em;
-        }
-
-        .actionButtonsCell {
+          word-break: break-word;
           display: flex;
+          align-items: center;
           gap: 6px;
-          flex-wrap: wrap;
+          min-width: 80px;
         }
 
-        @media (max-width: 1200px) {
-          .withdrawalTable th,
-          .withdrawalTable td {
-            padding: 10px;
-            font-size: 0.95em;
+        /* Desktop - show all 9 columns */
+        @media (min-width: 1401px) {
+          .investmentTablehead {
+            grid-template-columns: repeat(9, 1fr);
+            min-width: 1300px;
           }
         }
 
-        @media (max-width: 768px) {
-          .withdrawalTableWrapper {
+        /* Laptop - all columns with reduced spacing */
+        @media (max-width: 1400px) and (min-width: 1025px) {
+          .historyTable {
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
           }
-
-          .withdrawalTable {
-            font-size: 0.85em;
-          }
-
-          .withdrawalTable th,
-          .withdrawalTable td {
+          .investmentTablehead {
+            grid-template-columns: repeat(9, minmax(100px, 1fr));
+            gap: 10px;
             padding: 8px;
-            font-size: 0.8em;
+            min-width: auto;
           }
-
-          .copyButtonSmall {
-            padding: 2px 4px;
-            font-size: 0.65em;
+          .unitheadsect {
+            padding: 8px 6px;
+            font-size: 0.95em;
+            min-width: auto;
           }
         }
 
-        @media (max-width: 640px) {
-          .withdrawalTableWrapper {
+        /* Tablet landscape - all columns, compact */
+        @media (max-width: 1024px) and (min-width: 768px) {
+          .investmentTablehead {
+            grid-template-columns: repeat(9, minmax(80px, 1fr));
+            gap: 8px;
+            padding: 6px;
+            min-width: auto;
+          }
+          .unitheadsect {
+            padding: 6px 4px;
+            font-size: 0.9em;
+            min-width: auto;
+          }
+          button {
+            padding: 4px 8px !important;
+            font-size: 0.8em !important;
+          }
+        }
+
+        /* Tablet portrait - hide some columns */
+        @media (max-width: 768px) and (min-width: 641px) {
+          .historyTable {
+            font-size: 0.85em;
+            overflow-x: auto;
+          }
+          .investmentTablehead {
+            grid-template-columns: repeat(7, minmax(70px, 1fr));
+            gap: 6px;
+            min-width: auto;
+            padding: 6px;
+          }
+          .unitheadsect {
+            padding: 5px 3px;
+            font-size: 0.85em;
+            min-width: auto;
+          }
+          .unitheadsect:nth-child(3),
+          .unitheadsect:nth-child(12),
+          .unitheadsect:nth-child(21),
+          .unitheadsect:nth-child(30) {
             display: none;
           }
-
-          .withdrawalCardsContainer {
-            display: grid;
-            gap: 16px;
+          button {
+            padding: 3px 6px !important;
+            font-size: 0.75em !important;
           }
+        }
 
-          .withdrawalCard {
-            background: var(--input-bg);
-            border: 1px solid var(--text-deco);
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        /* Mobile - hide columns, show essential info */
+        @media (max-width: 640px) {
+          .historyTable {
+            font-size: 0.8em;
+            padding: 0;
+            margin: 0 -16px;
+            width: calc(100% + 32px);
           }
-
-          .cardRow {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-          }
-
-          .cardLabel {
-            font-weight: 600;
-            color: var(--text-clr1);
-            min-width: 120px;
-          }
-
-          .cardValue {
-            flex: 1;
-            text-align: right;
-            word-break: break-word;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            justify-content: flex-end;
-          }
-
-          .cardActions {
-            display: flex;
+          .investmentTablehead {
+            grid-template-columns: 1fr auto auto;
             gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 8px;
-          }
-
-          .cardActions button {
-            flex: 1;
-            min-width: 100px;
             padding: 8px 12px;
+            min-width: 100%;
+            border-bottom: 1px solid var(--text-deco);
+          }
+          .investmentTablehead.header {
+            padding: 10px 12px;
+            gap: 12px;
+            font-weight: 600;
+          }
+          .unitheadsect {
+            padding: 8px 0;
+            min-width: auto;
             font-size: 0.9em;
           }
-
-          .statusBadgeMobile {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 4px;
+          /* Column layout: Amount | Status | Actions */
+          .unitheadsect:nth-child(1),
+          .unitheadsect:nth-child(2),
+          .unitheadsect:nth-child(3),
+          .unitheadsect:nth-child(4),
+          .unitheadsect:nth-child(5),
+          .unitheadsect:nth-child(6),
+          .unitheadsect:nth-child(8) {
+            display: none;
+          }
+          .investmentTablehead:not(.header) .unitheadsect:nth-child(1) {
+            display: flex;
+          }
+          .investmentTablehead:not(.header) .unitheadsect:nth-child(2) {
+            display: flex;
             font-weight: 600;
+            min-width: 70px;
+          }
+          .investmentTablehead:not(.header) .unitheadsect:nth-child(7) {
+            display: flex;
+          }
+          .investmentTablehead:not(.header) .unitheadsect:nth-child(9) {
+            display: flex;
+          }
+          button {
+            padding: 4px 8px !important;
+            font-size: 0.8em !important;
+          }
+        }
+
+        /* Small mobile */
+        @media (max-width: 480px) {
+          .historyTable {
+            font-size: 0.75em;
+          }
+          .investmentTablehead {
+            gap: 6px;
+            padding: 6px 10px;
+          }
+          .unitheadsect {
+            padding: 6px 0;
+          }
+          button {
+            padding: 3px 6px !important;
+            font-size: 0.7em !important;
+          }
+          .statusFilter {
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+          }
+          .statusFilter button {
+            padding: 6px 10px !important;
+            font-size: 0.8em !important;
           }
         }
       `}</style>
