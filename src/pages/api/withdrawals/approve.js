@@ -63,32 +63,21 @@ export default async function handler(req, res) {
 
       if (userData?.email) {
         const emailSubject = 'Withdrawal Confirmed - Grant Union Investment';
-        const emailMessage = `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #28a745;">💰 Withdrawal Confirmed!</h2>
-            <p>Dear ${userData.name || 'User'},</p>
-            <p>Great news! Your withdrawal request has been processed and confirmed.</p>
-            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <h3 style="margin-top: 0;">Withdrawal Details:</h3>
-              <ul style="list-style: none; padding: 0;">
-                <li><strong>Amount:</strong> $${withdrawal.amount}</li>
-                <li><strong>Fee:</strong> $${withdrawal.withdrawal_fee || '0.00'}</li>
-                <li><strong>Payment Method:</strong> ${withdrawal.paymentoption || withdrawal.paymentOption || 'N/A'}</li>
-              </ul>
-            </div>
-            <p>Your funds are now being processed and will be sent to your wallet shortly.</p>
-            <p>Best regards,<br>Grant Union Investment Team</p>
-          </div>
-        `;
-
+        
+        // Use the styled email template from send-email API
         await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             to: userData.email,
             subject: emailSubject,
-            message: emailMessage,
-            type: 'withdrawal_confirmation'
+            type: 'withdrawal_notification',
+            templateData: {
+              userName: userData.name || 'User',
+              amount: withdrawal.amount,
+              status: 'approved',
+              method: withdrawal.paymentoption || withdrawal.paymentOption || 'N/A'
+            }
           })
         });
       }

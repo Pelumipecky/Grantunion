@@ -29,12 +29,29 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         }
         .header {
           background: linear-gradient(120deg, #1C0F36, #FF8C37);
-          padding: 30px 20px;
+          padding: 40px 20px;
           text-align: center;
           border-bottom: 3px solid #FF8C37;
         }
         .logo-section {
-          margin-bottom: 20px;
+          margin-bottom: 15px;
+        }
+        .logo-text {
+          font-size: 32px;
+          font-weight: 800;
+          color: #FEF9FF;
+          letter-spacing: 2px;
+          margin: 0;
+          text-transform: uppercase;
+          text-shadow: 0 4px 12px rgba(255, 140, 55, 0.3);
+        }
+        .logo-subtitle {
+          font-size: 12px;
+          color: #FFD6B8;
+          letter-spacing: 3px;
+          margin: 5px 0 0 0;
+          text-transform: uppercase;
+          font-weight: 600;
         }
         .logo-section img {
           max-width: 150px;
@@ -177,7 +194,10 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
       <div class="email-container">
         <div class="header">
           <div class="logo-section">
-            <img src="https://grantunion583.com/grantunionLogo.png" alt="Grant Union Investment Logo">
+            <!-- Try to load image logo, fallback to text -->
+            <img src="https://grantunion583.com/grantunionLogo.png" alt="Grant Union Investment Logo" style="max-width: 120px; height: auto;">
+            <p class="logo-text">🚀 GRANT UNION</p>
+            <p class="logo-subtitle">Investment Platform</p>
           </div>
           <h1>${title}</h1>
         </div>

@@ -85,33 +85,21 @@ export default async function handler(req, res) {
 
       if (emailUserData?.email) {
         const emailSubject = 'Withdrawal Request - Unable to Process';
-        const emailMessage = `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #dc3545;">❌ Withdrawal Request Rejected</h2>
-            <p>Dear ${emailUserData.name || 'User'},</p>
-            <p>Unfortunately, we were unable to process your withdrawal request at this time.</p>
-            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <h3 style="margin-top: 0;">Withdrawal Details:</h3>
-              <ul style="list-style: none; padding: 0;">
-                <li><strong>Amount:</strong> $${withdrawal.amount}</li>
-                <li><strong>Payment Method:</strong> ${withdrawal.paymentoption || withdrawal.paymentOption || 'N/A'}</li>
-                ${reason ? `<li><strong>Reason:</strong> ${reason}</li>` : ''}
-              </ul>
-            </div>
-            <p><strong style="color: #28a745;">✓ Good News:</strong> The $${withdrawal.amount} has been refunded to your account balance and is available for future use.</p>
-            <p>If you have any questions or concerns, please contact our support team.</p>
-            <p>Best regards,<br>Grant Union Investment Team</p>
-          </div>
-        `;
-
+        
+        // Use the styled email template from send-email API
         await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             to: emailUserData.email,
             subject: emailSubject,
-            message: emailMessage,
-            type: 'withdrawal_rejected'
+            type: 'withdrawal_notification',
+            templateData: {
+              userName: emailUserData.name || 'User',
+              amount: withdrawal.amount,
+              status: 'rejected',
+              method: withdrawal.paymentoption || withdrawal.paymentOption || 'N/A'
+            }
           })
         });
       }
