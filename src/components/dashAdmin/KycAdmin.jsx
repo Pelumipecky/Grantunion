@@ -206,13 +206,16 @@ export default function KycAdmin({ currentUser }) {
                         {r.status === 'pending' || !r.status ? 'Submitted' : r.status}
                       </span>
                     </td>
-                    <td>{new Date(r.created_at || r.submitted_at).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit"
-                    })}</td>
+                    <td>{(() => {
+                      const d = new Date(r.created_at || r.submitted_at || 0);
+                      return isNaN(d.getTime()) ? 'Invalid Date' : d.toLocaleDateString("en-US", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                      });
+                    })()}</td>
                     <td>
                       <div className="action-buttons">
                         {r.status !== 'Verified' && (

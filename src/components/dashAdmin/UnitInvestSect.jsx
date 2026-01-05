@@ -109,11 +109,17 @@ const UnitInvestSect = ({ setInvestData, setProfileState, investData, currentUse
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Date</label>
-              <input type="text" disabled value={new Date(investData?.date).toLocaleDateString("en-US", {day: "numeric", month: "short", year: "numeric", }) } />
+              <input type="text" disabled value={(() => {
+                const d = new Date(investData?.date || 0);
+                return isNaN(d.getTime()) ? 'Invalid Date' : d.toLocaleDateString("en-US", {day: "numeric", month: "short", year: "numeric"});
+              })()} />
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Time</label>
-              <input type="text" disabled value={new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, }).format(new Date(investData?.date))} />
+              <input type="text" disabled value={(() => {
+                const d = new Date(investData?.date || 0);
+                return isNaN(d.getTime()) ? 'Invalid Time' : new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, }).format(d);
+              })()} />
             </div>
             
           </div>

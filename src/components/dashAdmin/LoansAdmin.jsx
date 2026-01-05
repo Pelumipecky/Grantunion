@@ -151,7 +151,11 @@ export default function LoansAdmin({ setProfileState, currentUser }) {
                 <div className="unitheadsect">${(ln.amount || 0).toLocaleString()}</div>
                 <div className="unitheadsect">{ln.purpose || '-'}</div>
                 <div className="unitheadsect">{ln.status}</div>
-                <div className="unitheadsect">{ln.created_at ? new Date(ln.created_at).toLocaleString() : '-'}</div>
+                <div className="unitheadsect">{(() => {
+                  if (!ln.created_at) return '-';
+                  const d = new Date(ln.created_at);
+                  return isNaN(d.getTime()) ? 'Invalid Date' : d.toLocaleString();
+                })()}</div>
                 <div className="unitheadsect">
                   {ln.status !== 'Approved' && <button onClick={() => changeStatus(ln.id, 'Approved')}>Approve</button>}
                   {ln.status !== 'Declined' && <button onClick={() => changeStatus(ln.id, 'Declined')}>Decline</button>}

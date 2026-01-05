@@ -115,28 +115,36 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
                   </div>
                   {
                       withdrawals.sort((a, b) => {
-                          const dateA = new Date(a.date);
-                          const dateB = new Date(b.date);
+                          const dateA = new Date(a.date || 0);
+                          const dateB = new Date(b.date || 0);
+                          
+                          // Handle invalid dates
+                          const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
+                          const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
                         
-                          return dateA - dateB;
-                      }).map((elem, idx) => (
+                          return timeA - timeB;
+                      }).map((elem, idx) => {
+                          const elemDate = new Date(elem?.date || 0);
+                          const isValidDate = !isNaN(elemDate.getTime());
+                          return (
                           <div className="investmentTablehead" key={`${elem.idnum}-UWithdraw_${idx}`} onClick={() => {setWithdrawData(elem); setProfileState("Edit Withdraw")}}>
                               <div className="unitheadsect">{idx + 1}</div>
                               <div className="unitheadsect">{elem?.amount}</div>
                               <div className="unitheadsect">{elem?.id}</div>
                               <div className="unitheadsect">{elem?.idnum}</div>
                               <div className="unitheadsect"><span style={{color: `${elem?.status === "Pending" ? "#F9F871" : elem?.status === "Rejected" ? "#DC1262" : elem?.status === "Expired" ? "#DC1262" : "#2DC194"}`}}>{elem?.status}</span></div>
-                              <div className="unitheadsect">{new Date(elem?.date).toLocaleDateString("en-US", {
+                              <div className="unitheadsect">{isValidDate ? `${elemDate.toLocaleDateString("en-US", {
                                     day: "numeric",
                                     month: "short",
                                     year: "numeric",
-                                })} | {new Intl.DateTimeFormat('en-US', {
+                                })} | ${new Intl.DateTimeFormat('en-US', {
                                     hour: '2-digit',
                                     minute: '2-digit',
                                     hour12: false,
-                                  }).format(new Date(elem?.date))}</div>
+                                  }).format(elemDate)}` : 'Invalid Date'}</div>
                           </div>
-                      ))
+                          );
+                      })
                   }
               </div>
 

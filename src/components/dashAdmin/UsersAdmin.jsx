@@ -144,8 +144,15 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
   });
 
   const sortedUsers = [...filteredUsers].sort((a, b) => {
-    let aValue = sortField === 'date' ? new Date(a[sortField]) : a[sortField];
-    let bValue = sortField === 'date' ? new Date(b[sortField]) : b[sortField];
+    if (sortField === 'date') {
+      const aDate = new Date(a[sortField] || a.created_at || 0);
+      const bDate = new Date(b[sortField] || b.created_at || 0);
+      const aTime = isNaN(aDate.getTime()) ? 0 : aDate.getTime();
+      const bTime = isNaN(bDate.getTime()) ? 0 : bDate.getTime();
+      return sortOrder === 'desc' ? bTime - aTime : aTime - bTime;
+    }
+    let aValue = a[sortField];
+    let bValue = b[sortField];
     return sortOrder === 'desc' ? bValue - aValue : aValue - bValue;
   });
 
@@ -238,11 +245,14 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
                                                elem?.kyc_status === 'rejected' ? 'Rejected' : 'Pending'}
                                           </span>
                                       </td>
-                                      <td>{new Date(elem?.date || elem?.created_at).toLocaleDateString("en-US", {
-                                          day: "numeric", 
-                                          month: "short", 
-                                          year: "numeric"
-                                      })}</td>
+                                      <td>{(() => {
+                                          const dateVal = new Date(elem?.date || elem?.created_at || 0);
+                                          return isNaN(dateVal.getTime()) ? 'Invalid Date' : dateVal.toLocaleDateString("en-US", {
+                                              day: "numeric", 
+                                              month: "short", 
+                                              year: "numeric"
+                                          });
+                                      })()}</td>
                                       <td>
                                           <span className={`account-status ${elem.accountStatus === 'suspended' ? 'suspended' : 'active'}`}>
                                               {elem.accountStatus === 'suspended' ? 'Suspended' : 'Active'}

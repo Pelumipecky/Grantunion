@@ -24,11 +24,19 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
 
     const investmentStartDate = useCallback((investment) => {
       if (!investment) return new Date();
-      if (investment.approved_at) return new Date(investment.approved_at);
-      if (investment.approvedAt) return new Date(investment.approvedAt);
-      if (investment.updated_at) return new Date(investment.updated_at);
-      if (investment.updatedAt) return new Date(investment.updatedAt);
-      return new Date(investment.date);
+      
+      let dateValue = null;
+      if (investment.approved_at) dateValue = investment.approved_at;
+      else if (investment.approvedAt) dateValue = investment.approvedAt;
+      else if (investment.updated_at) dateValue = investment.updated_at;
+      else if (investment.updatedAt) dateValue = investment.updatedAt;
+      else if (investment.date) dateValue = investment.date;
+      
+      if (!dateValue) return new Date();
+      
+      const dateObj = new Date(dateValue);
+      // Validate the date is valid and not NaN
+      return isNaN(dateObj.getTime()) ? new Date() : dateObj;
     }, []);
 
     const handleActiveInvestment = useCallback(async (vlad) => {

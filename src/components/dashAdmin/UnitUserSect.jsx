@@ -79,7 +79,10 @@ const UnitUserSect = ({ userData, setProfileState, setUserData}) => {
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Joined on</label>
-              <input type="text" disabled value={new Date(userData?.date).toLocaleDateString("en-US", {day: "numeric", month: "short", year: "numeric", }) } />
+              <input type="text" disabled value={(() => {
+                const d = new Date(userData?.date || 0);
+                return isNaN(d.getTime()) ? 'Invalid Date' : d.toLocaleDateString("en-US", {day: "numeric", month: "short", year: "numeric"});
+              })()} />
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Current Balance</label>
