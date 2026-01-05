@@ -112,6 +112,27 @@ export const createInvestment = async (investmentData) => {
  */
 export const createWithdrawal = async (withdrawalData) => {
   try {
+    // Validate withdrawal data before processing
+    if (!withdrawalData) {
+      const error = new Error('Withdrawal data is required');
+      console.error('❌ Withdrawal data validation failed:', error);
+      return { data: null, error };
+    }
+
+    const idnum = Number(withdrawalData.idnum);
+    if (isNaN(idnum) || idnum <= 0) {
+      const error = new Error(`Invalid user account ID: ${withdrawalData.idnum}`);
+      console.error('❌ Invalid idnum:', error);
+      return { data: null, error };
+    }
+
+    const amount = Number(withdrawalData.amount);
+    if (!amount || isNaN(amount) || amount < 200) {
+      const error = new Error(`Invalid withdrawal amount: ${withdrawalData.amount}. Minimum is $200.`);
+      console.error('❌ Invalid amount:', error);
+      return { data: null, error };
+    }
+
     // Create withdrawal
     const result = await supabaseDb.createWithdrawal(withdrawalData);
 

@@ -78,17 +78,46 @@ const normalizeInvestmentPayload = (investmentData = {}) => ({
 
 const normalizeWithdrawalPayload = (withdrawalData = {}) => {
   console.log('🔧 Normalizing withdrawal payload:', withdrawalData);
+  
+  // Handle empty or null data
+  if (!withdrawalData || typeof withdrawalData !== 'object') {
+    throw new Error('Withdrawal data must be a valid object');
+  }
+
   const idnum = Number(withdrawalData.idnum);
   console.log('🔧 Parsed idnum:', idnum, 'isNaN:', isNaN(idnum), 'idnum <= 0:', idnum <= 0);
+  
   if (isNaN(idnum) || idnum <= 0) {
-    throw new Error('Invalid idnum for withdrawal');
+    throw new Error(`Invalid user account ID: ${withdrawalData.idnum}. Please ensure you are logged in correctly.`);
+  }
+
+  const amount = Number(withdrawalData.amount);
+  if (isNaN(amount) || amount < 200) {
+    throw new Error(`Invalid withdrawal amount: $${amount}. Minimum withdrawal is $200.`);
+  }
+  
+  const paymentOption = withdrawalData.paymentoption ?? withdrawalData.paymentOption;
+  if (!paymentOption) {
+    throw new Error('Payment method (Bitcoin, Ethereum, or Bank Transfer) is required');
+  }
+
+  if (paymentOption !== 'Bank Transfer' && paymentOption !== 'Bitcoin' && paymentOption !== 'Ethereum') {
+    throw new Error(`Invalid payment method: ${paymentOption}`);
+  }
+
+  // Validate wallet address for crypto payments
+  if (paymentOption !== 'Bank Transfer') {
+    const walletAddress = withdrawalData.wallet_address ?? withdrawalData.walletAddress;
+    if (!walletAddress || !walletAddress.trim()) {
+      throw new Error(`Wallet address is required for ${paymentOption} payments`);
+    }
   }
   
   const normalized = {
     idnum,
-    amount: Number(withdrawalData.amount) || 0,
+    amount,
     status: withdrawalData.status || 'pending',
-    paymentoption: withdrawalData.paymentoption ?? withdrawalData.paymentOption ?? 'Bitcoin',
+    paymentoption: paymentOption,
     wallet_address: withdrawalData.wallet_address ?? withdrawalData.walletAddress ?? null,
   };
   console.log('🔧 Normalized withdrawal data:', normalized);
@@ -1645,48 +1674,53 @@ export const supabaseRealtime = {
 
   // Withdrawal operations
   createWithdrawal: async (withdrawalData) => {
-    console.log('💰 Creating withdrawal with data:', withdrawalData);
-    const cleanData = normalizeWithdrawalPayload(withdrawalData);
-    console.log('💰 Clean withdrawal data:', cleanData);
+    try {
+      console.log('💰 Creating withdrawal with data:', withdrawalData);
+      const cleanData = normalizeWithdrawalPayload(withdrawalData);
+      console.log('💰 Clean withdrawal data:', cleanData);
 
-    const { data, error } = await supabase
-      .from('withdrawals')
-      .insert([{
-        ...cleanData,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }])
-      .select()
-      .single();
-      
-    console.log('💰 Supabase response - data:', data, 'error:', error);
-
-    // Create notification for user about withdrawal request
-    if (!error && data) {
-      try {
-        const notificationMessage = `📤 Your withdrawal request of $${cleanData.amount} has been submitted and is pending review. You will be notified once it's processed.`;
+      const { data, error } = await supabase
+        .from('withdrawals')
+        .insert([{
+          ...cleanData,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }])
+        .select()
+        .single();
         
-        const { error: notificationError } = await supabase
-          .from('notifications')
-          .insert([{
-            idnum: cleanData.idnum,
-            title: 'Withdrawal Request Submitted',
-            message: notificationMessage,
-            status: 'unseen',
-            type: 'withdrawal_submitted',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }]);
+      console.log('💰 Supabase response - data:', data, 'error:', error);
 
-        if (notificationError) {
-          console.error('Failed to create withdrawal submission notification:', notificationError);
+      // Create notification for user about withdrawal request
+      if (!error && data) {
+        try {
+          const notificationMessage = `📤 Your withdrawal request of $${cleanData.amount} has been submitted and is pending review. You will be notified once it's processed.`;
+          
+          const { error: notificationError } = await supabase
+            .from('notifications')
+            .insert([{
+              idnum: cleanData.idnum,
+              title: 'Withdrawal Request Submitted',
+              message: notificationMessage,
+              status: 'unseen',
+              type: 'withdrawal_submitted',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            }]);
+
+          if (notificationError) {
+            console.error('Failed to create withdrawal submission notification:', notificationError);
+          }
+        } catch (notificationError) {
+          console.error('Error creating withdrawal submission notification:', notificationError);
         }
-      } catch (notificationError) {
-        console.error('Error creating withdrawal submission notification:', notificationError);
       }
-    }
 
-    return { data, error };
+      return { data, error };
+    } catch (normalizeError) {
+      console.error('💰 Error normalizing withdrawal data:', normalizeError);
+      return { data: null, error: normalizeError };
+    }
   },
 
   deleteWithdrawalsByUserId: async (userId) => {

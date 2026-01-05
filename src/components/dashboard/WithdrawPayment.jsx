@@ -260,7 +260,17 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
             }, 2000);
         } catch (err) {
             console.error("Finalizing withdrawal failed:", err);
-            showModal('error', 'Error', "Could not complete withdrawal. Please try again later.");
+            
+            // Extract error message for user-friendly display
+            let errorMessage = "Could not complete withdrawal. Please try again later.";
+            
+            if (err?.message) {
+              errorMessage = err.message;
+            } else if (typeof err === 'string') {
+              errorMessage = err;
+            }
+            
+            showModal('error', 'Error', errorMessage);
         } finally {
             setIsProcessing(false);
         }
