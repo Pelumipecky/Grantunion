@@ -12,6 +12,7 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
         message: '',
         onConfirm: null
     });
+    const [copiedField, setCopiedField] = useState(null);
 
     const closeModal = () => setModalConfig(prev => ({ ...prev, isOpen: false }));
 
@@ -23,6 +24,16 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             message,
             onConfirm
         });
+    };
+
+    const handleCopyToClipboard = async (text, fieldName) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            setCopiedField(fieldName);
+            setTimeout(() => setCopiedField(null), 2000);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
     };
 
     const notificationPush = {
@@ -157,6 +168,68 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
 
   return (
     <div className="profileMainCntn">
+      <style>{`
+        .unitInputField {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .unitInputField input {
+          padding: 10px;
+          border: 1px solid var(--text-deco);
+          border-radius: 4px;
+          background-color: var(--input-bg);
+          color: var(--text-clr1);
+        }
+
+        .unitInputField label {
+          font-weight: 600;
+          color: var(--text-clr1);
+        }
+
+        @media (max-width: 768px) {
+          .unitInputField {
+            gap: 6px;
+          }
+
+          .unitInputField input,
+          button {
+            font-size: 14px;
+          }
+
+          .theFormField {
+            gap: 12px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .unitInputField label {
+            font-size: 0.95em;
+          }
+
+          .unitInputField input {
+            font-size: 14px;
+            padding: 8px;
+          }
+
+          button {
+            padding: 6px 10px !important;
+            font-size: 0.85em !important;
+          }
+
+          .flex-align-jusc {
+            flex-wrap: wrap;
+            gap: 8px;
+          }
+
+          .activateBtn,
+          button[type="button"] {
+            flex: 1;
+            min-width: 120px;
+          }
+        }
+      `}</style>
       <div className="profileEditableDisplay">
           <h2>Withdrawal Details</h2>
           <div className="theFormField">
@@ -182,11 +255,60 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Payment Option</label>
-              <input type="text" disabled value={withdrawData?.paymentoption || withdrawData?.paymentOption || 'N/A'} />
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <input 
+                  type="text" 
+                  disabled 
+                  value={withdrawData?.paymentoption || withdrawData?.paymentOption || 'N/A'}
+                  style={{flex: 1}}
+                />
+                <button
+                  onClick={() => handleCopyToClipboard(withdrawData?.paymentoption || withdrawData?.paymentOption || 'N/A', 'paymentOption')}
+                  title="Copy payment option"
+                  style={{
+                    background: copiedField === 'paymentOption' ? '#28a745' : '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    padding: '8px 12px',
+                    cursor: 'pointer',
+                    fontSize: '0.9em',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.3s'
+                  }}
+                >
+                  {copiedField === 'paymentOption' ? '✓ Copied' : '📋 Copy'}
+                </button>
+              </div>
             </div>
             <div className="unitInputField">
-              <label htmlFor="name">Wallet Address</label>
-              <input type="text" disabled value={withdrawData?.wallet_address} />
+              <label htmlFor="name">Payment Account ({withdrawData?.paymentoption === 'crypto' ? 'Wallet Address' : 'Account Number'})</label>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <input 
+                  type="text" 
+                  disabled 
+                  value={withdrawData?.wallet_address || 'N/A'}
+                  title={withdrawData?.wallet_address}
+                  style={{flex: 1, wordBreak: 'break-all'}}
+                />
+                <button
+                  onClick={() => handleCopyToClipboard(withdrawData?.wallet_address || 'N/A', 'walletAddress')}
+                  title="Copy wallet address"
+                  style={{
+                    background: copiedField === 'walletAddress' ? '#28a745' : '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    padding: '8px 12px',
+                    cursor: 'pointer',
+                    fontSize: '0.9em',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.3s'
+                  }}
+                >
+                  {copiedField === 'walletAddress' ? '✓ Copied' : '📋 Copy'}
+                </button>
+              </div>
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Date</label>

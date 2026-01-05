@@ -4,6 +4,7 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
     const [loadingId, setLoadingId] = useState(null);
+    const [copiedId, setCopiedId] = useState(null);
 
     // Calculate withdrawal stats
     const withdrawalStats = {
@@ -83,9 +84,89 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
             setLoadingId(null);
         }
     };
+
+    const handleCopyPaymentMethod = async (paymentMethod, withdrawalId) => {
+        try {
+            await navigator.clipboard.writeText(paymentMethod);
+            setCopiedId(withdrawalId);
+            setTimeout(() => setCopiedId(null), 2000);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
+    };
     
     return (
     <div className="investmentMainCntn">
+      <style>{`
+        @media (max-width: 1024px) {
+          .historyTable {
+            font-size: 0.85em;
+          }
+          .investmentTablehead {
+            gap: 8px !important;
+          }
+          .unitheadsect {
+            padding: 8px 4px !important;
+            word-break: break-word;
+          }
+          button {
+            padding: 4px 8px !important;
+            font-size: 0.75em !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .historyTable {
+            font-size: 0.8em;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+          }
+          .investmentTablehead {
+            gap: 5px !important;
+          }
+          .unitheadsect {
+            padding: 6px 2px !important;
+            min-width: 55px;
+            text-align: center;
+          }
+          .investmentTablehead.header {
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-clr);
+            z-index: 10;
+            border-bottom: 2px solid var(--text-deco);
+          }
+          button {
+            padding: 3px 6px !important;
+            font-size: 0.7em !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .statusFilter {
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+          }
+          .statusFilter button {
+            padding: 6px 10px !important;
+            font-size: 0.85em !important;
+          }
+          .searchBox input {
+            font-size: 14px !important;
+          }
+          .historyTable {
+            font-size: 0.75em;
+          }
+          .unitheadsect {
+            padding: 4px 2px !important;
+            min-width: 45px;
+          }
+          button {
+            padding: 2px 4px !important;
+            font-size: 0.65em !important;
+          }
+        }
+      `}</style>
       <div className="overviewSection">
         <div className="dashboardStats">
           <div className="statCard">
@@ -146,12 +227,14 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
         <h2>Withdrawals Stack ({filteredWithdrawals.length})</h2>
       {
           withdrawals.length > 0 ? (
-              <div className="historyTable">
-                  <div className="investmentTablehead header">
+              <div className="historyTable" style={{overflowX: 'auto'}}>
+                  <div className="investmentTablehead header" style={{display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)', gap: '10px', alignItems: 'center', minWidth: '1200px'}}>
                       <div className="unitheadsect">S/N</div>
                       <div className="unitheadsect">Amount</div>
                       <div className="unitheadsect">Transaction ID</div>
                       <div className="unitheadsect">User ID</div>
+                      <div className="unitheadsect">Payment Method</div>
+                      <div className="unitheadsect">Payment Account</div>
                       <div className="unitheadsect">Status</div>
                       <div className="unitheadsect">Made On</div>
                       <div className="unitheadsect">Actions</div>
@@ -169,12 +252,52 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
                           const elemDate = new Date(elem?.created_at || elem?.date || 0);
                           const isValidDate = !isNaN(elemDate.getTime());
                           const isPending = (elem?.status || '').toLowerCase() === "pending";
+                          const paymentMethod = elem?.paymentoption || elem?.paymentOption || 'N/A';
+                          const walletAddress = elem?.wallet_address || 'N/A';
                           return (
-                          <div className="investmentTablehead" key={`${elem.idnum}-UWithdraw_${idx}`} style={{display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '10px', alignItems: 'center'}}>
+                          <div className="investmentTablehead" key={`${elem.idnum}-UWithdraw_${idx}`} style={{display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)', gap: '10px', alignItems: 'center', minWidth: '1200px'}}>
                               <div className="unitheadsect">{idx + 1}</div>
                               <div className="unitheadsect">${elem?.amount}</div>
                               <div className="unitheadsect" title={elem?.id}>{elem?.id?.substring(0, 8)}...</div>
                               <div className="unitheadsect">{elem?.idnum}</div>
+                              <div className="unitheadsect" style={{display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'center'}}>
+                                <span title={paymentMethod}>{paymentMethod.substring(0, 12)}{paymentMethod.length > 12 ? '...' : ''}</span>
+                                <button
+                                  onClick={() => handleCopyPaymentMethod(paymentMethod, `method-${elem?.id}`)}
+                                  title="Copy payment method"
+                                  style={{
+                                    background: copiedId === `method-${elem?.id}` ? '#28a745' : 'transparent',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '3px',
+                                    padding: '2px 6px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.75em',
+                                    transition: 'all 0.3s',
+                                    color: copiedId === `method-${elem?.id}` ? 'white' : '#666'
+                                  }}
+                                >
+                                  {copiedId === `method-${elem?.id}` ? '✓' : '📋'}
+                                </button>
+                              </div>
+                              <div className="unitheadsect" style={{display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'center', minWidth: '120px'}}>
+                                <span title={walletAddress} style={{fontSize: '0.85em'}}>{walletAddress.substring(0, 12)}{walletAddress.length > 12 ? '...' : ''}</span>
+                                <button
+                                  onClick={() => handleCopyPaymentMethod(walletAddress, `wallet-${elem?.id}`)}
+                                  title="Copy wallet address"
+                                  style={{
+                                    background: copiedId === `wallet-${elem?.id}` ? '#28a745' : 'transparent',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '3px',
+                                    padding: '2px 6px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.75em',
+                                    transition: 'all 0.3s',
+                                    color: copiedId === `wallet-${elem?.id}` ? 'white' : '#666'
+                                  }}
+                                >
+                                  {copiedId === `wallet-${elem?.id}` ? '✓' : '📋'}
+                                </button>
+                              </div>
                               <div className="unitheadsect"><span style={{color: `${(elem?.status || '').toLowerCase() === "pending" ? "#F9F871" : (elem?.status || '').toLowerCase() === "rejected" ? "#DC1262" : (elem?.status || '').toLowerCase() === "expired" ? "#DC1262" : "#2DC194"}`}}>{elem?.status}</span></div>
                               <div className="unitheadsect">{isValidDate ? `${elemDate.toLocaleDateString("en-US", {
                                     day: "numeric",
