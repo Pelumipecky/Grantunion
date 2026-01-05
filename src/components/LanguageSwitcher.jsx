@@ -124,6 +124,27 @@ const LanguageSwitcher = () => {
     }
   }, [isOpen]);
 
+  // Change language
+  const changeLanguage = useCallback((langCode) => {
+    i18n.changeLanguage(langCode);
+    setIsOpen(false);
+    setSearchTerm('');
+    setSelectedIndex(0);
+    handleInteraction();
+
+    if (!applyGoogleLanguage(langCode)) {
+      pendingLanguageRef.current = langCode;
+      if (!isGoogleReady) {
+        setTimeout(() => applyGoogleLanguage(langCode), 500);
+      }
+    }
+
+    // Save language preference to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('i18nextLng', langCode);
+    }
+  }, [i18n, applyGoogleLanguage, isGoogleReady, handleInteraction]);
+
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e) => {
     if (!isOpen) return;
@@ -143,26 +164,6 @@ const LanguageSwitcher = () => {
       setSearchTerm('');
     }
   }, [isOpen, filteredLanguages, selectedIndex, changeLanguage]);
-
-  const changeLanguage = (langCode) => {
-    i18n.changeLanguage(langCode);
-    setIsOpen(false);
-    setSearchTerm('');
-    setSelectedIndex(0);
-    handleInteraction();
-
-    if (!applyGoogleLanguage(langCode)) {
-      pendingLanguageRef.current = langCode;
-      if (!isGoogleReady) {
-        setTimeout(() => applyGoogleLanguage(langCode), 500);
-      }
-    }
-
-    // Save language preference to localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('i18nextLng', langCode);
-    }
-  };
 
   if (!isVisible) return (
     <div id={WIDGET_CONTAINER_ID} className={styles.hiddenTranslateContainer} aria-hidden="true" />
