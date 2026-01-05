@@ -81,7 +81,7 @@ export default async function handler(req, res) {
           </div>
         `;
 
-        await fetch('/api/send-email', {
+        await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
