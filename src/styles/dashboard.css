@@ -1249,4 +1249,47 @@ button.logoutBtn:hover i {
         padding-inline: 30px;
         width: calc(100vw - 30px);
     }
+
+    /* Mobile Withdrawal Table Stack */
+    .investmentTablehead {
+        grid-auto-columns: minmax(80px, 1fr) !important;
+        height: auto;
+        padding: 10px 5px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .investmentTablehead.header {
+        display: none;
+    }
+
+    .historyTable {
+        padding: 15px 10px;
+    }
+
+    .investmentTablehead > div {
+        width: 100%;
+        justify-content: space-between;
+        padding: 5px 0;
+        font-size: 0.85em;
+    }
+
+    .investmentTablehead > div::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--yellow-clr);
+    }
+
+    .investmentTablehead > div:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid var(--opac-clr3);
+    }
+
+    .investmentTablehead button {
+        width: 100%;
+        padding: 8px !important;
+        font-size: 0.75em !important;
+        margin: 2px 0 !important;
+    }
 }
