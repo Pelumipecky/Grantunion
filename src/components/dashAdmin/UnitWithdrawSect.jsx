@@ -61,8 +61,8 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
                           <h3 style="margin-top: 0;">Withdrawal Details:</h3>
                           <ul style="list-style: none; padding: 0;">
                             <li><strong>Amount:</strong> $${withdrawData?.amount}</li>
-                            <li><strong>Fee:</strong> $${withdrawData?.widthrawalFee}</li>
-                            <li><strong>Payment Method:</strong> ${withdrawData?.paymentOption}</li>
+                            <li><strong>Fee:</strong> $${withdrawData?.withdrawal_fee || '0.00'}</li>
+                            <li><strong>Payment Method:</strong> ${withdrawData?.paymentoption || withdrawData?.paymentOption || 'N/A'}</li>
                             <li><strong>Wallet Address:</strong> ${withdrawData?.wallet_address}</li>
                           </ul>
                         </div>
@@ -166,7 +166,7 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Withdrawal Fee</label>
-              <input type="text" disabled value={withdrawData?.widthrawalFee} />
+              <input type="text" disabled value={withdrawData?.withdrawal_fee || '$0.00'} />
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Withdrawal Status</label>
@@ -182,7 +182,7 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Payment Option</label>
-              <input type="text" disabled value={withdrawData?.paymentOption} />
+              <input type="text" disabled value={withdrawData?.paymentoption || withdrawData?.paymentOption || 'N/A'} />
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Wallet Address</label>
@@ -191,14 +191,14 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             <div className="unitInputField">
               <label htmlFor="name">Date</label>
               <input type="text" disabled value={(() => {
-                const d = new Date(withdrawData?.date || 0);
+                const d = new Date(withdrawData?.created_at || withdrawData?.date || 0);
                 return isNaN(d.getTime()) ? 'Invalid Date' : d.toLocaleDateString("en-US", {day: "numeric", month: "short", year: "numeric"});
               })()} />
             </div>
             <div className="unitInputField">
               <label htmlFor="name">Time</label>
               <input type="text" disabled value={(() => {
-                const d = new Date(withdrawData?.date || 0);
+                const d = new Date(withdrawData?.created_at || withdrawData?.date || 0);
                 return isNaN(d.getTime()) ? 'Invalid Time' : new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, }).format(d);
               })()} />
             </div>

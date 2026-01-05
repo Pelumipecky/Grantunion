@@ -14,7 +14,7 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
             .reduce((sum, w) => sum + (parseFloat(w.amount) || 0), 0),
         completedAmount: withdrawals.filter(w => w.status === 'Active')
             .reduce((sum, w) => sum + (parseFloat(w.amount) || 0), 0),
-        totalFees: withdrawals.reduce((sum, w) => sum + (parseFloat(w.withdrawalFee) || 0), 0)
+        totalFees: withdrawals.reduce((sum, w) => sum + (parseFloat(w.withdrawal_fee) || 0), 0)
     };
 
     // Filter withdrawals
@@ -62,8 +62,8 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
                           <h3 style="margin-top: 0;">Withdrawal Details:</h3>
                           <ul style="list-style: none; padding: 0;">
                             <li><strong>Amount:</strong> $${withdrawal.amount}</li>
-                            <li><strong>Fee:</strong> $${withdrawal.widthrawalFee}</li>
-                            <li><strong>Payment Method:</strong> ${withdrawal.paymentOption}</li>
+                            <li><strong>Fee:</strong> $${withdrawal.withdrawal_fee || '0.00'}</li>
+                            <li><strong>Payment Method:</strong> ${withdrawal.paymentoption || withdrawal.paymentOption || 'N/A'}</li>
                           </ul>
                         </div>
                         <p>Your funds are now being processed and will be sent to your wallet shortly.</p>
