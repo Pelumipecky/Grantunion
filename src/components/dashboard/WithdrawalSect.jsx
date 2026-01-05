@@ -183,6 +183,7 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
                     >
                         <option value="Bitcoin">Bitcoin</option>
                         <option value="Ethereum">Ethereum</option>
+                        <option value="USDT">USDT</option>
                         <option value="Bank Transfer">Bank Transfer</option>
                     </select>
                     {paymentOption === 'Bank Transfer' && (
@@ -330,7 +331,7 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
             <h2 className={styles.guidelinesTitle}>Withdrawal Guidelines</h2>
             <div className={styles.guidelinesList}>
                 <p className={styles.guidelineItem}>- To initiate a withdrawal, select your preferred withdrawal method and enter the amount you want to withdraw, then click &quot;Proceed&quot;.</p>
-                <p className={styles.guidelineItem}>- We provide three (3) withdrawal methods (Bitcoin, Ethereum, and Bank Transfer).</p>
+                <p className={styles.guidelineItem}>- We provide four (4) withdrawal methods (Bitcoin, Ethereum, USDT, and Bank Transfer).</p>
                 <p className={styles.guidelineItem}>- Requests for withdrawals can be made at any time via this website and will be processed after admin approval.</p>
                 <p className={styles.guidelineItem}>- Withdrawals are capped at the amount of funds that are currently in the account (Minimum withdrawal amount is $200).</p>
                 <p className={styles.guidelineItem}>- A withdrawal processing fee may apply.</p>

@@ -44,14 +44,24 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
 
     const handleActiveInvestment = async () => {
         try {
-            await supabaseDb.updateWithdrawal(withdrawData?.id, {
-                status: "Active",
-                date: new Date().toISOString(),
-                authStatus: "seen"
+            const response = await fetch('/api/withdrawals/approve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    withdrawalId: withdrawData?.id,
+                    withdrawal: withdrawData
+                })
             });
 
-            await supabaseDb.createNotification(notificationPush);
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to approve withdrawal');
+            }
 
+            const result = await response.json();
+            
             // Send email notification to user
             try {
                 // Get user email from userlogs table
@@ -117,43 +127,29 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             }, 1500);
         } catch (error) {
             console.error("Error confirming withdrawal:", error);
-            showModal('error', 'Error', 'Failed to confirm withdrawal');
+            showModal('error', 'Error', error.message || 'Failed to confirm withdrawal');
         }
     };
 
     const handleRejectWithdrawal = async () => {
         try {
-            await supabaseDb.updateWithdrawal(withdrawData?.id, {
-                status: "Rejected",
-                date: new Date().toISOString(),
-                authStatus: "seen"
+            const response = await fetch('/api/withdrawals/reject', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    withdrawalId: withdrawData?.id,
+                    withdrawal: withdrawData
+                })
             });
 
-            // Refund the user's balance
-            const { data: userData, error: userError } = await supabase
-                .from('userlogs')
-                .select('balance')
-                .eq('idnum', withdrawData.idnum)
-                .single();
-
-            if (!userError && userData) {
-                const currentBalance = parseFloat(userData.balance || 0);
-                const refundAmount = parseFloat(withdrawData?.amount || 0);
-                const newBalance = currentBalance + refundAmount;
-
-                await supabase
-                    .from('userlogs')
-                    .update({ balance: newBalance, updated_at: new Date().toISOString() })
-                    .eq('idnum', withdrawData.idnum);
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to reject withdrawal');
             }
 
-            // Send rejection notification
-            const rejectionNotification = {
-                message: `Your $${withdrawData?.amount} withdrawal request has been rejected. The amount has been refunded to your account.`,
-                idnum: withdrawData.idnum,
-                status: "unseen"
-            };
-            await supabaseDb.createNotification(rejectionNotification);
+            const result = await response.json();
 
             showModal('success', 'Success', 'Withdrawal rejected and amount refunded');
             setTimeout(() => {
@@ -161,7 +157,7 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             }, 1500);
         } catch (error) {
             console.error("Error rejecting withdrawal:", error);
-            showModal('error', 'Error', 'Failed to reject withdrawal');
+            showModal('error', 'Error', error.message || 'Failed to reject withdrawal');
         }
     };
 
@@ -328,18 +324,38 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
           </div>
 
             <div className="flex-align-jusc">
-                {
-                    withdrawData?.status === "Pending" && (
-                        <div style={{ display: 'flex', gap: '10px' }}>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
+                    {(withdrawData?.status === "Pending" || withdrawData?.status === "pending") ? (
+                        <>
                             <button 
                                 type="button" 
                                 onClick={() => showModal('confirm', 'Confirm Withdrawal', 
                                     `Are you sure you want to confirm this withdrawal of $${withdrawData?.amount}?`,
                                     handleActiveInvestment
                                 )} 
-                                className='activateBtn'
+                                style={{
+                                    padding: '12px 28px',
+                                    background: 'linear-gradient(135deg, #2DC194, #1fb086)',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '25px',
+                                    cursor: 'pointer',
+                                    fontWeight: '600',
+                                    fontSize: '14px',
+                                    transition: 'all 0.3s ease',
+                                    boxShadow: '0 4px 15px rgba(45, 193, 148, 0.3)',
+                                    minWidth: '150px'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.target.style.transform = 'translateY(-2px)';
+                                    e.target.style.boxShadow = '0 6px 20px rgba(45, 193, 148, 0.4)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.transform = 'translateY(0)';
+                                    e.target.style.boxShadow = '0 4px 15px rgba(45, 193, 148, 0.3)';
+                                }}
                             >
-                                Confirm Withdrawal
+                                ✓ Confirm
                             </button>
                             <button 
                                 type="button" 
@@ -348,19 +364,34 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
                                     handleRejectWithdrawal
                                 )} 
                                 style={{
-                                    padding: '10px 20px',
-                                    backgroundColor: '#dc3545',
+                                    padding: '12px 28px',
+                                    background: 'linear-gradient(135deg, #DC1262, #a80d4a)',
                                     color: 'white',
                                     border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
+                                    borderRadius: '25px',
+                                    cursor: 'pointer',
+                                    fontWeight: '600',
+                                    fontSize: '14px',
+                                    transition: 'all 0.3s ease',
+                                    boxShadow: '0 4px 15px rgba(220, 18, 98, 0.3)',
+                                    minWidth: '150px'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.target.style.transform = 'translateY(-2px)';
+                                    e.target.style.boxShadow = '0 6px 20px rgba(220, 18, 98, 0.4)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.transform = 'translateY(0)';
+                                    e.target.style.boxShadow = '0 4px 15px rgba(220, 18, 98, 0.3)';
                                 }}
                             >
-                                Reject Withdrawal
+                                ✕ Reject
                             </button>
-                        </div>
-                    )
-                }
+                        </>
+                    ) : (
+                        <p style={{color: 'var(--text-clr1)', marginTop: '10px'}}>Status: <strong>{withdrawData?.status}</strong> - Buttons only available for Pending withdrawals</p>
+                    )}
+                </div>
             </div>
         </div>
 

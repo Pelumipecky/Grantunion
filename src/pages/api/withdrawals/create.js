@@ -28,10 +28,10 @@ const normalizeWithdrawalPayload = (withdrawalData = {}) => {
   
   const paymentOption = withdrawalData.paymentoption ?? withdrawalData.paymentOption;
   if (!paymentOption) {
-    throw new Error('Payment method (Bitcoin, Ethereum, or Bank Transfer) is required');
+    throw new Error('Payment method (Bitcoin, Ethereum, USDT, or Bank Transfer) is required');
   }
 
-  if (paymentOption !== 'Bank Transfer' && paymentOption !== 'Bitcoin' && paymentOption !== 'Ethereum') {
+  if (paymentOption !== 'Bank Transfer' && paymentOption !== 'Bitcoin' && paymentOption !== 'Ethereum' && paymentOption !== 'USDT') {
     throw new Error(`Invalid payment method: ${paymentOption}`);
   }
 

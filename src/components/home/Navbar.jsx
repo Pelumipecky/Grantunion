@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from 'react';
 import { themeContext } from '../../../providers/ThemeProvider';
 import Link from 'next/link';
 import Image from 'next/image';
-import { supabaseDb } from '../../database/supabaseUtils';
+import { supabaseDb, supabaseRealtime } from '../../database/supabaseUtils';
 import { useTranslation } from 'react-i18next';
 import styles from './Navbar.module.css';
 import LanguageSwitcher from '../LanguageSwitcher';
@@ -48,8 +48,8 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
                 setUnreadChats(count);
             });
 
-            // Subscribe to real-time updates
-            const unsubscribe = supabaseDb.subscribeToChatMessages(currentUser.id, () => {
+            // Subscribe to real-time updates - use supabaseRealtime for chat
+            const unsubscribe = supabaseRealtime.subscribeToChatMessages(currentUser.id, () => {
                 // Refresh count when messages change
                 supabaseDb.getChatCounts(currentUser.id, currentUser.admin).then(count => {
                     setUnreadChats(count);

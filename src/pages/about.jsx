@@ -150,6 +150,7 @@ const About = () => {
                   <ul>
                     <li><strong>Bitcoin (BTC):</strong> Most popular cryptocurrency</li>
                     <li><strong>Ethereum (ETH):</strong> Smart contract platform</li>
+                    <li><strong>USDT (Tether):</strong> Stablecoin pegged to USD</li>
                     <li><strong>Minimum Deposit:</strong> $200 USD equivalent</li>
                     <li><strong>Withdrawal Fee:</strong> Network fees only</li>
                   </ul>

@@ -98,6 +98,263 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
     return (
     <div className="investmentMainCntn">
       <style>{`
+        /* Withdrawal Table Container */
+        .withdrawalTableContainer {
+          width: 100%;
+          border-radius: 12px;
+          background-color: var(--dark-clr4);
+          overflow-x: auto;
+          overflow-y: visible;
+          -webkit-overflow-scrolling: touch;
+          scroll-behavior: smooth;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          margin: 20px 0;
+          scrollbar-width: thin;
+          scrollbar-color: var(--sec-clr) var(--dark-clr3);
+        }
+
+        .withdrawalTableContainer::-webkit-scrollbar {
+          height: 8px;
+          background-color: var(--dark-clr3);
+        }
+
+        .withdrawalTableContainer::-webkit-scrollbar-track {
+          background: var(--dark-clr3);
+          border-radius: 10px;
+        }
+
+        .withdrawalTableContainer::-webkit-scrollbar-thumb {
+          background: var(--sec-clr);
+          border-radius: 10px;
+        }
+
+        .withdrawalTableContainer::-webkit-scrollbar-thumb:hover {
+          background: #ff9b50;
+        }
+
+        /* Simplified Withdrawal List */
+        .simplifiedWithdrawalsList {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          width: 100%;
+        }
+
+        .withdrawalListItem {
+          background-color: var(--dark-clr4);
+          border-radius: 10px;
+          padding: 16px;
+          border: 1px solid var(--opac-clr3);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .withdrawalListItem:hover {
+          background-color: var(--dark-clr3);
+          border-color: var(--sec-clr);
+          box-shadow: 0 4px 12px rgba(255, 140, 55, 0.2);
+          transform: translateX(4px);
+        }
+
+        .withdrawalItemContent {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          gap: 16px;
+        }
+
+        .withdrawalItemLeft {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          flex: 1;
+        }
+
+        .withdrawalAmount {
+          font-size: 18px;
+          font-weight: 700;
+          color: var(--green-clr);
+          text-align: left;
+        }
+
+        .withdrawalUserId {
+          font-size: 13px;
+          color: var(--text-deco);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          text-align: left;
+        }
+
+        .withdrawalItemRight {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          white-space: nowrap;
+        }
+
+        .clickIndicator {
+          font-size: 20px;
+          color: var(--sec-clr);
+          font-weight: bold;
+          transition: transform 0.3s ease;
+        }
+
+        .withdrawalListItem:hover .clickIndicator {
+          transform: translateX(4px);
+        }
+
+        .withdrawalTable {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 14px;
+          table-layout: auto;
+          display: none;
+        }
+
+        .withdrawalTable thead {
+          background: linear-gradient(135deg, var(--primary-clr), var(--sec-clr));
+          color: white;
+        }
+
+        .withdrawalTable th {
+          padding: 16px 12px;
+          text-align: left;
+          font-weight: 600;
+          font-size: 13px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border-bottom: 2px solid var(--dark-clr2);
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          white-space: nowrap;
+        }
+
+        .withdrawalTable th:first-child {
+          border-top-left-radius: 12px;
+          width: 50px;
+          text-align: center;
+          padding: 16px 8px;
+        }
+
+        .withdrawalTable th:nth-child(2) {
+          width: 90px;
+          padding: 16px 10px;
+        }
+
+        .withdrawalTable th:nth-child(3) {
+          width: 110px;
+          padding: 16px 10px;
+        }
+
+        .withdrawalTable th:nth-child(4) {
+          width: 100px;
+          padding: 16px 10px;
+        }
+
+        .withdrawalTable th:nth-child(5),
+        .withdrawalTable th:nth-child(6) {
+          width: 120px;
+          padding: 16px 10px;
+        }
+
+        .withdrawalTable th:nth-child(7) {
+          width: 95px;
+          padding: 16px 10px;
+        }
+
+        .withdrawalTable th:nth-child(8) {
+          width: 110px;
+          padding: 16px 10px;
+        }
+
+        .withdrawalTable th:last-child {
+          border-top-right-radius: 12px;
+          width: 140px;
+          text-align: center;
+          padding: 16px 8px;
+        }
+
+        .withdrawalTable tbody tr {
+          transition: all 0.2s ease;
+          border-bottom: 1px solid var(--opac-clr3);
+        }
+
+        .withdrawalTable tbody tr:hover {
+          background-color: var(--opac-clr2);
+        }
+
+        .withdrawalTable tbody tr:last-child {
+          border-bottom: none;
+        }
+
+        .withdrawalTable td {
+          padding: 14px 12px;
+          vertical-align: middle;
+          color: var(--text-clr1);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          white-space: normal;
+        }
+
+        .withdrawalTable td:first-child {
+          text-align: center;
+          font-weight: 600;
+          color: var(--sec-clr);
+          width: 50px;
+          padding: 14px 8px;
+        }
+
+        .withdrawalTable td:nth-child(2) {
+          width: 90px;
+          padding: 14px 10px;
+        }
+
+        .withdrawalTable td:nth-child(3) {
+          width: 110px;
+          padding: 14px 10px;
+          max-width: 110px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .withdrawalTable td:nth-child(4) {
+          width: 100px;
+          padding: 14px 10px;
+        }
+
+        .withdrawalTable td:nth-child(5),
+        .withdrawalTable td:nth-child(6) {
+          width: 120px;
+          padding: 14px 10px;
+        }
+
+        .withdrawalTable td:nth-child(7) {
+          width: 95px;
+          padding: 14px 10px;
+          text-align: center;
+        }
+
+        .withdrawalTable td:nth-child(8) {
+          width: 110px;
+          padding: 14px 10px;
+          text-align: center;
+        }
+
+        .withdrawalTable td:nth-child(9) {
+          width: 140px;
+          padding: 14px 8px;
+          text-align: center;
+        }
+
+        .withdrawalTable td:nth-child(8),
+        .withdrawalTable td:nth-child(9) {
+          text-align: center;
+        }
+
         .historyTable {
           width: 100%;
           overflow-x: auto;
@@ -113,13 +370,14 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
         }
 
         .investmentTablehead.header {
-          background-color: var(--bg-clr);
+          background: linear-gradient(135deg, var(--primary-clr), var(--sec-clr));
           border-bottom: 2px solid var(--text-deco);
           position: sticky;
           top: 0;
           z-index: 10;
           padding: 10px;
           min-width: 100%;
+          color: white;
         }
 
         .unitheadsect {
@@ -285,6 +543,591 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
             padding: 6px 10px !important;
             font-size: 0.8em !important;
           }
+
+        /* CSS classes for dynamic content */
+        .withdrawPaymentMethodCell,
+        .withdrawWalletCell {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .walletAddressText {
+          max-width: 100px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 0.85em;
+        }
+
+        /* Status badge styling */
+        .statusBadge {
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          display: inline-block;
+          border: none;
+        }
+
+        .status-pending {
+          background-color: rgba(249, 248, 113, 0.2);
+          color: var(--yellow-clr);
+          border: 1px solid rgba(249, 248, 113, 0.3);
+        }
+
+        .status-rejected,
+        .status-expired {
+          background-color: rgba(220, 18, 98, 0.2);
+          color: var(--danger-clr);
+          border: 1px solid rgba(220, 18, 98, 0.3);
+        }
+
+        .status-active {
+          background-color: rgba(45, 193, 148, 0.2);
+          color: var(--green-clr);
+          border: 1px solid rgba(45, 193, 148, 0.3);
+        }
+
+        /* Action Button Styles */
+        .actionButton {
+          padding: 8px 14px;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 12px;
+          transition: all 0.3s ease;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .approveButton {
+          background: linear-gradient(135deg, var(--green-clr), #24b383);
+          color: white;
+        }
+
+        .approveButton:hover:not(:disabled) {
+          background: linear-gradient(135deg, #24b383, #1fa876);
+          box-shadow: 0 4px 12px rgba(45, 193, 148, 0.4);
+          transform: translateY(-2px);
+        }
+
+        .approveButton:active:not(:disabled) {
+          transform: translateY(0);
+          box-shadow: 0 2px 4px rgba(45, 193, 148, 0.3);
+        }
+
+        .rejectButton {
+          background: linear-gradient(135deg, var(--danger-clr), #b91051);
+          color: white;
+        }
+
+        .rejectButton:hover:not(:disabled) {
+          background: linear-gradient(135deg, #b91051, #9d0a45);
+          box-shadow: 0 4px 12px rgba(220, 18, 98, 0.4);
+          transform: translateY(-2px);
+        }
+
+        .rejectButton:active:not(:disabled) {
+          transform: translateY(0);
+          box-shadow: 0 2px 4px rgba(220, 18, 98, 0.3);
+        }
+
+        .viewButton {
+          background: linear-gradient(135deg, var(--sec-clr), #ff7a1f);
+          color: white;
+          border: none;
+        }
+
+        .viewButton:hover:not(:disabled) {
+          background: linear-gradient(135deg, #ff7a1f, #ff6a05);
+          box-shadow: 0 4px 12px rgba(255, 140, 55, 0.4);
+          transform: translateY(-2px);
+        }
+
+        .viewButton:active:not(:disabled) {
+          transform: translateY(0);
+          box-shadow: 0 2px 4px rgba(255, 140, 55, 0.3);
+        }
+
+        .actionButton.loading,
+        .actionButton:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none !important;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .actionButtonsCell {
+          display: flex;
+          gap: 4px;
+          flex-wrap: wrap;
+        }
+
+        .cardActions {
+          display: flex;
+          gap: 8px;
+          margin-top: 12px;
+          justify-content: flex-start;
+          flex-wrap: wrap;
+        }
+
+        .cardActions button {
+          flex: 1;
+          min-width: 100px;
+          padding: 10px 12px;
+          font-size: 12px;
+          font-weight: 700;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .cardActions .approveButton {
+          background: linear-gradient(135deg, var(--green-clr), #24b383);
+          color: white;
+        }
+
+        .cardActions .approveButton:hover:not(:disabled) {
+          background: linear-gradient(135deg, #24b383, #1fa876);
+          box-shadow: 0 4px 12px rgba(45, 193, 148, 0.4);
+          transform: translateY(-2px);
+        }
+
+        .cardActions .rejectButton {
+          background: linear-gradient(135deg, var(--danger-clr), #b91051);
+          color: white;
+        }
+
+        .cardActions .rejectButton:hover:not(:disabled) {
+          background: linear-gradient(135deg, #b91051, #9d0a45);
+          box-shadow: 0 4px 12px rgba(220, 18, 98, 0.4);
+          transform: translateY(-2px);
+        }
+
+        .cardActions .viewButton {
+          background: linear-gradient(135deg, var(--sec-clr), #ff7a1f);
+          color: white;
+        }
+
+        .cardActions .viewButton:hover:not(:disabled) {
+          background: linear-gradient(135deg, #ff7a1f, #ff6a05);
+          box-shadow: 0 4px 12px rgba(255, 140, 55, 0.4);
+          transform: translateY(-2px);
+        }
+
+        /* Mobile Card Styles */
+        .withdrawalTableWrapper {
+          display: block;
+        }
+
+        .withdrawalCardsContainer {
+          display: none;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .withdrawalCard {
+          background-color: var(--dark-clr4);
+          border-radius: 10px;
+          padding: 14px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          border: 1px solid var(--opac-clr3);
+          transition: all 0.3s ease;
+          margin-bottom: 12px;
+        }
+
+        .withdrawalCard:hover {
+          background-color: var(--dark-clr3);
+          box-shadow: 0 6px 16px rgba(255, 140, 55, 0.15);
+          border-color: var(--sec-clr);
+        }
+
+        .cardHeader {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 2px solid var(--sec-clr);
+          padding-bottom: 10px;
+          margin-bottom: 12px;
+          gap: 10px;
+        }
+
+        .cardTitle {
+          margin: 0;
+          font-size: 13px;
+          font-weight: 700;
+          color: var(--text-clr1);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .cardAmount {
+          font-weight: 700;
+          font-size: 1.2em;
+          color: var(--green-clr);
+          text-align: right;
+        }
+
+        .cardTransactionId {
+          font-size: 0.8em;
+          font-family: 'Courier New', monospace;
+          color: var(--text-deco);
+        }
+
+        .cardRow {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 9px 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          gap: 8px;
+        }
+
+        .cardRow:last-child {
+          border-bottom: none;
+        }
+
+        .cardLabel {
+          font-weight: 700;
+          color: var(--text-deco);
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          white-space: nowrap;
+          min-width: fit-content;
+        }
+
+        .cardValue {
+          color: var(--text-clr1);
+          text-align: right;
+          flex: 1;
+          margin-left: 8px;
+          font-size: 13px;
+          word-break: break-word;
+        }
+
+        .statusBadgeMobile {
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          display: inline-block;
+          border: none;
+        }
+
+        .statusBadgeMobile.status-pending {
+          background-color: rgba(249, 248, 113, 0.2);
+          color: var(--yellow-clr);
+          border: 1px solid rgba(249, 248, 113, 0.3);
+        }
+
+        .statusBadgeMobile.status-rejected,
+        .statusBadgeMobile.status-expired {
+          background-color: rgba(220, 18, 98, 0.2);
+          color: var(--danger-clr);
+          border: 1px solid rgba(220, 18, 98, 0.3);
+        }
+
+        .statusBadgeMobile.status-active {
+          background-color: rgba(45, 193, 148, 0.2);
+          color: var(--green-clr);
+          border: 1px solid rgba(45, 193, 148, 0.3);
+        }
+
+        .copyButtonSmall {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 4px 6px;
+          font-size: 14px;
+          transition: transform 0.2s ease;
+          color: var(--text-clr1);
+        }
+
+        .copyButtonSmall:hover {
+          transform: scale(1.1);
+        }
+
+        .copyButtonSmall.copied {
+          color: var(--green-clr);
+        }
+
+        /* Responsive Mobile Views */
+        @media (max-width: 1400px) {
+          .withdrawalTable {
+            font-size: 13px;
+          }
+
+          .withdrawalTable th,
+          .withdrawalTable td {
+            padding: 14px 8px;
+          }
+
+          .withdrawalTable th:first-child {
+            width: 45px;
+            padding: 14px 6px;
+          }
+
+          .withdrawalTable th:nth-child(2) {
+            width: 80px;
+          }
+
+          .withdrawalTable th:nth-child(3) {
+            width: 95px;
+          }
+
+          .withdrawalTable th:nth-child(4) {
+            width: 85px;
+          }
+
+          .withdrawalTable th:nth-child(5),
+          .withdrawalTable th:nth-child(6) {
+            width: 100px;
+          }
+
+          .withdrawalTable th:nth-child(7) {
+            width: 85px;
+          }
+
+          .withdrawalTable th:nth-child(8) {
+            width: 95px;
+          }
+
+          .withdrawalTable th:last-child {
+            width: 120px;
+            padding: 14px 6px;
+          }
+        }
+
+        @media (max-width: 1200px) {
+          .withdrawalTable {
+            font-size: 12px;
+          }
+
+          .withdrawalTable th,
+          .withdrawalTable td {
+            padding: 12px 6px;
+          }
+
+          .withdrawalTable th:first-child {
+            width: 40px;
+            padding: 12px 4px;
+          }
+
+          .withdrawalTable th:nth-child(2) {
+            width: 70px;
+          }
+
+          .withdrawalTable th:nth-child(3) {
+            width: 85px;
+          }
+
+          .withdrawalTable th:nth-child(4) {
+            width: 75px;
+          }
+
+          .withdrawalTable th:nth-child(5),
+          .withdrawalTable th:nth-child(6) {
+            width: 90px;
+          }
+
+          .withdrawalTable th:nth-child(7) {
+            width: 75px;
+          }
+
+          .withdrawalTable th:nth-child(8) {
+            width: 85px;
+          }
+
+          .withdrawalTable th:last-child {
+            width: 110px;
+            padding: 12px 4px;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          .withdrawalTableWrapper {
+            display: none;
+          }
+
+          .withdrawalCardsContainer {
+            display: flex;
+            padding: 0 8px;
+          }
+
+          .withdrawalCard {
+            padding: 12px;
+            margin-bottom: 10px;
+          }
+
+          .cardLabel {
+            font-size: 10px;
+          }
+
+          .cardValue {
+            font-size: 12px;
+          }
+
+          .cardAmount {
+            font-size: 1.1em;
+          }
+
+          .cardActions button {
+            padding: 7px 10px;
+            font-size: 11px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .withdrawalCard {
+            padding: 11px;
+            border-radius: 8px;
+          }
+
+          .cardHeader {
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+          }
+
+          .cardTitle {
+            font-size: 12px;
+          }
+
+          .cardRow {
+            padding: 8px 0;
+            font-size: 12px;
+          }
+
+          .cardLabel {
+            font-size: 9px;
+          }
+
+          .cardValue {
+            font-size: 11px;
+          }
+
+          .cardActions {
+            gap: 6px;
+            margin-top: 10px;
+          }
+
+          .cardActions button {
+            padding: 8px 10px;
+            font-size: 11px;
+            flex: 1;
+            min-width: auto;
+          }
+
+          .actionButton {
+            padding: 7px 10px;
+            font-size: 11px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .withdrawalCard {
+            padding: 10px;
+            margin-bottom: 8px;
+          }
+
+          .cardRow {
+            padding: 6px 0;
+            flex-wrap: wrap;
+          }
+
+          .cardLabel {
+            font-size: 9px;
+            flex: 0 0 40%;
+          }
+
+          .cardValue {
+            font-size: 11px;
+            text-align: left;
+            flex: 0 0 60%;
+            margin-left: 0;
+          }
+
+          .cardActions {
+            gap: 5px;
+            margin-top: 8px;
+          }
+
+          .cardActions button {
+            padding: 6px 8px;
+            font-size: 10px;
+            flex: 1;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .withdrawalCard {
+            padding: 9px;
+            margin-bottom: 8px;
+          }
+
+          .cardHeader {
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+          }
+
+          .cardTitle {
+            font-size: 11px;
+          }
+
+          .statusBadgeMobile {
+            padding: 4px 8px;
+            font-size: 9px;
+          }
+
+          .cardRow {
+            padding: 5px 0;
+            font-size: 11px;
+          }
+
+          .cardLabel {
+            font-size: 8px;
+            flex: 0 0 45%;
+          }
+
+          .cardValue {
+            font-size: 10px;
+            flex: 0 0 55%;
+          }
+
+          .cardAmount {
+            font-size: 1em;
+          }
+
+          .cardActions {
+            gap: 4px;
+            margin-top: 6px;
+            flex-direction: column;
+          }
+
+          .cardActions button {
+            width: 100%;
+            padding: 6px 8px;
+            font-size: 9px;
+          }
+
+          .actionButton {
+            padding: 6px 8px;
+            font-size: 9px;
+          }
+        }
         }
       `}</style>
       <div className="overviewSection">
@@ -347,267 +1190,38 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
         <h2>Withdrawals Stack ({filteredWithdrawals.length})</h2>
       {
           withdrawals.length > 0 ? (
-              <>
-                {/* Desktop Table View */}
-                <div className="withdrawalTableWrapper">
-                  <table className="withdrawalTable">
-                    <thead>
-                      <tr>
-                        <th>S/N</th>
-                        <th>Amount</th>
-                        <th>Transaction ID</th>
-                        <th>User ID</th>
-                        <th>Payment Method</th>
-                        <th>Payment Account</th>
-                        <th>Status</th>
-                        <th>Made On</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                      withdrawals.sort((a, b) => {
-                          const dateA = new Date(a.created_at || a.date || 0);
-                          const dateB = new Date(b.created_at || b.date || 0);
-                          
-                          const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
-                          const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
-                        
-                          return timeB - timeA;
-                      }).map((elem, idx) => {
-                          const elemDate = new Date(elem?.created_at || elem?.date || 0);
-                          const isValidDate = !isNaN(elemDate.getTime());
-                          const isPending = (elem?.status || '').toLowerCase() === "pending";
-                          const paymentMethod = elem?.paymentoption || elem?.paymentOption || 'N/A';
-                          const walletAddress = elem?.wallet_address || 'N/A';
-                          const statusColor = (elem?.status || '').toLowerCase() === "pending" ? "#F9F871" : 
-                                            (elem?.status || '').toLowerCase() === "rejected" ? "#DC1262" : 
-                                            (elem?.status || '').toLowerCase() === "expired" ? "#DC1262" : "#2DC194";
-                          
-                          return (
-                            <tr key={`${elem.idnum}-UWithdraw_${idx}`}>
-                              <td>{idx + 1}</td>
-                              <td>${elem?.amount}</td>
-                              <td title={elem?.id}>{elem?.id?.substring(0, 8)}...</td>
-                              <td>{elem?.idnum}</td>
-                              <td>
-                                <div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-                                  <span title={paymentMethod}>{paymentMethod}</span>
-                                  <button
-                                    className={`copyButtonSmall ${copiedId === `method-${elem?.id}` ? 'copied' : ''}`}
-                                    onClick={() => handleCopyPaymentMethod(paymentMethod, `method-${elem?.id}`)}
-                                    title="Copy payment method"
-                                  >
-                                    {copiedId === `method-${elem?.id}` ? '✓' : '📋'}
-                                  </button>
-                                </div>
-                              </td>
-                              <td>
-                                <div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-                                  <span title={walletAddress} style={{maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis'}}>{walletAddress.substring(0, 15)}{walletAddress.length > 15 ? '...' : ''}</span>
-                                  <button
-                                    className={`copyButtonSmall ${copiedId === `wallet-${elem?.id}` ? 'copied' : ''}`}
-                                    onClick={() => handleCopyPaymentMethod(walletAddress, `wallet-${elem?.id}`)}
-                                    title="Copy wallet address"
-                                  >
-                                    {copiedId === `wallet-${elem?.id}` ? '✓' : '📋'}
-                                  </button>
-                                </div>
-                              </td>
-                              <td><span className="statusBadge" style={{color: statusColor, borderLeft: `3px solid ${statusColor}`}}>{elem?.status}</span></td>
-                              <td>{isValidDate ? `${elemDate.toLocaleDateString("en-US", {day: "numeric", month: "short", year: "numeric"})}` : 'Invalid Date'}</td>
-                              <td>
-                                <div className="actionButtonsCell">
-                                  {isPending ? (
-                                    <>
-                                      <button 
-                                        onClick={() => handleApproveWithdrawal(elem)}
-                                        disabled={loadingId === elem.id}
-                                        style={{
-                                          padding: '6px 12px',
-                                          backgroundColor: '#28a745',
-                                          color: 'white',
-                                          border: 'none',
-                                          borderRadius: '4px',
-                                          cursor: loadingId === elem.id ? 'not-allowed' : 'pointer',
-                                          fontSize: '0.85em',
-                                          opacity: loadingId === elem.id ? 0.6 : 1,
-                                          transition: 'all 0.3s'
-                                        }}
-                                      >
-                                        {loadingId === elem.id ? 'Processing...' : 'Approve'}
-                                      </button>
-                                      <button 
-                                        onClick={() => handleRejectWithdrawal(elem)}
-                                        disabled={loadingId === elem.id}
-                                        style={{
-                                          padding: '6px 12px',
-                                          backgroundColor: '#dc3545',
-                                          color: 'white',
-                                          border: 'none',
-                                          borderRadius: '4px',
-                                          cursor: loadingId === elem.id ? 'not-allowed' : 'pointer',
-                                          fontSize: '0.85em',
-                                          opacity: loadingId === elem.id ? 0.6 : 1,
-                                          transition: 'all 0.3s'
-                                        }}
-                                      >
-                                        Reject
-                                      </button>
-                                    </>
-                                  ) : (
-                                    <button 
-                                      onClick={() => {setWithdrawData(elem); setProfileState("Edit Withdraw")}}
-                                      style={{
-                                        padding: '6px 12px',
-                                        backgroundColor: '#007bff',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        fontSize: '0.85em'
-                                      }}
-                                    >
-                                      View
-                                    </button>
-                                  )}
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                      })
-                    }
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Mobile Card View */}
-                <div className="withdrawalCardsContainer">
-                  {
-                    withdrawals.sort((a, b) => {
-                        const dateA = new Date(a.created_at || a.date || 0);
-                        const dateB = new Date(b.created_at || b.date || 0);
-                        const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
-                        const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
-                        return timeB - timeA;
-                    }).map((elem, idx) => {
-                        const elemDate = new Date(elem?.created_at || elem?.date || 0);
-                        const isValidDate = !isNaN(elemDate.getTime());
-                        const isPending = (elem?.status || '').toLowerCase() === "pending";
-                        const paymentMethod = elem?.paymentoption || elem?.paymentOption || 'N/A';
-                        const walletAddress = elem?.wallet_address || 'N/A';
-                        const statusColor = (elem?.status || '').toLowerCase() === "pending" ? "#F9F871" : 
-                                          (elem?.status || '').toLowerCase() === "rejected" ? "#DC1262" : 
-                                          (elem?.status || '').toLowerCase() === "expired" ? "#DC1262" : "#2DC194";
-
-                        return (
-                          <div className="withdrawalCard" key={`${elem.idnum}-card-${idx}`}>
-                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--text-deco)', paddingBottom: '12px'}}>
-                              <h3 style={{margin: 0, fontSize: '1em'}}>Withdrawal #{idx + 1}</h3>
-                              <span className="statusBadgeMobile" style={{backgroundColor: statusColor, color: '#fff'}}>{elem?.status}</span>
+              <div className="simplifiedWithdrawalsList">
+                {
+                  withdrawals.sort((a, b) => {
+                      const dateA = new Date(a.created_at || a.date || 0);
+                      const dateB = new Date(b.created_at || b.date || 0);
+                      const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
+                      const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
+                      return timeB - timeA;
+                  }).map((elem, idx) => {
+                      const statusClass = (elem?.status || '').toLowerCase();
+                      
+                      return (
+                        <div 
+                          className="withdrawalListItem" 
+                          key={`${elem.idnum}-withdraw-${idx}`}
+                          onClick={() => {setWithdrawData(elem); setProfileState("Edit Withdraw")}}
+                        >
+                          <div className="withdrawalItemContent">
+                            <div className="withdrawalItemLeft">
+                              <div className="withdrawalAmount">${elem?.amount}</div>
+                              <div className="withdrawalUserId">User: {elem?.idnum}</div>
                             </div>
-
-                            <div className="cardRow">
-                              <span className="cardLabel">Amount:</span>
-                              <span className="cardValue" style={{fontWeight: '600', fontSize: '1.1em'}}>${elem?.amount}</span>
-                            </div>
-
-                            <div className="cardRow">
-                              <span className="cardLabel">User ID:</span>
-                              <span className="cardValue">{elem?.idnum}</span>
-                            </div>
-
-                            <div className="cardRow">
-                              <span className="cardLabel">Transaction:</span>
-                              <span className="cardValue" title={elem?.id} style={{fontSize: '0.85em'}}>{elem?.id?.substring(0, 12)}...</span>
-                            </div>
-
-                            <div className="cardRow">
-                              <span className="cardLabel">Payment Method:</span>
-                              <span className="cardValue">
-                                <span>{paymentMethod}</span>
-                                <button
-                                  className={`copyButtonSmall ${copiedId === `method-${elem?.id}` ? 'copied' : ''}`}
-                                  onClick={() => handleCopyPaymentMethod(paymentMethod, `method-${elem?.id}`)}
-                                  style={{marginLeft: '4px'}}
-                                >
-                                  {copiedId === `method-${elem?.id}` ? '✓' : '📋'}
-                                </button>
-                              </span>
-                            </div>
-
-                            <div className="cardRow">
-                              <span className="cardLabel">Account:</span>
-                              <span className="cardValue">
-                                <span title={walletAddress} style={{fontSize: '0.85em', maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis'}}>{walletAddress.substring(0, 15)}{walletAddress.length > 15 ? '...' : ''}</span>
-                                <button
-                                  className={`copyButtonSmall ${copiedId === `wallet-${elem?.id}` ? 'copied' : ''}`}
-                                  onClick={() => handleCopyPaymentMethod(walletAddress, `wallet-${elem?.id}`)}
-                                  style={{marginLeft: '4px'}}
-                                >
-                                  {copiedId === `wallet-${elem?.id}` ? '✓' : '📋'}
-                                </button>
-                              </span>
-                            </div>
-
-                            <div className="cardRow">
-                              <span className="cardLabel">Date:</span>
-                              <span className="cardValue">{isValidDate ? elemDate.toLocaleDateString("en-US", {day: "numeric", month: "short", year: "numeric"}) : 'Invalid'}</span>
-                            </div>
-
-                            <div className="cardActions">
-                              {isPending ? (
-                                <>
-                                  <button 
-                                    onClick={() => handleApproveWithdrawal(elem)}
-                                    disabled={loadingId === elem.id}
-                                    style={{
-                                      backgroundColor: '#28a745',
-                                      color: 'white',
-                                      border: 'none',
-                                      borderRadius: '4px',
-                                      cursor: loadingId === elem.id ? 'not-allowed' : 'pointer',
-                                      opacity: loadingId === elem.id ? 0.6 : 1
-                                    }}
-                                  >
-                                    {loadingId === elem.id ? 'Processing...' : 'Approve'}
-                                  </button>
-                                  <button 
-                                    onClick={() => handleRejectWithdrawal(elem)}
-                                    disabled={loadingId === elem.id}
-                                    style={{
-                                      backgroundColor: '#dc3545',
-                                      color: 'white',
-                                      border: 'none',
-                                      borderRadius: '4px',
-                                      cursor: loadingId === elem.id ? 'not-allowed' : 'pointer',
-                                      opacity: loadingId === elem.id ? 0.6 : 1
-                                    }}
-                                  >
-                                    Reject
-                                  </button>
-                                </>
-                              ) : (
-                                <button 
-                                  onClick={() => {setWithdrawData(elem); setProfileState("Edit Withdraw")}}
-                                  style={{
-                                    backgroundColor: '#007bff',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                  }}
-                                >
-                                  View Details
-                                </button>
-                              )}
+                            <div className="withdrawalItemRight">
+                              <span className={`statusBadge status-${statusClass}`}>{elem?.status}</span>
+                              <div className="clickIndicator">→</div>
                             </div>
                           </div>
-                        );
-                    })
-                  }
-                </div>
-              </>
+                        </div>
+                      );
+                  })
+                }
+              </div>
           ) : (
               <div className="emptyTable">
                   <i className="icofont-exclamation-tringle"></i>
