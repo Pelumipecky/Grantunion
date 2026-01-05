@@ -3,7 +3,56 @@
  * This must run on the server to safely use the service role key
  */
 
-import { supabaseDb } from '../../../database/supabaseUtils';
+import { supabase } from '../../../database/supabaseConfig';
+
+// Normalize withdrawal payload (same logic as in supabaseUtils)
+const normalizeWithdrawalPayload = (withdrawalData = {}) => {
+  console.log('🔧 Normalizing withdrawal payload:', withdrawalData);
+  
+  // Handle empty or null data
+  if (!withdrawalData || typeof withdrawalData !== 'object') {
+    throw new Error('Withdrawal data must be a valid object');
+  }
+
+  const idnum = Number(withdrawalData.idnum);
+  console.log('🔧 Parsed idnum:', idnum, 'isNaN:', isNaN(idnum), 'idnum <= 0:', idnum <= 0);
+  
+  if (isNaN(idnum) || idnum <= 0) {
+    throw new Error(`Invalid user account ID: ${withdrawalData.idnum}. Please ensure you are logged in correctly.`);
+  }
+
+  const amount = Number(withdrawalData.amount);
+  if (isNaN(amount) || amount < 200) {
+    throw new Error(`Invalid withdrawal amount: $${amount}. Minimum withdrawal is $200.`);
+  }
+  
+  const paymentOption = withdrawalData.paymentoption ?? withdrawalData.paymentOption;
+  if (!paymentOption) {
+    throw new Error('Payment method (Bitcoin, Ethereum, or Bank Transfer) is required');
+  }
+
+  if (paymentOption !== 'Bank Transfer' && paymentOption !== 'Bitcoin' && paymentOption !== 'Ethereum') {
+    throw new Error(`Invalid payment method: ${paymentOption}`);
+  }
+
+  // Validate wallet address for crypto payments
+  if (paymentOption !== 'Bank Transfer') {
+    const walletAddress = withdrawalData.wallet_address ?? withdrawalData.walletAddress;
+    if (!walletAddress || !walletAddress.trim()) {
+      throw new Error(`Wallet address is required for ${paymentOption} payments`);
+    }
+  }
+  
+  const normalized = {
+    idnum,
+    amount,
+    status: withdrawalData.status || 'pending',
+    paymentoption: paymentOption,
+    wallet_address: withdrawalData.wallet_address ?? withdrawalData.walletAddress ?? null,
+  };
+  console.log('🔧 Normalized withdrawal data:', normalized);
+  return normalized;
+};
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -21,58 +70,56 @@ export default async function handler(req, res) {
       });
     }
 
-    // Validate required fields
-    const idnum = Number(withdrawalData.idnum);
-    if (!idnum || isNaN(idnum) || idnum <= 0) {
-      return res.status(400).json({ 
-        error: `Invalid user account ID: ${withdrawalData.idnum}. Please ensure you are logged in correctly.`
-      });
-    }
+    // Normalize and validate withdrawal data
+    const cleanData = normalizeWithdrawalPayload(withdrawalData);
 
-    const amount = Number(withdrawalData.amount);
-    if (!amount || isNaN(amount) || amount < 200) {
-      return res.status(400).json({ 
-        error: `Invalid withdrawal amount: $${amount}. Minimum withdrawal is $200.`
-      });
-    }
+    // Create withdrawal record in database
+    console.log('💰 Creating withdrawal with clean data:', cleanData);
+    const { data, error } = await supabase
+      .from('withdrawals')
+      .insert([{
+        ...cleanData,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }])
+      .select()
+      .single();
 
-    const paymentOption = withdrawalData.paymentoption ?? withdrawalData.paymentOption;
-    if (!paymentOption) {
-      return res.status(400).json({ 
-        error: 'Payment method (Bitcoin, Ethereum, or Bank Transfer) is required'
-      });
-    }
-
-    if (paymentOption !== 'Bank Transfer' && paymentOption !== 'Bitcoin' && paymentOption !== 'Ethereum') {
-      return res.status(400).json({ 
-        error: `Invalid payment method: ${paymentOption}`
-      });
-    }
-
-    // Validate wallet address for crypto payments
-    if (paymentOption !== 'Bank Transfer') {
-      const walletAddress = withdrawalData.wallet_address ?? withdrawalData.walletAddress;
-      if (!walletAddress || !walletAddress.trim()) {
-        return res.status(400).json({ 
-          error: `Wallet address is required for ${paymentOption} payments`
-        });
-      }
-    }
-
-    // Call the database function to create the withdrawal
-    const result = await supabaseDb.createWithdrawal(withdrawalData);
-
-    if (result.error) {
-      console.error('❌ Withdrawal creation error:', result.error);
+    if (error) {
+      console.error('❌ Supabase error creating withdrawal:', error);
       return res.status(500).json({ 
-        error: result.error.message || 'Failed to create withdrawal. Please try again later.'
+        error: error.message || 'Failed to create withdrawal. Please try again later.'
       });
     }
 
-    console.log('✅ Withdrawal created successfully:', result.data);
+    console.log('✅ Withdrawal created successfully:', data);
+
+    // Create notification for user about withdrawal request
+    try {
+      const notificationMessage = `📤 Your withdrawal request of $${cleanData.amount} has been submitted and is pending review. You will be notified once it's processed.`;
+      
+      const { error: notificationError } = await supabase
+        .from('notifications')
+        .insert([{
+          idnum: cleanData.idnum,
+          title: 'Withdrawal Request Submitted',
+          message: notificationMessage,
+          status: 'unseen',
+          type: 'withdrawal_submitted',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }]);
+
+        if (notificationError) {
+          console.error('Failed to create withdrawal notification:', notificationError);
+        }
+    } catch (notificationError) {
+      console.error('Error creating withdrawal notification:', notificationError);
+      // Don't fail the withdrawal if notification fails
+    }
     
     return res.status(200).json({ 
-      data: result.data,
+      data: data,
       success: true
     });
 
