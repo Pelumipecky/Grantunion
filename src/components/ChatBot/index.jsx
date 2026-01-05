@@ -32,7 +32,7 @@ function ChatBot() {
         }
 
         // Query only for the current user's chats to preserve privacy.
-        const unsubscribe = supabaseRealtime.subscribeToChatMessages(activeId, (payload) => {
+        const channel = supabaseRealtime.subscribeToChatMessages(activeId, (payload) => {
             // Refresh messages when there's a change
             supabaseDb.getChatMessages(activeId).then(({ data, error }) => {
                 if (!error && data) {
@@ -65,7 +65,11 @@ function ChatBot() {
 
         // Cleanup subscription on unmount or when activeId/isOpen changes
         return () => {
-            try { unsubscribe && unsubscribe(); } catch (e) { /* ignore cleanup errors */ }
+            try { 
+                if (channel && typeof channel.unsubscribe === 'function') {
+                    channel.unsubscribe();
+                }
+            } catch (e) { /* ignore cleanup errors */ }
         };
     }, [isOpen, activeId]);
 

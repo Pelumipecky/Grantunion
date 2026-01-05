@@ -142,7 +142,7 @@ export default function AdminChat() {
         if (!selectedUser) return;
 
         // Subscribe to messages for selected user
-        const unsubscribe = supabaseDb.subscribeToChatMessages(selectedUser, (payload) => {
+        const channel = supabaseDb.subscribeToChatMessages(selectedUser, (payload) => {
             console.log('User chat subscription triggered:', payload);
             // Refresh messages when there's a change
             supabaseDb.getChatMessages(selectedUser).then(({ data, error }) => {
@@ -181,7 +181,9 @@ export default function AdminChat() {
 
         return () => {
             try {
-                unsubscribe();
+                if (channel && typeof channel.unsubscribe === 'function') {
+                    channel.unsubscribe();
+                }
             } catch (err) {
                 console.error('Error unsubscribing from user chat:', err);
             }

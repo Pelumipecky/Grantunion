@@ -49,7 +49,7 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
             });
 
             // Subscribe to real-time updates - use supabaseRealtime for chat
-            const unsubscribe = supabaseRealtime.subscribeToChatMessages(currentUser.id, () => {
+            const channel = supabaseRealtime.subscribeToChatMessages(currentUser.id, () => {
                 // Refresh count when messages change
                 supabaseDb.getChatCounts(currentUser.id, currentUser.admin).then(count => {
                     setUnreadChats(count);
@@ -57,7 +57,9 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
             });
 
             return () => {
-                if (unsubscribe) unsubscribe();
+                if (channel && typeof channel.unsubscribe === 'function') {
+                    channel.unsubscribe();
+                }
             };
         } catch (err) {
             console.error('Chat badge listener error', err);
