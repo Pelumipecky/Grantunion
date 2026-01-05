@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { supabaseDb } from "../../database/supabaseUtils";
-import { supabase } from "../../database/supabaseConfig";
 
 const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawData}) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -29,67 +27,33 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
     const handleApproveWithdrawal = async (withdrawal) => {
         setLoadingId(withdrawal.id);
         try {
-            await supabaseDb.updateWithdrawal(withdrawal.id, {
-                status: "Active",
-                date: new Date().toISOString(),
-                authStatus: "seen"
+            // Call server-side API endpoint
+            const response = await fetch('/api/withdrawals/approve', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    withdrawalId: withdrawal.id,
+                    withdrawal: withdrawal
+                })
             });
 
-            // Create notification for user
-            const notificationPush = {
-                message: `Your $${withdrawal.amount} withdrawal transaction has been confirmed. $${withdrawal.amount} is on its way to your wallet address now`,
-                idnum: withdrawal.idnum,
-                status: "unseen"
-            };
-            await supabaseDb.createNotification(notificationPush);
+            const data = await response.json();
 
-            // Send email notification
-            try {
-                const { data: userData } = await supabase
-                    .from('userlogs')
-                    .select('email, name')
-                    .eq('idnum', withdrawal.idnum)
-                    .single();
-
-                if (userData?.email) {
-                    const emailSubject = 'Withdrawal Confirmed - Grant Union Investment';
-                    const emailMessage = `
-                      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                        <h2 style="color: #28a745;">💰 Withdrawal Confirmed!</h2>
-                        <p>Dear ${userData.name || 'User'},</p>
-                        <p>Great news! Your withdrawal request has been processed and confirmed.</p>
-                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                          <h3 style="margin-top: 0;">Withdrawal Details:</h3>
-                          <ul style="list-style: none; padding: 0;">
-                            <li><strong>Amount:</strong> $${withdrawal.amount}</li>
-                            <li><strong>Fee:</strong> $${withdrawal.withdrawal_fee || '0.00'}</li>
-                            <li><strong>Payment Method:</strong> ${withdrawal.paymentoption || withdrawal.paymentOption || 'N/A'}</li>
-                          </ul>
-                        </div>
-                        <p>Your funds are now being processed and will be sent to your wallet shortly.</p>
-                        <p>Best regards,<br>Grant Union Investment Team</p>
-                      </div>
-                    `;
-
-                    await fetch('/api/send-email', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        to: userData.email,
-                        subject: emailSubject,
-                        message: emailMessage,
-                        type: 'withdrawal_confirmation'
-                      })
-                    });
-                }
-            } catch (emailError) {
-                console.error('Error sending email:', emailError);
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to approve withdrawal');
             }
 
             alert('Withdrawal approved successfully!');
+            // Reload or update the withdrawal list
+            if (setProfileState) {
+                setProfileState(prev => ({
+                    ...prev,
+                    refreshWithdrawals: true
+                }));
+            }
         } catch (error) {
             console.error("Error approving withdrawal:", error);
-            alert('Failed to approve withdrawal');
+            alert('Failed to approve withdrawal: ' + error.message);
         } finally {
             setLoadingId(null);
         }
@@ -100,40 +64,33 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
         
         setLoadingId(withdrawal.id);
         try {
-            await supabaseDb.updateWithdrawal(withdrawal.id, {
-                status: "Rejected",
-                date: new Date().toISOString(),
-                authStatus: "seen"
+            // Call server-side API endpoint
+            const response = await fetch('/api/withdrawals/reject', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    withdrawalId: withdrawal.id,
+                    withdrawal: withdrawal
+                })
             });
 
-            // Refund the user's balance
-            const { data: userData } = await supabase
-                .from('userlogs')
-                .select('balance')
-                .eq('idnum', withdrawal.idnum)
-                .single();
+            const data = await response.json();
 
-            if (userData) {
-                const currentBalance = parseFloat(userData.balance || 0);
-                const refundAmount = parseFloat(withdrawal.amount || 0);
-                await supabase
-                    .from('userlogs')
-                    .update({ balance: currentBalance + refundAmount, updated_at: new Date().toISOString() })
-                    .eq('idnum', withdrawal.idnum);
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to reject withdrawal');
             }
 
-            // Send rejection notification
-            const rejectionNotification = {
-                message: `Your $${withdrawal.amount} withdrawal request has been rejected. The amount has been refunded to your account.`,
-                idnum: withdrawal.idnum,
-                status: "unseen"
-            };
-            await supabaseDb.createNotification(rejectionNotification);
-
             alert('Withdrawal rejected and amount refunded!');
+            // Reload or update the withdrawal list
+            if (setProfileState) {
+                setProfileState(prev => ({
+                    ...prev,
+                    refreshWithdrawals: true
+                }));
+            }
         } catch (error) {
             console.error("Error rejecting withdrawal:", error);
-            alert('Failed to reject withdrawal');
+            alert('Failed to reject withdrawal: ' + error.message);
         } finally {
             setLoadingId(null);
         }
