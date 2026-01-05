@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "صفحه اصلی",
+    "about": "درباره ما",
+    "contact": "تماس با ما",
+    "register": "ثبت نام",
+    "login": "ورود",
+    "logout": "خروج"
+  },
+  "auth": {
+    "welcome": "خوش آمدید",
+    "signin": "ورود",
+    "signup": "ثبت نام",
+    "email": "ایمیل",
+    "password": "رمز عبور",
+    "confirmPassword": "تأیید رمز عبور"
+  },
+  "dashboard": {
+    "overview": "نمای کلی",
+    "investments": "سرمایه گذاری ها",
+    "withdrawals": "برداشت ها",
+    "profile": "نمایه",
+    "settings": "تنظیمات"
+  }
+}

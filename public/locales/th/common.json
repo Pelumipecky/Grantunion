@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "หน้าแรก",
+    "about": "เกี่ยวกับเรา",
+    "contact": "ติดต่อเรา",
+    "register": "ลงทะเบียน",
+    "login": "เข้าสู่ระบบ",
+    "logout": "ออกจากระบบ"
+  },
+  "auth": {
+    "welcome": "ยินดีต้อนรับ",
+    "signin": "เข้าสู่ระบบ",
+    "signup": "ลงทะเบียน",
+    "email": "อีเมล",
+    "password": "รหัสผ่าน",
+    "confirmPassword": "ยืนยันรหัสผ่าน"
+  },
+  "dashboard": {
+    "overview": "ภาพรวม",
+    "investments": "การลงทุน",
+    "withdrawals": "การถอนเงิน",
+    "profile": "โปรไฟล์",
+    "settings": "การตั้งค่า"
+  }
+}

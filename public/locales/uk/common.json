@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Домашня сторінка",
+    "about": "Про нас",
+    "contact": "Контакт",
+    "register": "Реєстрація",
+    "login": "Увійти",
+    "logout": "Вийти"
+  },
+  "auth": {
+    "welcome": "Ласкаво просимо",
+    "signin": "Увійти",
+    "signup": "Реєстрація",
+    "email": "Електронна пошта",
+    "password": "Пароль",
+    "confirmPassword": "Підтвердіть пароль"
+  },
+  "dashboard": {
+    "overview": "Огляд",
+    "investments": "Інвестиції",
+    "withdrawals": "Виводи",
+    "profile": "Профіль",
+    "settings": "Налаштування"
+  }
+}

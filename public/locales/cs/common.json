@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Domů",
+    "about": "O nás",
+    "contact": "Kontakt",
+    "register": "Zaregistrovat se",
+    "login": "Přihlášení",
+    "logout": "Odhlášení"
+  },
+  "auth": {
+    "welcome": "Vítejte",
+    "signin": "Přihlášení",
+    "signup": "Registrace",
+    "email": "E-mail",
+    "password": "Heslo",
+    "confirmPassword": "Potvrďte heslo"
+  },
+  "dashboard": {
+    "overview": "Přehled",
+    "investments": "Investice",
+    "withdrawals": "Výběry",
+    "profile": "Profil",
+    "settings": "Nastavení"
+  }
+}

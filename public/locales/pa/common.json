@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "ਘਰ",
+    "about": "ਸਾਡੇ ਬਾਰੇ",
+    "contact": "ਸੰਪਰਕ",
+    "register": "ਰਜਿਸਟਰ ਕਰੋ",
+    "login": "ਲਾਗਇਨ ਕਰੋ",
+    "logout": "ਲਾਗ ਆਊਟ ਕਰੋ"
+  },
+  "auth": {
+    "welcome": "ਸੁਆਗਤ ਹੈ",
+    "signin": "ਲਾਗਇਨ ਕਰੋ",
+    "signup": "ਸਾਈਨ ਅੱਪ ਕਰੋ",
+    "email": "ਇਮੇਲ",
+    "password": "ਪਾਸਵਰਡ",
+    "confirmPassword": "ਪਾਸਵਰਡ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ"
+  },
+  "dashboard": {
+    "overview": "ਜਾਇਜ਼ਾ",
+    "investments": "ਨਿਵੇਸ਼",
+    "withdrawals": "ਨਿਕਾਸੀ",
+    "profile": "ਪ੍ਰੋਫਾਈਲ",
+    "settings": "ਸੈਟਿੰਗਜ਼"
+  }
+}

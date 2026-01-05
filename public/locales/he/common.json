@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "בית",
+    "about": "אודות",
+    "contact": "יצור קשר",
+    "register": "הרשמה",
+    "login": "כניסה",
+    "logout": "יציאה"
+  },
+  "auth": {
+    "welcome": "ברוכים הבאים",
+    "signin": "כניסה",
+    "signup": "הרשמה",
+    "email": "דוא״ל",
+    "password": "סיסמא",
+    "confirmPassword": "אישור סיסמא"
+  },
+  "dashboard": {
+    "overview": "סקירה",
+    "investments": "השקעות",
+    "withdrawals": "משיכות",
+    "profile": "פרופיל",
+    "settings": "הגדרות"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "ہوم",
+    "about": "ہمارے بارے میں",
+    "contact": "رابطہ",
+    "register": "رجسٹر کریں",
+    "login": "لاگ ان",
+    "logout": "لاگ آؤٹ"
+  },
+  "auth": {
+    "welcome": "خوش آمدید",
+    "signin": "لاگ ان",
+    "signup": "سائن اپ",
+    "email": "ای میل",
+    "password": "پاس ورڈ",
+    "confirmPassword": "پاس ورڈ کی تصدیق کریں"
+  },
+  "dashboard": {
+    "overview": "جائزہ",
+    "investments": "سرمایہ کاری",
+    "withdrawals": "نکلوانا",
+    "profile": "پروفائل",
+    "settings": "سیٹنگز"
+  }
+}

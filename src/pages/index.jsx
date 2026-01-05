@@ -35,7 +35,7 @@ export default function Home() {
   };
 
   return (
-    <div className="HomefirstPageCtn" onClick={handleGrandMovementTraffic}>
+    <div className="HomefirstPageCtn" onClick={handleGrandMovementTraffic} suppressHydrationWarning>
       <Navbar
         showsidecard={showsidecard}
         setShowsideCard={setShowsideCard}

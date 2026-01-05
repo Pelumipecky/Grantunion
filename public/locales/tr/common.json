@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "about": "Hakkında",
+    "contact": "İletişim",
+    "register": "Kayıt Ol",
+    "login": "Giriş Yap",
+    "logout": "Çıkış Yap"
+  },
+  "auth": {
+    "welcome": "Hoş Geldiniz",
+    "signin": "Giriş Yap",
+    "signup": "Kayıt Ol",
+    "email": "E-posta",
+    "password": "Şifre",
+    "confirmPassword": "Şifreyi Onayla"
+  },
+  "dashboard": {
+    "overview": "Genel Bakış",
+    "investments": "Yatırımlar",
+    "withdrawals": "Çekilişler",
+    "profile": "Profil",
+    "settings": "Ayarlar"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Αρχική",
+    "about": "Σχετικά με εμάς",
+    "contact": "Επικοινωνία",
+    "register": "Εγγραφή",
+    "login": "Σύνδεση",
+    "logout": "Αποσύνδεση"
+  },
+  "auth": {
+    "welcome": "Καλώς ήρθατε",
+    "signin": "Σύνδεση",
+    "signup": "Εγγραφή",
+    "email": "Email",
+    "password": "Κωδικός πρόσβασης",
+    "confirmPassword": "Επιβεβαίωση κωδικού"
+  },
+  "dashboard": {
+    "overview": "Επισκόπηση",
+    "investments": "Επενδύσεις",
+    "withdrawals": "Αναλήψεις",
+    "profile": "Προφίλ",
+    "settings": "Ρυθμίσεις"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Thuis",
+    "about": "Over ons",
+    "contact": "Contact",
+    "register": "Registreren",
+    "login": "Inloggen",
+    "logout": "Uitloggen"
+  },
+  "auth": {
+    "welcome": "Welkom",
+    "signin": "Inloggen",
+    "signup": "Aanmelden",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "confirmPassword": "Wachtwoord bevestigen"
+  },
+  "dashboard": {
+    "overview": "Overzicht",
+    "investments": "Investeringen",
+    "withdrawals": "Opnames",
+    "profile": "Profiel",
+    "settings": "Instellingen"
+  }
+}

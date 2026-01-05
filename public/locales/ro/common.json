@@ -1,0 +1,25 @@
+{
+  "nav": {
+    "home": "Acasă",
+    "about": "Despre noi",
+    "contact": "Contact",
+    "register": "Înregistrare",
+    "login": "Conectare",
+    "logout": "Deconectare"
+  },
+  "auth": {
+    "welcome": "Bine ati venit",
+    "signin": "Conectare",
+    "signup": "Înregistrare",
+    "email": "E-mail",
+    "password": "Parolă",
+    "confirmPassword": "Confirmă parola"
+  },
+  "dashboard": {
+    "overview": "Privire de ansamblu",
+    "investments": "Investiții",
+    "withdrawals": "Retrageri",
+    "profile": "Profil",
+    "settings": "Setări"
+  }
+}
