@@ -129,6 +129,24 @@ const Navbar = ({ showsidecard, setShowsideCard, shownavOptions, showDisplayCard
             {
                 isHydrated && currentUser?.idnum ? (
                     <div id="mobilenone" className="profileIcon">
+                        {/* Mail notification icon with Grant Union logo */}
+                        <div style={{position: 'relative', display: 'inline-block', marginRight: '12px'}} title="Mail Notifications">
+                            <Link href={'/profile#notifications'}>
+                                <i className="icofont-email" style={{fontSize: '20px', color: '#FF8C37', transition: 'transform 0.3s'}}></i>
+                                <span style={{
+                                    position: 'absolute',
+                                    top: -6,
+                                    right: -8,
+                                    background: 'linear-gradient(120deg, #FF8C37, #FF6B1B)',
+                                    color: 'white',
+                                    borderRadius: '50%',
+                                    padding: '2px 6px',
+                                    fontSize: '0.65em',
+                                    fontWeight: 'bold'
+                                }}>✉</span>
+                            </Link>
+                        </div>
+
                         <Link href={currentUser?.admin ? '/dashboard_admin' : '/profile'}>
                             <div style={{position: 'relative', display: 'inline-block', marginRight: '12px'}} title="Chats">
                                 <i className="icofont-chat"></i>
