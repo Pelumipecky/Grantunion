@@ -10,6 +10,17 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
     const [modalMessage, setModalMessage] = useState("");
     const [modalType, setModalType] = useState("success");
     const [transactionHash, setTransactionHash] = useState("");
+    
+    // Allow user to switch payment method on this screen
+    // Initialize with the one selected in the previous step
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(investData?.paymentOption || "Bitcoin");
+
+    // Sync if prop changes
+    useEffect(() => {
+        if (investData?.paymentOption) {
+            setSelectedPaymentMethod(investData.paymentOption);
+        }
+    }, [investData?.paymentOption]);
 
     // Debug logging for prices
     useEffect(() => {
@@ -56,6 +67,7 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
         // Ensure the investment is created with "Pending" status and no pre-calculated bonus
         const investmentToCreate = {
             ...investData,
+            paymentOption: selectedPaymentMethod, // Use the locally selected method
             status: "Pending", // Explicitly set status to Pending
             roi: 0, // Will be calculated during admin approval
             bonus: 0, // Will be calculated during admin approval
@@ -100,16 +112,41 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
         <h2 style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem', marginBottom: '2rem' }}>Confirm Payment</h2>
         
         <div className="mainPaymentSect" style={{ background: 'rgba(255,255,255,0.03)', padding: '2rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            
+            {/* Payment Method Selector */}
+            <div style={{ marginBottom: '2rem' }}>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc', fontSize: '0.9rem' }}>Select Payment Method:</label>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    {['Bitcoin', 'Ethereum', 'USDT'].map(method => (
+                        <button
+                            key={method}
+                            onClick={() => setSelectedPaymentMethod(method)}
+                            style={{
+                                padding: '8px 16px',
+                                background: selectedPaymentMethod === method ? '#FFB347' : 'rgba(255,255,255,0.1)',
+                                color: selectedPaymentMethod === method ? '#000' : '#fff',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                fontWeight: '500'
+                            }}
+                        >
+                            {method}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', color: '#ccc' }}>
                 Send exactly <span style={{ color: '#FFB347', fontSize: '1.4rem', fontWeight: 'bold', display: 'block', marginTop: '0.5rem' }}>
-                    {investData?.paymentOption === "Bitcoin" ? `${calculateCryptoAmount(investData?.capital, bitPrice, 'BTC')} BTC` : 
-                     investData?.paymentOption === "Ethereum" ? `${calculateCryptoAmount(investData?.capital, ethPrice, 'ETH')} ETH` :
+                    {selectedPaymentMethod === "Bitcoin" ? `${calculateCryptoAmount(investData?.capital, bitPrice, 'BTC')} BTC` : 
+                     selectedPaymentMethod === "Ethereum" ? `${calculateCryptoAmount(investData?.capital, ethPrice, 'ETH')} ETH` :
                      `${parseFloat(investData?.capital).toFixed(2)} USDT`}
                 </span>
             </h3>
             
             <div style={{ marginTop: '2rem' }}>
-                <p style={{ marginBottom: '0.5rem', color: '#aaa', fontSize: '0.9rem' }}>To this {investData?.paymentOption} address:</p>
+                <p style={{ marginBottom: '0.5rem', color: '#aaa', fontSize: '0.9rem' }}>To this {selectedPaymentMethod} address:</p>
                 <div style={{ 
                     display: 'flex', 
                     alignItems: 'center', 
@@ -122,12 +159,12 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
                     gap: '10px'
                 }}>
                     <span style={{ fontFamily: 'monospace', fontSize: '1.1rem', color: '#fff', wordBreak: 'break-all' }}>
-                        {investData?.paymentOption === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : 
-                         investData?.paymentOption === "Ethereum" ? "0x675be3dc056d6a0c199395d66e21101ad87504f4" :
+                        {selectedPaymentMethod === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : 
+                         selectedPaymentMethod === "Ethereum" ? "0x675be3dc056d6a0c199395d66e21101ad87504f4" :
                          "0x675be3dc056d6a0c199395d66e21101ad87504f4"}
                     </span>
                     <button 
-                        onClick={() => {copyToClipboard(`${investData?.paymentOption === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : investData?.paymentOption === "Ethereum" ? "0x675be3dc056d6a0c199395d66e21101ad87504f4" : "0x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
+                        onClick={() => {copyToClipboard(`${selectedPaymentMethod === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : selectedPaymentMethod === "Ethereum" ? "0x675be3dc056d6a0c199395d66e21101ad87504f4" : "0x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
                         style={{
                             background: 'rgba(255, 179, 71, 0.15)',
                             border: '1px solid #FFB347',
