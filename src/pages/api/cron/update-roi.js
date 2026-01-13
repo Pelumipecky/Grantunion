@@ -6,10 +6,12 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Plan Configuration
 const PLANS = {
-  "7-Day Plan": { dailyRate: 0.025, duration: 7 },
-  "14-Day Plan": { dailyRate: 0.03, duration: 14 },
-  "3-Month Plan": { dailyRate: 0.035, duration: 90 },
-  "6-Month Plan": { dailyRate: 0.04, duration: 180 }
+  "3-Day Plan": { dailyRate: 0.08, duration: 3 },
+  "7-Day Plan": { dailyRate: 0.03, duration: 7 },
+  "12-Day Plan": { dailyRate: 0.035, duration: 12 },
+  "15-Day Plan": { dailyRate: 0.04, duration: 15 },
+  "3-Month Plan": { dailyRate: 0.04, duration: 90 },
+  "6-Month Plan": { dailyRate: 0.05, duration: 180 }
 };
 
 // Function to send ROI email notification
