@@ -6,7 +6,7 @@ const TelegramWidget = () => {
   return (
     <div className={styles.details}>
       <a 
-        href="https://t.me/GrantUnionInvestment" 
+        href="https://t.me/grant_union" 
         target="_blank" 
         rel="noopener noreferrer" 
         className={styles.telegramBtn}
