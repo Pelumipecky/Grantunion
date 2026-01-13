@@ -416,53 +416,8 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                                     console.log('Notification created successfully');
                                                                 }
 
-                                                                // Send email notification to user
-                                                                try {
-                                                                    if (userData?.email) {
-                                                                        const emailSubject = 'Investment Approved - Grant Union Investment';
-
-                                                                        // Calculate daily dollar amount for email
-                                                                        let dailyAmount = 0;
-                                                                        if (planConfig) {
-                                                                            dailyAmount = capital * planConfig.dailyRate;
-                                                                        } else if (!legacyRule) {
-                                                                            dailyAmount = capital * 0.025; // Fallback
-                                                                        }
-                                                                        
-                                                                        // Prepare email data with all required fields for the template
-                                                                        const emailData = {
-                                                                            to: userData.email,
-                                                                            subject: emailSubject,
-                                                                            type: 'investment_approved',
-                                                                            templateData: {
-                                                                                userName: userData.name || userData.email.split('@')[0] || 'Investor',
-                                                                                plan: elem.plan,
-                                                                                amount: capital,
-                                                                                dailyROI: dailyAmount,
-                                                                                duration: fallbackDuration
-                                                                            }
-                                                                        };
-
-                                                                        const emailResponse = await fetch('/api/send-email', {
-                                                                          method: 'POST',
-                                                                          headers: {
-                                                                            'Content-Type': 'application/json',
-                                                                          },
-                                                                          body: JSON.stringify(emailData)
-                                                                        });
-
-                                                                        const emailResult = await emailResponse.json();
-                                                                        if (emailResponse.ok) {
-                                                                          console.log('✅ Investment approval email sent successfully to:', userData.email);
-                                                                          console.log('Message ID:', emailResult.messageId);
-                                                                        } else {
-                                                                          console.error('❌ Failed to send investment approval email:', emailResult);
-                                                                        }
-                                                                    }
-                                                                } catch (emailError) {
-                                                                    console.error('❌ Error sending investment approval email:', emailError);
-                                                                    // Don't throw here - email failure shouldn't block approval
-                                                                }
+                                                                // Email notification is now handled automatically by activateInvestment in supabaseUtils.js
+                                                                console.log('✅ Email notification will be sent by activateInvestment');
 
                                                                 alert(`✅ Investment approved successfully!\n\nUser ${elem.idnum} has been credited $${capitalFormatted}.\nProjected earnings: $${roiFormatted}${calculatedBonus > 0 ? ` + legacy bonus $${bonusFormatted}` : ''}.\nSchedule: ${payoutSummary}.`);
 

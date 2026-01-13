@@ -50,7 +50,6 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
           letter-spacing: 2px;
           margin: 0;
           text-transform: uppercase;
-          text-shadow: 0 4px 12px rgba(255, 140, 55, 0.3);
         }
         .logo-subtitle {
           font-size: 12px;
@@ -89,12 +88,13 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
           font-weight: 600;
         }
         .stats-box {
-          background: rgba(255, 140, 55, 0.1);
+          background: #ffffff;
+          border: 1px solid #e0e0e0;
           border-left: 4px solid #FF8C37;
           padding: 20px;
           border-radius: 8px;
           margin: 20px 0;
-          backdrop-filter: blur(10px);
+          color: #333333;
         }
         .stats-box ul {
           list-style: none;
@@ -105,8 +105,12 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
           padding: 8px 0;
           display: flex;
           justify-content: space-between;
-          border-bottom: 1px solid rgba(255, 140, 55, 0.2);
+          border-bottom: 1px solid #e0e0e0;
           font-size: 14px;
+          color: #333333;
+        }
+        .stats-box li span {
+          color: #333333;
         }
         .stats-box li:last-child {
           border-bottom: none;
@@ -303,13 +307,13 @@ const emailTemplates = {
           </li>` : ''}
           <li>
             <span>Duration</span>
-            <span style="color: #FEF9FF;">${duration} days</span>
+            <span style="color: #333333;">${duration} days</span>
           </li>
           ${showExpected ? `<li>
             <span>Expected Total Return</span>
             <span class="value">$${parseFloat(expectedReturn).toFixed(2)}</span>
           </li>` : ''}
-          ${transactionHash ? `<li><span>Transaction ID</span><span style="color: #FEF9FF; font-size: 11px; word-break: break-all;">${transactionHash}</span></li>` : ''}
+          ${transactionHash ? `<li><span>Transaction ID</span><span style="color: #666666; font-size: 11px; word-break: break-all;">${transactionHash}</span></li>` : ''}
           <li>
             <span>Status</span>
             <span style="color: #FFB347;">Pending Approval</span>
@@ -365,7 +369,7 @@ const emailTemplates = {
           <li><span>Plan</span><span style="color: #FF8C37;">${plan}</span></li>
           <li><span>Capital</span><span class="value">$${parseFloat(amount).toFixed(2)}</span></li>
           <li><span>${roiLabel}</span><span class="value">$${roiValue.toFixed(2)}</span></li>
-          <li><span>Duration</span><span style="color: #FEF9FF;">${duration} ${duration.toString().includes('day') ? '' : 'days'}</span></li>
+          <li><span>Duration</span><span style="color: #333333;">${duration} ${duration.toString().includes('day') ? '' : 'days'}</span></li>
         </ul>
       </div>
 
@@ -397,7 +401,7 @@ const emailTemplates = {
           </li>
           <li>
             <span>Payment Method</span>
-            <span style="color: #FEF9FF;">${method || 'Bank Transfer'}</span>
+            <span style="color: #333333;">${method || 'Bank Transfer'}</span>
           </li>
           <li>
             <span>Status</span>
@@ -405,7 +409,7 @@ const emailTemplates = {
           </li>
           <li>
             <span>Requested On</span>
-            <span style="color: #FEF9FF;">${new Date().toLocaleDateString()}</span>
+            <span style="color: #333333;">${new Date().toLocaleDateString()}</span>
           </li>
         </ul>
       </div>
@@ -440,7 +444,7 @@ const emailTemplates = {
           </li>
           <li>
             <span>Payment Method</span>
-            <span style="color: #FEF9FF;">${method || 'Bank Transfer'}</span>
+            <span style="color: #333333;">${method || 'Bank Transfer'}</span>
           </li>
           <li>
             <span>Status</span>
@@ -448,7 +452,7 @@ const emailTemplates = {
           </li>
           <li>
             <span>Processed On</span>
-            <span style="color: #FEF9FF;">${new Date().toLocaleDateString()}</span>
+            <span style="color: #333333;">${new Date().toLocaleDateString()}</span>
           </li>
         </ul>
       </div>
@@ -480,7 +484,7 @@ const emailTemplates = {
         <ul>
           <li>
             <span>Amount</span>
-            <span style="color: #FEF9FF;">$${parseFloat(amount).toFixed(2)}</span>
+            <span style="color: #333333;">$${parseFloat(amount).toFixed(2)}</span>
           </li>
           <li>
             <span>Status</span>
@@ -488,7 +492,7 @@ const emailTemplates = {
           </li>
           <li>
             <span>Date</span>
-            <span style="color: #FEF9FF;">${new Date().toLocaleDateString()}</span>
+            <span style="color: #333333;">${new Date().toLocaleDateString()}</span>
           </li>
         </ul>
       </div>
@@ -526,9 +530,9 @@ const emailTemplates = {
           </li>
           <li>
             <span>Payment Method</span>
-            <span style="color: #FEF9FF;">${method || 'Cryptocurrency'}</span>
+            <span style="color: #333333;">${method || 'Cryptocurrency'}</span>
           </li>
-          ${transactionHash ? `<li><span>Transaction ID</span><span style="color: #FEF9FF; font-size: 11px; word-break: break-all;">${transactionHash}</span></li>` : ''}
+          ${transactionHash ? `<li><span>Transaction ID</span><span style="color: #666666; font-size: 11px; word-break: break-all;">${transactionHash}</span></li>` : ''}
           ${newBalance ? `<li><span>New Balance</span><span class="value">$${parseFloat(newBalance).toFixed(2)}</span></li>` : ''}
           <li>
             <span>Status</span>
@@ -536,7 +540,7 @@ const emailTemplates = {
           </li>
           <li>
             <span>Date</span>
-            <span style="color: #FEF9FF;">${new Date().toLocaleDateString()}</span>
+            <span style="color: #333333;">${new Date().toLocaleDateString()}</span>
           </li>
         </ul>
       </div>

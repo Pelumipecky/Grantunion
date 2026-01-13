@@ -1008,7 +1008,7 @@ export const supabaseDb = {
           .single();
 
         if (userEmailData?.email) {
-          const emailSubject = 'Investment Activated - Grant Union Investment';
+          const emailSubject = 'Investment Approved - Grant Union Investment';
           
           await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
             method: 'POST',
@@ -1016,11 +1016,11 @@ export const supabaseDb = {
             body: JSON.stringify({
               to: userEmailData.email,
               subject: emailSubject,
-              type: 'investment_approval',
+              type: 'investment_approved',
               templateData: {
                 userName: userEmailData.name || 'Investor',
                 plan: investmentData.plan || 'Standard Plan',
-                capital: capitalAmount,
+                amount: capitalAmount,
                 roi: roiAmount,
                 bonus: bonusAmount,
                 duration: `${investmentData.duration || 5} days`,
