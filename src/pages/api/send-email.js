@@ -23,16 +23,17 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         .email-container {
           max-width: 600px;
           margin: 0 auto;
-          background: linear-gradient(180deg, #1C0F36 40%, #3A1A63);
+          background-color: #1C0F36;
           border-radius: 12px;
           overflow: hidden;
-          box-shadow: 0 8px 24px rgba(255, 140, 55, 0.15);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+          border: 1px solid #2d2d2d;
         }
         .header {
-          background: linear-gradient(120deg, #1C0F36, #FF8C37);
+          background-color: #1C0F36;
           padding: 40px 20px;
           text-align: center;
-          border-bottom: 3px solid #FF8C37;
+          border-bottom: 2px solid #FF8C37;
         }
         .logo-section {
           margin-bottom: 15px;
