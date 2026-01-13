@@ -123,11 +123,11 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
                 }}>
                     <span style={{ fontFamily: 'monospace', fontSize: '1.1rem', color: '#fff', wordBreak: 'break-all' }}>
                         {investData?.paymentOption === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : 
-                         investData?.paymentOption === "Ethereum" ? "0x1D2C71bF833Df554A86Ad142f861bc12f3B24c1c" :
+                         investData?.paymentOption === "Ethereum" ? "0x675be3dc056d6a0c199395d66e21101ad87504f4" :
                          "0x675be3dc056d6a0c199395d66e21101ad87504f4"}
                     </span>
                     <button 
-                        onClick={() => {copyToClipboard(`${investData?.paymentOption === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : investData?.paymentOption === "Ethereum" ? "0x1D2C71bF833Df554A86Ad142f861bc12f3B24c1c" : "0x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
+                        onClick={() => {copyToClipboard(`${investData?.paymentOption === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : investData?.paymentOption === "Ethereum" ? "0x675be3dc056d6a0c199395d66e21101ad87504f4" : "0x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
                         style={{
                             background: 'rgba(255, 179, 71, 0.15)',
                             border: '1px solid #FFB347',
