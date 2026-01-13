@@ -34,7 +34,6 @@ export default function DashboardAdmin() {
   const [passwordShow, setPasswordShow] = useState(true);
   const [profilestate, setProfileState] = useState("Investments");
   const [bitPrice, setBitPrice] = useState("");
-  const [ethPrice, setEthPrice] = useState("");
   const [investments, setInvestments] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
   const [withdrawals, setWithdrawals] = useState([]);
@@ -343,7 +342,6 @@ export default function DashboardAdmin() {
     });
 
     // Fetch crypto prices with better error handling
-    fetchCryptoPrice('ethereum').then(price => setEthPrice(price));
     fetchCryptoPrice('bitcoin').then(price => setBitPrice(price));
 
     setShowSidePanel(false);
@@ -555,7 +553,6 @@ export default function DashboardAdmin() {
             setProfileState={setProfileState}
             investData={investData}
             bitPrice={bitPrice}
-            ethPrice={ethPrice}
           />
         )}
         {profilestate === "Withdrawal Payment" && (
@@ -563,7 +560,6 @@ export default function DashboardAdmin() {
             setProfileState={setProfileState}
             withdrawData={withdrawData}
             bitPrice={bitPrice}
-            ethPrice={ethPrice}
             currentUser={currentUser}
           />
         )}

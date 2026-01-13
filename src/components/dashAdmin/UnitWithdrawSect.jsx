@@ -277,35 +277,82 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
                 </button>
               </div>
             </div>
-            <div className="unitInputField">
-              <label htmlFor="name">Payment Account ({withdrawData?.paymentoption === 'crypto' ? 'Wallet Address' : 'Account Number'})</label>
-              <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                <input 
-                  type="text" 
-                  disabled 
-                  value={withdrawData?.wallet_address || 'N/A'}
-                  title={withdrawData?.wallet_address}
-                  style={{flex: 1, wordBreak: 'break-all'}}
-                />
-                <button
-                  onClick={() => handleCopyToClipboard(withdrawData?.wallet_address || 'N/A', 'walletAddress')}
-                  title="Copy wallet address"
-                  style={{
-                    background: copiedField === 'walletAddress' ? '#28a745' : '#007bff',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    padding: '8px 12px',
-                    cursor: 'pointer',
-                    fontSize: '0.9em',
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.3s'
-                  }}
-                >
-                  {copiedField === 'walletAddress' ? '✓ Copied' : '📋 Copy'}
-                </button>
-              </div>
-            </div>
+            {(withdrawData?.paymentoption === 'Bank Transfer' || withdrawData?.paymentOption === 'Bank Transfer') ? (
+              <>
+                <div className="unitInputField">
+                  <label htmlFor="name">Bank Name</label>
+                  <input type="text" disabled value={withdrawData?.bank_name || withdrawData?.bankName || 'N/A'} />
+                </div>
+                <div className="unitInputField">
+                  <label htmlFor="name">Account Number</label>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                    <input 
+                      type="text" 
+                      disabled 
+                      value={withdrawData?.account_number || withdrawData?.bankAccountNumber || 'N/A'} 
+                      style={{flex: 1}}
+                    />
+                    <button
+                      onClick={() => handleCopyToClipboard(withdrawData?.account_number || withdrawData?.bankAccountNumber || 'N/A', 'accNum')}
+                      title="Copy Account Number"
+                      style={{
+                        background: copiedField === 'accNum' ? '#28a745' : '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        padding: '8px 12px',
+                        cursor: 'pointer',
+                        fontSize: '0.9em',
+                        whiteSpace: 'nowrap',
+                        transition: 'all 0.3s'
+                      }}
+                    >
+                      {copiedField === 'accNum' ? '✓ Copied' : '📋 Copy'}
+                    </button>
+                  </div>
+                </div>
+                <div className="unitInputField">
+                  <label htmlFor="name">Account Name</label>
+                  <input type="text" disabled value={withdrawData?.account_name || withdrawData?.bankAccountName || 'N/A'} />
+                </div>
+                {(withdrawData?.routing_number || withdrawData?.bankRoutingSwift) && (
+                  <div className="unitInputField">
+                    <label htmlFor="name">Routing/Swift</label>
+                    <input type="text" disabled value={withdrawData?.routing_number || withdrawData?.bankRoutingSwift} />
+                  </div>
+                )}
+              </>
+            ) : (
+                <div className="unitInputField">
+                  <label htmlFor="name">Wallet Address</label>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                    <input 
+                      type="text" 
+                      disabled 
+                      value={withdrawData?.wallet_address || 'N/A'}
+                      title={withdrawData?.wallet_address}
+                      style={{flex: 1, wordBreak: 'break-all'}}
+                    />
+                    <button
+                      onClick={() => handleCopyToClipboard(withdrawData?.wallet_address || 'N/A', 'walletAddress')}
+                      title="Copy wallet address"
+                      style={{
+                        background: copiedField === 'walletAddress' ? '#28a745' : '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        padding: '8px 12px',
+                        cursor: 'pointer',
+                        fontSize: '0.9em',
+                        whiteSpace: 'nowrap',
+                        transition: 'all 0.3s'
+                      }}
+                    >
+                      {copiedField === 'walletAddress' ? '✓ Copied' : '📋 Copy'}
+                    </button>
+                  </div>
+                </div>
+            )}
             <div className="unitInputField">
               <label htmlFor="name">Date</label>
               <input type="text" disabled value={(() => {

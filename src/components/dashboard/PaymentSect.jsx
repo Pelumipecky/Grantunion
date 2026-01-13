@@ -3,7 +3,7 @@ import { supabaseDb } from "../../database/supabaseUtils";
 import { createInvestment } from "../../utils/transactionManager";
 import Modal from "../Modal";
 
-const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvestments}) => {
+const PaymentSect = ({setProfileState, investData, bitPrice, setInvestments}) => {
     const [copystate, setCopystate] = useState("Copy");
     const [modalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
@@ -25,7 +25,7 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
     // Debug logging for prices
     useEffect(() => {
         // Removed console.log for security
-    }, [bitPrice, ethPrice, investData?.capital]);
+    }, [bitPrice, investData?.capital]);
 
     // Helper function to calculate crypto amount
     const calculateCryptoAmount = (amount, price, crypto) => {
@@ -117,7 +117,7 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
             <div style={{ marginBottom: '2rem' }}>
                 <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc', fontSize: '0.9rem' }}>Select Payment Method:</label>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    {['Bitcoin', 'Ethereum', 'USDT'].map(method => (
+                    {['Bitcoin', 'USDT'].map(method => (
                         <button
                             key={method}
                             onClick={() => setSelectedPaymentMethod(method)}
@@ -140,7 +140,6 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
             <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', color: '#ccc' }}>
                 Send exactly <span style={{ color: '#FFB347', fontSize: '1.4rem', fontWeight: 'bold', display: 'block', marginTop: '0.5rem' }}>
                     {selectedPaymentMethod === "Bitcoin" ? `${calculateCryptoAmount(investData?.capital, bitPrice, 'BTC')} BTC` : 
-                     selectedPaymentMethod === "Ethereum" ? `${calculateCryptoAmount(investData?.capital, ethPrice, 'ETH')} ETH` :
                      `${parseFloat(investData?.capital).toFixed(2)} USDT`}
                 </span>
             </h3>
@@ -160,11 +159,10 @@ const PaymentSect = ({setProfileState, investData, bitPrice, ethPrice, setInvest
                 }}>
                     <span style={{ fontFamily: 'monospace', fontSize: '1.1rem', color: '#fff', wordBreak: 'break-all' }}>
                         {selectedPaymentMethod === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : 
-                         selectedPaymentMethod === "Ethereum" ? "0x675be3dc056d6a0c199395d66e21101ad87504f4" :
                          "0x675be3dc056d6a0c199395d66e21101ad87504f4"}
                     </span>
                     <button 
-                        onClick={() => {copyToClipboard(`${selectedPaymentMethod === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : selectedPaymentMethod === "Ethereum" ? "0x675be3dc056d6a0c199395d66e21101ad87504f4" : "0x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
+                        onClick={() => {copyToClipboard(`${selectedPaymentMethod === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : "0x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
                         style={{
                             background: 'rgba(255, 179, 71, 0.15)',
                             border: '1px solid #FFB347',

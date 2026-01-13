@@ -5,7 +5,7 @@ import { createWithdrawal } from "../../utils/transactionManager";
 import styles from "./WithdrawPayment.module.css";
 import Modal from "../Modal";
 
-const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, currentUser}) => {
+const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, currentUser}) => {
     const router = useRouter();
     const [copystate, setCopystate] = useState("Copy");
     const [walletAddress, setWalletAddress] = useState(""); // New state for wallet address
@@ -34,7 +34,7 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
     // Debug prices on mount
     useEffect(() => {
         // Removed console.log for security
-    }, [bitPrice, ethPrice]);
+    }, [bitPrice]);
 
     const removeErr = () => {
         setTimeout(() => {
@@ -186,6 +186,12 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, ethPrice, c
                 amount: parseFloat(amount), // Ensure it's a number
                 wallet_address: walletAddress,
                 paymentoption: withdrawData?.paymentOption,
+                // Bank Details
+                bank_name: withdrawData?.bankName,
+                account_number: withdrawData?.bankAccountNumber,
+                account_name: withdrawData?.bankAccountName,
+                routing_number: withdrawData?.bankRoutingSwift,
+                
                 idnum: parsedIdnum, // Ensure it's a number
                 status: "pending" // Use lowercase to match database default
             };

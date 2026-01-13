@@ -123,7 +123,6 @@ const DynamicWidget = ({widgetState, setWidgetState, currentUser, setCurrentUser
                                 <label htmlFor="name">Payment Option</label>
                                 <select required value={investData?.paymentOption} onChange={(e) => {setInvestData({...investData, paymentOption: e.target.value})}}>
                                     <option value="Bitcoin">Bitcoin</option>
-                                    <option value="Ethereum">Ethereum</option>
                                     <option value="USDT">USDT</option>
                                 </select>
                             </div>

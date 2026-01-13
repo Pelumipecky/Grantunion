@@ -69,44 +69,26 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
         
         setIsProcessing(true);
         try {
-            console.log('Deleting notifications for idnum:', selectedUser.idnum);
-            // Delete related notifications
-            await supabaseDb.deleteNotificationsByUserId(selectedUser.idnum);
-            
-            console.log('Deleting kyc records for user_id:', selectedUser.id);
-            // Delete related KYC records
-            await supabaseDb.deleteKycByUserId(selectedUser.id);
-            
-            console.log('Deleting chats for user_id:', selectedUser.id);
-            // Delete related chat messages
-            await supabaseDb.deleteChatsByUserId(selectedUser.id);
-            
-            console.log('Deleting loans for idnum:', selectedUser.idnum);
-            // Delete related loans
-            await supabaseDb.deleteLoansByUserId(selectedUser.idnum);
-            
-            console.log('Deleting withdrawal codes for user_id:', selectedUser.id);
-            // Delete related withdrawal codes
-            await supabaseDb.deleteWithdrawalCodesByUserId(selectedUser.id);
-            
-            console.log('Deleting referrals for user_id:', selectedUser.id);
-            // Delete related referrals
-            await supabaseDb.deleteReferralsByUserId(selectedUser.id);
-            
-            console.log('Deleting investments for idnum:', selectedUser.idnum);
-            // Delete related investments
-            await supabaseDb.deleteInvestmentsByUserId(selectedUser.idnum);
-            
-            console.log('Deleting withdrawals for idnum:', selectedUser.idnum);
-            // Delete related withdrawals
-            await supabaseDb.deleteWithdrawalsByUserId(selectedUser.idnum);
-            
-            console.log('Deleting user with id:', selectedUser.id);
-            // Delete user document
-            await supabaseDb.deleteUser(selectedUser.id);
+            // Use server-side API for robust deletion with Admin privileges
+            // This bypasses RLS policies that might block deletion on the client side
+            const response = await fetch('/api/admin/delete-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: selectedUser.id,
+                    idnum: selectedUser.idnum
+                }),
+            });
+
+            if (!response.ok) {
+                const result = await response.json();
+                throw new Error(result.error || 'Failed to delete user');
+            }
             
             // Remove user from local state immediately
-            if (setUserData) setUserData(defaultUserData || null);
+            if (setUserData) setUserData(null);
             
             // Note: UsersAdmin gets users from parent prop, so we might need a refresh callback
             // But for now, let's close the modal and show success immediately
@@ -117,7 +99,7 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
             setTimeout(() => window.location.reload(), 500);
         } catch (error) {
             console.error("Error deleting user:", error);
-            showModal('error', 'Error', "Failed to delete user. Please try again.");
+            showModal('error', 'Error', error.message || "Failed to delete user. Please try again.");
         } finally {
             setIsProcessing(false);
         }

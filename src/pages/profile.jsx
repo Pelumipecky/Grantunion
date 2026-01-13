@@ -58,7 +58,6 @@ const Profile = () => {
   }, [profilestate]);
 
   const [bitPrice, setBitPrice] = useState(0);
-  const [ethPrice, setEthPrice] = useState(0);
   const [investments, setInvestments] = useState([]);
   const handleLogOut = () => {
     localStorage.clear();
@@ -286,7 +285,7 @@ const Profile = () => {
   async function fetchData(path, stateSetter) {
     try {
       // Use local API proxy to avoid CORS issues
-      const response = await fetch(`/api/price?ids=bitcoin,ethereum&vs_currencies=usd`);
+      const response = await fetch(`/api/price?ids=bitcoin&vs_currencies=usd`);
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -295,31 +294,22 @@ const Profile = () => {
       const data = await response.json();
       console.log('Price API Response:', data);
       
-      // If caller asks for bit price or eth price, set appropriately
+      // If caller asks for bit price, set appropriately
       if (stateSetter === setBitPrice) {
         const price = data.bitcoin?.usd || 0;
         console.log('Setting BTC Price:', price);
         stateSetter(price);
-      } else if (stateSetter === setEthPrice) {
-        const price = data.ethereum?.usd || 0;
-        console.log('Setting ETH Price:', price);
-        stateSetter(price);
       } else {
-        // fallback: if called generically, set both when possible
+        // fallback: if called generically, set btc
         if (data.bitcoin?.usd) {
           console.log('Setting BTC Price (generic):', data.bitcoin.usd);
           setBitPrice(data.bitcoin.usd);
-        }
-        if (data.ethereum?.usd) {
-          console.log('Setting ETH Price (generic):', data.ethereum.usd);
-          setEthPrice(data.ethereum.usd);
         }
       }
     } catch (error) {
       console.error("Error fetching price data:", error.message);
       // Set fallback prices on error
       setBitPrice(95000);
-      setEthPrice(3500);
     }
   }
 
@@ -784,7 +774,6 @@ const Profile = () => {
             setProfileState={setProfileState}
             investData={investData}
             bitPrice={bitPrice}
-            ethPrice={ethPrice}
             setInvestments={setInvestments}
           />
         )}
@@ -793,7 +782,6 @@ const Profile = () => {
             setProfileState={setProfileState}
             withdrawData={withdrawData}
             bitPrice={bitPrice}
-            ethPrice={ethPrice}
             currentUser={currentUser}
           />
         )}

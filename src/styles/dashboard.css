@@ -1293,3 +1293,182 @@ button.logoutBtn:hover i {
         margin: 2px 0 !important;
     }
 }
+
+/* Users Table Styles */
+.usersTableContainer {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 20px;
+    border-radius: 12px;
+    background-color: var(--dark-clr4);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.usersTable {
+    width: 100%;
+    border-collapse: separate; 
+    border-spacing: 0;
+    min-width: 1000px; /* Force minimum width to ensure no cramping */
+}
+
+.usersTable th,
+.usersTable td {
+    padding: 16px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.usersTable th {
+    background-color: var(--dark-clr2);
+    color: var(--text-deco);
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.usersTable td {
+    color: var(--text-clr1);
+    font-size: 0.95em;
+    vertical-align: middle;
+}
+
+.usersTable tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.usersTable .clickable-name {
+    color: var(--sec-clr);
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.usersTable .clickable-name:hover {
+    color: #ff9b50;
+    text-decoration: underline;
+}
+
+.usersTable .cryptic-id {
+    font-family: monospace;
+    opacity: 0.7;
+    font-size: 0.9em;
+}
+
+.usersTable .balance,
+.usersTable .bonus {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.usersTable .balance {
+    color: var(--green-clr);
+}
+
+.usersTable .bonus {
+    color: var(--text-accent);
+}
+
+.usersTable .kyc-status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.usersTable .kyc-status.verified {
+    background-color: rgba(45, 193, 148, 0.15);
+    color: var(--green-clr);
+    border: 1px solid rgba(45, 193, 148, 0.3);
+}
+
+.usersTable .kyc-status.pending {
+    background-color: rgba(249, 248, 113, 0.15);
+    color: var(--yellow-clr);
+    border: 1px solid rgba(249, 248, 113, 0.3);
+}
+
+.usersTable .kyc-status.rejected {
+    background-color: rgba(220, 18, 98, 0.15);
+    color: var(--danger-clr);
+    border: 1px solid rgba(220, 18, 98, 0.3);
+}
+
+.usersTable .account-status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.usersTable .account-status.active {
+    color: var(--green-clr);
+}
+
+.usersTable .account-status.suspended {
+    background-color: rgba(220, 18, 98, 0.15);
+    color: var(--danger-clr);
+}
+
+.usersTable .action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.usersTable .action-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    outline: none;
+}
+
+.usersTable .action-btn.suspend {
+    background-color: rgba(255, 179, 71, 0.15);
+    color: var(--text-deco);
+    border: 1px solid rgba(255, 179, 71, 0.3);
+}
+
+.usersTable .action-btn.activate {
+    background-color: rgba(45, 193, 148, 0.15);
+    color: var(--green-clr);
+    border: 1px solid rgba(45, 193, 148, 0.3);
+}
+
+.usersTable .action-btn.delete {
+    background-color: rgba(220, 18, 98, 0.15);
+    color: var(--danger-clr);
+    border: 1px solid rgba(220, 18, 98, 0.3);
+}
+
+.usersTable .action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Scrollbar styling for the table container */
+.usersTableContainer::-webkit-scrollbar {
+    height: 8px;
+    background-color: var(--dark-clr3);
+}
+
+.usersTableContainer::-webkit-scrollbar-thumb {
+    background: var(--sec-clr);
+    border-radius: 10px;
+}
+
+.usersTableContainer::-webkit-scrollbar-track {
+    background: var(--dark-clr3);
+    border-radius: 10px;
+}

@@ -49,6 +49,10 @@ const normalizeWithdrawalPayload = (withdrawalData = {}) => {
     status: withdrawalData.status || 'pending',
     paymentoption: paymentOption,
     wallet_address: withdrawalData.wallet_address ?? withdrawalData.walletAddress ?? null,
+    bank_name: withdrawalData.bank_name ?? withdrawalData.bankName ?? null,
+    account_number: withdrawalData.account_number ?? withdrawalData.accountNumber ?? withdrawalData.bankAccountNumber ?? null,
+    account_name: withdrawalData.account_name ?? withdrawalData.accountName ?? withdrawalData.bankAccountName ?? null,
+    routing_number: withdrawalData.routing_number ?? withdrawalData.routingNumber ?? withdrawalData.bankRoutingSwift ?? null,
   };
   console.log('🔧 Normalized withdrawal data:', normalized);
   return normalized;

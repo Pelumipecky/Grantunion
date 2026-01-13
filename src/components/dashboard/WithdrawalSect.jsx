@@ -182,7 +182,6 @@ const WithdrawalSect = ({currentUser, setWidgetState, totalBonus, totalCapital, 
                         className={styles.select}
                     >
                         <option value="Bitcoin">Bitcoin</option>
-                        <option value="Ethereum">Ethereum</option>
                         <option value="USDT">USDT</option>
                         <option value="Bank Transfer">Bank Transfer</option>
                     </select>
