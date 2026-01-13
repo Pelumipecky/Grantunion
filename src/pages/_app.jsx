@@ -16,6 +16,7 @@ import dynamic from 'next/dynamic';
 import '../i18n'; // Add this import
 
 import TelegramWidget from '../components/TelegramWidget';
+import TawkToWidget from '../components/TawkToWidget';
 
 // Dynamically import client-side components
 // ChatBot is rendered only on the user dashboard (profile page).
@@ -96,6 +97,7 @@ export default function App({ Component, pageProps }) {
           {/* ChatBot is rendered inside the user profile page only */}
           <Component {...pageProps} />
           <TelegramWidget />
+          <TawkToWidget />
         </div>
       </AnimatePresence>
     </ThemeProvider>

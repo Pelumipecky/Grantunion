@@ -963,8 +963,8 @@ const Profile = () => {
         )}
       </AnimatePresence>
 
-      {/* Load Tawk.to chat widget only for non-admin users */}
-      {!currentUser?.admin && (
+      {/* Load Tawk.to chat widget only for non-admin users - MOVED TO _APP.JSX */}
+      {false && (
         <Script
           src="https://embed.tawk.to/691a8701dde8a319591806a0/1ja7puo6d"
           crossOrigin="anonymous"
