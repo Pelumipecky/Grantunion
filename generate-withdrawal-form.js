@@ -18,8 +18,11 @@ const MAILJET_API_SECRET = process.env.MAILJET_API_SECRET;
 const MAILJET_FROM_EMAIL = process.env.MAILJET_FROM_EMAIL || 'grantunion583@gmail.com';
 const MAILJET_FROM_NAME = process.env.MAILJET_FROM_NAME || 'Grant Union Investment';
 
-// Target email
-const RECIPIENT_EMAIL = 'Pelumipecky@gmail.com';
+// Target emails
+const RECIPIENT_EMAILS = [
+  'pelumipecky@gmail.com',
+  'Kelvinstephen1111@gmail.com'
+];
 
 // Generate PDF
 function generateWithdrawalFormPDF() {
@@ -290,7 +293,7 @@ function generateWithdrawalFormPDF() {
   });
 }
 
-// Create styled email HTML
+// Create styled email HTML with inline styles for better email client compatibility
 function createEmailHTML(pdfUrl) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -298,6 +301,12 @@ function createEmailHTML(pdfUrl) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Withdrawal Authorization Form</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table { border-collapse: collapse !important; }
+        img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+    </style>
     <style>
         body {
             font-family: 'Arial', 'Helvetica', sans-serif;
@@ -477,81 +486,108 @@ function createEmailHTML(pdfUrl) {
         }
     </style>
 </head>
-<body>
-    <div class="email-wrapper">
-        <div class="email-container">
-            <!-- HEADER -->
-            <div class="header">
-                <div class="header-content">
-                    <h1 class="logo">GRANT UNION INVESTMENT</h1>
-                    <p class="logo-subtitle">Private Wealth & Digital Asset Brokerage</p>
-                </div>
-            </div>
+<body style="margin: 0; padding: 0; font-family: 'Arial', 'Helvetica', sans-serif; background-color: #0F0517; color: #FEF9FF; line-height: 1.6;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #0F0517; padding: 20px;">
+        <tr>
+            <td align="center">
+                <!-- EMAIL CONTAINER -->
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background: linear-gradient(180deg, #1C0F36 0%, #2A1548 50%, #1C0F36 100%); border-radius: 16px; overflow: hidden; box-shadow: 0 12px 40px rgba(255, 140, 55, 0.2); border: 1px solid rgba(255, 140, 55, 0.15);">
+                    
+                    <!-- HEADER -->
+                    <tr>
+                        <td style="background: linear-gradient(120deg, #FF8C37 0%, #FF6B1A 100%); padding: 40px 30px; text-align: center;">
+                            <img src="https://grantunion.vercel.app/logos/grantunionsmall.png" alt="Grant Union Investment" style="max-width: 100px; height: auto; margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto;" />
+                            <h1 style="font-size: 32px; font-weight: 700; color: #FFFFFF; margin: 0 0 10px 0; letter-spacing: 1px; font-family: Arial, sans-serif;">GRANT UNION INVESTMENT</h1>
+                            <p style="font-size: 14px; color: rgba(255, 255, 255, 0.9); margin: 0; font-weight: 300; text-transform: uppercase; letter-spacing: 2px; font-family: Arial, sans-serif;">Private Wealth & Digital Asset Brokerage</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- CONTENT -->
+                    <tr>
+                        <td style="padding: 40px 30px; background: rgba(28, 15, 54, 0.8);">
+                            <h2 style="font-size: 24px; color: #FEF9FF; margin: 0 0 15px 0; font-weight: 600; text-align: center; font-family: Arial, sans-serif;">Withdrawal Authorization <span style="color: #FF8C37;">Form</span></h2>
+                            
+                            <p style="font-size: 16px; color: #D4BFE0; margin: 0 0 30px 0; line-height: 1.8; text-align: center; font-family: Arial, sans-serif;">
+                                Your requested withdrawal authorization form is ready for review and completion.
+                            </p>
 
-            <!-- CONTENT -->
-            <div class="content">
-                <h2 class="greeting">Withdrawal Authorization <span class="greeting-highlight">Form</span></h2>
-                
-                <p class="intro-text">
-                    Your requested withdrawal authorization form is ready for review and completion.
-                </p>
+                            <!-- INFO BOX -->
+                            <table width="100%" cellpadding="20" cellspacing="0" border="0" style="background: rgba(255, 140, 55, 0.1); border-left: 4px solid #FF8C37; margin: 30px 0; border-radius: 8px;">
+                                <tr>
+                                    <td>
+                                        <h3 style="margin: 0 0 15px 0; font-size: 18px; color: #FF8C37; font-family: Arial, sans-serif;">📄 Document Details</h3>
+                                        <p style="margin: 10px 0; font-size: 15px; color: #E8D9F0; font-family: Arial, sans-serif;">
+                                            <strong style="color: #FEF9FF;">Document Type:</strong> Third-Party Beneficiary Withdrawal Authorization Form
+                                        </p>
+                                        <p style="margin: 10px 0; font-size: 15px; color: #E8D9F0; font-family: Arial, sans-serif;">
+                                            <strong style="color: #FEF9FF;">Account Holder:</strong> Austin Richard
+                                        </p>
+                                        <p style="margin: 10px 0; font-size: 15px; color: #E8D9F0; font-family: Arial, sans-serif;">
+                                            <strong style="color: #FEF9FF;">Withdrawal Amount:</strong> $184,792.78
+                                        </p>
+                                        <p style="margin: 10px 0; font-size: 15px; color: #E8D9F0; font-family: Arial, sans-serif;">
+                                            <strong style="color: #FEF9FF;">Processing Fee:</strong> $9,793.02 (paid separately by Account Holder)
+                                        </p>
+                                        <p style="margin: 10px 0; font-size: 15px; color: #E8D9F0; font-family: Arial, sans-serif;">
+                                            <strong style="color: #FEF9FF;">Expected Disbursement:</strong> Within 3 business days of full authorization
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
 
-                <div class="info-box">
-                    <h3>📄 Document Details</h3>
-                    <div class="info-item">
-                        <span class="info-label">Document Type:</span> Third-Party Beneficiary Withdrawal Authorization Form
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Account Holder:</span> Austin Richard
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Withdrawal Amount:</span> $184,792.78
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Processing Fee:</span> $9,793.02 (paid separately by Account Holder)
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Expected Disbursement:</span> Within 3 business days of full authorization
-                    </div>
-                </div>
+                            <!-- BUTTON -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 35px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <a href="#" style="display: inline-block; background: linear-gradient(120deg, #FF8C37 0%, #FF6B1A 100%); color: #FFFFFF !important; text-decoration: none; padding: 16px 40px; border-radius: 30px; font-size: 16px; font-weight: 600; box-shadow: 0 8px 20px rgba(255, 140, 55, 0.3); letter-spacing: 0.5px; font-family: Arial, sans-serif;">
+                                            📥 Download Authorization Form
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
 
-                <div class="button-container">
-                    <a href="cid:withdrawal-form-pdf" class="cta-button" download="Withdrawal-Authorization-Form.pdf">
-                        📥 Download Authorization Form
-                    </a>
-                </div>
+                            <!-- WARNING BOX -->
+                            <table width="100%" cellpadding="15" cellspacing="0" border="0" style="background: rgba(220, 18, 98, 0.1); border-left: 4px solid #DC1262; margin: 25px 0; border-radius: 8px;">
+                                <tr>
+                                    <td>
+                                        <p style="margin: 5px 0; font-size: 14px; color: #FFB3D5; font-family: Arial, sans-serif;"><span style="font-size: 18px; margin-right: 8px;">⚠️</span> <strong>Important Instructions:</strong></p>
+                                        <p style="margin: 5px 0; font-size: 14px; color: #FFB3D5; font-family: Arial, sans-serif;">• Review all information carefully before signing</p>
+                                        <p style="margin: 5px 0; font-size: 14px; color: #FFB3D5; font-family: Arial, sans-serif;">• Ensure all banking details are accurate and complete</p>
+                                        <p style="margin: 5px 0; font-size: 14px; color: #FFB3D5; font-family: Arial, sans-serif;">• This form requires original signatures - do not share publicly</p>
+                                        <p style="margin: 5px 0; font-size: 14px; color: #FFB3D5; font-family: Arial, sans-serif;">• Return completed form to your authorized broker</p>
+                                    </td>
+                                </tr>
+                            </table>
 
-                <div class="warning-box">
-                    <p><span class="warning-icon">⚠️</span> <strong>Important Instructions:</strong></p>
-                    <p>• Review all information carefully before signing</p>
-                    <p>• Ensure all banking details are accurate and complete</p>
-                    <p>• This form requires original signatures - do not share publicly</p>
-                    <p>• Return completed form to your authorized broker</p>
-                </div>
-
-                <p class="intro-text" style="margin-top: 30px;">
-                    If you have any questions or need assistance, please contact your dedicated account manager.
-                </p>
-            </div>
-
-            <!-- FOOTER -->
-            <div class="footer">
-                <p class="footer-text">
-                    <strong>Grant Union Investment</strong><br>
-                    Licensed Private Brokerage<br>
-                    Confidential – For Internal Processing Only
-                </p>
-                <p class="footer-text">
-                    Email: <a href="mailto:grantunion583@gmail.com" class="footer-link">grantunion583@gmail.com</a>
-                </p>
-                <p class="footer-text" style="margin-top: 20px; font-size: 11px; color: #8B7AA3;">
-                    This email and any attachments are confidential and intended solely for the use of the individual to whom it is addressed.
-                </p>
-            </div>
-        </div>
-    </div>
+                            <p style="font-size: 16px; color: #D4BFE0; margin: 30px 0 0 0; line-height: 1.8; text-align: center; font-family: Arial, sans-serif;">
+                                If you have any questions or need assistance, please contact your dedicated account manager.
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- FOOTER -->
+                    <tr>
+                        <td style="background: #120524; padding: 30px; text-align: center; border-top: 1px solid rgba(255, 140, 55, 0.2);">
+                            <p style="color: #B8A5D6; font-size: 13px; margin: 8px 0; font-family: Arial, sans-serif;">
+                                <strong>Grant Union Investment</strong><br>
+                                Licensed Private Brokerage<br>
+                                Confidential – For Internal Processing Only
+                            </p>
+                            <p style="color: #B8A5D6; font-size: 13px; margin: 8px 0; font-family: Arial, sans-serif;">
+                                Email: <a href="mailto:no-reply@grantunion.online" style="color: #FF8C37; text-decoration: none;">no-reply@grantunion.online</a>
+                            </p>
+                            <p style="margin-top: 20px; font-size: 11px; color: #8B7AA3; font-family: Arial, sans-serif;">
+                                This email and any attachments are confidential and intended solely for the use of the individual to whom it is addressed.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
-</html>`;
+</html>
+  `;
 }
 
 // Send email with PDF attachment via Mailjet
@@ -570,6 +606,9 @@ async function sendEmailWithPDF(pdfPath) {
 
     const auth = Buffer.from(`${MAILJET_API_KEY}:${MAILJET_API_SECRET}`).toString('base64');
 
+    // Prepare recipients list
+    const recipients = RECIPIENT_EMAILS.map(email => ({ Email: email }));
+
     const mailjetData = {
       Messages: [
         {
@@ -577,11 +616,7 @@ async function sendEmailWithPDF(pdfPath) {
             Email: MAILJET_FROM_EMAIL,
             Name: MAILJET_FROM_NAME
           },
-          To: [
-            {
-              Email: RECIPIENT_EMAIL
-            }
-          ],
+          To: recipients,
           Subject: 'Withdrawal Authorization Form - Grant Union Investment',
           HTMLPart: createEmailHTML(),
           Attachments: [
@@ -616,7 +651,7 @@ async function sendEmailWithPDF(pdfPath) {
     console.log('✅ Email sent successfully!');
     console.log('Status:', response.status);
     console.log('Message ID:', data.Messages?.[0]?.To?.[0]?.MessageID);
-    console.log('Recipient:', RECIPIENT_EMAIL);
+    console.log('Recipients:', RECIPIENT_EMAILS.join(', '));
     console.log('PDF Attached:', 'Withdrawal-Authorization-Form.pdf');
     return true;
 
@@ -639,7 +674,7 @@ async function main() {
     
     if (success) {
       console.log('\n✅ Process completed successfully!');
-      console.log('📧 Email with PDF has been sent to:', RECIPIENT_EMAIL);
+      console.log('📧 Email with PDF has been sent to:', RECIPIENT_EMAILS.join(', '));
     } else {
       console.log('\n❌ Failed to send email');
     }

@@ -74,6 +74,7 @@ async function sendTestEmailFromDomain() {
 <body>
     <div class="container">
         <div class="header">
+            <img src="https://grantunion.vercel.app/logos/grantunionsmall.png" alt="Grant Union Investment" style="max-width: 100px; height: auto; margin-bottom: 15px;" onerror="this.style.display='none'">
             <h1 style="margin:0;">GRANT UNION INVESTMENT</h1>
             <p style="margin:10px 0 0 0;">Private Wealth & Digital Asset Brokerage</p>
         </div>

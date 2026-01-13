@@ -36,6 +36,11 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         .logo-section {
           margin-bottom: 15px;
         }
+        .logo-section img {
+          max-width: 120px;
+          height: auto;
+          margin-bottom: 15px;
+        }
         .logo-text {
           font-size: 32px;
           font-weight: 800;
@@ -52,10 +57,6 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
           margin: 5px 0 0 0;
           text-transform: uppercase;
           font-weight: 600;
-        }
-        .logo-section img {
-          max-width: 150px;
-          height: auto;
         }
         .header h1 {
           color: #FEF9FF;
@@ -194,9 +195,8 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
       <div class="email-container">
         <div class="header">
           <div class="logo-section">
-            <!-- Try to load image logo, fallback to text -->
-            <img src="https://grantunion583.com/grantunionLogo.png" alt="Grant Union Investment Logo" style="max-width: 120px; height: auto;">
-            <p class="logo-text">🚀 GRANT UNION</p>
+            <img src="https://grantunion.vercel.app/logos/grantunionsmall.png" alt="Grant Union Investment" onerror="this.style.display='none'">
+            <p class="logo-text">GRANT UNION</p>
             <p class="logo-subtitle">Investment Platform</p>
           </div>
           <h1>${title}</h1>
@@ -221,6 +221,309 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
 
 // Template generators for different email types
 const emailTemplates = {
+  // Welcome email for new users
+  welcome: (data) => {
+    const { userName, email } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Member'}</strong>,</p>
+      <p>Welcome to Grant Union Investment! We're thrilled to have you join our community of successful investors.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #FF8C37;">Getting Started Guide</h3>
+        <p style="margin-bottom: 15px;">Here's how to navigate your Grant Union Investment platform:</p>
+        <ul style="list-style: none; padding: 0;">
+          <li style="padding: 10px 0; border-bottom: 1px solid rgba(255, 140, 55, 0.2);">
+            <strong style="color: #FF8C37;">1. Complete Your Profile</strong><br>
+            <span style="font-size: 13px;">Go to Dashboard → Profile to verify your account details</span>
+          </li>
+          <li style="padding: 10px 0; border-bottom: 1px solid rgba(255, 140, 55, 0.2);">
+            <strong style="color: #FF8C37;">2. Submit KYC Verification</strong><br>
+            <span style="font-size: 13px;">Visit Dashboard → KYC to upload required documents</span>
+          </li>
+          <li style="padding: 10px 0; border-bottom: 1px solid rgba(255, 140, 55, 0.2);">
+            <strong style="color: #FF8C37;">3. Choose Investment Plan</strong><br>
+            <span style="font-size: 13px;">Browse our plans: 7-Day, 14-Day, 3-Month, or 6-Month options</span>
+          </li>
+          <li style="padding: 10px 0; border-bottom: 1px solid rgba(255, 140, 55, 0.2);">
+            <strong style="color: #FF8C37;">4. Make Your First Deposit</strong><br>
+            <span style="font-size: 13px;">Click Invest Now and follow the deposit instructions</span>
+          </li>
+          <li style="padding: 10px 0;">
+            <strong style="color: #FF8C37;">5. Track Your Returns</strong><br>
+            <span style="font-size: 13px;">Monitor daily ROI credits in your dashboard</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>Account Details:</strong><br>
+        Email: ${email}<br>
+        Member Since: ${new Date().toLocaleDateString()}<br>
+        Status: Active
+      </div>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/signin" class="button">Access Your Dashboard</a>
+      </p>
+
+      <p>If you have any questions, our support team is here to help 24/7.</p>
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Welcome to Grant Union Investment', content);
+  },
+
+  // Investment creation notification
+  investment_created: (data) => {
+    const { userName, plan, amount, dailyROI, duration, expectedReturn, transactionHash } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Investor'}</strong>,</p>
+      <p>Your investment has been successfully submitted and is now pending approval.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #FF8C37;">Investment Details</h3>
+        <ul>
+          <li>
+            <span>Investment Plan</span>
+            <span style="color: #FF8C37; font-weight: 600;">${plan}</span>
+          </li>
+          <li>
+            <span>Capital Amount</span>
+            <span class="value">$${parseFloat(amount).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Daily ROI</span>
+            <span class="value">$${parseFloat(dailyROI).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Duration</span>
+            <span style="color: #FEF9FF;">${duration} days</span>
+          </li>
+          <li>
+            <span>Expected Total Return</span>
+            <span class="value">$${parseFloat(expectedReturn).toFixed(2)}</span>
+          </li>
+          ${transactionHash ? `<li><span>Transaction ID</span><span style="color: #FEF9FF; font-size: 11px; word-break: break-all;">${transactionHash}</span></li>` : ''}
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>What Happens Next:</strong><br>
+        1. Our team will review your investment within 24 hours<br>
+        2. You'll receive a confirmation email once approved<br>
+        3. Daily ROI credits will begin immediately after approval<br>
+        4. Track your earnings in real-time on your dashboard
+      </div>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/dashboard" class="button">View Dashboard</a>
+      </p>
+
+      <p>Thank you for choosing Grant Union Investment.</p>
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Investment Submitted Successfully', content);
+  },
+
+  // Investment approved notification
+  investment_approved: (data) => {
+    const { userName, plan, amount, dailyROI, duration } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Investor'}</strong>,</p>
+      <p>Great news! Your investment has been approved and activated.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #2DC194;">Investment Active</h3>
+        <ul>
+          <li><span>Plan</span><span style="color: #FF8C37;">${plan}</span></li>
+          <li><span>Capital</span><span class="value">$${parseFloat(amount).toFixed(2)}</span></li>
+          <li><span>Daily ROI</span><span class="value">$${parseFloat(dailyROI).toFixed(2)}</span></li>
+          <li><span>Duration</span><span style="color: #FEF9FF;">${duration} days</span></li>
+        </ul>
+      </div>
+
+      <p>Your daily ROI credits will begin immediately. You can track your earnings in real-time on your dashboard.</p>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/dashboard" class="button">View Your Earnings</a>
+      </p>
+
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Investment Approved', content);
+  },
+
+  // Withdrawal request notification
+  withdrawal_requested: (data) => {
+    const { userName, amount, method, accountDetails } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Member'}</strong>,</p>
+      <p>We have received your withdrawal request and it is currently being processed.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #FF8C37;">Withdrawal Details</h3>
+        <ul>
+          <li>
+            <span>Withdrawal Amount</span>
+            <span class="value">$${parseFloat(amount).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Payment Method</span>
+            <span style="color: #FEF9FF;">${method || 'Bank Transfer'}</span>
+          </li>
+          <li>
+            <span>Status</span>
+            <span style="color: #FFD700;">Pending Review</span>
+          </li>
+          <li>
+            <span>Requested On</span>
+            <span style="color: #FEF9FF;">${new Date().toLocaleDateString()}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>Processing Timeline:</strong><br>
+        • Review: Within 24 hours<br>
+        • Approval: 1-2 business days<br>
+        • Transfer: 3-5 business days<br>
+        • You'll be notified at each stage
+      </div>
+
+      <p>We'll send you another email once your withdrawal has been approved and processed.</p>
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Withdrawal Request Received', content);
+  },
+
+  // Withdrawal approved notification
+  withdrawal_approved: (data) => {
+    const { userName, amount, method } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Member'}</strong>,</p>
+      <p>Excellent news! Your withdrawal request has been approved and processed.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #2DC194;">Withdrawal Approved</h3>
+        <ul>
+          <li>
+            <span>Amount</span>
+            <span class="value">$${parseFloat(amount).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Payment Method</span>
+            <span style="color: #FEF9FF;">${method || 'Bank Transfer'}</span>
+          </li>
+          <li>
+            <span>Status</span>
+            <span class="value">Approved</span>
+          </li>
+          <li>
+            <span>Processed On</span>
+            <span style="color: #FEF9FF;">${new Date().toLocaleDateString()}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>What's Next:</strong><br>
+        The funds have been transferred to your account. Depending on your bank, it may take 3-5 business days for the funds to reflect in your account.
+      </div>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/dashboard" class="button">View Transaction History</a>
+      </p>
+
+      <p>Thank you for your patience.</p>
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Withdrawal Approved', content);
+  },
+
+  // Withdrawal rejected notification
+  withdrawal_rejected: (data) => {
+    const { userName, amount, reason } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Member'}</strong>,</p>
+      <p>We regret to inform you that your withdrawal request could not be processed at this time.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #DC1262;">Withdrawal Details</h3>
+        <ul>
+          <li>
+            <span>Amount</span>
+            <span style="color: #FEF9FF;">$${parseFloat(amount).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Status</span>
+            <span style="color: #DC1262;">Rejected</span>
+          </li>
+          <li>
+            <span>Date</span>
+            <span style="color: #FEF9FF;">${new Date().toLocaleDateString()}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="warning-box">
+        <strong>Reason for Rejection:</strong><br>
+        ${reason || 'Please contact support for more information regarding your withdrawal request.'}
+      </div>
+
+      <p>If you have any questions or would like to discuss this further, please contact our support team.</p>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/contact" class="button">Contact Support</a>
+      </p>
+
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Withdrawal Status Update', content);
+  },
+
+  // Deposit confirmation
+  deposit_confirmed: (data) => {
+    const { userName, amount, method, transactionHash, newBalance } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Member'}</strong>,</p>
+      <p>Your deposit has been successfully confirmed and credited to your account.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #2DC194;">Deposit Confirmed</h3>
+        <ul>
+          <li>
+            <span>Deposit Amount</span>
+            <span class="value">$${parseFloat(amount).toFixed(2)}</span>
+          </li>
+          <li>
+            <span>Payment Method</span>
+            <span style="color: #FEF9FF;">${method || 'Cryptocurrency'}</span>
+          </li>
+          ${transactionHash ? `<li><span>Transaction ID</span><span style="color: #FEF9FF; font-size: 11px; word-break: break-all;">${transactionHash}</span></li>` : ''}
+          ${newBalance ? `<li><span>New Balance</span><span class="value">$${parseFloat(newBalance).toFixed(2)}</span></li>` : ''}
+          <li>
+            <span>Status</span>
+            <span class="value">Confirmed</span>
+          </li>
+          <li>
+            <span>Date</span>
+            <span style="color: #FEF9FF;">${new Date().toLocaleDateString()}</span>
+          </li>
+        </ul>
+      </div>
+
+      <p>Your funds are now available for investment. Start earning daily returns by choosing one of our investment plans.</p>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/dashboard" class="button">Start Investing</a>
+      </p>
+
+      <p>Thank you for your deposit.</p>
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Deposit Confirmed', content);
+  },
+
+  // Daily ROI credit
   roi_daily_credit: (data) => {
     const { userName, dailyROI, totalROI, totalExpected, plan, progress } = data;
     const content = `
@@ -228,7 +531,7 @@ const emailTemplates = {
       <p>Excellent news! Your daily ROI has been successfully credited to your account.</p>
       
       <div class="stats-box">
-        <h3 style="margin-top: 0; color: #FF8C37;">💰 Today's Earnings Summary</h3>
+        <h3 style="margin-top: 0; color: #FF8C37;">Today's Earnings Summary</h3>
         <ul>
           <li>
             <span>Daily ROI Credited</span>
@@ -248,6 +551,79 @@ const emailTemplates = {
           </li>
           <li>
             <span>Completion Progress</span>
+            <span class="value">${parseFloat(progress || 0).toFixed(1)}%</span>
+          </li>
+        </ul>
+      </div>
+
+      <p>Your investment is performing excellently. Keep earning daily returns automatically.</p>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/dashboard" class="button">View Full Details</a>
+      </p>
+
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('Daily ROI Credited', content);
+  },
+
+  // KYC status updates
+  kyc_approved: (data) => {
+    const { userName } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Member'}</strong>,</p>
+      <p>Congratulations! Your KYC verification has been approved.</p>
+      
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #2DC194;">Verification Complete</h3>
+        <p>Your account is now fully verified and you have access to all platform features:</p>
+        <ul style="list-style: none; padding: 0;">
+          <li style="padding: 8px 0; color: #2DC194;">✓ Full investment access</li>
+          <li style="padding: 8px 0; color: #2DC194;">✓ Unlimited withdrawals</li>
+          <li style="padding: 8px 0; color: #2DC194;">✓ Priority support</li>
+          <li style="padding: 8px 0; color: #2DC194;">✓ Enhanced security</li>
+        </ul>
+      </div>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/dashboard" class="button">Access Your Account</a>
+      </p>
+
+      <p>Thank you for completing the verification process.</p>
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('KYC Verification Approved', content);
+  },
+
+  kyc_rejected: (data) => {
+    const { userName, reason } = data;
+    const content = `
+      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Member'}</strong>,</p>
+      <p>We were unable to approve your KYC verification at this time.</p>
+      
+      <div class="warning-box">
+        <strong>Reason:</strong><br>
+        ${reason || 'The documents provided did not meet our verification requirements. Please ensure your documents are clear, valid, and match your account information.'}
+      </div>
+
+      <div class="info-box">
+        <strong>Next Steps:</strong><br>
+        1. Review the rejection reason above<br>
+        2. Prepare valid identification documents<br>
+        3. Resubmit your KYC application<br>
+        4. Contact support if you need assistance
+      </div>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/dashboard/kyc" class="button">Resubmit Documents</a>
+      </p>
+
+      <p>Our support team is here to help if you have any questions.</p>
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    `;
+    return buildStyledEmailTemplate('KYC Verification Update', content);
+  }
+};
             <span class="value">${parseFloat(progress).toFixed(1)}%</span>
           </li>
         </ul>
@@ -453,23 +829,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    let { to, subject, message, type, templateData } = req.body;
+    let { to, subject, message, type, templateData, templateType } = req.body;
 
     if (!to || !subject) {
       return res.status(400).json({ error: 'Missing required fields: to, subject' });
     }
 
-    // Use styled template if type is specified
-    if (type && emailTemplates[type] && templateData) {
-      message = emailTemplates[type](templateData);
+    // Use templateType or type for template selection
+    const templateKey = templateType || type;
+
+    // Use styled template if template key is specified
+    if (templateKey && emailTemplates[templateKey]) {
+      if (!templateData) {
+        return res.status(400).json({ error: `Template '${templateKey}' requires templateData` });
+      }
+      message = emailTemplates[templateKey](templateData);
     } else if (!message) {
-      return res.status(400).json({ error: 'Missing message or templateData' });
+      return res.status(400).json({ error: 'Missing message or valid template type with templateData' });
     }
 
     // Get Mailjet credentials from environment variables
     const MAILJET_API_KEY = process.env.MAILJET_API_KEY;
     const MAILJET_API_SECRET = process.env.MAILJET_API_SECRET;
-    const MAILJET_FROM_EMAIL = process.env.MAILJET_FROM_EMAIL || 'noreply@grantunioninvestment.com';
+    const MAILJET_FROM_EMAIL = process.env.MAILJET_FROM_EMAIL || 'no-reply@grantunion.online';
     const MAILJET_FROM_NAME = process.env.MAILJET_FROM_NAME || 'Grant Union Investment';
 
     if (!MAILJET_API_KEY || !MAILJET_API_SECRET) {
