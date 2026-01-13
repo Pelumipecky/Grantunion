@@ -420,19 +420,26 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                                 try {
                                                                     if (userData?.email) {
                                                                         const emailSubject = 'Investment Approved - Grant Union Investment';
+
+                                                                        // Calculate daily dollar amount for email
+                                                                        let dailyAmount = 0;
+                                                                        if (planConfig) {
+                                                                            dailyAmount = capital * planConfig.dailyRate;
+                                                                        } else if (!legacyRule) {
+                                                                            dailyAmount = capital * 0.025; // Fallback
+                                                                        }
                                                                         
                                                                         // Prepare email data with all required fields for the template
                                                                         const emailData = {
                                                                             to: userData.email,
                                                                             subject: emailSubject,
-                                                                            type: 'investment_approval',
+                                                                            type: 'investment_approved',
                                                                             templateData: {
                                                                                 userName: userData.name || userData.email.split('@')[0] || 'Investor',
                                                                                 plan: elem.plan,
-                                                                                capital: capital,
-                                                                                roi: calculatedROI,
-                                                                                bonus: calculatedBonus,
-                                                                                duration: termLabel
+                                                                                amount: capital,
+                                                                                dailyROI: dailyAmount,
+                                                                                duration: fallbackDuration
                                                                             }
                                                                         };
 
