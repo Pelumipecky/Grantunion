@@ -68,13 +68,13 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         }
         .content {
           padding: 30px 25px;
-          background: rgba(28, 15, 54, 0.8);
+          background: #ffffff;
         }
         .content p {
           margin: 15px 0;
           line-height: 1.6;
           font-size: 15px;
-          color: #F8EDFF;
+          color: #333333;
         }
         .content h2 {
           color: #FF8C37;
@@ -156,7 +156,7 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
           border-radius: 6px;
           margin: 15px 0;
           font-size: 14px;
-          color: #E0D5FF;
+          color: #333333;
         }
         .footer {
           background: rgba(58, 26, 99, 0.6);
@@ -189,7 +189,7 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
           border-radius: 6px;
           margin: 15px 0;
           font-size: 14px;
-          color: #FFD6B8;
+          color: #333333;
         }
       </style>
     </head>
