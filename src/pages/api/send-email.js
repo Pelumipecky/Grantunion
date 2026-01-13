@@ -743,9 +743,12 @@ const emailTemplates = {
 
   withdrawal_notification: (data) => {
     const { userName, amount, status, method } = data;
+    const statusText = status === 'approved' ? 'APPROVED' : status === 'rejected' ? 'REJECTED' : 'PENDING';
+    const statusColor = status === 'approved' ? '#2DC194' : status === 'rejected' ? '#FF4444' : '#FF9837';
+    
     const content = `
       <p>Dear <strong style="color: #FF8C37;">${userName || 'Investor'}</strong>,</p>
-      <p>Your withdrawal request has been <strong style="color: ${status === 'approved' ? '#2DC194' : '#FF9837'};">${status.toUpperCase()}</strong>.</p>
+      <p>Your withdrawal request has been <strong style="color: ${statusColor};">${statusText}</strong>.</p>
       
       <div class="stats-box">
         <h3 style="margin-top: 0; color: #FF8C37;">Withdrawal Details</h3>
@@ -760,7 +763,7 @@ const emailTemplates = {
           </li>
           <li>
             <span>Status</span>
-            <span style="color: ${status === 'approved' ? '#2DC194' : '#FF9837'};">${status.toUpperCase()}</span>
+            <span style="color: ${statusColor};">${statusText}</span>
           </li>
         </ul>
       </div>
@@ -769,19 +772,24 @@ const emailTemplates = {
         <div class="info-box">
           Your withdrawal has been approved and will be processed within 24-48 hours. You will receive another notification once the funds are sent.
         </div>
+      ` : status === 'rejected' ? `
+        <div class="warning-box">
+          Your withdrawal request could not be processed and has been rejected. The amount has been refunded to your account balance.
+        </div>
       ` : `
         <div class="warning-box">
           Your withdrawal request is pending review. We will notify you once it has been processed.
         </div>
       `}
 
-      <a href="https://grantunion.vercel.app/dashboard" class="button">View Status</a>
+      <center>
+        <a href="https://grantunion.vercel.app/dashboard" class="button">View Dashboard</a>
+      </center>
 
       <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
     `;
     return buildStyledEmailTemplate('Withdrawal Notification', content);
   },
-  */
 
   password_reset: (data) => {
     const { userName, resetLink } = data;
