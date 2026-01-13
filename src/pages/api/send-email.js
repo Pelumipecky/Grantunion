@@ -699,6 +699,7 @@ const emailTemplates = {
     `;
     return buildStyledEmailTemplate('Investment Approved ✓', content);
   },
+  */
 
   kyc_verification: (data) => {
     const { userName, status } = data;
