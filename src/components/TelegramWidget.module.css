@@ -1,0 +1,54 @@
+.details {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.details:hover {
+  transform: scale(1.1);
+}
+
+.telegramBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: #0088cc;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  animation: pulse 2s infinite;
+  border: 2px solid white;
+}
+
+.icon {
+  filter: brightness(0) invert(1);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 136, 204, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(0, 136, 204, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 136, 204, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .details {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .telegramBtn {
+    width: 50px;
+    height: 50px;
+  }
+}

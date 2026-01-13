@@ -15,6 +15,8 @@ import { config } from '../utils/config';
 import dynamic from 'next/dynamic';
 import '../i18n'; // Add this import
 
+import TelegramWidget from '../components/TelegramWidget';
+
 // Dynamically import client-side components
 // ChatBot is rendered only on the user dashboard (profile page).
 // Moved rendering into the profile page so admin pages don't load the widget.
@@ -93,6 +95,7 @@ export default function App({ Component, pageProps }) {
           <div className="app-wrapper" key="app-content">
           {/* ChatBot is rendered inside the user profile page only */}
           <Component {...pageProps} />
+          <TelegramWidget />
         </div>
       </AnimatePresence>
     </ThemeProvider>
