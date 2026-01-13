@@ -277,6 +277,11 @@ const emailTemplates = {
   // Investment creation notification
   investment_created: (data) => {
     const { userName, plan, amount, dailyROI, duration, expectedReturn, transactionHash } = data;
+    
+    // Only show ROI fields if they are provided and greater than 0
+    const showROI = dailyROI && parseFloat(dailyROI) > 0;
+    const showExpected = expectedReturn && parseFloat(expectedReturn) > 0;
+    
     const content = `
       <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Investor'}</strong>,</p>
       <p>Your investment has been successfully submitted and is now pending approval.</p>
@@ -292,19 +297,23 @@ const emailTemplates = {
             <span>Capital Amount</span>
             <span class="value">$${parseFloat(amount).toFixed(2)}</span>
           </li>
-          <li>
+          ${showROI ? `<li>
             <span>Daily ROI</span>
             <span class="value">$${parseFloat(dailyROI).toFixed(2)}</span>
-          </li>
+          </li>` : ''}
           <li>
             <span>Duration</span>
             <span style="color: #FEF9FF;">${duration} days</span>
           </li>
-          <li>
+          ${showExpected ? `<li>
             <span>Expected Total Return</span>
             <span class="value">$${parseFloat(expectedReturn).toFixed(2)}</span>
-          </li>
+          </li>` : ''}
           ${transactionHash ? `<li><span>Transaction ID</span><span style="color: #FEF9FF; font-size: 11px; word-break: break-all;">${transactionHash}</span></li>` : ''}
+          <li>
+            <span>Status</span>
+            <span style="color: #FFB347;">Pending Approval</span>
+          </li>
         </ul>
       </div>
 

@@ -67,9 +67,19 @@ export default function Signin() {
             const userResult = await supabaseDb.getUserByEmail(email.trim().toLowerCase());
             if (userResult.data) {
                 dbUser = userResult.data;
+            } else {
+                // User not found in database (likely deleted)
+                console.warn('User authenticated but record missing in database');
+                setErrMsg('Account not found or has been deleted.');
+                clearErrorSoon();
+                await supabaseAuth.signOut();
+                return;
             }
         } catch (dbErr) {
             console.warn('Database user lookup failed:', dbErr);
+            setErrMsg('Error verifying account status. Please contact support.');
+            clearErrorSoon();
+            return;
         }
 
         // Check if account is suspended

@@ -7,7 +7,7 @@
 require('dotenv').config({ path: '.env.local' });
 
 const WEBSITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://grantunion.vercel.app';
-const TEST_EMAILS = ['pelumipecky@gmail.com', 'Kelvinstephen1111@gmail.com'];
+const TEST_EMAILS = ['pelumipecky@gmail.com'];
 
 async function sendTestEmail(type, subject, templateData, email) {
   try {
@@ -94,18 +94,18 @@ async function testAllEmailTemplates() {
         method: 'Bitcoin'
       }
     },
-    {
-      name: 'Deposit Confirmed',
-      type: 'deposit_confirmed',
-      subject: 'Deposit Confirmed',
-      data: {
-        userName: 'John Doe',
-        amount: 5000,
-        method: 'Bitcoin',
-        transactionHash: 'TXN987654321',
-        newBalance: 5000
-      }
-    },
+    // {
+    //   name: 'Deposit Confirmed',
+    //   type: 'deposit_confirmed',
+    //   subject: 'Deposit Confirmed',
+    //   data: {
+    //     userName: 'John Doe',
+    //     amount: 5000,
+    //     method: 'Bitcoin',
+    //     transactionHash: 'TXN987654321',
+    //     newBalance: 5000
+    //   }
+    // },
     {
       name: 'Daily ROI Credit',
       type: 'roi_daily_credit',
@@ -125,6 +125,25 @@ async function testAllEmailTemplates() {
       subject: 'KYC Verification Approved',
       data: {
         userName: 'John Doe'
+      }
+    },
+    {
+      name: 'KYC Rejected',
+      type: 'kyc_rejected',
+      subject: 'KYC Verification Update',
+      data: {
+        userName: 'John Doe',
+        reason: 'Document blurry'
+      }
+    },
+    {
+      name: 'Withdrawal Rejected',
+      type: 'withdrawal_rejected',
+      subject: 'Withdrawal Status Update',
+      data: {
+        userName: 'John Doe',
+        amount: 1000,
+        reason: 'Insufficient balance'
       }
     }
   ];

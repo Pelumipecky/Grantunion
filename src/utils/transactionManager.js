@@ -28,50 +28,20 @@ export const createInvestment = async (investmentData) => {
         const userEmail = userResult.data.email;
         const userName = userResult.data.name || 'Valued Investor';
 
-        // Prepare email content
-        const emailSubject = 'Investment Created - Grant Union Investment';
-        const emailMessage = `
-          <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
-            <!-- Header with Logo -->
-            <div style="background: linear-gradient(135deg, #1C0F36 0%, #2d1b4e 100%); padding: 30px 20px; text-align: center;">
-              <img src="https://grantunioninvestment.com/logos/grantunionsmall.png" alt="Grant Union Investment" style="max-width: 150px; height: auto; margin-bottom: 10px;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">Grant Union Investment</h1>
-              <p style="color: #e0e0e0; margin: 5px 0 0 0; font-size: 14px;">Your Trusted Investment Partner</p>
-            </div>
-
-            <!-- Content -->
-            <div style="padding: 30px 20px;">
-              <h2 style="color: #1C0F36; margin-top: 0; font-size: 22px;">Investment Created Successfully</h2>
-              <p style="color: #333; font-size: 16px; line-height: 1.6;">Dear ${userName},</p>
-              <p style="color: #555; font-size: 16px; line-height: 1.6;">Your investment has been successfully created and is now pending approval.</p>
-
-              <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #1C0F36;">
-                <h3 style="color: #1C0F36; margin-top: 0; font-size: 18px;">Investment Details:</h3>
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                  <li style="padding: 8px 0; border-bottom: 1px solid #dee2e6;"><strong style="color: #1C0F36;">Plan:</strong> <span style="color: #495057;">${investmentData.plan}</span></li>
-                  <li style="padding: 8px 0; border-bottom: 1px solid #dee2e6;"><strong style="color: #1C0F36;">Amount:</strong> <span style="color: #495057; font-weight: bold;">$${investmentData.capital}</span></li>
-                  <li style="padding: 8px 0; border-bottom: 1px solid #dee2e6;"><strong style="color: #1C0F36;">Duration:</strong> <span style="color: #495057;">${investmentData.duration} days</span></li>
-                  <li style="padding: 8px 0; border-bottom: 1px solid #dee2e6;"><strong style="color: #1C0F36;">Payment Method:</strong> <span style="color: #495057;">${investmentData.paymentOption}</span></li>
-                  <li style="padding: 8px 0; border-bottom: 1px solid #dee2e6;"><strong style="color: #1C0F36;">Status:</strong> <span style="color: #ffc107; font-weight: bold;">Pending Approval</span></li>
-                  <li style="padding: 8px 0;"><strong style="color: #1C0F36;">Date:</strong> <span style="color: #495057;">${new Date(investmentData.date).toLocaleDateString()}</span></li>
-                </ul>
-              </div>
-
-              <p style="color: #555; font-size: 16px; line-height: 1.6;">You will receive another notification once your investment is approved and becomes active.</p>
-              <p style="color: #555; font-size: 16px; line-height: 1.6;">If you have any questions, please contact our support team.</p>
-
-              <div style="text-align: center; margin: 30px 0;">
-                <a href="https://grantunioninvestment.com" style="background: linear-gradient(135deg, #1C0F36 0%, #2d1b4e 100%); color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Visit Dashboard</a>
-              </div>
-            </div>
-
-            <!-- Footer -->
-            <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
-              <p style="color: #6c757d; margin: 0; font-size: 14px;">Best regards,<br><strong style="color: #1C0F36;">Grant Union Investment Team</strong></p>
-              <p style="color: #6c757d; margin: 10px 0 0 0; font-size: 12px;">© 2025 Grant Union Investment. All rights reserved.</p>
-            </div>
-          </div>
-        `;
+        // Prepare email content using standardized template
+        const emailSubject = 'Investment Submitted - Grant Union Investment';
+        
+        // Structure data for the email template
+        const templateData = {
+          userName: userName,
+          plan: investmentData.plan,
+          amount: investmentData.capital,
+          duration: investmentData.duration,
+          transactionHash: investmentData.transactionHash || investmentData.transaction_hash,
+          // ROI and Expected Return are not calculated yet for pending investments
+          dailyROI: 0,
+          expectedReturn: 0
+        };
 
         // Send email notification
         const emailResponse = await fetch('/api/send-email', {
@@ -82,8 +52,8 @@ export const createInvestment = async (investmentData) => {
           body: JSON.stringify({
             to: userEmail,
             subject: emailSubject,
-            message: emailMessage,
-            type: 'investment-created'
+            type: 'investment_created',
+            templateData: templateData
           })
         });
 
