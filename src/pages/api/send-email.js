@@ -482,6 +482,7 @@ const emailTemplates = {
     return buildStyledEmailTemplate('Withdrawal Status Update', content);
   },
 
+  /* DEACTIVATED AS REQUESTED
   // Deposit confirmation
   deposit_confirmed: (data) => {
     const { userName, amount, method, transactionHash, newBalance } = data;
@@ -524,6 +525,7 @@ const emailTemplates = {
     `;
     return buildStyledEmailTemplate('Deposit Confirmed', content);
   },
+  */
 
   // Daily ROI credit
   roi_daily_credit: (data) => {
@@ -626,6 +628,7 @@ const emailTemplates = {
     return buildStyledEmailTemplate('KYC Verification Update', content);
   },
 
+  /* DEACTIVATED AS REQUESTED - DUPLICATE/ALT TEMPLATES
   investment_approval: (data) => {
     const { userName, plan, capital, roi, bonus, duration } = data;
     const content = `
@@ -751,6 +754,7 @@ const emailTemplates = {
     `;
     return buildStyledEmailTemplate('Withdrawal Notification', content);
   },
+  */
 
   password_reset: (data) => {
     const { userName, resetLink } = data;
