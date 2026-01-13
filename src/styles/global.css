@@ -520,3 +520,51 @@ td {
     width: 100% !important;
   }
 }
+
+/* --- Google Translate Hidden Mode --- */
+/* Hides the default Google Translate widget while keeping it functional for the custom switcher */
+
+/* Hide the container */
+#google_translate_element {
+  visibility: hidden !important;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  z-index: -1000;
+  pointer-events: none;
+}
+
+/* Hide the top banner frame */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+/* Reset body top shift */
+body {
+  top: 0px !important; 
+}
+
+/* Hide Google Tooltips */
+.goog-tooltip, 
+#goog-gt-tt {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Remove hover highlighting text */
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Hide popups */
+.goog-te-balloon-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
