@@ -998,6 +998,43 @@ export const supabaseDb = {
       if (notificationError) {
         console.error('Failed to create investment activation notification:', notificationError);
       }
+
+      // Send email notification about investment activation
+      try {
+        const { data: userEmailData } = await supabase
+          .from('userlogs')
+          .select('email, name')
+          .eq('idnum', idnum)
+          .single();
+
+        if (userEmailData?.email) {
+          const emailSubject = 'Investment Activated - Grant Union Investment';
+          
+          await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              to: userEmailData.email,
+              subject: emailSubject,
+              type: 'investment_approval',
+              templateData: {
+                userName: userEmailData.name || 'Investor',
+                plan: investmentData.plan || 'Standard Plan',
+                capital: capitalAmount,
+                roi: roiAmount,
+                bonus: bonusAmount,
+                duration: `${investmentData.duration || 5} days`,
+                dailyROI: (roiAmount / (investmentData.duration || 5)).toFixed(2)
+              }
+            })
+          });
+          console.log('Investment activation email sent successfully');
+        }
+      } catch (emailError) {
+        console.error('Error sending investment activation email:', emailError);
+        // Don't throw - still return success for database update
+      }
+
     } catch (notificationError) {
       console.error('Error creating investment activation notification:', notificationError);
     }
