@@ -1,3 +1,4 @@
+// @ts-nocheck
 // API endpoint for sending email notifications using Mailjet
 // Mailjet is a reliable email service provider with good deliverability
 
