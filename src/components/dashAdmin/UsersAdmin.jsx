@@ -105,9 +105,16 @@ const UsersAdmin = ({ activeUsers = [], investments = [], withdrawals = [], setP
             // Delete user document
             await supabaseDb.deleteUser(selectedUser.id);
             
+            // Remove user from local state immediately
+            if (setUserData) setUserData(defaultUserData || null);
+            
+            // Note: UsersAdmin gets users from parent prop, so we might need a refresh callback
+            // But for now, let's close the modal and show success immediately
             showModal('success', 'Success', `User ${selectedUser.name} has been deleted successfully`);
             setSelectedUser(null);
-            setTimeout(() => window.location.reload(), 1500);
+            
+            // Force reload faster
+            setTimeout(() => window.location.reload(), 500);
         } catch (error) {
             console.error("Error deleting user:", error);
             showModal('error', 'Error', "Failed to delete user. Please try again.");

@@ -335,9 +335,26 @@ const emailTemplates = {
     return buildStyledEmailTemplate('Investment Submitted Successfully', content);
   },
 
-  // Investment approved notification
   investment_approved: (data) => {
-    const { userName, plan, amount, dailyROI, duration } = data;
+    // Determine which field names are being used (support both old and new)
+    const userName = data.userName;
+    const plan = data.plan;
+    const amount = data.amount || data.capital; // Fallback to capital
+    const duration = data.duration;
+    
+    // Determine ROI value - support dailyROI or total roi/projectedEarnings
+    let roiValue = 0;
+    let roiLabel = 'Daily ROI';
+    
+    if (data.dailyROI) {
+        roiValue = parseFloat(data.dailyROI);
+        roiLabel = 'Daily ROI';
+    } else if (data.roi) {
+        // If it's a total ROI, show it as such
+        roiValue = parseFloat(data.roi);
+        roiLabel = 'Projected Total Profit';
+    }
+    
     const content = `
       <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Investor'}</strong>,</p>
       <p>Great news! Your investment has been approved and activated.</p>
@@ -347,8 +364,8 @@ const emailTemplates = {
         <ul>
           <li><span>Plan</span><span style="color: #FF8C37;">${plan}</span></li>
           <li><span>Capital</span><span class="value">$${parseFloat(amount).toFixed(2)}</span></li>
-          <li><span>Daily ROI</span><span class="value">$${parseFloat(dailyROI).toFixed(2)}</span></li>
-          <li><span>Duration</span><span style="color: #FEF9FF;">${duration} days</span></li>
+          <li><span>${roiLabel}</span><span class="value">$${roiValue.toFixed(2)}</span></li>
+          <li><span>Duration</span><span style="color: #FEF9FF;">${duration} ${duration.toString().includes('day') ? '' : 'days'}</span></li>
         </ul>
       </div>
 
@@ -363,7 +380,8 @@ const emailTemplates = {
     return buildStyledEmailTemplate('Investment Approved', content);
   },
 
-  // Withdrawal request notification
+  /* DEACTIVATED AS REQUESTED - DUPLICATE/ALT TEMPLATES
+  investment_approval: (data) => {
   withdrawal_requested: (data) => {
     const { userName, amount, method, accountDetails } = data;
     const content = `
@@ -772,7 +790,7 @@ const emailTemplates = {
       <p>We received a request to reset your password. Click the button below to create a new password:</p>
       
       <div class="info-box">
-        This link will expire in 1 hour for security purposes.
+        This link will expire in 15 minutesfor security purposes.
       </div>
 
       <center>
