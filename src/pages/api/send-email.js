@@ -623,24 +623,6 @@ const emailTemplates = {
       <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
     `;
     return buildStyledEmailTemplate('KYC Verification Update', content);
-  }
-};
-            <span class="value">${parseFloat(progress).toFixed(1)}%</span>
-          </li>
-        </ul>
-      </div>
-
-      <div class="info-box">
-        Your investment is performing exceptionally well! Continue to monitor your dashboard for real-time updates on your portfolio growth.
-      </div>
-
-      <p>You can view your complete investment details and withdrawal options in your <a href="https://grantunion.vercel.app/dashboard" style="color: #FF8C37; text-decoration: none; font-weight: 600;">account dashboard</a>.</p>
-      
-      <a href="https://grantunion.vercel.app/dashboard" class="button">View Dashboard</a>
-
-      <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
-    `;
-    return buildStyledEmailTemplate('Daily ROI Credit Notification', content);
   },
 
   investment_approval: (data) => {
