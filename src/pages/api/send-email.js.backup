@@ -207,7 +207,7 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         <div class="footer">
           ${footer || `
             <p style="margin-top: 0; font-weight: 600;">Grant Union Investment</p>
-            <p><a href="https://grantunion.vercel.app" class="footer-link">Visit Our Website</a> | <a href="https://grantunion.vercel.app/contact" class="footer-link">Contact Support</a></p>
+            <p><a href="https://grantunion583.com" class="footer-link">Visit Our Website</a> | <a href="https://grantunion583.com/contact" class="footer-link">Contact Support</a></p>
             <div class="divider" style="margin: 15px 0;"></div>
             <p style="color: #8B7BA8; font-size: 11px; margin-bottom: 0;">This is an automated message from Grant Union Investment. Please do not reply to this email.</p>
             <p style="color: #8B7BA8; font-size: 11px; margin: 5px 0 0 0;">© 2025 Grant Union Investment. All rights reserved.</p>
@@ -630,12 +630,12 @@ const emailTemplates = {
       </div>
 
       <div class="info-box">
-        Your investment is performing exceptionally well! Continue to monitor your dashboard for real-time updates on your portfolio growth.
+        ✨ Your investment is performing exceptionally well! Continue to monitor your dashboard for real-time updates on your portfolio growth.
       </div>
 
-      <p>You can view your complete investment details and withdrawal options in your <a href="https://grantunion.vercel.app/dashboard" style="color: #FF8C37; text-decoration: none; font-weight: 600;">account dashboard</a>.</p>
+      <p>You can view your complete investment details and withdrawal options in your <a href="https://grantunion583.com/dashboard" style="color: #FF8C37; text-decoration: none; font-weight: 600;">account dashboard</a>.</p>
       
-      <a href="https://grantunion.vercel.app/dashboard" class="button">View Dashboard</a>
+      <a href="https://grantunion583.com/dashboard" class="button">View Dashboard</a>
 
       <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
     `;
@@ -646,11 +646,11 @@ const emailTemplates = {
     const { userName, plan, capital, roi, bonus, duration } = data;
     const content = `
       <p>Dear <strong style="color: #FF8C37;">${userName || 'Investor'}</strong>,</p>
-      <p>Congratulations! Your investment request has been <span class="success-badge">APPROVED</span></p>
+      <p>🎉 Congratulations! Your investment request has been <span class="success-badge">APPROVED</span></p>
       <p>Your capital has been credited to your account and your investment plan is now active. Earnings will be posted daily according to your investment schedule.</p>
       
       <div class="stats-box">
-        <h3 style="margin-top: 0; color: #FF8C37;">Investment Details</h3>
+        <h3 style="margin-top: 0; color: #FF8C37;">📊 Investment Details</h3>
         <ul>
           <li>
             <span>Investment Plan</span>
@@ -676,10 +676,10 @@ const emailTemplates = {
       </div>
 
       <div class="info-box">
-        Your ROI will be credited daily to your account balance. You can withdraw your capital plus commissions after the investment term completes.
+        ✨ Your ROI will be credited daily to your account balance. You can withdraw your capital plus commissions after the investment term completes.
       </div>
 
-      <a href="https://grantunion.vercel.app/dashboard" class="button">View Investment</a>
+      <a href="https://grantunion583.com/dashboard" class="button">View Investment</a>
 
       <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
     `;
@@ -689,6 +689,7 @@ const emailTemplates = {
   kyc_verification: (data) => {
     const { userName, status } = data;
     const isVerified = status === 'Verified';
+    const icon = isVerified ? '✅' : '⚠️';
     const content = `
       <p>Dear <strong style="color: #FF8C37;">${userName || 'User'}</strong>,</p>
       <p>${isVerified 
@@ -698,7 +699,7 @@ const emailTemplates = {
       
       ${isVerified ? `
         <div class="info-box">
-          You can now access all premium features including higher withdrawal limits and exclusive investment opportunities!
+          ✨ You can now access all premium features including higher withdrawal limits and exclusive investment opportunities!
         </div>
       ` : `
         <div class="warning-box">
@@ -707,7 +708,7 @@ const emailTemplates = {
       `}
 
       <div class="stats-box">
-        <h3 style="margin-top: 0; color: #FF8C37;">Verification Status</h3>
+        <h3 style="margin-top: 0; color: #FF8C37;">📋 Verification Status</h3>
         <ul>
           <li>
             <span>KYC Status</span>
@@ -720,11 +721,11 @@ const emailTemplates = {
         </ul>
       </div>
 
-      <a href="https://grantunion.vercel.app/dashboard" class="button">Go to Dashboard</a>
+      <a href="https://grantunion583.com/dashboard" class="button">Go to Dashboard</a>
 
       <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
     `;
-    return buildStyledEmailTemplate('KYC Verification Update', content);
+    return buildStyledEmailTemplate(`${icon} KYC Verification Update`, content);
   },
 
   withdrawal_notification: (data) => {
@@ -734,7 +735,7 @@ const emailTemplates = {
       <p>Your withdrawal request has been <strong style="color: ${status === 'approved' ? '#2DC194' : '#FF9837'};">${status.toUpperCase()}</strong>.</p>
       
       <div class="stats-box">
-        <h3 style="margin-top: 0; color: #FF8C37;">Withdrawal Details</h3>
+        <h3 style="margin-top: 0; color: #FF8C37;">💸 Withdrawal Details</h3>
         <ul>
           <li>
             <span>Withdrawal Amount</span>
@@ -753,7 +754,7 @@ const emailTemplates = {
 
       ${status === 'approved' ? `
         <div class="info-box">
-          Your withdrawal has been approved and will be processed within 24-48 hours. You will receive another notification once the funds are sent.
+          ✨ Your withdrawal has been approved and will be processed within 24-48 hours. You will receive another notification once the funds are sent.
         </div>
       ` : `
         <div class="warning-box">
@@ -761,7 +762,7 @@ const emailTemplates = {
         </div>
       `}
 
-      <a href="https://grantunion.vercel.app/dashboard" class="button">View Status</a>
+      <a href="https://grantunion583.com/dashboard" class="button">View Status</a>
 
       <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
     `;
@@ -775,11 +776,11 @@ const emailTemplates = {
       <p>We received a request to reset your password. Click the button below to create a new password:</p>
       
       <div class="info-box">
-        This link will expire in 1 hour for security purposes.
+        🔐 This link will expire in 1 hour for security purposes.
       </div>
 
       <center>
-        <a href="${resetLink || 'https://grantunion.vercel.app/reset-password'}" class="button">Reset Password</a>
+        <a href="${resetLink || 'https://grantunion583.com/reset-password'}" class="button">Reset Password</a>
       </center>
 
       <p style="margin-bottom: 0;">If you didn't request this password reset, you can safely ignore this email.<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>

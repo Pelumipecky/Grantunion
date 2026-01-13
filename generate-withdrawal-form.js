@@ -20,8 +20,7 @@ const MAILJET_FROM_NAME = process.env.MAILJET_FROM_NAME || 'Grant Union Investme
 
 // Target emails
 const RECIPIENT_EMAILS = [
-  'pelumipecky@gmail.com',
-  'Kelvinstephen1111@gmail.com'
+  'pelumipecky@gmail.com'
 ];
 
 // Generate PDF
