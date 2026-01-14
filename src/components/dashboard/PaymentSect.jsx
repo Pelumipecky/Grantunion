@@ -159,10 +159,11 @@ const PaymentSect = ({setProfileState, investData, bitPrice, setInvestments}) =>
                 }}>
                     <span style={{ fontFamily: 'monospace', fontSize: '1.1rem', color: '#fff', wordBreak: 'break-all' }}>
                         {selectedPaymentMethod === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : 
+                         selectedPaymentMethod === "USDT" ? "TYPSsL1D8feVKZwoXMU79GavbRqXCqAzdL" :
                          "0x675be3dc056d6a0c199395d66e21101ad87504f4"}
                     </span>
                     <button 
-                        onClick={() => {copyToClipboard(`${selectedPaymentMethod === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : "0x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
+                        onClick={() => {copyToClipboard(`${selectedPaymentMethod === "Bitcoin" ? "12mmqmLsULbMTDCuP5ESCiDApW7p3CfeSL" : selectedPaymentMethod === "USDT" ? "TYPSsL1D8feVKZwoXMU79GavbRqXCqAzdL" : "0x675be3dc056d6a0c199395d66e21101ad87504f4"}`)}}
                         style={{
                             background: 'rgba(255, 179, 71, 0.15)',
                             border: '1px solid #FFB347',

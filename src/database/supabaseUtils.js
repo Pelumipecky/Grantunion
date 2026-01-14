@@ -1010,7 +1010,9 @@ export const supabaseDb = {
         if (userEmailData?.email) {
           const emailSubject = 'Investment Approved - Grant Union Investment';
           
-          await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+          console.log('📧 Sending investment approval email to:', userEmailData.email);
+          
+          const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1028,10 +1030,19 @@ export const supabaseDb = {
               }
             })
           });
-          console.log('Investment activation email sent successfully');
+          
+          const emailResult = await emailResponse.json();
+          
+          if (emailResponse.ok) {
+            console.log('✅ Investment activation email sent successfully:', emailResult);
+          } else {
+            console.error('❌ Failed to send investment email:', emailResult);
+          }
+        } else {
+          console.log('⚠️ No email found for user idnum:', idnum);
         }
       } catch (emailError) {
-        console.error('Error sending investment activation email:', emailError);
+        console.error('❌ Error sending investment activation email:', emailError);
         // Don't throw - still return success for database update
       }
 

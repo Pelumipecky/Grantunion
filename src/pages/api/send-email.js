@@ -15,25 +15,25 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
       <style>
         body {
           font-family: 'Alegreya Sans', Arial, sans-serif;
-          background-color: #120524;
-          color: #FEF9FF;
+          background-color: #f5f5f5;
+          color: #333333;
           margin: 0;
           padding: 0;
         }
         .email-container {
           max-width: 600px;
           margin: 0 auto;
-          background-color: #1C0F36;
+          background-color: #ffffff;
           border-radius: 12px;
           overflow: hidden;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-          border: 1px solid #2d2d2d;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          border: 1px solid #e0e0e0;
         }
         .header {
-          background-color: #1C0F36;
+          background: #FF8C37;
           padding: 40px 20px;
           text-align: center;
-          border-bottom: 2px solid #FF8C37;
+          border-bottom: none;
         }
         .logo-section {
           margin-bottom: 15px;
@@ -46,21 +46,22 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         .logo-text {
           font-size: 32px;
           font-weight: 800;
-          color: #FEF9FF;
+          color: #ffffff;
           letter-spacing: 2px;
           margin: 0;
           text-transform: uppercase;
         }
         .logo-subtitle {
           font-size: 12px;
-          color: #FFD6B8;
+          color: #ffffff;
           letter-spacing: 3px;
           margin: 5px 0 0 0;
           text-transform: uppercase;
           font-weight: 600;
+          opacity: 0.9;
         }
         .header h1 {
-          color: #FEF9FF;
+          color: #ffffff;
           font-size: 28px;
           margin: 10px 0 0 0;
           font-weight: 600;
@@ -163,12 +164,12 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
           color: #333333;
         }
         .footer {
-          background: rgba(58, 26, 99, 0.6);
+          background: #f8f8f8;
           padding: 25px;
           text-align: center;
           border-top: 2px solid #FF8C37;
           font-size: 12px;
-          color: #B8A5D6;
+          color: #666666;
         }
         .footer p {
           margin: 8px 0;
@@ -212,11 +213,11 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         </div>
         <div class="footer">
           ${footer || `
-            <p style="margin-top: 0; font-weight: 600;">Grant Union Investment</p>
+            <p style="margin-top: 0; font-weight: 600; color: #333333;">Grant Union Investment</p>
             <p><a href="https://grantunion.vercel.app" class="footer-link">Visit Our Website</a> | <a href="https://grantunion.vercel.app/contact" class="footer-link">Contact Support</a></p>
             <div class="divider" style="margin: 15px 0;"></div>
-            <p style="color: #8B7BA8; font-size: 11px; margin-bottom: 0;">This is an automated message from Grant Union Investment. Please do not reply to this email.</p>
-            <p style="color: #8B7BA8; font-size: 11px; margin: 5px 0 0 0;">© 2025 Grant Union Investment. All rights reserved.</p>
+            <p style="color: #888888; font-size: 11px; margin-bottom: 0;">This is an automated message from Grant Union Investment. Please do not reply to this email.</p>
+            <p style="color: #888888; font-size: 11px; margin: 5px 0 0 0;">© 2025 Grant Union Investment. All rights reserved.</p>
           `}
         </div>
       </div>
