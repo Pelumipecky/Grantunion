@@ -28,23 +28,29 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
     const handleApproveWithdrawal = async (withdrawal) => {
         setLoadingId(withdrawal.id);
         try {
-            // Call server-side API endpoint
-            const response = await fetch('/api/withdrawals/approve', {
+            console.log('📝 Calling backend API to approve withdrawal:', withdrawal.id);
+
+            // Call NEW backend API endpoint for approval
+            const response = await fetch('/api/admin/withdrawals/approve', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    withdrawalId: withdrawal.id,
-                    withdrawal: withdrawal
+                    withdrawalId: withdrawal.id
                 })
             });
 
-            const data = await response.json();
+            const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || 'Failed to approve withdrawal');
+                throw new Error(result.error || 'Failed to approve withdrawal');
             }
 
-            alert('Withdrawal approved successfully!');
+            if (result.alreadyProcessed) {
+                alert('ℹ️ Withdrawal already processed\n\nThis withdrawal was already approved.');
+            } else {
+                alert(`✅ Withdrawal approved successfully!\n\nAmount: $${withdrawal.amount}\nMethod: ${withdrawal.paymentoption || 'N/A'}\n\nNotification and email sent to user.`);
+            }
+            
             // Withdrawal list will be refreshed by the parent component
         } catch (error) {
             console.error("Error approving withdrawal:", error);

@@ -360,72 +360,42 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                             const ok = window.confirm(confirmMessage);
                                                             if (!ok) return;
 
-                                                            const dailyRateLabel = planConfig ? formatPercent(planConfig.dailyRate) : legacyRule ? `${legacyRule.roiMultiplier}X legacy ROI` : formatPercent(0.025);
                                                             const capitalFormatted = capital.toLocaleString();
                                                             const roiFormatted = calculatedROI.toLocaleString();
                                                             const bonusFormatted = calculatedBonus.toLocaleString();
 
                                                             try {
-                                                                console.log('Starting investment approval for:', elem.id);
-                                                                console.log('Investment data:', elem);
-                                                                console.log('Calculated ROI:', calculatedROI, 'Bonus:', calculatedBonus);
+                                                                console.log('📝 Calling backend API to approve investment:', elem.id);
 
-                                                                // Find user by idnum
-                                                                const { data: userData, error: userError } = await supabase
-                                                                    .from('userlogs')
-                                                                    .select('*')
-                                                                    .eq('idnum', elem.idnum)
-                                                                    .single();
-
-                                                                if (userError) {
-                                                                    console.error('User lookup error:', userError);
-                                                                    throw new Error('User not found');
-                                                                }
-
-                                                                console.log('Found user:', userData.id);
-
-                                                                const approvedBy = currentUser?.id || currentUser?.userName || 'admin';
-
-                                                                await supabaseDb.activateInvestment(elem.id, {
-                                                                    approvedBy,
-                                                                    capital,
-                                                                    roi: calculatedROI,
-                                                                    bonus: calculatedBonus,
-                                                                    idnum: elem.idnum,
-                                                                    creditBonus: false
+                                                                // Call backend API endpoint for approval
+                                                                const response = await fetch('/api/admin/investments/approve', {
+                                                                    method: 'POST',
+                                                                    headers: {
+                                                                        'Content-Type': 'application/json'
+                                                                    },
+                                                                    body: JSON.stringify({
+                                                                        investmentId: elem.id
+                                                                    })
                                                                 });
 
-                                                                // Add notification
-                                                                const payoutMessage = calculatedBonus > 0
-                                                                  ? `You will earn $${roiFormatted} ROI and $${bonusFormatted} bonus over ${termLabel}.`
-                                                                  : `You will earn $${roiFormatted} in daily commissions (${payoutSummary}).`;
+                                                                const result = await response.json();
 
-                                                                const notificationPush = {
-                                                                  title: 'Investment Approved',
-                                                                  message: `Your $${capitalFormatted} ${elem.plan} investment has been activated! ${payoutMessage} Capital and earnings unlock after ${termLabel}.`,
-                                                                  idnum: elem.idnum,
-                                                                  status: 'unseen',
-                                                                  type: 'success'
-                                                                };
-
-                                                                const notificationResult = await supabaseDb.createNotification(notificationPush);
-                                                                if (notificationResult.error) {
-                                                                    console.error('Notification creation error:', notificationResult.error);
-                                                                    // Don't throw here - notification failure shouldn't block approval
-                                                                } else {
-                                                                    console.log('Notification created successfully');
+                                                                if (!response.ok) {
+                                                                    throw new Error(result.error || 'Failed to approve investment');
                                                                 }
 
-                                                                // Email notification is now handled automatically by activateInvestment in supabaseUtils.js
-                                                                console.log('✅ Email notification will be sent by activateInvestment');
+                                                                if (result.alreadyProcessed) {
+                                                                    alert(`ℹ️ Investment already approved\n\nThis investment was already processed.`);
+                                                                } else {
+                                                                    const details = result.details || {};
+                                                                    alert(`✅ Investment approved successfully!\n\nUser ${elem.idnum} has been credited $${details.capitalCredited?.toLocaleString() || capitalFormatted}.\nProjected earnings: $${details.projectedROI?.toLocaleString() || roiFormatted}.\nDuration: ${details.duration || termLabel}.\n\nNotification and email sent to user.`);
+                                                                }
 
-                                                                alert(`✅ Investment approved successfully!\n\nUser ${elem.idnum} has been credited $${capitalFormatted}.\nProjected earnings: $${roiFormatted}${calculatedBonus > 0 ? ` + legacy bonus $${bonusFormatted}` : ''}.\nSchedule: ${payoutSummary}.`);
-
-                                                                // Force a refresh of the investments data
+                                                                // Refresh the investments data
                                                                 window.location.reload();
 
                                                             } catch (err) {
-                                                                console.error('Investment approval error:', err);
+                                                                console.error('❌ Investment approval error:', err);
                                                                 alert(`❌ Failed to approve investment: ${err.message}`);
                                                             }
                                                         }}
