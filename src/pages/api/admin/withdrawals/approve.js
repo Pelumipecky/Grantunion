@@ -103,7 +103,16 @@ export default async function handler(req, res) {
       if (userData?.email) {
         console.log('📧 Sending approval email to:', userData.email);
         
-        await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+        // Use absolute URL for production, fallback to relative path
+        const apiUrl = process.env.VERCEL_URL 
+          ? `https://${process.env.VERCEL_URL}/api/send-email`
+          : process.env.NEXT_PUBLIC_APP_URL 
+          ? `${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`
+          : '/api/send-email';
+        
+        console.log('📍 Email API URL:', apiUrl);
+        
+        const emailResponse = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -119,7 +128,15 @@ export default async function handler(req, res) {
           })
         });
 
-        console.log('✅ Email sent successfully');
+        const emailResult = await emailResponse.json();
+        
+        if (emailResponse.ok) {
+          console.log('✅ Email sent successfully:', emailResult);
+        } else {
+          console.error('⚠️ Email API returned error:', emailResult);
+        }
+      } else {
+        console.warn('⚠️ No email address found for user');
       }
     } catch (emailError) {
       console.error('⚠️ Email error (non-blocking):', emailError);
