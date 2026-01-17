@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawData}) => {
+const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawData, onDataRefresh}) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
     const [loadingId, setLoadingId] = useState(null);
@@ -51,7 +51,10 @@ const WithdrawAdmin = ({ withdrawals, activeUsers, setProfileState, setWithdrawD
                 alert(`✅ Withdrawal approved successfully!\n\nAmount: $${withdrawal.amount}\nMethod: ${withdrawal.paymentoption || 'N/A'}\n\nNotification and email sent to user.`);
             }
             
-            // Withdrawal list will be refreshed by the parent component
+            // Refresh data without page reload
+            if (onDataRefresh) {
+                onDataRefresh();
+            }
         } catch (error) {
             console.error("Error approving withdrawal:", error);
             alert('Failed to approve withdrawal: ' + error.message);

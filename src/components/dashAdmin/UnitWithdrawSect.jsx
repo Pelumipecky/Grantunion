@@ -3,7 +3,7 @@ import { supabaseDb } from "../../database/supabaseUtils";
 import { supabase } from "../../database/supabaseConfig";
 import Modal from "../Modal";
 
-const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
+const UnitWithdrawSect = ({ setProfileState, withdrawData, onDataRefresh }) => {
     // Modal State
     const [modalConfig, setModalConfig] = useState({
         isOpen: false,
@@ -66,6 +66,12 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
             console.log('✅ Withdrawal approved via backend API');
             
             showModal('success', 'Success', 'Withdrawal confirmed successfully');
+            
+            // Refresh data and navigate back
+            if (onDataRefresh) {
+                onDataRefresh();
+            }
+            
             setTimeout(() => {
                 setProfileState("Withdrawals");
             }, 1500);

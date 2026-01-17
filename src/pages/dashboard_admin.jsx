@@ -222,12 +222,26 @@ export default function DashboardAdmin() {
       if (mounted) fetchWithdrawals();
     });
 
+    // Expose refetch functions for child components
+    window.refetchAdminData = {
+      investments: fetchInvestments,
+      users: fetchUsers,
+      withdrawals: fetchWithdrawals,
+      all: () => {
+        fetchInvestments();
+        fetchUsers();
+        fetchWithdrawals();
+        fetchDeletionRequests();
+      }
+    };
+
     // Cleanup function
     return () => {
       mounted = false;
       investmentsSubscription?.unsubscribe();
       usersSubscription?.unsubscribe();
       withdrawalsSubscription?.unsubscribe();
+      delete window.refetchAdminData;
     };
   }, []);
 
@@ -530,6 +544,7 @@ export default function DashboardAdmin() {
             currentUser={currentUser}
             setProfileState={setProfileState}
             setInvestData={setInvestData}
+            onDataRefresh={() => window.refetchAdminData?.all()}
           />
         )}
         {profilestate === "Users" && (
@@ -568,6 +583,8 @@ export default function DashboardAdmin() {
             withdrawals={withdrawals}
             setProfileState={setProfileState}
             setWithdrawData={setWithdrawData}
+            activeUsers={activeUsers}
+            onDataRefresh={() => window.refetchAdminData?.all()}
           />
         )}
         {profilestate === "Edit Investment" && (
@@ -590,6 +607,7 @@ export default function DashboardAdmin() {
             setProfileState={setProfileState}
             setWithdrawData={setWithdrawData}
             withdrawData={withdrawData}
+            onDataRefresh={() => window.refetchAdminData?.all()}
           />
         )}
         {profilestate === "Loans" && (

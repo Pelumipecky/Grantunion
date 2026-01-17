@@ -3,7 +3,7 @@ import { supabaseDb } from "../../database/supabaseUtils";
 import { supabase } from "../../database/supabaseConfig";
 import { PLAN_CONFIG_MAP, LEGACY_PLAN_RULES, formatPercent } from "../../utils/planConfig";
 
-const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCapital, bitPrice, ethPrice, currentUser }) => {
+const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCapital, bitPrice, ethPrice, currentUser, onDataRefresh }) => {
     const [filterStatus, setFilterStatus] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     
