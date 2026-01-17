@@ -157,49 +157,49 @@ export default async function handler(req, res) {
 
     // Step 7: Send email notification (non-blocking)
     try {
+      console.log('[INVESTMENT APPROVAL] Attempting to send approval email...');
+      console.log('[INVESTMENT APPROVAL] Investment ID:', investment.id);
+      console.log('[INVESTMENT APPROVAL] User email:', userData.email);
+      console.log('[INVESTMENT APPROVAL] Investment status:', investment.status);
       if (userData.email) {
-        console.log('📧 Sending approval email to:', userData.email);
-        
         // Use absolute URL for production, fallback to relative path
         const apiUrl = process.env.VERCEL_URL 
           ? `https://${process.env.VERCEL_URL}/api/send-email`
           : process.env.NEXT_PUBLIC_APP_URL 
           ? `${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`
           : '/api/send-email';
-        
-        console.log('📍 Email API URL:', apiUrl);
-        
+        console.log('[INVESTMENT APPROVAL] Email API URL:', apiUrl);
+        const emailPayload = {
+          to: userData.email,
+          subject: 'Investment Approved - Grant Union Investment',
+          type: 'investment_approved',
+          templateData: {
+            userName: userData.name || 'Investor',
+            plan: investment.plan || 'Standard Plan',
+            amount: capital.toString(),
+            roi: calculatedROI.toString(),
+            bonus: calculatedBonus.toString(),
+            duration: termLabel,
+            dailyROI: (calculatedROI / duration).toString()
+          }
+        };
+        console.log('[INVESTMENT APPROVAL] Email payload:', emailPayload);
         const emailResponse = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            to: userData.email,
-            subject: 'Investment Approved - Grant Union Investment',
-            type: 'investment_approved',
-            templateData: {
-              userName: userData.name || 'Investor',
-              plan: investment.plan || 'Standard Plan',
-              amount: capital.toString(),
-              roi: calculatedROI.toString(),
-              bonus: calculatedBonus.toString(),
-              duration: termLabel,
-              dailyROI: (calculatedROI / duration).toString()
-            }
-          })
+          body: JSON.stringify(emailPayload)
         });
-
         const emailResult = await emailResponse.json();
-        
         if (emailResponse.ok) {
-          console.log('✅ Email sent successfully:', emailResult);
+          console.log('[INVESTMENT APPROVAL] ✅ Email sent successfully:', emailResult);
         } else {
-          console.error('⚠️ Email API returned error:', emailResult);
+          console.error('[INVESTMENT APPROVAL] ⚠️ Email API returned error:', emailResult);
         }
       } else {
-        console.warn('⚠️ No email address found for user');
+        console.warn('[INVESTMENT APPROVAL] ⚠️ No email address found for user');
       }
     } catch (emailError) {
-      console.error('⚠️ Email error (non-blocking):', emailError);
+      console.error('[INVESTMENT APPROVAL] ⚠️ Email error (non-blocking):', emailError);
       // Don't fail the approval if email fails
     }
 
