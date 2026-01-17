@@ -392,7 +392,11 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                                 }
 
                                                                 // Refresh the investments data
-                                                                window.location.reload();
+                                                                if (onDataRefresh) {
+                                                                    onDataRefresh();
+                                                                } else {
+                                                                    window.location.reload();
+                                                                }
 
                                                             } catch (err) {
                                                                 console.error('❌ Investment approval error:', err);
