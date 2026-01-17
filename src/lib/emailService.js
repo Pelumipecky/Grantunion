@@ -1,12 +1,6 @@
 // Server-side EmailService using Mailjet Transactional API
 // Uses native fetch (available in Node 18+ and Vercel)
 
-try {
-  require('dotenv').config({ path: '.env.local' });
-} catch (e) {
-  console.log('No .env.local found, using environment variables');
-}
-
 const MAILJET_API_KEY = process.env.MAILJET_API_KEY;
 const MAILJET_API_SECRET = process.env.MAILJET_API_SECRET;
 const MAILJET_FROM_EMAIL = process.env.MAILJET_FROM_EMAIL || 'no-reply@grantunion.online';

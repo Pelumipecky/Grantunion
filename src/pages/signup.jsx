@@ -8,7 +8,6 @@ import { themeContext } from '../../providers/ThemeProvider';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { config, validatePassword } from '../utils/config';
-import { sendTransactionalEmail } from '../lib/emailService';
 
 const Signup = () => {
   const [passwordShow, setPasswordShow] = useState(false);
@@ -251,92 +250,6 @@ const Signup = () => {
       } catch (adminFetchError) {
         console.error('Failed to fetch admin users for notifications:', adminFetchError);
         // Don't block signup success if admin notifications fail
-      }
-
-      // Send welcome email to new user
-      try {
-        const welcomeEmailData = {
-          userName: toLocaleStorage.name,
-          email: toLocaleStorage.email
-        };
-
-        await sendTransactionalEmail({
-          to: toLocaleStorage.email,
-          subject: 'Welcome to Grant Union Investment',
-          htmlBody: `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <style>
-                body { font-family: 'Alegreya Sans', Arial, sans-serif; background-color: #0F0517; color: #FEF9FF; margin: 0; padding: 20px; }
-                .container { max-width: 600px; margin: 0 auto; background: linear-gradient(180deg, #1C0F36 0%, #2A1548 50%, #1C0F36 100%); border-radius: 16px; padding: 30px; }
-                .header { text-align: center; margin-bottom: 30px; }
-                .logo { font-size: 32px; font-weight: 800; color: #FF8C37; margin-bottom: 10px; }
-                .subtitle { font-size: 12px; color: #FF8C37; text-transform: uppercase; letter-spacing: 3px; }
-                h1 { color: #FF8C37; font-size: 28px; margin: 20px 0; }
-                .content { line-height: 1.6; }
-                .button { display: inline-block; background: #FF8C37; color: #0F0517; padding: 12px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 20px 0; }
-                .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255, 140, 55, 0.2); font-size: 12px; color: #888; }
-              </style>
-            </head>
-            <body>
-              <div class="container">
-                <div class="header">
-                  <div class="logo">GRANT UNION</div>
-                  <div class="subtitle">Investment Platform</div>
-                  <h1>Welcome to Grant Union!</h1>
-                </div>
-                <div class="content">
-                  <p>Dear <strong>${toLocaleStorage.name}</strong>,</p>
-                  <p>Welcome to Grant Union Investment! We're thrilled to have you join our community of successful investors.</p>
-                  
-                  <h3 style="color: #FF8C37;">Getting Started:</h3>
-                  <ul>
-                    <li>Complete your profile in the dashboard</li>
-                    <li>Submit KYC verification for full access</li>
-                    <li>Choose from our investment plans (7-Day, 14-Day, 3-Month, 6-Month)</li>
-                    <li>Make your first deposit to start earning</li>
-                  </ul>
-                  
-                  <p style="text-align: center;">
-                    <a href="https://grantunion.vercel.app/signin" class="button">Access Your Dashboard</a>
-                  </p>
-                  
-                  <p>If you have any questions, our support team is here to help 24/7.</p>
-                  <p>Best regards,<br><strong>The Grant Union Investment Team</strong></p>
-                </div>
-                <div class="footer">
-                  <p>This is an automated message from Grant Union Investment. Please do not reply to this email.</p>
-                  <p>© 2025 Grant Union Investment. All rights reserved.</p>
-                </div>
-              </div>
-            </body>
-            </html>
-          `,
-          textBody: `Welcome to Grant Union Investment, ${toLocaleStorage.name}!
-
-We're thrilled to have you join our community of successful investors.
-
-Getting Started:
-- Complete your profile in the dashboard
-- Submit KYC verification for full access
-- Choose from our investment plans
-- Make your first deposit to start earning
-
-Access your dashboard: https://grantunion.vercel.app/signin
-
-If you have any questions, our support team is here to help 24/7.
-
-Best regards,
-The Grant Union Investment Team`
-        });
-
-        console.log('Welcome email sent successfully to:', toLocaleStorage.email);
-      } catch (emailError) {
-        console.error('Failed to send welcome email:', emailError);
-        // Don't block signup success if email fails
       }
 
       // Store user data safely (no password) in localStorage
