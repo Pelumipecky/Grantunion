@@ -368,20 +368,20 @@ const emailTemplates = {
         <h3 style="margin-top: 0; color: #2DC194; margin-bottom: 15px;">Investment Active</h3>
         <table style="width: 100%; border-collapse: collapse;">
           <tr style="border-bottom: 1px solid #e0e0e0;">
-            <td style="padding: 12px 0; color: #666666; font-size: 14px;">Plan</td>
-            <td style="padding: 12px 0; color: #FF8C37; font-weight: 600; text-align: right; font-size: 14px;">${plan}</td>
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Plan</td>
+            <td style="padding: 15px 0 15px 20px; color: #FF8C37; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">${plan}</td>
           </tr>
           <tr style="border-bottom: 1px solid #e0e0e0;">
-            <td style="padding: 12px 0; color: #666666; font-size: 14px;">Capital</td>
-            <td style="padding: 12px 0; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px;">$${parseFloat(amount).toFixed(2)}</td>
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Capital</td>
+            <td style="padding: 15px 0 15px 20px; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">$${parseFloat(amount).toFixed(2)}</td>
           </tr>
           <tr style="border-bottom: 1px solid #e0e0e0;">
-            <td style="padding: 12px 0; color: #666666; font-size: 14px;">${roiLabel}</td>
-            <td style="padding: 12px 0; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px;">$${roiValue.toFixed(2)}</td>
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">${roiLabel}</td>
+            <td style="padding: 15px 0 15px 20px; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">$${roiValue.toFixed(2)}</td>
           </tr>
           <tr>
-            <td style="padding: 12px 0; color: #666666; font-size: 14px;">Duration</td>
-            <td style="padding: 12px 0; color: #333333; font-weight: 600; text-align: right; font-size: 14px;">${duration} ${duration.toString().includes('day') ? '' : 'days'}</td>
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Duration</td>
+            <td style="padding: 15px 0 15px 20px; color: #333333; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">${duration} ${duration.toString().includes('day') ? '' : 'days'}</td>
           </tr>
         </table>
       </div>
