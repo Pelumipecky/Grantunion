@@ -1,5 +1,5 @@
 // Server-side EmailService using Mailjet Transactional API
-// Use global fetch when available (Node 18+ / serverless), fallback to node-fetch if needed
+// Uses native fetch (available in Node 18+ and Vercel)
 
 const MAILJET_API_KEY = process.env.MAILJET_API_KEY;
 const MAILJET_API_SECRET = process.env.MAILJET_API_SECRET;
@@ -36,8 +36,7 @@ async function sendTransactionalEmail({ to, subject, htmlBody, textBody }) {
     ]
   };
 
-  const _fetch = typeof fetch !== 'undefined' ? fetch : (await import('node-fetch')).default;
-  const resp = await _fetch('https://api.mailjet.com/v3.1/send', {
+  const resp = await fetch('https://api.mailjet.com/v3.1/send', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
