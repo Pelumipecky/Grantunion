@@ -96,7 +96,6 @@ export default async function handler(req, res) {
         credited_roi: 0,
         credited_bonus: 0,
         approved_at: approvedAt,
-        start_date: approvedAt,
         authstatus: 'seen',
         updated_at: approvedAt
       })
@@ -171,11 +170,11 @@ export default async function handler(req, res) {
             templateData: {
               userName: userData.name || 'Investor',
               plan: investment.plan || 'Standard Plan',
-              amount: capitalFormatted,
-              roi: roiFormatted,
-              bonus: calculatedBonus.toFixed(2),
+              amount: capital.toString(),
+              roi: calculatedROI.toString(),
+              bonus: calculatedBonus.toString(),
               duration: termLabel,
-              dailyROI: (calculatedROI / duration).toFixed(2)
+              dailyROI: (calculatedROI / duration).toString()
             }
           })
         });
