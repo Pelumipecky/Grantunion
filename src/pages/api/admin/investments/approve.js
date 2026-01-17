@@ -184,12 +184,13 @@ export default async function handler(req, res) {
         const emailPayload = {
           to: userData.email,
           subject: 'Investment Approved - Grant Union Investment',
-          type: 'investment_approved',
+          type: 'investment_approval',
           templateData: {
             userName: userData.name || 'Investor',
             plan: investment.plan || 'Standard Plan',
-            amount: capital.toString(),
+            capital: capital.toString(),
             roi: calculatedROI.toString(),
+            bonus: calculatedBonus.toString(),
             duration: termLabel,
             dailyROI: (calculatedROI / duration).toString()
           }
