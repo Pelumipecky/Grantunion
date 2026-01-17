@@ -766,11 +766,11 @@ const emailTemplates = {
     const { userName, amount, status, method } = data;
     const statusText = status === 'approved' ? 'APPROVED' : status === 'rejected' ? 'REJECTED' : 'PENDING';
     const statusColor = status === 'approved' ? '#2DC194' : status === 'rejected' ? '#FF4444' : '#FF9837';
-    
+
     const content = `
-      <p>Dear <strong style="color: #1C0F36;">${userName || 'Investor'}</strong>,</p>
+      <p>Dear <strong style="color: #1C0F36;">${userName || 'Valued Investor'}</strong>,</p>
       <p>Your withdrawal request has been <strong style="color: ${statusColor};">${statusText}</strong>.</p>
-      
+
       <div class="stats-box">
         <h3 style="margin-top: 0; color: #1C0F36; margin-bottom: 15px;">Withdrawal Details</h3>
         <table style="width: 100%; border-collapse: collapse;">
@@ -791,7 +791,11 @@ const emailTemplates = {
 
       ${status === 'approved' ? `
         <div class="info-box">
-          Your withdrawal has been approved and will be processed within 24-48 hours. You will receive another notification once the funds are sent.
+          <strong>What Happens Next:</strong><br>
+          1. Your withdrawal will be processed within 24-48 hours<br>
+          2. Funds will be sent to your specified address<br>
+          3. You'll receive a confirmation once funds are sent<br>
+          4. Track your withdrawal status in your dashboard
         </div>
       ` : status === 'rejected' ? `
         <div class="warning-box">
@@ -803,13 +807,14 @@ const emailTemplates = {
         </div>
       `}
 
-      <center>
+      <p style="text-align: center;">
         <a href="https://grantunion.vercel.app/dashboard" class="button">View Dashboard</a>
-      </center>
+      </p>
 
-      <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #1C0F36;">Grant Union Investment Team</strong></p>
+      <p>Thank you for your patience.</p>
+      <p>Best regards,<br><strong style="color: #1C0F36;">The Grant Union Investment Team</strong></p>
     `;
-    return buildStyledEmailTemplate('Withdrawal Notification', content);
+    return buildStyledEmailTemplate('Withdrawal Status Update', content);
   },
 
   password_reset: (data) => {
