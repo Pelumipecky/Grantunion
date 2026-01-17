@@ -91,7 +91,7 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         .stats-box {
           background: #ffffff;
           border: 1px solid #e0e0e0;
-          border-left: 4px solid #FF8C37;
+          border-left: 4px solid #1C0F36;
           padding: 20px;
           border-radius: 8px;
           margin: 20px 0;
@@ -126,19 +126,19 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         }
         .button {
           display: inline-block;
-          background: linear-gradient(120deg, #FF8C37, #FF6B1B);
-          color: #FEF9FF;
+          background: linear-gradient(120deg, #1C0F36, #2f1d5c);
+          color: #ffffff;
           padding: 14px 35px;
           text-decoration: none;
           border-radius: 8px;
           font-weight: 600;
           margin: 20px 0;
           transition: transform 0.3s ease;
-          border: 2px solid #FF8C37;
+          border: 2px solid #1C0F36;
         }
         .button:hover {
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(255, 140, 55, 0.4);
+          box-shadow: 0 4px 12px rgba(28, 15, 54, 0.4);
         }
         .highlight {
           color: #2DC194;
@@ -288,38 +288,41 @@ const emailTemplates = {
     const showExpected = expectedReturn && parseFloat(expectedReturn) > 0;
     
     const content = `
-      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Investor'}</strong>,</p>
+      <p>Dear <strong style="color: #1C0F36;">${userName || 'Valued Investor'}</strong>,</p>
       <p>Your investment has been successfully submitted and is now pending approval.</p>
       
       <div class="stats-box">
-        <h3 style="margin-top: 0; color: #FF8C37;">Investment Details</h3>
-        <ul>
-          <li>
-            <span>Investment Plan</span>
-            <span style="color: #FF8C37; font-weight: 600;">${plan}</span>
-          </li>
-          <li>
-            <span>Capital Amount</span>
-            <span class="value">$${parseFloat(amount).toFixed(2)}</span>
-          </li>
-          ${showROI ? `<li>
-            <span>Daily ROI</span>
-            <span class="value">$${parseFloat(dailyROI).toFixed(2)}</span>
-          </li>` : ''}
-          <li>
-            <span>Duration</span>
-            <span style="color: #333333;">${duration} days</span>
-          </li>
-          ${showExpected ? `<li>
-            <span>Expected Total Return</span>
-            <span class="value">$${parseFloat(expectedReturn).toFixed(2)}</span>
-          </li>` : ''}
-          ${transactionHash ? `<li><span>Transaction ID</span><span style="color: #666666; font-size: 11px; word-break: break-all;">${transactionHash}</span></li>` : ''}
-          <li>
-            <span>Status</span>
-            <span style="color: #FFB347;">Pending Approval</span>
-          </li>
-        </ul>
+        <h3 style="margin-top: 0; color: #1C0F36; margin-bottom: 15px;">Investment Details</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Investment Plan</td>
+            <td style="padding: 15px 0 15px 20px; color: #1C0F36; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">${plan}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Capital Amount</td>
+            <td style="padding: 15px 0 15px 20px; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">$${parseFloat(amount).toFixed(2)}</td>
+          </tr>
+          ${showROI ? `<tr style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Daily ROI</td>
+            <td style="padding: 15px 0 15px 20px; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">$${parseFloat(dailyROI).toFixed(2)}</td>
+          </tr>` : ''}
+          <tr style="${showExpected || transactionHash ? 'border-bottom: 1px solid #e0e0e0;' : ''}">
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Duration</td>
+            <td style="padding: 15px 0 15px 20px; color: #333333; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">${duration} days</td>
+          </tr>
+          ${showExpected ? `<tr style="${transactionHash ? 'border-bottom: 1px solid #e0e0e0;' : ''}">
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Expected Total Return</td>
+            <td style="padding: 15px 0 15px 20px; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">$${parseFloat(expectedReturn).toFixed(2)}</td>
+          </tr>` : ''}
+          ${transactionHash ? `<tr style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Transaction ID</td>
+            <td style="padding: 15px 0 15px 20px; color: #666666; font-size: 11px; text-align: right; word-break: break-all; width: 60%;">${transactionHash}</td>
+          </tr>` : ''}
+          <tr>
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Status</td>
+            <td style="padding: 15px 0 15px 20px; color: #FFB347; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">Pending Approval</td>
+          </tr>
+        </table>
       </div>
 
       <div class="info-box">
@@ -335,7 +338,7 @@ const emailTemplates = {
       </p>
 
       <p>Thank you for choosing Grant Union Investment.</p>
-      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+      <p>Best regards,<br><strong style="color: #1C0F36;">The Grant Union Investment Team</strong></p>
     `;
     return buildStyledEmailTemplate('Investment Submitted Successfully', content);
   },
@@ -361,7 +364,7 @@ const emailTemplates = {
     }
     
     const content = `
-      <p>Dear <strong style="color: #FF8C37;">${userName || 'Valued Investor'}</strong>,</p>
+      <p>Dear <strong style="color: #1C0F36;">${userName || 'Valued Investor'}</strong>,</p>
       <p>Great news! Your investment has been approved and activated.</p>
       
       <div class="stats-box">
@@ -369,7 +372,7 @@ const emailTemplates = {
         <table style="width: 100%; border-collapse: collapse;">
           <tr style="border-bottom: 1px solid #e0e0e0;">
             <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Plan</td>
-            <td style="padding: 15px 0 15px 20px; color: #FF8C37; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">${plan}</td>
+            <td style="padding: 15px 0 15px 20px; color: #1C0F36; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">${plan}</td>
           </tr>
           <tr style="border-bottom: 1px solid #e0e0e0;">
             <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Capital</td>
@@ -392,7 +395,7 @@ const emailTemplates = {
         <a href="https://grantunion.vercel.app/dashboard" class="button">View Your Earnings</a>
       </p>
 
-      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+      <p>Best regards,<br><strong style="color: #1C0F36;">The Grant Union Investment Team</strong></p>
     `;
     return buildStyledEmailTemplate('Investment Approved', content);
   },
@@ -765,25 +768,25 @@ const emailTemplates = {
     const statusColor = status === 'approved' ? '#2DC194' : status === 'rejected' ? '#FF4444' : '#FF9837';
     
     const content = `
-      <p>Dear <strong style="color: #FF8C37;">${userName || 'Investor'}</strong>,</p>
+      <p>Dear <strong style="color: #1C0F36;">${userName || 'Investor'}</strong>,</p>
       <p>Your withdrawal request has been <strong style="color: ${statusColor};">${statusText}</strong>.</p>
       
       <div class="stats-box">
-        <h3 style="margin-top: 0; color: #FF8C37;">Withdrawal Details</h3>
-        <ul>
-          <li>
-            <span>Withdrawal Amount</span>
-            <span class="value">$${parseFloat(amount).toFixed(2)}</span>
-          </li>
-          <li>
-            <span>Payment Method</span>
-            <span style="color: #FF8C37;">${method}</span>
-          </li>
-          <li>
-            <span>Status</span>
-            <span style="color: ${statusColor};">${statusText}</span>
-          </li>
-        </ul>
+        <h3 style="margin-top: 0; color: #1C0F36; margin-bottom: 15px;">Withdrawal Details</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Withdrawal Amount</td>
+            <td style="padding: 15px 0 15px 20px; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">$${parseFloat(amount).toFixed(2)}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Payment Method</td>
+            <td style="padding: 15px 0 15px 20px; color: #1C0F36; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">${method}</td>
+          </tr>
+          <tr>
+            <td style="padding: 15px 20px 15px 0; color: #666666; font-size: 14px; width: 40%;">Status</td>
+            <td style="padding: 15px 0 15px 20px; color: ${statusColor}; font-weight: 600; text-align: right; font-size: 14px; width: 60%;">${statusText}</td>
+          </tr>
+        </table>
       </div>
 
       ${status === 'approved' ? `
@@ -804,7 +807,7 @@ const emailTemplates = {
         <a href="https://grantunion.vercel.app/dashboard" class="button">View Dashboard</a>
       </center>
 
-      <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #FF8C37;">Grant Union Investment Team</strong></p>
+      <p style="margin-bottom: 0;">Best regards,<br><strong style="color: #1C0F36;">Grant Union Investment Team</strong></p>
     `;
     return buildStyledEmailTemplate('Withdrawal Notification', content);
   },
