@@ -38,22 +38,16 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
         .logo-section {
           margin-bottom: 15px;
         }
+        .logo-section img {
+          max-width: 120px;
+          height: auto;
+          margin-bottom: 15px;
+        }
         .logo-text {
           font-size: 32px;
           font-weight: 800;
           color: #ffffff;
           letter-spacing: 2px;
-          margin: 0;
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .logo-subtitle {
-          font-size: 14px;
-          color: #ffffff;
-          opacity: 0.9;
-          margin: 5px 0 0 0;
-          font-weight: 300;
-          letter-spacing: 1px;
-        }
           margin: 0;
           text-transform: uppercase;
         }
@@ -208,6 +202,7 @@ const buildStyledEmailTemplate = (title, content, footer = null) => {
       <div class="email-container">
         <div class="header">
           <div class="logo-section">
+            <img src="https://grantunion.vercel.app/grantunionLogo.png" alt="Grant Union Investment" onerror="this.style.display='none'">
             <p class="logo-text">GRANT UNION</p>
             <p class="logo-subtitle">Investment Platform</p>
           </div>
