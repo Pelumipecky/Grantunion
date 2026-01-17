@@ -44,14 +44,14 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
 
     const handleActiveInvestment = async () => {
         try {
-            const response = await fetch('/api/withdrawals/approve', {
+            // Call NEW backend API endpoint (no need to send email manually - backend handles it)
+            const response = await fetch('/api/admin/withdrawals/approve', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    withdrawalId: withdrawData?.id,
-                    withdrawal: withdrawData
+                    withdrawalId: withdrawData?.id
                 })
             });
 
@@ -62,65 +62,9 @@ const UnitWithdrawSect = ({ setProfileState, withdrawData }) => {
 
             const result = await response.json();
             
-            // Send email notification to user
-            try {
-                // Get user email from userlogs table
-                const { data: userData, error: userError } = await supabase
-                    .from('userlogs')
-                    .select('email, name')
-                    .eq('idnum', withdrawData.idnum)
-                    .single();
-
-                if (!userError && userData?.email) {
-                    const emailSubject = 'Withdrawal Confirmed - Grant Union Investment';
-                    const emailMessage = `
-                      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                        <h2 style="color: #28a745;">💰 Withdrawal Confirmed!</h2>
-                        <p>Dear ${userData.name || 'User'},</p>
-                        <p>Great news! Your withdrawal request has been processed and confirmed.</p>
-                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                          <h3 style="margin-top: 0;">Withdrawal Details:</h3>
-                          <ul style="list-style: none; padding: 0;">
-                            <li><strong>Amount:</strong> $${withdrawData?.amount}</li>
-                            <li><strong>Fee:</strong> $${withdrawData?.withdrawal_fee || '0.00'}</li>
-                            <li><strong>Payment Method:</strong> ${withdrawData?.paymentoption || withdrawData?.paymentOption || 'N/A'}</li>
-                            <li><strong>Wallet Address:</strong> ${withdrawData?.wallet_address}</li>
-                          </ul>
-                        </div>
-                        <p>Your funds are now being processed and will be sent to your wallet shortly. Processing times may vary depending on the payment method.</p>
-                        <p>If you have any questions, please contact our support team.</p>
-                        <p>Best regards,<br>Grant Union Investment Team</p>
-                        <hr>
-                        <p style="font-size: 12px; color: #666;">
-                          This is an automated message. Please do not reply to this email.
-                        </p>
-                      </div>
-                    `;
-
-                    const emailResponse = await fetch('/api/send-email', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        to: userData.email,
-                        subject: emailSubject,
-                        message: emailMessage,
-                        type: 'withdrawal_confirmation'
-                      })
-                    });
-
-                    if (emailResponse.ok) {
-                      console.log('Withdrawal confirmation email sent successfully');
-                    } else {
-                      console.error('Failed to send withdrawal confirmation email');
-                    }
-                }
-            } catch (emailError) {
-                console.error('Error sending withdrawal confirmation email:', emailError);
-                // Don't throw here - email failure shouldn't block withdrawal confirmation
-            }
-
+            // Backend handles email sending - no need to send manually here
+            console.log('✅ Withdrawal approved via backend API');
+            
             showModal('success', 'Success', 'Withdrawal confirmed successfully');
             setTimeout(() => {
                 setProfileState("Withdrawals");
