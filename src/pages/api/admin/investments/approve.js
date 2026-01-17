@@ -9,6 +9,7 @@
  */
 
 import { supabase } from '../../../../database/supabaseConfig';
+import { sendTransactionalEmail } from '../../../../lib/emailService';
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -163,76 +164,127 @@ export default async function handler(req, res) {
       console.error('⚠️ Failed to create notification (non-blocking):', notificationError);
     }
 
-    // Step 7: Send email notification via POST to /api/send-email (using proven template)
+    // Step 7: Send email notification via EmailService (direct Mailjet)
     let emailSendResult = null;
     let emailSendError = null;
     try {
-      console.log('[INVESTMENT APPROVAL] Attempting to send approval email via /api/send-email...');
+      console.log('[INVESTMENT APPROVAL] Attempting to send approval email via EmailService...');
       console.log('[INVESTMENT APPROVAL] Investment ID:', investment.id);
       console.log('[INVESTMENT APPROVAL] User email:', userData.email);
 
       if (!userData.email) {
         console.warn('[INVESTMENT APPROVAL] ⚠️ No email address found for user');
       } else {
-        // Use absolute URL for production, fallback to relative path
-        const apiUrl = process.env.VERCEL_URL 
-          ? `https://${process.env.VERCEL_URL}/api/send-email`
-          : process.env.NEXT_PUBLIC_APP_URL 
-          ? `${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`
-          : '/api/send-email';
-        console.log('[INVESTMENT APPROVAL] Email API URL:', apiUrl);
-        const emailPayload = {
+        const subject = 'Investment Approved - Grant Union Investment';
+
+        // Build HTML content similar to the template
+        const userName = userData.name || 'Valued Investor';
+        const plan = investment.plan || 'Standard Plan';
+        const amount = capital;
+        const roiValue = calculatedROI;
+        const roiLabel = 'Projected Total Profit';
+        const duration = termLabel;
+
+        const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: 'Alegreya Sans', Arial, sans-serif; background-color: #f5f5f5; color: #333333; margin: 0; padding: 0; }
+    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 1px solid #e0e0e0; }
+    .header { background: #FF8C37; padding: 40px 20px; text-align: center; }
+    .header h1 { color: #ffffff; font-size: 28px; margin: 10px 0 0 0; font-weight: 600; }
+    .content { padding: 30px 25px; }
+    .content p { margin: 15px 0; line-height: 1.6; font-size: 15px; }
+    .stats-box { background: #ffffff; border: 1px solid #e0e0e0; border-left: 4px solid #1C0F36; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    .stats-box table { width: 100%; border-collapse: collapse; }
+    .stats-box td { padding: 15px; border-bottom: 1px solid #e0e0e0; }
+    .stats-box td:first-child { color: #666666; width: 40%; }
+    .stats-box td:last-child { text-align: right; font-weight: 600; width: 60%; }
+    .button { display: inline-block; background: linear-gradient(120deg, #1C0F36, #2f1d5c); color: #ffffff; padding: 14px 35px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 20px 0; border: 2px solid #1C0F36; }
+    .footer { background: #f8f8f8; padding: 25px; text-align: center; border-top: 2px solid #FF8C37; font-size: 12px; color: #666666; }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>Investment Approved</h1>
+    </div>
+    <div class="content">
+      <p>Dear <strong style="color: #1C0F36;">${userName}</strong>,</p>
+      <p>Great news! Your investment has been approved and activated.</p>
+
+      <div class="stats-box">
+        <h3 style="margin-top: 0; color: #2DC194; margin-bottom: 15px;">Investment Active</h3>
+        <table>
+          <tr>
+            <td>Plan</td>
+            <td>${plan}</td>
+          </tr>
+          <tr>
+            <td>Capital</td>
+            <td style="color: #2DC194;">$${amount.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td>${roiLabel}</td>
+            <td style="color: #2DC194;">$${roiValue.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td>Duration</td>
+            <td>${duration}</td>
+          </tr>
+        </table>
+      </div>
+
+      <p>Your daily ROI credits will begin immediately. You can track your earnings in real-time on your dashboard.</p>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/dashboard" class="button">View Your Earnings</a>
+      </p>
+
+      <p>Best regards,<br><strong style="color: #1C0F36;">The Grant Union Investment Team</strong></p>
+    </div>
+    <div class="footer">
+      <p>© 2026 Grant Union Investment. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+        const textBody = `Dear ${userName},\n\nGreat news! Your investment has been approved and activated.\n\nPlan: ${plan}\nCapital: $${amount.toFixed(2)}\n${roiLabel}: $${roiValue.toFixed(2)}\nDuration: ${duration}\n\nYour daily ROI credits will begin immediately.\n\nBest regards,\nThe Grant Union Investment Team`;
+
+        emailSendResult = await sendTransactionalEmail({
           to: userData.email,
-          subject: 'Investment Approved - Grant Union Investment',
-          type: 'investment_approval',
-          templateData: {
-            userName: userData.name || 'Investor',
-            plan: investment.plan || 'Standard Plan',
-            capital: capital.toString(),
-            roi: calculatedROI.toString(),
-            bonus: calculatedBonus.toString(),
-            duration: termLabel,
-            dailyROI: (calculatedROI / duration).toString()
-          }
-        };
-        console.log('[INVESTMENT APPROVAL] Email payload:', emailPayload);
-        const emailResponse = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(emailPayload)
+          subject,
+          textBody,
+          htmlBody
         });
-        const emailResult = await emailResponse.json();
-        if (emailResponse.ok) {
-          emailSendResult = emailResult;
-          console.log('[INVESTMENT APPROVAL] ✅ Email sent successfully:', emailResult);
 
-          // Step 7b: Mark approval_email_sent = true only after successful send
-          try {
-            const { data: emailFlagUpdate, error: emailFlagError } = await supabase
-              .from('investments')
-              .update({ approval_email_sent: true, updated_at: new Date().toISOString() })
-              .eq('id', investmentId)
-              .select()
-              .single();
+        console.log('[INVESTMENT APPROVAL] ✅ EmailService send result:', emailSendResult);
 
-            if (emailFlagError) {
-              console.error('[INVESTMENT APPROVAL] ❌ Failed to set approval_email_sent flag:', emailFlagError);
-              // Do not throw; but include in response
-            } else {
-              console.log('[INVESTMENT APPROVAL] ✅ approval_email_sent flag set on investment');
-            }
-          } catch (flagErr) {
-            console.error('[INVESTMENT APPROVAL] ❌ Error setting approval_email_sent flag:', flagErr);
+        // Step 7b: Mark approval_email_sent = true only after successful send
+        try {
+          const { data: emailFlagUpdate, error: emailFlagError } = await supabase
+            .from('investments')
+            .update({ approval_email_sent: true, updated_at: new Date().toISOString() })
+            .eq('id', investmentId)
+            .select()
+            .single();
+
+          if (emailFlagError) {
+            console.error('[INVESTMENT APPROVAL] ❌ Failed to set approval_email_sent flag:', emailFlagError);
+          } else {
+            console.log('[INVESTMENT APPROVAL] ✅ approval_email_sent flag set on investment');
           }
-        } else {
-          emailSendError = emailResult;
-          console.error('[INVESTMENT APPROVAL] ⚠️ Email API returned error:', emailResult);
+        } catch (flagErr) {
+          console.error('[INVESTMENT APPROVAL] ❌ Error setting approval_email_sent flag:', flagErr);
         }
       }
     } catch (emailErr) {
       emailSendError = emailErr;
-      console.error('[INVESTMENT APPROVAL] ⚠️ Email error (non-blocking):', emailErr);
-      // Don't fail the approval if email fails
+      console.error('[INVESTMENT APPROVAL] ⚠️ EmailService error:', emailErr);
     }
 
     // Step 8: Return success response
