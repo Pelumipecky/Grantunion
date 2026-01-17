@@ -365,18 +365,30 @@ const emailTemplates = {
       <p>Great news! Your investment has been approved and activated.</p>
       
       <div class="stats-box">
-        <h3 style="margin-top: 0; color: #2DC194;">Investment Active</h3>
-        <ul>
-          <li><span>Plan</span><span style="color: #FF8C37;">${plan}</span></li>
-          <li><span>Capital</span><span class="value">$${parseFloat(amount).toFixed(2)}</span></li>
-          <li><span>${roiLabel}</span><span class="value">$${roiValue.toFixed(2)}</span></li>
-          <li><span>Duration</span><span style="color: #333333;">${duration} ${duration.toString().includes('day') ? '' : 'days'}</span></li>
-        </ul>
+        <h3 style="margin-top: 0; color: #2DC194; margin-bottom: 15px;">Investment Active</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 12px 0; color: #666666; font-size: 14px;">Plan</td>
+            <td style="padding: 12px 0; color: #FF8C37; font-weight: 600; text-align: right; font-size: 14px;">${plan}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 12px 0; color: #666666; font-size: 14px;">Capital</td>
+            <td style="padding: 12px 0; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px;">$${parseFloat(amount).toFixed(2)}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e0e0;">
+            <td style="padding: 12px 0; color: #666666; font-size: 14px;">${roiLabel}</td>
+            <td style="padding: 12px 0; color: #2DC194; font-weight: 600; text-align: right; font-size: 14px;">$${roiValue.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 0; color: #666666; font-size: 14px;">Duration</td>
+            <td style="padding: 12px 0; color: #333333; font-weight: 600; text-align: right; font-size: 14px;">${duration} ${duration.toString().includes('day') ? '' : 'days'}</td>
+          </tr>
+        </table>
       </div>
 
       <p>Your daily ROI credits will begin immediately. You can track your earnings in real-time on your dashboard.</p>
 
-      <p style="text-align: center;">
+      <p style="text-align: center; margin: 25px 0;">
         <a href="https://grantunion.vercel.app/dashboard" class="button">View Your Earnings</a>
       </p>
 
