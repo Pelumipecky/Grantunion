@@ -246,7 +246,8 @@ export default async function handler(req, res) {
         capitalCredited: capital,
         projectedROI: calculatedROI,
         duration: termLabel
-      }
+      },
+      emailSent: !!emailSendResult
     };
 
     if (emailSendError) {

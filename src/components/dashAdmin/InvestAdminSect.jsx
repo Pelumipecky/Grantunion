@@ -388,7 +388,8 @@ const InvestAdminSect = ({ setInvestData, setProfileState, investments, totalCap
                                                                     alert(`ℹ️ Investment already approved\n\nThis investment was already processed.`);
                                                                 } else {
                                                                     const details = result.details || {};
-                                                                    alert(`✅ Investment approved successfully!\n\nUser ${elem.idnum} has been credited $${details.capitalCredited?.toLocaleString() || capitalFormatted}.\nProjected earnings: $${details.projectedROI?.toLocaleString() || roiFormatted}.\nDuration: ${details.duration || termLabel}.\n\nNotification and email sent to user.`);
+                                                                    const emailMessage = result.emailSent ? '\n\nNotification and email sent to user.' : '\n\nNotification sent to user (email delivery pending).';
+                                                                    alert(`✅ Investment approved successfully!\n\nUser ${elem.idnum} has been credited $${details.capitalCredited?.toLocaleString() || capitalFormatted}.\nProjected earnings: $${details.projectedROI?.toLocaleString() || roiFormatted}.\nDuration: ${details.duration || termLabel}.${emailMessage}`);
                                                                 }
 
                                                                 // Refresh the investments data
