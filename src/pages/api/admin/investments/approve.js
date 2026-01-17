@@ -160,7 +160,7 @@ export default async function handler(req, res) {
       if (userData.email) {
         console.log('📧 Sending approval email to:', userData.email);
         
-        await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+        const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -179,7 +179,13 @@ export default async function handler(req, res) {
           })
         });
 
-        console.log('✅ Email sent successfully');
+        const emailResult = await emailResponse.json();
+        
+        if (emailResponse.ok) {
+          console.log('✅ Email sent successfully:', emailResult);
+        } else {
+          console.error('⚠️ Email API returned error:', emailResult);
+        }
       }
     } catch (emailError) {
       console.error('⚠️ Email error (non-blocking):', emailError);
