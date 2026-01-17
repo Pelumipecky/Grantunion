@@ -37,13 +37,15 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: 'Investment not found' });
     }
 
-    // Step 2: Idempotency Check - If already approved, return success immediately
-    if (investment.status === 'Active' || investment.status === 'Approved') {
-      console.log('⚠️ Investment already approved, returning cached result');
+    // Step 2: Idempotency Check - If already approved and email already sent, return
+    const alreadyApproved = investment.status === 'Active' || investment.status === 'Approved';
+    const emailAlreadySent = !!investment.approval_email_sent;
+    if (alreadyApproved && emailAlreadySent) {
+      console.log('⚠️ Investment already approved and approval email already sent');
       return res.status(200).json({
         success: true,
         record: investment,
-        message: 'Investment already approved',
+        message: 'Investment already approved and email sent',
         alreadyProcessed: true
       });
     }
@@ -79,6 +81,9 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: 'User not found for this investment' });
     }
 
+      // Log important user state that could block email sending (KYC, wallet presence)
+      console.log('[INVESTMENT APPROVAL] User KYC status:', userData.kyc_status || 'unknown', 'user email:', userData.email || 'none', 'paymentOption:', investment.paymentOption || 'none');
+
     const approvedAt = new Date().toISOString();
     const currentBalance = parseFloat(userData.balance) || 0;
     const currentBonus = parseFloat(userData.bonus) || 0;
@@ -86,7 +91,8 @@ export default async function handler(req, res) {
     // Step 5: Atomic Database Updates
     console.log('🔄 Starting atomic updates...');
 
-    // 5a. Update investment status
+    // 5a. Update investment status (idempotent)
+    console.log('[INVESTMENT APPROVAL] Before update - status:', investment.status, 'approval_email_sent:', investment.approval_email_sent);
     const { data: updatedInvestment, error: investError } = await supabase
       .from('investments')
       .update({
@@ -102,6 +108,8 @@ export default async function handler(req, res) {
       .eq('id', investmentId)
       .select()
       .single();
+
+    console.log('[INVESTMENT APPROVAL] After update - investError:', investError, 'updatedInvestment:', updatedInvestment && updatedInvestment.status);
 
     if (investError) {
       console.error('❌ Failed to update investment:', investError);
@@ -155,13 +163,17 @@ export default async function handler(req, res) {
       console.error('⚠️ Failed to create notification (non-blocking):', notificationError);
     }
 
-    // Step 7: Send email notification (non-blocking)
+    // Step 7: Send email notification via POST to /api/send-email (using proven template)
+    let emailSendResult = null;
+    let emailSendError = null;
     try {
-      console.log('[INVESTMENT APPROVAL] Attempting to send approval email...');
+      console.log('[INVESTMENT APPROVAL] Attempting to send approval email via /api/send-email...');
       console.log('[INVESTMENT APPROVAL] Investment ID:', investment.id);
       console.log('[INVESTMENT APPROVAL] User email:', userData.email);
-      console.log('[INVESTMENT APPROVAL] Investment status:', investment.status);
-      if (userData.email) {
+
+      if (!userData.email) {
+        console.warn('[INVESTMENT APPROVAL] ⚠️ No email address found for user');
+      } else {
         // Use absolute URL for production, fallback to relative path
         const apiUrl = process.env.VERCEL_URL 
           ? `https://${process.env.VERCEL_URL}/api/send-email`
@@ -178,7 +190,6 @@ export default async function handler(req, res) {
             plan: investment.plan || 'Standard Plan',
             amount: capital.toString(),
             roi: calculatedROI.toString(),
-            bonus: calculatedBonus.toString(),
             duration: termLabel,
             dailyROI: (calculatedROI / duration).toString()
           }
@@ -191,21 +202,41 @@ export default async function handler(req, res) {
         });
         const emailResult = await emailResponse.json();
         if (emailResponse.ok) {
+          emailSendResult = emailResult;
           console.log('[INVESTMENT APPROVAL] ✅ Email sent successfully:', emailResult);
+
+          // Step 7b: Mark approval_email_sent = true only after successful send
+          try {
+            const { data: emailFlagUpdate, error: emailFlagError } = await supabase
+              .from('investments')
+              .update({ approval_email_sent: true, updated_at: new Date().toISOString() })
+              .eq('id', investmentId)
+              .select()
+              .single();
+
+            if (emailFlagError) {
+              console.error('[INVESTMENT APPROVAL] ❌ Failed to set approval_email_sent flag:', emailFlagError);
+              // Do not throw; but include in response
+            } else {
+              console.log('[INVESTMENT APPROVAL] ✅ approval_email_sent flag set on investment');
+            }
+          } catch (flagErr) {
+            console.error('[INVESTMENT APPROVAL] ❌ Error setting approval_email_sent flag:', flagErr);
+          }
         } else {
+          emailSendError = emailResult;
           console.error('[INVESTMENT APPROVAL] ⚠️ Email API returned error:', emailResult);
         }
-      } else {
-        console.warn('[INVESTMENT APPROVAL] ⚠️ No email address found for user');
       }
-    } catch (emailError) {
-      console.error('[INVESTMENT APPROVAL] ⚠️ Email error (non-blocking):', emailError);
+    } catch (emailErr) {
+      emailSendError = emailErr;
+      console.error('[INVESTMENT APPROVAL] ⚠️ Email error (non-blocking):', emailErr);
       // Don't fail the approval if email fails
     }
 
     // Step 8: Return success response
     console.log('🎉 Investment approval complete');
-    return res.status(200).json({
+    const responsePayload = {
       success: true,
       record: updatedInvestment,
       user: updatedUser,
@@ -215,7 +246,18 @@ export default async function handler(req, res) {
         projectedROI: calculatedROI,
         duration: termLabel
       }
-    });
+    };
+
+    if (emailSendError) {
+      responsePayload.emailError = {
+        message: emailSendError.message,
+        details: emailSendError.details || null
+      };
+    } else if (emailSendResult) {
+      responsePayload.emailResult = emailSendResult;
+    }
+
+    return res.status(200).json(responsePayload);
 
   } catch (error) {
     console.error('❌ Unexpected error:', error);

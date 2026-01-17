@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS investments (
   duration INTEGER DEFAULT 5,
   paymentoption TEXT DEFAULT 'Bitcoin',
   transaction_hash TEXT,
+  approval_email_sent BOOLEAN DEFAULT FALSE,
   authstatus TEXT DEFAULT 'unseen',
   approved_by TEXT,
   approved_at TIMESTAMPTZ,
