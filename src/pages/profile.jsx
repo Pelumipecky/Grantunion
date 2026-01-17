@@ -185,17 +185,46 @@ const Profile = () => {
     // we need an idnum to subscribe to related collections (investments/notifications)
     if (!currentUser?.idnum) return;
 
+    // Define refetch functions
+    const fetchInvestments = () => {
+      supabaseDb.getInvestmentsByIdnum(currentUser.idnum).then(({ data, error }) => {
+        if (!error && data) {
+          setInvestments(data);
+        }
+      });
+    };
+
+    const fetchNotifications = () => {
+      supabaseDb.getNotificationsByIdnum(currentUser.idnum).then(({ data, error }) => {
+        if (!error && data) {
+          console.log('Updated notifications data:', data);
+          setNotifications(data);
+        } else {
+          console.error('Error fetching updated notifications:', error);
+        }
+      });
+    };
+
+    const fetchUserData = () => {
+      supabaseDb.getUserByIdnum(currentUser.idnum).then(({ data, error }) => {
+        if (!error && data) {
+          setCurrentUser(prev => ({
+            ...prev,
+            balance: data.balance,
+            name: data.name,
+            email: data.email,
+            avatar: data.avatar
+          }));
+        }
+      });
+    };
+
     // Subscribe to investments
     const investmentsSubscription = supabaseRealtime.subscribeToInvestments(
       currentUser.idnum,
       (payload) => {
         console.log('Investments change:', payload);
-        // Refresh investments data
-        supabaseDb.getInvestmentsByIdnum(currentUser.idnum).then(({ data, error }) => {
-          if (!error && data) {
-            setInvestments(data);
-          }
-        });
+        fetchInvestments();
       }
     );
 
@@ -204,33 +233,25 @@ const Profile = () => {
       currentUser.idnum,
       (payload) => {
         console.log('Notifications change detected:', payload);
-        // Refresh notifications data
-        supabaseDb.getNotificationsByIdnum(currentUser.idnum).then(({ data, error }) => {
-          if (!error && data) {
-            console.log('Updated notifications data:', data);
-            setNotifications(data);
-          } else {
-            console.error('Error fetching updated notifications:', error);
-          }
-        });
+        fetchNotifications();
       }
     );
 
     // Initial data load
-    supabaseDb.getInvestmentsByIdnum(currentUser.idnum).then(({ data, error }) => {
-      if (!error && data) {
-        setInvestments(data);
-      }
-    });
+    fetchInvestments();
+    fetchNotifications();
 
-    supabaseDb.getNotificationsByIdnum(currentUser.idnum).then(({ data, error }) => {
-      if (!error && data) {
-        console.log('Initial notifications loaded:', data);
-        setNotifications(data);
-      } else {
-        console.error('Error loading initial notifications:', error);
+    // Expose refetch functions for child components
+    window.refetchUserData = {
+      investments: fetchInvestments,
+      notifications: fetchNotifications,
+      user: fetchUserData,
+      all: () => {
+        fetchInvestments();
+        fetchNotifications();
+        fetchUserData();
       }
-    });
+    };
 
     // Initial KYC status load
     if (currentUser?.id) {
@@ -268,6 +289,7 @@ const Profile = () => {
       investmentsSubscription.unsubscribe();
       notificationsSubscription.unsubscribe();
       if (kycSubscription) kycSubscription.unsubscribe();
+      delete window.refetchUserData;
     };
   }, [currentUser?.idnum, currentUser?.id]);
 
@@ -775,6 +797,7 @@ const Profile = () => {
             investData={investData}
             bitPrice={bitPrice}
             setInvestments={setInvestments}
+            onDataRefresh={() => window.refetchUserData?.all()}
           />
         )}
         {profilestate === "Withdrawal Payment" && (
@@ -783,6 +806,7 @@ const Profile = () => {
             withdrawData={withdrawData}
             bitPrice={bitPrice}
             currentUser={currentUser}
+            onDataRefresh={() => window.refetchUserData?.all()}
           />
         )}
         <footer className="profilefooter">

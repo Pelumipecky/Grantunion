@@ -5,7 +5,7 @@ import { createWithdrawal } from "../../utils/transactionManager";
 import styles from "./WithdrawPayment.module.css";
 import Modal from "../Modal";
 
-const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, currentUser}) => {
+const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, currentUser, onDataRefresh}) => {
     const router = useRouter();
     const [copystate, setCopystate] = useState("Copy");
     const [walletAddress, setWalletAddress] = useState(""); // New state for wallet address
@@ -259,6 +259,11 @@ const WithdrawalPayment = ({setProfileState, withdrawData, bitPrice, currentUser
             }
 
             showModal('success', 'Success', "Withdrawal request submitted successfully.");
+
+            // Trigger data refresh
+            if (onDataRefresh) {
+                onDataRefresh();
+            }
 
             // small delay so user can see success message before routing
             setTimeout(() => {

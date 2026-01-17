@@ -3,7 +3,7 @@ import { supabaseDb } from "../../database/supabaseUtils";
 import { createInvestment } from "../../utils/transactionManager";
 import Modal from "../Modal";
 
-const PaymentSect = ({setProfileState, investData, bitPrice, setInvestments}) => {
+const PaymentSect = ({setProfileState, investData, bitPrice, setInvestments, onDataRefresh}) => {
     const [copystate, setCopystate] = useState("Copy");
     const [modalOpen, setModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
@@ -92,6 +92,11 @@ const PaymentSect = ({setProfileState, investData, bitPrice, setInvestments}) =>
         } else if (setInvestments) {
              // Fallback if data is not returned but no error (unlikely with Supabase)
              setInvestments(prev => [investmentToCreate, ...prev]);
+        }
+
+        // Trigger data refresh
+        if (onDataRefresh) {
+            onDataRefresh();
         }
 
         setModalTitle("Success");
