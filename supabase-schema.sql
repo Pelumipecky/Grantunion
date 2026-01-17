@@ -124,6 +124,7 @@ CREATE TABLE IF NOT EXISTS loans (
 );
 
 -- Create withdrawals table
+-- Create withdrawals table
 CREATE TABLE IF NOT EXISTS withdrawals (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   idnum INTEGER NOT NULL REFERENCES userlogs(idnum),
@@ -131,6 +132,16 @@ CREATE TABLE IF NOT EXISTS withdrawals (
   status TEXT DEFAULT 'pending',
   paymentoption TEXT,
   wallet_address TEXT,
+  -- Additional columns for withdrawal processing
+  processed_at TIMESTAMPTZ,
+  authstatus TEXT DEFAULT 'pending',
+  bank_name TEXT,
+  bankname TEXT,
+  account_number TEXT,
+  account_name TEXT,
+  routing_number TEXT,
+  swift_code TEXT,
+  iban TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
