@@ -24,7 +24,6 @@ const GuideSection = () => {
     { name: 'Swedish', code: 'sv', flag: '🇸🇪' },
     { name: 'Norwegian', code: 'no', flag: '🇳🇴' },
     { name: 'Danish', code: 'da', flag: '🇩🇰' },
-    { name: 'Finnish', code: 'fi', flag: '🇫🇮' },
   ];
 
   return (

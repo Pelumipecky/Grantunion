@@ -242,7 +242,6 @@ const About = () => {
                     <a href="/downloads/guide-sv.pdf" className="lang-link" download>🇸🇪 Swedish</a>
                     <a href="/downloads/guide-no.pdf" className="lang-link" download>🇳🇴 Norwegian</a>
                     <a href="/downloads/guide-da.pdf" className="lang-link" download>🇩🇰 Danish</a>
-                    <a href="/downloads/guide-fi.pdf" className="lang-link" download>🇫🇮 Finnish</a>
                   </div>
                 </div>
               </div>

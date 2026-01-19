@@ -6,7 +6,6 @@ import FAQ from '../components/home/FAQ';
 import Footer from '../components/home/Footer';
 import Navbar from '../components/home/Navbar';
 import AdvancedChartWidget from '../components/dashboard/LengthyAnalytics';
-import GuideSection from '../components/home/GuideSection';
 import { PLAN_CONFIG, formatPercent } from '../utils/planConfig';
 import dashboardStyles from '../components/dashboard/DashboardSect.module.css';
 
@@ -193,7 +192,66 @@ export default function Home() {
           </div>
         </section>
 
-        <GuideSection />
+        <section className="guideCtaSection" style={{
+          padding: '4rem 5%',
+          background: 'linear-gradient(135deg, #1C0F36 0%, #3A1A63 100%)',
+          textAlign: 'center',
+          margin: '3rem 0'
+        }}>
+          <div style={{
+            maxWidth: '800px',
+            margin: '0 auto',
+            paddingBottom: '2rem'
+          }}>
+            <h2 style={{
+              fontSize: '2.5rem',
+              color: '#FEF9FF',
+              marginBottom: '1rem',
+              fontWeight: 'bold'
+            }}>
+              Complete Investment Guide
+            </h2>
+            <p style={{
+              fontSize: '1.1rem',
+              color: '#EAD8FF',
+              marginBottom: '2rem',
+              lineHeight: '1.8'
+            }}>
+              Get comprehensive information about our investment plans, platform features, and how to get started. 
+              Available in 19 languages for our global community.
+            </p>
+            <a 
+              href="/master-guide-complete.html"
+              className="fancyBtn"
+              style={{
+                display: 'inline-block',
+                padding: '15px 40px',
+                backgroundColor: '#FF8C37',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '8px',
+                fontSize: '1.1rem',
+                fontWeight: 'bold',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer',
+                border: 'none',
+                boxShadow: '0 4px 15px rgba(255, 140, 55, 0.3)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#FF6B1A';
+                e.target.style.transform = 'translateY(-3px)';
+                e.target.style.boxShadow = '0 8px 25px rgba(255, 140, 55, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#FF8C37';
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 15px rgba(255, 140, 55, 0.3)';
+              }}
+            >
+              View Master Guide
+            </a>
+          </div>
+        </section>
 
         {isHydrated && !currentUser?.admin && (
           <section id="packages" className={`homePackagesSection ${dashboardStyles.packages}`}>

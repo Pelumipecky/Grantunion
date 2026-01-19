@@ -1,0 +1,2460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grant Union - Investment Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1C0F36 0%, #120524 100%);
+            color: #FEF9FF;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(120deg, #1C0F36 0%, #3A1A63 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 140, 55, 0.2);
+        }
+
+        .logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-section img {
+            height: 50px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 12px rgba(255, 140, 55, 0.3));
+        }
+
+        .header h1 {
+            color: #FEF9FF;
+            font-size: 32px;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 12px rgba(255, 140, 55, 0.3);
+        }
+
+        .header p {
+            color: #EAD8FF;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .language-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 140, 55, 0.2);
+        }
+
+        .lang-btn {
+            padding: 10px 16px;
+            border: 2px solid #FF8C37;
+            background: rgba(255, 140, 55, 0.1);
+            color: #FF8C37;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 140, 55, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(120deg, #FF8C37, #FF6B1A);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 140, 55, 0.4);
+        }
+
+        .content {
+            background: linear-gradient(135deg, #1A0833 0%, #230E42 100%);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            min-height: 600px;
+            border: 1px solid rgba(255, 140, 55, 0.1);
+        }
+
+        .language-content {
+            display: none;
+        }
+
+        .language-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1 {
+            color: #FF8C37;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #FFB347;
+            font-size: 22px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            color: #FFB347;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p, li {
+            color: #EAD8FF;
+            font-size: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(60, 30, 100, 0.4);
+            border: 1px solid rgba(255, 140, 55, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(120deg, #FF8C37, #FF6B1A);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 140, 55, 0.15);
+            color: #FEF9FF;
+        }
+
+        td strong {
+            color: #FFB347;
+        }
+
+        tr:hover {
+            background: rgba(255, 140, 55, 0.1);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 30px 0;
+        }
+
+        .highlight {
+            background: rgba(255, 140, 55, 0.15);
+            padding: 20px;
+            border-left: 4px solid #FF8C37;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #FEF9FF;
+        }
+
+        .contact-info {
+            background: rgba(255, 140, 55, 0.15);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 140, 55, 0.2);
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+            color: #FEF9FF;
+        }
+
+        .contact-info strong {
+            color: #FFB347;
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #EAD8FF;
+            padding: 20px;
+        }
+
+        .pdf-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(120deg, #FF8C37, #FF6B1A);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 140, 55, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .language-selector {
+                gap: 5px;
+            }
+
+            .lang-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            table th, table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-section">
+                <img src="public/logos/grantunionsmall.png" alt="Grant Union Logo">
+                <div>
+                    <h1>GRANT UNION</h1>
+                    <p>Professional Investment & Trading Platform</p>
+                </div>
+            </div>
+            <div class="language-selector" id="languageSelector"></div>
+        </header>
+
+        <div class="content" id="contentArea"></div>
+
+        <footer>
+            <p>&copy; 2026 Grant Union. All rights reserved.</p>
+            <p>Professional Trading | Cryptocurrency | Forex | Gold | Real Estate</p>
+        </footer>
+    </div>
+
+    <script>
+        const languages = {
+            en: {
+                name: '🇬🇧 English',
+                content: `
+                    <h1>Welcome to Grant Union</h1>
+                    <p>Welcome to Grant Union, the world's premier investment and trading platform. We are committed to providing you with a secure, transparent, and profitable investment experience.</p>
+
+                    <h2>About Grant Union</h2>
+                    <p>Grant Union is a professional trading company specializing in cryptocurrency trading, forex trading, gold, and real estate investments. Our expert team of professional traders works diligently to maximize returns on your Bitcoin investments.</p>
+
+                    <h2>Minimum Investment</h2>
+                    <p>The company offers daily commission based on your investment plan. With a minimum deposit of just $100, you can start earning. After your investment period, you can choose to withdraw both your capital and earnings, or reinvest for continued growth.</p>
+
+                    <h2>Investment Plans & Returns</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Duration</th>
+                                    <th>Daily Commission</th>
+                                    <th>Min Deposit</th>
+                                    <th>Max Deposit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>3-Day Plan</strong></td>
+                                    <td>3 days</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>7-Day Plan</strong></td>
+                                    <td>7 days</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>12-Day Plan</strong></td>
+                                    <td>12 days</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>15-Day Plan</strong></td>
+                                    <td>15 days</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3-Month Plan</strong></td>
+                                    <td>90 days</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>6-Month Plan</strong></td>
+                                    <td>180 days</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>Unlimited</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Example Calculation</h3>
+                    <p>If you invest $100 in the 3-Day plan at 8% daily, you will earn $24 after 3 days. You can choose to withdraw your capital and earnings or reinvest.</p>
+
+                    <h2>How It Works</h2>
+                    <p>When you invest with Grant Union, our professional team of traders trades your Bitcoin for the duration of your chosen plan (e.g., 3 days). After the investment period, your capital and earnings are transferred to your back office, where you can choose to withdraw or reinvest.</p>
+
+                    <h2>Withdrawal Process</h2>
+                    <h3>Quick & Efficient Withdrawals</h3>
+                    <p>Withdrawals are quick and efficient. The process takes only a few minutes, and at most within 24 hours.</p>
+
+                    <h3>Withdrawal Steps</h3>
+                    <ul>
+                        <li>Log in to your Grant Union account</li>
+                        <li>Navigate to the Withdrawal section</li>
+                        <li>Select your withdrawal amount</li>
+                        <li>Choose your payment method (Bitcoin or USDT)</li>
+                        <li>Enter your wallet address</li>
+                        <li>Submit your withdrawal request</li>
+                        <li>Funds are transferred within minutes</li>
+                    </ul>
+
+                    <h3>Available Methods</h3>
+                    <ul>
+                        <li><strong>Bitcoin:</strong> Secure and fast cryptocurrency transfers</li>
+                        <li><strong>USDT:</strong> Stablecoin transfers with stable value</li>
+                    </ul>
+                    <p>Whether you want to withdraw your capital after your investment period ends or take your daily commissions, Grant Union makes it quick and convenient.</p>
+
+                    <h2>Payment Methods</h2>
+                    <p>Grant Union uses Bitcoin and USDT for all transactions on the platform, ensuring fast, secure, and global access.</p>
+
+                    <h2>Safety & Security</h2>
+                    <h3>Our Commitment to Your Security</h3>
+                    <p>Grant Union is committed to maintaining the highest standards of security and protecting your investment.</p>
+
+                    <h3>Security Features</h3>
+                    <ul>
+                        <li>Industry-leading encryption for all data transmission</li>
+                        <li>Secure cloud infrastructure</li>
+                        <li>Regular security audits and compliance checks</li>
+                        <li>Professional trading team monitoring your investments</li>
+                        <li>Transparent transaction history and reporting</li>
+                    </ul>
+
+                    <h3>Protecting Your Account</h3>
+                    <ul>
+                        <li>Use a strong, unique password for your account</li>
+                        <li>Never share your login credentials with anyone</li>
+                        <li>Keep your email address secure and monitored</li>
+                        <li>Enable email notifications for all transactions</li>
+                        <li>Report any suspicious activity immediately</li>
+                    </ul>
+                    <p>Grant Union employs advanced security measures to protect your funds and personal information at all times.</p>
+
+                    <h2>Referral Commission</h2>
+                    <h3>Earn Unlimited 10% Referral Commission</h3>
+                    <p>Grant Union offers unlimited 10% referral commission to all investors! Earn 10% from every deposit made by anyone who signs up using your unique referral link.</p>
+
+                    <h2>Frequently Asked Questions</h2>
+                    <h3>Q: What is the minimum investment amount?</h3>
+                    <p>A: The minimum investment is just $100. You can start small and grow your investment over time.</p>
+
+                    <h3>Q: How often are commissions credited?</h3>
+                    <p>A: Daily commissions are credited to your account every 24 hours based on your chosen investment plan. You can view your earnings in real-time on your dashboard.</p>
+
+                    <h3>Q: Can I withdraw before my investment period ends?</h3>
+                    <p>A: You can withdraw your daily commissions at any time. Your capital remains locked until the investment period completes as outlined in your plan.</p>
+
+                    <h3>Q: What payment methods are accepted?</h3>
+                    <p>A: Grant Union accepts Bitcoin and USDT for all transactions, ensuring fast, secure, and global accessibility.</p>
+
+                    <h3>Q: How much can I earn from referrals?</h3>
+                    <p>A: There is no limit on referral earnings. You earn 10% of every deposit made by anyone who registers using your referral link. The more referrals you make, the more you earn.</p>
+
+                    <h3>Q: How long does withdrawal take?</h3>
+                    <p>A: Withdrawals are processed within minutes. Bitcoin and USDT transfers are typically confirmed on the blockchain within 24 hours.</p>
+
+                    <h3>Q: Is my investment secure?</h3>
+                    <p>A: Yes. Grant Union employs industry-leading security measures and our professional trading team ensures your funds are managed with care and expertise.</p>
+
+                    <h2>Key Benefits</h2>
+                    <ul>
+                        <li>Professional trading team managing your investments</li>
+                        <li>Transparent and secure transactions</li>
+                        <li>Fast withdrawals and deposits</li>
+                        <li>24/7 customer support</li>
+                        <li>Unlimited referral commissions</li>
+                        <li>Multiple investment plans for different budgets</li>
+                        <li>Real-time account updates</li>
+                    </ul>
+
+                `
+            },
+            es: {
+                name: '🇪🇸 Español',
+                content: `
+                    <h1>Bienvenido a Grant Union</h1>
+                    <p>Bienvenido a Grant Union, la plataforma de inversión y comercio líder en el mundo. Nos comprometemos a proporcionarle una experiencia de inversión segura, transparente y rentable.</p>
+
+                    <h2>Acerca de Grant Union</h2>
+                    <p>Grant Union es una empresa comercial profesional especializada en trading de criptomonedas, trading de forex, oro e inversiones inmobiliarias. Nuestro equipo de traders profesionales trabaja diligentemente para maximizar los rendimientos de sus inversiones en Bitcoin.</p>
+
+                    <h2>Inversión Mínima</h2>
+                    <p>La empresa ofrece comisión diaria según su plan de inversión. Con un depósito mínimo de solo $100, puede comenzar a ganar. Después de su período de inversión, puede optar por retirar su capital y ganancias, o reinvertir para un crecimiento continuo.</p>
+
+                    <h2>Planes de Inversión y Rendimientos</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Duración</th>
+                                    <th>Comisión Diaria</th>
+                                    <th>Dep. Mín.</th>
+                                    <th>Dep. Máx.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Plan de 3 Días</strong></td>
+                                    <td>3 días</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan de 7 Días</strong></td>
+                                    <td>7 días</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan de 12 Días</strong></td>
+                                    <td>12 días</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan de 15 Días</strong></td>
+                                    <td>15 días</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan de 3 Meses</strong></td>
+                                    <td>90 días</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan de 6 Meses</strong></td>
+                                    <td>180 días</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>Ilimitado</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Cálculo de Ejemplo</h3>
+                    <p>Si invierte $100 en el plan de 3 días con 8% diario, ganará $24 después de 3 días. Puede optar por retirar su capital y ganancias o reinvertir.</p>
+
+                    <h2>Cómo Funciona</h2>
+                    <p>Cuando invierte con Grant Union, nuestro equipo profesional de traders negocia su Bitcoin durante la duración de su plan elegido (por ejemplo, 3 días). Después del período de inversión, su capital y ganancias se transfieren a su back office, donde puede optar por retirar o reinvertir.</p>
+
+                    <h2>Proceso de Retiro</h2>
+                    <h3>Retiros Rápidos y Eficientes</h3>
+                    <p>Los retiros son rápidos y eficientes. El proceso toma solo unos minutos, como máximo dentro de 24 horas.</p>
+
+                    <h3>Pasos de Retiro</h3>
+                    <ul>
+                        <li>Inicie sesión en su cuenta de Grant Union</li>
+                        <li>Navegue a la sección Retiro</li>
+                        <li>Seleccione su monto de retiro</li>
+                        <li>Elija su método de pago (Bitcoin o USDT)</li>
+                        <li>Ingrese su dirección de billetera</li>
+                        <li>Envíe su solicitud de retiro</li>
+                        <li>Los fondos se transfieren en minutos</li>
+                    </ul>
+
+                    <h3>Métodos Disponibles</h3>
+                    <ul>
+                        <li><strong>Bitcoin:</strong> Transferencias de criptomonedas seguras y rápidas</li>
+                        <li><strong>USDT:</strong> Transferencias de moneda estable con valor estable</li>
+                    </ul>
+                    <p>Ya sea que desee retirar su capital después de que finalice su período de inversión o tomar sus comisiones diarias, Grant Union lo hace rápido y conveniente.</p>
+
+                    <h2>Métodos de Pago</h2>
+                    <p>Grant Union utiliza Bitcoin y USDT para todas las transacciones en la plataforma, garantizando acceso rápido, seguro y global.</p>
+
+                    <h2>Seguridad</h2>
+                    <h3>Nuestro Compromiso con su Seguridad</h3>
+                    <p>Grant Union está comprometido a mantener los más altos estándares de seguridad y proteger su inversión.</p>
+
+                    <h3>Características de Seguridad</h3>
+                    <ul>
+                        <li>Cifrado de nivel industrial para toda transmisión de datos</li>
+                        <li>Infraestructura de nube segura</li>
+                        <li>Auditorías de seguridad regulares y verificaciones de cumplimiento</li>
+                        <li>Equipo de trading profesional monitoreando sus inversiones</li>
+                        <li>Historial de transacciones transparente e informes</li>
+                    </ul>
+
+                    <h3>Protegiendo su Cuenta</h3>
+                    <ul>
+                        <li>Use una contraseña única y fuerte para su cuenta</li>
+                        <li>Nunca comparta sus credenciales de inicio de sesión con nadie</li>
+                        <li>Mantenga su dirección de correo electrónico segura y monitoreada</li>
+                        <li>Active notificaciones por correo electrónico para todas las transacciones</li>
+                        <li>Reporte cualquier actividad sospechosa de inmediato</li>
+                    </ul>
+                    <p>Grant Union utiliza medidas de seguridad avanzadas para proteger sus fondos e información personal en todo momento.</p>
+
+                    <h2>Comisión de Referidos</h2>
+                    <h3>Gane Comisión de Referidos Ilimitada del 10%</h3>
+                    <p>¡Grant Union ofrece comisión de referidos ilimitada del 10% a todos los inversores! Gane 10% de cada depósito realizado por cualquiera que se registre usando su enlace de referencia único.</p>
+
+                    <h2>Preguntas Frecuentes</h2>
+                    <h3>P: ¿Cuál es el monto de inversión mínimo?</h3>
+                    <p>R: La inversión mínima es solo $100. Puede comenzar poco a poco y hacer crecer su inversión con el tiempo.</p>
+
+                    <h3>P: ¿Con qué frecuencia se acreditan las comisiones?</h3>
+                    <p>R: Las comisiones diarias se acreditan a su cuenta cada 24 horas según su plan de inversión elegido. Puede ver sus ganancias en tiempo real en su panel.</p>
+
+                    <h3>P: ¿Puedo retirar antes de que termine mi período de inversión?</h3>
+                    <p>R: Puede retirar sus comisiones diarias en cualquier momento. Su capital permanece bloqueado hasta que se completa el período de inversión según lo indicado en su plan.</p>
+
+                    <h3>P: ¿Qué métodos de pago se aceptan?</h3>
+                    <p>R: Grant Union acepta Bitcoin y USDT para todas las transacciones, garantizando accesibilidad rápida, segura y global.</p>
+
+                    <h3>P: ¿Cuánto puedo ganar con referencias?</h3>
+                    <p>R: No hay límite en las ganancias de referencias. Gana el 10% de cada depósito realizado por cualquiera que se registre usando su enlace de referencia único. Cuantas más referencias haga, más gana.</p>
+
+                    <h3>P: ¿Cuánto tarda un retiro?</h3>
+                    <p>R: Los retiros se procesan en minutos. Las transferencias de Bitcoin y USDT se confirman típicamente en la cadena de bloques dentro de 24 horas.</p>
+
+                    <h3>P: ¿Está segura mi inversión?</h3>
+                    <p>R: Sí. Grant Union utiliza medidas de seguridad de nivel industrial y nuestro equipo de trading profesional garantiza que sus fondos se gestionen con cuidado y experiencia.</p>
+
+                    <h2>Beneficios Clave</h2>
+                    <ul>
+                        <li>Equipo de trading profesional gestiona sus inversiones</li>
+                        <li>Transacciones transparentes y seguras</li>
+                        <li>Retiros y depósitos rápidos</li>
+                        <li>Soporte al cliente 24/7</li>
+                        <li>Comisiones de referidos ilimitadas</li>
+                        <li>Múltiples planes de inversión para diferentes presupuestos</li>
+                        <li>Actualizaciones de cuenta en tiempo real</li>
+                    </ul>
+
+                `
+            },
+            fr: {
+                name: '🇫🇷 Français',
+                content: `
+                    <h1>Bienvenue chez Grant Union</h1>
+                    <p>Bienvenue chez Grant Union, la plateforme d'investissement et de trading premier au monde. Nous nous engageons à vous fournir une expérience d'investissement sûre, transparente et rentable.</p>
+
+                    <h2>À Propos de Grant Union</h2>
+                    <p>Grant Union est une entreprise de trading professionnelle spécialisée dans le trading de crypto-monnaies, le trading forex, l'or et les investissements immobiliers. Notre équipe de traders professionnels experts travaille avec diligence pour maximiser les rendements de vos investissements en Bitcoin.</p>
+
+                    <h2>Investissement Minimum</h2>
+                    <p>L'entreprise offre une commission quotidienne basée sur votre plan d'investissement. Avec un dépôt minimum de seulement $100, vous pouvez commencer à gagner. Après votre période d'investissement, vous pouvez choisir de retirer votre capital et vos gains, ou de réinvestir pour une croissance continue.</p>
+
+                    <h2>Plans d'Investissement et Rendements</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Durée</th>
+                                    <th>Commission Quotidienne</th>
+                                    <th>Dép. Min.</th>
+                                    <th>Dép. Max.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Plan 3 Jours</strong></td>
+                                    <td>3 jours</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 7 Jours</strong></td>
+                                    <td>7 jours</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 12 Jours</strong></td>
+                                    <td>12 jours</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 15 Jours</strong></td>
+                                    <td>15 jours</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 3 Mois</strong></td>
+                                    <td>90 jours</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 6 Mois</strong></td>
+                                    <td>180 jours</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>Illimité</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Exemple de Calcul</h3>
+                    <p>Si vous investissez $100 dans le plan 3 Jours à 8% quotidien, vous gagnerez $24 après 3 jours. Vous pouvez choisir de retirer votre capital et vos gains ou de réinvestir.</p>
+
+                    <h2>Comment Ça Fonctionne</h2>
+                    <p>Lorsque vous investissez avec Grant Union, notre équipe professionnelle de traders échange votre Bitcoin pour la période de votre plan choisi (par exemple, 3 jours). Après la période d'investissement, votre capital et vos gains sont transférés à votre back-office, où vous pouvez choisir de retirer ou de réinvestir.</p>
+
+                    <h2>Processus de Retrait</h2>
+                    <h3>Retraits Rapides et Efficaces</h3>
+                    <p>Les retraits sont rapides et efficaces. Le processus ne prend que quelques minutes, au maximum dans les 24 heures.</p>
+
+                    <h3>Étapes de Retrait</h3>
+                    <ul>
+                        <li>Connectez-vous à votre compte Grant Union</li>
+                        <li>Accédez à la section Retrait</li>
+                        <li>Sélectionnez votre montant de retrait</li>
+                        <li>Choisissez votre méthode de paiement (Bitcoin ou USDT)</li>
+                        <li>Entrez votre adresse portefeuille</li>
+                        <li>Soumettez votre demande de retrait</li>
+                        <li>Les fonds sont transférés en minutes</li>
+                    </ul>
+
+                    <h3>Méthodes Disponibles</h3>
+                    <ul>
+                        <li><strong>Bitcoin:</strong> Transferts de crypto-monnaies sécurisés et rapides</li>
+                        <li><strong>USDT:</strong> Transferts de stablecoin avec valeur stable</li>
+                    </ul>
+                    <p>Que vous souhaitiez retirer votre capital après la fin de votre période d'investissement ou prélever vos commissions quotidiennes, Grant Union le rend rapide et pratique.</p>
+
+                    <h2>Méthodes de Paiement</h2>
+                    <p>Grant Union utilise Bitcoin et USDT pour toutes les transactions sur la plateforme, garantissant un accès rapide, sécurisé et mondial.</p>
+
+                    <h2>Sécurité et Sûreté</h2>
+                    <h3>Notre Engagement envers Votre Sécurité</h3>
+                    <p>Grant Union s'engage à maintenir les plus hauts standards de sécurité et à protéger votre investissement.</p>
+
+                    <h3>Caractéristiques de Sécurité</h3>
+                    <ul>
+                        <li>Chiffrement de niveau industriel pour toute transmission de données</li>
+                        <li>Infrastructure cloud sécurisée</li>
+                        <li>Audits de sécurité réguliers et vérifications de conformité</li>
+                        <li>Équipe de trading professionnelle surveillant vos investissements</li>
+                        <li>Historique de transactions transparent et rapports</li>
+                    </ul>
+
+                    <h3>Protéger Votre Compte</h3>
+                    <ul>
+                        <li>Utilisez un mot de passe fort et unique pour votre compte</li>
+                        <li>Ne partagez jamais vos identifiants de connexion avec quiconque</li>
+                        <li>Gardez votre adresse e-mail sécurisée et surveillée</li>
+                        <li>Activez les notifications par e-mail pour toutes les transactiones</li>
+                        <li>Signalez immédiatement toute activité suspecte</li>
+                    </ul>
+                    <p>Grant Union emploie des mesures de sécurité avancées pour protéger vos fonds et vos informations personnelles à tout moment.</p>
+
+                    <h2>Commission de Parrainage</h2>
+                    <h3>Gagnez une Commission de Parrainage Illimitée de 10%</h3>
+                    <p>Grant Union offre une commission de parrainage illimitée de 10% à tous les investisseurs! Gagnez 10% sur chaque dépôt effectué par quiconque s'inscrit en utilisant votre lien de parrainage unique.</p>
+
+                    <h2>Questions Fréquemment Posées</h2>
+                    <h3>Q: Quel est le montant d'investissement minimum?</h3>
+                    <p>A: L'investissement minimum est seulement de $100. Vous pouvez commencer petit et développer votre investissement au fil du temps.</p>
+
+                    <h3>Q: À quelle fréquence les commissions sont-elles crédités?</h3>
+                    <p>A: Les commissions quotidiennes sont crédités à votre compte toutes les 24 heures en fonction de votre plan d'investissement choisi. Vous pouvez voir vos gains en temps réel sur votre tableau de bord.</p>
+
+                    <h3>Q: Puis-je retirer avant la fin de ma période d'investissement?</h3>
+                    <p>A: Vous pouvez retirer vos commissions quotidiennes à tout moment. Votre capital reste bloqué jusqu'à la fin de la période d'investissement comme indiqué dans votre plan.</p>
+
+                    <h3>Q: Quelles méthodes de paiement sont acceptées?</h3>
+                    <p>A: Grant Union accepte Bitcoin et USDT pour toutes les transactions, garantissant un accès rapide, sécurisé et mondial.</p>
+
+                    <h3>Q: Combien puis-je gagner avec les références?</h3>
+                    <p>A: Il n'y a pas de limite aux gains de références. Vous gagnez 10% de chaque dépôt effectué par quiconque s'inscrit en utilisant votre lien de parrainage unique. Plus vous faites de références, plus vous gagnez.</p>
+
+                    <h3>Q: Combien de temps dure le retrait?</h3>
+                    <p>A: Les retraits sont traités en quelques minutes. Les transferts Bitcoin et USDT sont généralement confirmés sur la blockchain dans les 24 heures.</p>
+
+                    <h3>Q: Mon investissement est-il sécurisé?</h3>
+                    <p>A: Oui. Grant Union utilise des mesures de sécurité de niveau industriel et notre équipe de trading professionnelle garantit que vos fonds sont gérés avec soin et expertise.</p>
+
+                    <h2>Avantages Clés</h2>
+                    <ul>
+                        <li>Équipe de trading professionnelle gérant vos investissements</li>
+                        <li>Transactions transparentes et sécurisées</li>
+                        <li>Retraits et dépôts rapides</li>
+                        <li>Support client 24/7</li>
+                        <li>Commissions de parrainage illimitées</li>
+                        <li>Plusieurs plans d'investissement pour différents budgets</li>
+                        <li>Mises à jour de compte en temps réel</li>
+                    </ul>
+
+                `
+            },
+            de: {
+                name: '🇩🇪 Deutsch',
+                content: `
+                    <h1>Willkommen bei Grant Union</h1>
+                    <p>Willkommen bei Grant Union, der weltweit führenden Investitions- und Handelsplattform. Wir sind bestrebt, Ihnen ein sicheres, transparentes und rentables Anlageerlebnis zu bieten.</p>
+
+                    <h2>Über Grant Union</h2>
+                    <p>Grant Union ist ein professionelles Handelsunternehmen, das sich auf den Handel mit Kryptowährungen, Forex-Handel, Gold und Immobilieninvestitionen spezialisiert hat. Unser Team von professionellen Tradern arbeitet gewissenhaft daran, die Rendite Ihrer Bitcoin-Investitionen zu maximieren.</p>
+
+                    <h2>Mindestanlage</h2>
+                    <p>Das Unternehmen bietet tägliche Provisionen basierend auf Ihrem Anlageplan. Mit einer Mindesteinzahlung von nur $100 können Sie anfangen zu verdienen. Nach Ihrer Anlagefrist können Sie sich entscheiden, Ihr Kapital und Ihre Gewinne abzuheben oder erneut zu investieren.</p>
+
+                    <h2>Anlagepläne und Renditen</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Dauer</th>
+                                    <th>Tägliche Provision</th>
+                                    <th>Min. Einzahlung</th>
+                                    <th>Max. Einzahlung</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>3-Tage-Plan</strong></td>
+                                    <td>3 Tage</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>7-Tage-Plan</strong></td>
+                                    <td>7 Tage</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>12-Tage-Plan</strong></td>
+                                    <td>12 Tage</td>
+                                    <td>3,5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>15-Tage-Plan</strong></td>
+                                    <td>15 Tage</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3-Monats-Plan</strong></td>
+                                    <td>90 Tage</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>6-Monats-Plan</strong></td>
+                                    <td>180 Tage</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>Unbegrenzt</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Beispielrechnung</h3>
+                    <p>Wenn Sie $100 in den 3-Tage-Plan mit 8% täglich investieren, verdienen Sie $24 nach 3 Tagen. Sie können sich entscheiden, Ihr Kapital und Ihre Gewinne abzuheben oder erneut zu investieren.</p>
+
+                    <h2>So funktioniert es</h2>
+                    <p>Wenn Sie bei Grant Union investieren, handelt unser professionelles Handelsteam Ihr Bitcoin für Ihren gewählten Planzeitraum (z.B. 3 Tage). Nach der Anlagefrist werden Ihr Kapital und Ihre Gewinne in Ihr Back-Office übertragen, wo Sie sich entscheiden können, abzuheben oder erneut zu investieren.</p>
+
+                    <h2>Abhebungsprozess</h2>
+                    <h3>Schnelle und effiziente Abhebungen</h3>
+                    <p>Abhebungen sind schnell und effizient. Der Prozess dauert nur wenige Minuten, maximal innerhalb von 24 Stunden.</p>
+
+                    <h3>Abhebungsschritte</h3>
+                    <ul>
+                        <li>Melden Sie sich bei Ihrem Grant Union-Konto an</li>
+                        <li>Navigieren Sie zum Bereich Abhebung</li>
+                        <li>Wählen Sie Ihren Abhebungsbetrag</li>
+                        <li>Wählen Sie Ihre Zahlungsmethode (Bitcoin oder USDT)</li>
+                        <li>Geben Sie Ihre Wallet-Adresse ein</li>
+                        <li>Reichen Sie Ihre Abhebungsanfrage ein</li>
+                        <li>Gelder werden innerhalb von Minuten überwiesen</li>
+                    </ul>
+
+                    <h3>Verfügbare Methoden</h3>
+                    <ul>
+                        <li><strong>Bitcoin:</strong> Sichere und schnelle Kryptowährungstransfers</li>
+                        <li><strong>USDT:</strong> Stablecoin-Transfers mit stabilem Wert</li>
+                    </ul>
+                    <p>Unabhängig davon, ob Sie Ihr Kapital nach Ablauf Ihrer Anlagefrist abheben oder Ihre täglichen Provisionen entnehmen möchten, macht Grant Union es schnell und bequem.</p>
+
+                    <h2>Zahlungsmethoden</h2>
+                    <p>Grant Union nutzt Bitcoin und USDT für alle Transaktionen auf der Plattform und gewährleistet schnellen, sicheren und globalen Zugang.</p>
+
+                    <h2>Sicherheit</h2>
+                    <h3>Unser Engagement für Ihre Sicherheit</h3>
+                    <p>Grant Union ist bestrebt, die höchsten Sicherheitsstandards zu wahren und Ihre Investition zu schützen.</p>
+
+                    <h3>Sicherheitsfeatures</h3>
+                    <ul>
+                        <li>Verschlüsselung auf Industrieniveau für alle Datenübertragungen</li>
+                        <li>Sichere Cloud-Infrastruktur</li>
+                        <li>Regelmäßige Sicherheitsprüfungen und Compliance-Checks</li>
+                        <li>Professionelles Handelsteam überwacht Ihre Investitionen</li>
+                        <li>Transparente Transaktionshistorie und Berichte</li>
+                    </ul>
+
+                    <h3>Ihr Konto schützen</h3>
+                    <ul>
+                        <li>Verwenden Sie ein starkes, eindeutiges Passwort für Ihr Konto</li>
+                        <li>Geben Sie Ihre Anmeldedaten niemals an andere weiter</li>
+                        <li>Halten Sie Ihre E-Mail-Adresse sicher und überwacht</li>
+                        <li>Aktivieren Sie E-Mail-Benachrichtigungen für alle Transaktionen</li>
+                        <li>Melden Sie verdächtige Aktivitäten sofort</li>
+                    </ul>
+                    <p>Grant Union setzt fortgeschrittene Sicherheitsmaßnahmen ein, um Ihre Gelder und persönlichen Informationen jederzeit zu schützen.</p>
+
+                    <h2>Referralvergütung</h2>
+                    <h3>Verdienen Sie Unbegrenzte 10% Referralvergütung</h3>
+                    <p>Grant Union bietet unbegrenzte 10% Referralvergütung für alle Anleger! Verdienen Sie 10% bei jeder Einzahlung von jemandem, der sich über Ihren eindeutigen Referral-Link anmeldet.</p>
+
+                    <h2>Häufig gestellte Fragen</h2>
+                    <h3>F: Was ist der Mindestinvestitionsbetrag?</h3>
+                    <p>A: Die Mindestinvestition beträgt nur $100. Sie können klein anfangen und Ihre Investition im Laufe der Zeit vergrößern.</p>
+
+                    <h3>F: Wie oft werden Provisionen gutgeschrieben?</h3>
+                    <p>A: Tägliche Provisionen werden alle 24 Stunden auf der Grundlage Ihres gewählten Anlageplan auf Ihr Konto gutgeschrieben. Sie können Ihre Einnahmen in Echtzeit in Ihrem Dashboard anzeigen.</p>
+
+                    <h3>F: Kann ich vor Ablauf meiner Anlagefrist abheben?</h3>
+                    <p>A: Sie können Ihre täglichen Provisionen jederzeit abheben. Ihr Kapital bleibt bis zum Abschluss der Anlagefrist wie in Ihrem Plan dargelegt gesperrt.</p>
+
+                    <h3>F: Welche Zahlungsmethoden werden akzeptiert?</h3>
+                    <p>A: Grant Union akzeptiert Bitcoin und USDT für alle Transaktionen und gewährleistet schnelle, sichere und weltweite Erreichbarkeit.</p>
+
+                    <h3>F: Wie viel kann ich mit Referrals verdienen?</h3>
+                    <p>A: Es gibt keine Grenze für Referral-Verdienste. Sie verdienen 10% von jeder Einzahlung, die von jemandem getätigt wird, der sich mit Ihrem eindeutigen Referral-Link anmeldet. Je mehr Referrals Sie machen, desto mehr verdienen Sie.</p>
+
+                    <h3>F: Wie lange dauert eine Abhebung?</h3>
+                    <p>A: Abhebungen werden innerhalb von Minuten bearbeitet. Bitcoin- und USDT-Transfers werden in der Regel innerhalb von 24 Stunden auf der Blockchain bestätigt.</p>
+
+                    <h3>F: Ist meine Investition sicher?</h3>
+                    <p>A: Ja. Grant Union setzt Sicherheitsmaßnahmen auf Industrieniveau ein und unser professionelles Handelsteam stellt sicher, dass Ihre Gelder sorgfältig und fachgerecht verwaltet werden.</p>
+
+                    <h2>Wichtigste Vorteile</h2>
+                    <ul>
+                        <li>Professionelles Handelsteam verwaltet Ihre Investitionen</li>
+                        <li>Transparente und sichere Transaktionen</li>
+                        <li>Schnelle Abhebungen und Einzahlungen</li>
+                        <li>24/7 Kundenunterstützung</li>
+                        <li>Unbegrenzte Referralvergütungen</li>
+                        <li>Mehrere Anlagepläne für verschiedene Budgets</li>
+                        <li>Echtzeit-Kontoaktualisierungen</li>
+                    </ul>
+
+                `
+            },
+            it: {
+                name: '🇮🇹 Italiano',
+                content: `
+                    <h1>Benvenuto a Grant Union</h1>
+                    <p>Benvenuto a Grant Union, la piattaforma di investimento e trading leader mondiale. Ci impegniamo a fornirti un'esperienza di investimento sicura, trasparente e redditizia.</p>
+
+                    <h2>Chi è Grant Union</h2>
+                    <p>Grant Union è un'azienda di trading professionale specializzata nel trading di criptovalute, trading forex, oro e investimenti immobiliari. Il nostro team di trader professionisti lavora diligentemente per massimizzare i rendimenti dei tuoi investimenti in Bitcoin.</p>
+
+                    <h2>Investimento Minimo</h2>
+                    <p>L'azienda offre commissioni giornaliere in base al tuo piano di investimento. Con un deposito minimo di soli $100, puoi iniziare a guadagnare. Dopo il periodo di investimento, puoi scegliere di ritirare il tuo capitale e i guadagni, o reinvestire per una crescita continua.</p>
+
+                    <h2>Piani di Investimento e Rendimenti</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Piano</th>
+                                    <th>Durata</th>
+                                    <th>Commissione Giornaliera</th>
+                                    <th>Dep. Min.</th>
+                                    <th>Dep. Max.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Piano 3 Giorni</strong></td>
+                                    <td>3 giorni</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Piano 7 Giorni</strong></td>
+                                    <td>7 giorni</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Piano 12 Giorni</strong></td>
+                                    <td>12 giorni</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Piano 15 Giorni</strong></td>
+                                    <td>15 giorni</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Piano 3 Mesi</strong></td>
+                                    <td>90 giorni</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Piano 6 Mesi</strong></td>
+                                    <td>180 giorni</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>Illimitato</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Calcolo di Esempio</h3>
+                    <p>Se investi $100 nel piano 3 giorni all'8% giornaliero, guadagnerai $24 dopo 3 giorni. Puoi scegliere di ritirare il tuo capitale e i guadagni o reinvestire.</p>
+
+                    <h2>Come Funziona</h2>
+                    <p>Quando investi con Grant Union, il nostro team di trading professionale scambia i tuoi Bitcoin per il periodo del piano scelto (ad esempio 3 giorni). Dopo il periodo di investimento, il tuo capitale e i tuoi profitti vengono trasferiti al tuo back office dove puoi scegliere di ritirare o reinvestire.</p>
+
+                    <h2>Processo di Prelievo</h2>
+                    <h3>Prelievi Veloci ed Efficienti</h3>
+                    <p>I prelievi sono veloci ed efficienti. Il processo richiede solo pochi minuti, al massimo entro 24 ore.</p>
+
+                    <h3>Passaggi di Prelievo</h3>
+                    <ul>
+                        <li>Accedi al tuo account Grant Union</li>
+                        <li>Vai alla sezione Prelievi</li>
+                        <li>Seleziona l'importo del prelievo</li>
+                        <li>Scegli il tuo metodo di pagamento (Bitcoin o USDT)</li>
+                        <li>Inserisci l'indirizzo del tuo wallet</li>
+                        <li>Invia la tua richiesta di prelievo</li>
+                        <li>I fondi vengono trasferiti entro minuti</li>
+                    </ul>
+
+                    <h3>Metodi Disponibili</h3>
+                    <ul>
+                        <li><strong>Bitcoin:</strong> Trasferimenti di criptovalute sicuri e veloci</li>
+                        <li><strong>USDT:</strong> Trasferimenti di stablecoin con valore stabile</li>
+                    </ul>
+                    <p>Che tu voglia prelevare il tuo capitale dopo la fine del tuo periodo di investimento o prelevare le tue commissioni giornaliere, Grant Union lo rende veloce e conveniente.</p>
+
+                    <h2>Metodi di Pagamento</h2>
+                    <p>Grant Union utilizza Bitcoin e USDT per tutte le transazioni sulla piattaforma, garantendo accesso veloce, sicuro e globale.</p>
+
+                    <h2>Sicurezza</h2>
+                    <h3>Il Nostro Impegno per la Tua Sicurezza</h3>
+                    <p>Grant Union si impegna a mantenere i più alti standard di sicurezza e proteggere il tuo investimento.</p>
+
+                    <h3>Funzioni di Sicurezza</h3>
+                    <ul>
+                        <li>Crittografia di livello industriale per tutte le trasmissioni di dati</li>
+                        <li>Infrastruttura cloud sicura</li>
+                        <li>Audit di sicurezza regolari e controlli di conformità</li>
+                        <li>Team di trading professionale monitora i tuoi investimenti</li>
+                        <li>Cronologia delle transazioni trasparente e rapporti</li>
+                    </ul>
+
+                    <h3>Proteggere il Tuo Account</h3>
+                    <ul>
+                        <li>Usa una password forte e unica per il tuo account</li>
+                        <li>Non condividere mai le tue credenziali di accesso con nessuno</li>
+                        <li>Mantieni il tuo indirizzo email sicuro e monitorato</li>
+                        <li>Abilita notifiche email per tutte le transazioni</li>
+                        <li>Segnala immediatamente qualsiasi attività sospetta</li>
+                    </ul>
+                    <p>Grant Union impiega misure di sicurezza avanzate per proteggere i tuoi fondi e le tue informazioni personali in ogni momento.</p>
+
+                    <h2>Commissione Referral</h2>
+                    <h3>Guadagna Commissione Referral Illimitata del 10%</h3>
+                    <p>Grant Union offre commissione referral illimitata del 10% a tutti gli investitori! Guadagna il 10% da ogni deposito effettuato da chiunque si registri utilizzando il tuo link di referral unico.</p>
+
+                    <h2>Domande Frequenti</h2>
+                    <h3>D: Qual è l'importo minimo di investimento?</h3>
+                    <p>R: L'importo minimo di investimento è solo $100. Puoi iniziare in piccolo e far crescere il tuo investimento nel tempo.</p>
+
+                    <h3>D: Con quale frequenza vengono accreditate le commissioni?</h3>
+                    <p>R: Le commissioni giornaliere vengono accreditate sul tuo account ogni 24 ore in base al piano di investimento scelto. Puoi visualizzare i tuoi guadagni in tempo reale sul tuo dashboard.</p>
+
+                    <h3>D: Posso prelevare prima della fine del mio periodo di investimento?</h3>
+                    <p>R: Puoi prelevare le tue commissioni giornaliere in qualsiasi momento. Il tuo capitale rimane bloccato fino al completamento del periodo di investimento come indicato nel tuo piano.</p>
+
+                    <h3>D: Quali metodi di pagamento sono accettati?</h3>
+                    <p>R: Grant Union accetta Bitcoin e USDT per tutte le transazioni, garantendo accesso veloce, sicuro e globale.</p>
+
+                    <h3>D: Quanto posso guadagnare dai referral?</h3>
+                    <p>R: Non c'è limite ai guadagni dai referral. Guadagni il 10% da ogni deposito effettuato da chiunque si registri utilizzando il tuo link di referral unico. Più referral fai, più guadagni.</p>
+
+                    <h3>D: Quanto tempo ci vuole per il prelievo?</h3>
+                    <p>R: I prelievi vengono elaborati entro minuti. I trasferimenti di Bitcoin e USDT vengono generalmente confermati sulla blockchain entro 24 ore.</p>
+
+                    <h3>D: Il mio investimento è sicuro?</h3>
+                    <p>R: Sì. Grant Union impiega misure di sicurezza di livello industriale e il nostro team di trading professionale garantisce che i tuoi fondi siano gestiti con cura e competenza.</p>
+
+                    <h2>Vantaggi Principali</h2>
+                    <ul>
+                        <li>Team di trading professionale gestisce i tuoi investimenti</li>
+                        <li>Transazioni trasparenti e sicure</li>
+                        <li>Prelievi e depositi veloci</li>
+                        <li>Supporto clienti 24/7</li>
+                        <li>Commissioni referral illimitate</li>
+                        <li>Molteplici piani di investimento per diversi budget</li>
+                        <li>Aggiornamenti account in tempo reale</li>
+                    </ul>
+
+                `
+            },
+            pt: {
+                name: '🇵🇹 Português',
+                content: `
+                    <h1>Bem-vindo à Grant Union</h1>
+                    <p>Bem-vindo à Grant Union, a plataforma de investimento e negociação líder no mundo. Nos comprometemos a fornecer a você uma experiência de investimento segura, transparente e lucrativa.</p>
+
+                    <h2>Sobre Grant Union</h2>
+                    <p>Grant Union é uma empresa de negociação profissional especializada em negociação de criptomoedas, negociação forex, ouro e investimentos imobiliários. Nosso time de traders profissionais trabalha diligentemente para maximizar os retornos de seus investimentos em Bitcoin.</p>
+
+                    <h2>Investimento Mínimo</h2>
+                    <p>A empresa oferece comissão diária com base em seu plano de investimento. Com um depósito mínimo de apenas $100, você pode começar a ganhar. Após seu período de investimento, você pode optar por sacar seu capital e ganhos, ou reinvestir para crescimento contínuo.</p>
+
+                    <h2>Planos de Investimento e Retornos</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Plano</th>
+                                    <th>Duração</th>
+                                    <th>Comissão Diária</th>
+                                    <th>Dep. Mín.</th>
+                                    <th>Dep. Máx.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Plano 3 Dias</strong></td>
+                                    <td>3 dias</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plano 7 Dias</strong></td>
+                                    <td>7 dias</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plano 12 Dias</strong></td>
+                                    <td>12 dias</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plano 15 Dias</strong></td>
+                                    <td>15 dias</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plano 3 Meses</strong></td>
+                                    <td>90 dias</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plano 6 Meses</strong></td>
+                                    <td>180 dias</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>Ilimitado</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Cálculo de Exemplo</h3>
+                    <p>Se você investir $100 no plano de 3 dias a 8% ao dia, ganhará $24 após 3 dias. Você pode optar por sacar seu capital e ganhos ou reinvestir.</p>
+
+                    <h2>Como Funciona</h2>
+                    <p>Quando você investe com a Grant Union, nosso team de trading profissional negocia seus Bitcoin para o período do plano escolhido (por exemplo 3 dias). Após o período de investimento, seu capital e ganhos são transferidos para seu back office onde você pode escolher sacar ou reinvestir.</p>
+
+                    <h2>Processo de Saque</h2>
+                    <h3>Saques Rápidos e Eficientes</h3>
+                    <p>Os saques são rápidos e eficientes. O processo leva apenas alguns minutos, no máximo 24 horas.</p>
+
+                    <h3>Passos de Saque</h3>
+                    <ul>
+                        <li>Acesse sua conta Grant Union</li>
+                        <li>Vá para a seção Saques</li>
+                        <li>Selecione o valor do saque</li>
+                        <li>Escolha seu método de pagamento (Bitcoin ou USDT)</li>
+                        <li>Insira o endereço da sua carteira</li>
+                        <li>Envie sua solicitação de saque</li>
+                        <li>Os fundos são transferidos em minutos</li>
+                    </ul>
+
+                    <h3>Métodos Disponíveis</h3>
+                    <ul>
+                        <li><strong>Bitcoin:</strong> Transferências de criptomoedas seguras e rápidas</li>
+                        <li><strong>USDT:</strong> Transferências de stablecoin com valor estável</li>
+                    </ul>
+                    <p>Se você deseja sacar seu capital após o término do período de investimento ou sacar suas comissões diárias, a Grant Union torna rápido e conveniente.</p>
+
+                    <h2>Métodos de Pagamento</h2>
+                    <p>Grant Union usa Bitcoin e USDT para todas as transações na plataforma, garantindo acesso rápido, seguro e global.</p>
+
+                    <h2>Segurança</h2>
+                    <h3>Nosso Compromisso com Sua Segurança</h3>
+                    <p>Grant Union se compromete a manter os mais altos padrões de segurança e proteger seu investimento.</p>
+
+                    <h3>Recursos de Segurança</h3>
+                    <ul>
+                        <li>Criptografia de nível industrial para todas as transmissões de dados</li>
+                        <li>Infraestrutura de nuvem segura</li>
+                        <li>Auditorias de segurança regulares e verificações de conformidade</li>
+                        <li>Team de trading profissional monitora seus investimentos</li>
+                        <li>Histórico de transações transparente e relatórios</li>
+                    </ul>
+
+                    <h3>Proteja Sua Conta</h3>
+                    <ul>
+                        <li>Use uma senha forte e única para sua conta</li>
+                        <li>Nunca compartilhe suas credenciais de login com ninguém</li>
+                        <li>Mantenha seu endereço de email seguro e monitorado</li>
+                        <li>Habilite notificações por email para todas as transações</li>
+                        <li>Reporte imediatamente qualquer atividade suspeita</li>
+                    </ul>
+                    <p>Grant Union emprega medidas de segurança avançadas para proteger seus fundos e informações pessoais em todos os momentos.</p>
+
+                    <h2>Comissão de Referência</h2>
+                    <h3>Ganhe Comissão de Referência Ilimitada de 10%</h3>
+                    <p>Grant Union oferece comissão de referência ilimitada de 10% para todos os investidores! Ganhe 10% em cada depósito feito por qualquer pessoa que se registrar usando seu link de referência único.</p>
+
+                    <h2>Perguntas Frequentes</h2>
+                    <h3>P: Qual é o valor mínimo de investimento?</h3>
+                    <p>R: O valor mínimo de investimento é apenas $100. Você pode começar pequeno e crescer seu investimento ao longo do tempo.</p>
+
+                    <h3>P: Com que frequência as comissões são creditadas?</h3>
+                    <p>R: As comissões diárias são creditadas em sua conta a cada 24 horas com base no plano de investimento escolhido. Você pode visualizar seus ganhos em tempo real em seu painel.</p>
+
+                    <h3>P: Posso sacar antes do fim do meu período de investimento?</h3>
+                    <p>R: Você pode sacar suas comissões diárias a qualquer momento. Seu capital permanece bloqueado até a conclusão do período de investimento conforme indicado em seu plano.</p>
+
+                    <h3>P: Quais métodos de pagamento são aceitos?</h3>
+                    <p>R: Grant Union aceita Bitcoin e USDT para todas as transações, garantindo acesso rápido, seguro e global.</p>
+
+                    <h3>P: Quanto posso ganhar com referências?</h3>
+                    <p>R: Não há limite para ganhos com referências. Você ganha 10% em cada depósito feito por qualquer pessoa que se registre usando seu link de referência único. Quanto mais referências você faz, mais você ganha.</p>
+
+                    <h3>P: Quanto tempo leva para sacar?</h3>
+                    <p>R: Os saques são processados em minutos. As transferências de Bitcoin e USDT são geralmente confirmadas na blockchain em 24 horas.</p>
+
+                    <h3>P: Meu investimento é seguro?</h3>
+                    <p>R: Sim. Grant Union emprega medidas de segurança de nível industrial e nosso team de trading profissional garante que seus fundos sejam gerenciados com cuidado e competência.</p>
+
+                    <h2>Principais Benefícios</h2>
+                    <ul>
+                        <li>Time de traders profissionais gerenciando seus investimentos</li>
+                        <li>Transações transparentes e seguras</li>
+                        <li>Saques e depósitos rápidos</li>
+                        <li>Suporte ao cliente 24/7</li>
+                        <li>Comissões de referência ilimitadas</li>
+                        <li>Múltiplos planos de investimento para diferentes orçamentos</li>
+                        <li>Atualizações de conta em tempo real</li>
+                    </ul>
+
+                `
+            },
+            ru: {
+                name: '🇷🇺 Русский',
+                content: `
+                    <h1>Добро пожаловать в Grant Union</h1>
+                    <p>Добро пожаловать в Grant Union, ведущую мировую платформу инвестирования и торговли. Мы привержены предоставлению вам безопасного, прозрачного и прибыльного опыта инвестирования.</p>
+
+                    <h2>О Grant Union</h2>
+                    <p>Grant Union - это профессиональная торговая компания, специализирующаяся на торговле криптовалютами, торговле форексом, золотом и инвестициях в недвижимость. Наша команда профессиональных трейдеров добросовестно работает над максимизацией доходов от ваших инвестиций в биткойн.</p>
+
+                    <h2>Минимальные Инвестиции</h2>
+                    <p>Компания предлагает ежедневную комиссию в зависимости от вашего инвестиционного плана. С минимальным депозитом всего $100 вы можете начать зарабатывать. После периода инвестирования вы можете выбрать вывод своего капитала и прибыли или реинвестировать для продолжения роста.</p>
+
+                    <h2>Планы Инвестирования и Доход</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>План</th>
+                                    <th>Длительность</th>
+                                    <th>Дневная Комиссия</th>
+                                    <th>Мин. Депозит</th>
+                                    <th>Макс. Депозит</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>План 3 Дня</strong></td>
+                                    <td>3 дня</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>План 7 Дней</strong></td>
+                                    <td>7 дней</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>План 12 Дней</strong></td>
+                                    <td>12 дней</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>План 15 Дней</strong></td>
+                                    <td>15 дней</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>План 3 Месяца</strong></td>
+                                    <td>90 дней</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>План 6 Месяцев</strong></td>
+                                    <td>180 дней</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>Неограничено</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Пример Расчёта</h3>
+                    <p>Если вы инвестируете $100 в план на 3 дня с доходом 8% в день, вы заработаете $24 после 3 дней. Вы можете выбрать вывод своего капитала и прибыли или реинвестировать.</p>
+
+                    <h2>Как Это Работает</h2>
+                    <p>Когда вы инвестируете в Grant Union, наша команда профессиональных трейдеров торгует вашим биткойном в течение выбранного вами периода плана (например, 3 дня). После периода инвестирования ваш капитал и прибыль переводятся в ваш кабинет, где вы можете выбрать вывод или реинвестирование.</p>
+
+                    <h2>Процесс Вывода</h2>
+                    <h3>Быстрый и Эффективный Вывод</h3>
+                    <p>Выводы выполняются быстро и эффективно. Процесс занимает всего несколько минут, максимум 24 часа.</p>
+
+                    <h3>Этапы Вывода</h3>
+                    <ul>
+                        <li>Войдите в свой аккаунт Grant Union</li>
+                        <li>Перейдите в раздел Выводы</li>
+                        <li>Выберите сумму вывода</li>
+                        <li>Выберите способ оплаты (Биткойн или USDT)</li>
+                        <li>Введите адрес вашего кошелька</li>
+                        <li>Подтвердите запрос на вывод</li>
+                        <li>Средства переводятся в течение минут</li>
+                    </ul>
+
+                    <h3>Доступные Методы</h3>
+                    <ul>
+                        <li><strong>Биткойн:</strong> Безопасные и быстрые передачи криптовалют</li>
+                        <li><strong>USDT:</strong> Передачи стейблкойна с стабильной стоимостью</li>
+                    </ul>
+                    <p>Хотите ли вы вывести свой капитал по окончании периода инвестирования или вывести свои ежедневные комиссии, Grant Union делает это быстро и удобно.</p>
+
+                    <h2>Способы Оплаты</h2>
+                    <p>Grant Union использует биткойн и USDT для всех транзакций на платформе, обеспечивая быстрый, безопасный и глобальный доступ.</p>
+
+                    <h2>Безопасность</h2>
+                    <h3>Наше Обязательство по Безопасности</h3>
+                    <p>Grant Union обязуется соблюдать высочайшие стандарты безопасности и защищать ваши инвестиции.</p>
+
+                    <h3>Функции Безопасности</h3>
+                    <ul>
+                        <li>Шифрование промышленного уровня для всех передач данных</li>
+                        <li>Безопасная облачная инфраструктура</li>
+                        <li>Регулярные проверки безопасности и проверки соответствия</li>
+                        <li>Команда профессиональных трейдеров контролирует ваши инвестиции</li>
+                        <li>Прозрачная история транзакций и отчёты</li>
+                    </ul>
+
+                    <h3>Защита Вашего Аккаунта</h3>
+                    <ul>
+                        <li>Используйте надежный и уникальный пароль для вашего аккаунта</li>
+                        <li>Никогда не делитесь своими учётными данными с кем-либо</li>
+                        <li>Поддерживайте безопасность и мониторинг вашего адреса электронной почты</li>
+                        <li>Включите уведомления по электронной почте для всех транзакций</li>
+                        <li>Немедленно сообщите о любой подозрительной активности</li>
+                    </ul>
+                    <p>Grant Union применяет передовые меры безопасности для защиты ваших средств и личной информации в любое время.</p>
+
+                    <h2>Реферальная Комиссия</h2>
+                    <h3>Заработайте Неограниченную Реферальную Комиссию 10%</h3>
+                    <p>Grant Union предлагает неограниченную реферальную комиссию 10% для всех инвесторов! Заработайте 10% от каждого депозита, сделанного любым лицом, которое зарегистрируется по вашей уникальной реферальной ссылке.</p>
+
+                    <h2>Часто Задаваемые Вопросы</h2>
+                    <h3>В: Какова минимальная сумма инвестиции?</h3>
+                    <p>О: Минимальная сумма инвестиции составляет всего $100. Вы можете начать с небольшой суммы и увеличить свои инвестиции со временем.</p>
+
+                    <h3>В: Как часто кредитуются комиссии?</h3>
+                    <p>О: Ежедневные комиссии кредитуются на ваш счёт каждые 24 часа на основе выбранного вами инвестиционного плана. Вы можете просматривать свои доходы в режиме реального времени на своей панели управления.</p>
+
+                    <h3>В: Могу ли я вывести деньги до окончания периода инвестирования?</h3>
+                    <p>О: Вы можете вывести свои ежедневные комиссии в любое время. Ваш капитал остаётся заблокирован до завершения периода инвестирования, как указано в вашем плане.</p>
+
+                    <h3>В: Какие способы оплаты принимаются?</h3>
+                    <p>О: Grant Union принимает Биткойн и USDT для всех транзакций, обеспечивая быстрый, безопасный и глобальный доступ.</p>
+
+                    <h3>В: Сколько я могу заработать на рефералах?</h3>
+                    <p>О: Нет ограничений на доход от рефералов. Вы зарабатываете 10% от каждого депозита, сделанного любым лицом, которое зарегистрируется по вашей уникальной реферальной ссылке. Чем больше рефералов вы привлечёте, тем больше вы заработаете.</p>
+
+                    <h3>В: Сколько времени занимает вывод?</h3>
+                    <p>О: Выводы обрабатываются в течение минут. Передачи Биткойна и USDT обычно подтверждаются в блокчейне в течение 24 часов.</p>
+
+                    <h3>В: Мои инвестиции в безопасности?</h3>
+                    <p>О: Да. Grant Union использует меры безопасности промышленного уровня, и наша команда профессиональных трейдеров гарантирует, что ваши средства управляются с заботой и компетентностью.</p>
+
+                    <h2>Ключевые Преимущества</h2>
+                    <ul>
+                        <li>Команда профессиональных трейдеров управляет вашими инвестициями</li>
+                        <li>Прозрачные и безопасные транзакции</li>
+                        <li>Быстрые выводы и пополнения</li>
+                        <li>Поддержка клиентов 24/7</li>
+                        <li>Неограниченные реферальные комиссии</li>
+                        <li>Несколько инвестиционных планов для разных бюджетов</li>
+                        <li>Обновления счёта в реальном времени</li>
+                    </ul>
+
+                `
+            },
+            ar: {
+                name: '🇸🇦 العربية',
+                content: `
+                    <h1>أهلا بك في Grant Union</h1>
+                    <p>أهلا بك في Grant Union، منصة الاستثمار والتداول الرائدة في العالم. نحن ملتزمون بتوفير تجربة استثمارية آمنة وشفافة وربحية.</p>
+
+                    <h2>حول Grant Union</h2>
+                    <p>Grant Union هي شركة تداول احترافية متخصصة في تداول العملات المشفرة وتداول الفوركس والذهب والاستثمارات العقارية. يعمل فريقنا من متداولي محترفين بجد لتعظيم عوائد استثمارات البيتكوين الخاصة بك.</p>
+
+                    <h2>الحد الأدنى للاستثمار</h2>
+                    <p>تقدم الشركة عمولة يومية بناءً على خطتك الاستثمارية. مع حد أدنى للإيداع يبلغ $100 فقط، يمكنك البدء في الكسب. بعد فترة الاستثمار، يمكنك اختيار سحب رأس مالك وأرباحك، أو إعادة الاستثمار من أجل النمو المستمر.</p>
+
+                    <h2>خطط الاستثمار والعوائد</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الخطة</th>
+                                    <th>المدة</th>
+                                    <th>العمولة اليومية</th>
+                                    <th>الحد الأدنى</th>
+                                    <th>الحد الأقصى</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>خطة 3 أيام</strong></td>
+                                    <td>3 أيام</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>خطة 7 أيام</strong></td>
+                                    <td>7 أيام</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>خطة 12 يوم</strong></td>
+                                    <td>12 يوم</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>خطة 15 يوم</strong></td>
+                                    <td>15 يوم</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>خطة 3 أشهر</strong></td>
+                                    <td>90 يوم</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>خطة 6 أشهر</strong></td>
+                                    <td>180 يوم</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>غير محدود</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>مثال على الحساب</h3>
+                    <p>إذا استثمرت $100 في خطة 3 أيام بعائد 8% يومي، ستكسب $24 بعد 3 أيام. يمكنك اختيار سحب رأس مالك وأرباحك أو إعادة الاستثمار.</p>
+
+                    <h2>كيف يعمل</h2>
+                    <p>عندما تستثمر مع Grant Union، يتداول فريق التداول الاحترافي لدينا البيتكوين الخاص بك خلال فترة الخطة المختارة (مثل 3 أيام). بعد فترة الاستثمار، يتم تحويل رأس مالك وأرباحك إلى حسابك حيث يمكنك اختيار السحب أو إعادة الاستثمار.</p>
+
+                    <h2>عملية السحب</h2>
+                    <h3>السحب السريع والفعال</h3>
+                    <p>عمليات السحب سريعة وفعالة. تستغرق العملية بضع دقائق فقط، بحد أقصى 24 ساعة.</p>
+
+                    <h3>خطوات السحب</h3>
+                    <ul>
+                        <li>قم بتسجيل الدخول إلى حسابك Grant Union</li>
+                        <li>انتقل إلى قسم السحب</li>
+                        <li>حدد مبلغ السحب</li>
+                        <li>اختر طريقة الدفع (البيتكوين أو USDT)</li>
+                        <li>أدخل عنوان محفظتك</li>
+                        <li>أرسل طلب السحب</li>
+                        <li>يتم تحويل الأموال خلال دقائق</li>
+                    </ul>
+
+                    <h3>الطرق المتاحة</h3>
+                    <ul>
+                        <li><strong>البيتكوين:</strong> تحويلات عملات مشفرة آمنة وسريعة</li>
+                        <li><strong>USDT:</strong> تحويلات عملات مستقرة ذات قيمة ثابتة</li>
+                    </ul>
+                    <p>سواء كنت تريد سحب رأس مالك بعد نهاية فترة الاستثمار أو سحب عمولاتك اليومية، فإن Grant Union تجعل ذلك سريع وسهل.</p>
+
+                    <h2>طرق الدفع</h2>
+                    <p>تستخدم Grant Union البيتكوين و USDT لجميع المعاملات على المنصة، مما يضمن وصول سريع وآمن وعالمي.</p>
+
+                    <h2>الأمان</h2>
+                    <h3>التزامنا بأمانك</h3>
+                    <p>تلتزم Grant Union بالحفاظ على أعلى معايير الأمان وحماية استثمارك.</p>
+
+                    <h3>ميزات الأمان</h3>
+                    <ul>
+                        <li>تشفير على مستوى الصناعة لجميع نقل البيانات</li>
+                        <li>بنية تحتية سحابية آمنة</li>
+                        <li>عمليات تدقيق أمان منتظمة وفحوصات الامتثال</li>
+                        <li>فريق التداول الاحترافي يراقب استثماراتك</li>
+                        <li>سجل المعاملات الشفاف والتقارير</li>
+                    </ul>
+
+                    <h3>حماية حسابك</h3>
+                    <ul>
+                        <li>استخدم كلمة مرور قوية وفريدة لحسابك</li>
+                        <li>لا تشارك بيانات اعتمادك مع أي شخص</li>
+                        <li>حافظ على عنوان بريدك الإلكتروني آمن ومراقب</li>
+                        <li>تمكين إخطارات البريد الإلكتروني لجميع المعاملات</li>
+                        <li>الإبلاغ الفوري عن أي نشاط مريب</li>
+                    </ul>
+                    <p>تستخدم Grant Union تدابير أمان متقدمة لحماية أموالك ومعلوماتك الشخصية في كل وقت.</p>
+
+                    <h2>عمولة الإحالة</h2>
+                    <h3>اكسب عمولة إحالة غير محدودة بنسبة 10%</h3>
+                    <p>تقدم Grant Union عمولة إحالة غير محدودة بنسبة 10% لجميع المستثمرين! احصل على 10% من كل إيداع يتم من قبل أي شخص يسجل باستخدام رابط الإحالة الفريد الخاص بك.</p>
+
+                    <h2>الأسئلة الشائعة</h2>
+                    <h3>س: ما هو الحد الأدنى للاستثمار؟</h3>
+                    <p>ج: الحد الأدنى للاستثمار هو فقط 100 دولار. يمكنك البدء بمبلغ صغير وزيادة استثمارك بمرور الوقت.</p>
+
+                    <h3>س: كم مرة يتم إيداع العمولات؟</h3>
+                    <p>ج: يتم إيداع العمولات اليومية في حسابك كل 24 ساعة بناءً على خطة الاستثمار المختارة. يمكنك عرض أرباحك في الوقت الفعلي على لوحة التحكم الخاصة بك.</p>
+
+                    <h3>س: هل يمكنني السحب قبل نهاية فترة الاستثمار؟</h3>
+                    <p>ج: يمكنك سحب عمولاتك اليومية في أي وقت. يبقى رأس مالك مقفل حتى اكتمال فترة الاستثمار كما هو محدد في خطتك.</p>
+
+                    <h3>س: ما طرق الدفع المقبولة؟</h3>
+                    <p>ج: تقبل Grant Union البيتكوين و USDT لجميع المعاملات، مما يضمن وصول سريع وآمن وعالمي.</p>
+
+                    <h3>س: كم يمكنني أن أكسب من الإحالات؟</h3>
+                    <p>ج: لا توجد حدود على أرباح الإحالات. تحصل على 10% من كل إيداع يتم من قبل أي شخص يسجل باستخدام رابط الإحالة الفريد الخاص بك. كلما زاد عدد الإحالات، زادت أرباحك.</p>
+
+                    <h3>س: كم من الوقت يستغرق السحب؟</h3>
+                    <p>ج: يتم معالجة السحب خلال دقائق. تتم تأكيد تحويلات البيتكوين و USDT عادة على blockchain خلال 24 ساعة.</p>
+
+                    <h3>س: هل استثماري آمن؟</h3>
+                    <p>ج: نعم. تستخدم Grant Union تدابير أمان على مستوى الصناعة وفريق التداول الاحترافي لدينا يضمن إدارة أموالك بعناية واحترافية.</p>
+
+                    <h2>الفوائد الرئيسية</h2>
+                    <ul>
+                        <li>فريق تداول احترافي يدير استثماراتك</li>
+                        <li>معاملات شفافة وآمنة</li>
+                        <li>عمليات سحب وإيداع سريعة</li>
+                        <li>دعم العملاء 24/7</li>
+                        <li>عمولات إحالة غير محدودة</li>
+                        <li>خطط استثمارية متعددة لميزانيات مختلفة</li>
+                        <li>تحديثات الحساب في الوقت الفعلي</li>
+                    </ul>
+
+                `
+            },
+            zh: {
+                name: '🇨🇳 中文',
+                content: `
+                    <h1>欢迎来到 Grant Union</h1>
+                    <p>欢迎来到 Grant Union，世界领先的投资和交易平台。我们致力于为您提供安全、透明和盈利的投资体验。</p>
+
+                    <h2>关于 Grant Union</h2>
+                    <p>Grant Union 是一家专业交易公司，专门从事加密货币交易、外汇交易、黄金和房地产投资。我们的专业交易团队努力工作以最大化您的比特币投资回报。</p>
+
+                    <h2>最低投资</h2>
+                    <p>公司根据您的投资计划提供日常佣金。最低存款仅需 $100，您就可以开始赚钱。在投资期结束后，您可以选择提取资本和收益，或继续投资以获得持续增长。</p>
+
+                    <h2>投资计划和回报</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>计划</th>
+                                    <th>期限</th>
+                                    <th>每日佣金</th>
+                                    <th>最小存款</th>
+                                    <th>最大存款</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>3日计划</strong></td>
+                                    <td>3 天</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>7日计划</strong></td>
+                                    <td>7 天</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>12日计划</strong></td>
+                                    <td>12 天</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>15日计划</strong></td>
+                                    <td>15 天</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3月计划</strong></td>
+                                    <td>90 天</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>6月计划</strong></td>
+                                    <td>180 天</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>无限制</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>计算示例</h3>
+                    <p>如果您在 3 日计划中投入 $100，每日收益率为 8%，3 天后您将获得 $24。您可以选择提取资本和收益，或选择继续投资。</p>
+
+                    <h2>运作方式</h2>
+                    <p>当您与 Grant Union 进行投资时，我们的专业交易团队会在您选择的计划期间（如 3 天）交易您的比特币。投资期结束后，您的资本和利润将转入您的后台账户，您可以选择提取或继续投资。</p>
+
+                    <h2>提取流程</h2>
+                    <h3>快速高效的提取</h3>
+                    <p>提取快速高效。该过程仅需几分钟，最多 24 小时。</p>
+
+                    <h3>提取步骤</h3>
+                    <ul>
+                        <li>登录您的 Grant Union 账户</li>
+                        <li>转到提取部分</li>
+                        <li>选择提取金额</li>
+                        <li>选择您的支付方式（比特币或 USDT）</li>
+                        <li>输入您的钱包地址</li>
+                        <li>提交您的提取请求</li>
+                        <li>资金在数分钟内转移</li>
+                    </ul>
+
+                    <h3>可用方法</h3>
+                    <ul>
+                        <li><strong>比特币:</strong> 安全快速的加密货币转账</li>
+                        <li><strong>USDT:</strong> 价值稳定的稳定币转账</li>
+                    </ul>
+                    <p>无论您是想在投资期结束后提取您的资本，还是想提取您的日常佣金，Grant Union 都使其迅速便捷。</p>
+
+                    <h2>支付方式</h2>
+                    <p>Grant Union 使用比特币和 USDT 进行平台上的所有交易，确保快速、安全和全球访问。</p>
+
+                    <h2>安全性</h2>
+                    <h3>我们对您的安全的承诺</h3>
+                    <p>Grant Union 承诺保持最高的安全标准，保护您的投资。</p>
+
+                    <h3>安全功能</h3>
+                    <ul>
+                        <li>所有数据传输的行业级加密</li>
+                        <li>安全的云基础设施</li>
+                        <li>定期安全审计和合规检查</li>
+                        <li>专业交易团队监控您的投资</li>
+                        <li>透明的交易历史和报告</li>
+                    </ul>
+
+                    <h3>保护您的账户</h3>
+                    <ul>
+                        <li>为您的账户使用强大且独特的密码</li>
+                        <li>切勿与任何人分享您的登录凭证</li>
+                        <li>保持您的电子邮件地址安全且受监控</li>
+                        <li>为所有交易启用电子邮件通知</li>
+                        <li>立即报告任何可疑活动</li>
+                    </ul>
+                    <p>Grant Union 采用先进的安全措施，随时保护您的资金和个人信息。</p>
+
+                    <h2>推荐佣金</h2>
+                    <h3>赚取无限制 10% 推荐佣金</h3>
+                    <p>Grant Union 为所有投资者提供无限制 10% 推荐佣金！从通过您的独特推荐链接注册的任何人所进行的每笔存款中赚取 10%。</p>
+
+                    <h2>常见问题</h2>
+                    <h3>问: 最低投资额是多少？</h3>
+                    <p>答: 最低投资额仅为 $100。您可以从小额开始，随着时间推移增加您的投资。</p>
+
+                    <h3>问: 佣金多久被记入一次？</h3>
+                    <p>答: 日常佣金每 24 小时根据您选择的投资计划被记入您的账户。您可以在您的仪表板上实时查看您的收益。</p>
+
+                    <h3>问: 我可以在投资期结束前提取吗？</h3>
+                    <p>答: 您可以随时提取您的日常佣金。您的资本将保持锁定，直到您的计划所示的投资期完成。</p>
+
+                    <h3>问: 接受哪些支付方式？</h3>
+                    <p>答: Grant Union 接受比特币和 USDT 进行所有交易，确保快速、安全和全球访问。</p>
+
+                    <h3>问: 我可以从推荐中赚取多少？</h3>
+                    <p>答: 推荐收入没有限制。您从通过您的独特推荐链接注册的任何人所进行的每笔存款中赚取 10%。您进行的推荐越多，赚取的就越多。</p>
+
+                    <h3>问: 提取需要多长时间？</h3>
+                    <p>答: 提取在数分钟内处理。比特币和 USDT 转账通常在 24 小时内在区块链上确认。</p>
+
+                    <h3>问: 我的投资安全吗？</h3>
+                    <p>答: 是的。Grant Union 采用行业级安全措施，我们的专业交易团队确保您的资金得到妥善和专业的管理。</p>
+
+                    <h2>主要优势</h2>
+                    <ul>
+                        <li>专业交易团队管理您的投资</li>
+                        <li>透明且安全的交易</li>
+                        <li>快速提现和存款</li>
+                        <li>24/7 客户支持</li>
+                        <li>无限制推荐佣金</li>
+                        <li>适合不同预算的多种投资计划</li>
+                        <li>实时账户更新</li>
+                    </ul>
+
+                `
+            },
+            ja: {
+                name: '🇯🇵 日本語',
+                content: `
+                    <h1>Grant Union へようこそ</h1>
+                    <p>世界をリードする投資・取引プラットフォーム、Grant Union へようこそ。安全で透明性があり、利益を生む投資体験を提供することに尽力しています。</p>
+
+                    <h2>Grant Union について</h2>
+                    <p>Grant Union は暗号資産取引、外国為替取引、金、不動産投資を専門とするプロの取引会社です。私たちのプロ取引チームはあなたのビットコイン投資のリターンを最大化するために一生懸命働いています。</p>
+
+                    <h2>最小投資額</h2>
+                    <p>会社はあなたの投資計画に基づいて日次手数料を提供します。わずか $100 の最小預金で、稼ぐことを始めることができます。投資期間の後、資本と利益を引き出すか、継続的な成長のための再投資を選択できます。</p>
+
+                    <h2>投資プランとリターン</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>プラン</th>
+                                    <th>期間</th>
+                                    <th>日次手数料</th>
+                                    <th>最小預金</th>
+                                    <th>最大預金</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>3日プラン</strong></td>
+                                    <td>3 日</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>7日プラン</strong></td>
+                                    <td>7 日</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>12日プラン</strong></td>
+                                    <td>12 日</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>15日プラン</strong></td>
+                                    <td>15 日</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3ヶ月プラン</strong></td>
+                                    <td>90 日</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>6ヶ月プラン</strong></td>
+                                    <td>180 日</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>無制限</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>計算例</h3>
+                    <p>3日プランで日々8%の利回りで$100を投資した場合、3日後に$24を稼ぐことができます。資本と利益を引き出すか、再投資するかを選択できます。</p>
+
+                    <h2>仕組み</h2>
+                    <p>Grant Union に投資すると、プロの取引チームが選択したプラン期間（例えば3日間）中にあなたのビットコインを取引します。投資期間後、資本と利益がバックオフィスに移され、引き出すか再投資するかを選択できます。</p>
+
+                    <h2>出金プロセス</h2>
+                    <h3>迅速で効率的な出金</h3>
+                    <p>出金は迅速で効率的です。プロセスはわずか数分で完了し、最大でも24時間以内です。</p>
+
+                    <h3>出金ステップ</h3>
+                    <ul>
+                        <li>Grant Union アカウントにログイン</li>
+                        <li>出金セクションに移動</li>
+                        <li>出金額を選択</li>
+                        <li>支払い方法（ビットコインまたはUSDT）を選択</li>
+                        <li>ウォレットアドレスを入力</li>
+                        <li>出金リクエストを提出</li>
+                        <li>資金は数分以内に転送</li>
+                    </ul>
+
+                    <h3>利用可能な方法</h3>
+                    <ul>
+                        <li><strong>ビットコイン:</strong> 安全で迅速な暗号資産の転送</li>
+                        <li><strong>USDT:</strong> 安定した価値のステーブルコイン転送</li>
+                    </ul>
+                    <p>投資期間終了後に資本を引き出したい場合でも、日々のコミッションを引き出したい場合でも、Grant Union なら迅速で便利です。</p>
+
+                    <h2>支払い方法</h2>
+                    <p>Grant Union はプラットフォーム上のすべてのトランザクションに Bitcoin と USDT を使用し、迅速で安全なグローバルアクセスを保証します。</p>
+
+                    <h2>セキュリティ</h2>
+                    <h3>あなたのセキュリティへのコミットメント</h3>
+                    <p>Grant Union は最高のセキュリティ基準を維持し、あなたの投資を保護することにコミットしています。</p>
+
+                    <h3>セキュリティ機能</h3>
+                    <ul>
+                        <li>すべてのデータ送信に対する業界レベルの暗号化</li>
+                        <li>安全なクラウドインフラストラクチャ</li>
+                        <li>定期的なセキュリティ監査とコンプライアンスチェック</li>
+                        <li>プロの取引チームがあなたの投資を監視</li>
+                        <li>透明な取引履歴とレポート</li>
+                    </ul>
+
+                    <h3>アカウントを保護</h3>
+                    <ul>
+                        <li>アカウント用に強力でユニークなパスワードを使用</li>
+                        <li>ログイン認証情報を誰とも共有しない</li>
+                        <li>メールアドレスを安全に保ち、監視する</li>
+                        <li>すべてのトランザクションのメール通知を有効にする</li>
+                        <li>疑わしいアクティビティはすぐに報告</li>
+                    </ul>
+                    <p>Grant Union は常にあなたの資金と個人情報を保護するための高度なセキュリティ対策を採用しています。</p>
+
+                    <h2>リファーラルコミッション</h2>
+                    <h3>無制限の 10% リファーラルコミッションを獲得</h3>
+                    <p>Grant Union はすべての投資家に無制限の 10% リファーラルコミッションを提供しています！あなたの独自のリファーラルリンクを使用して登録した人による毎回の入金から 10% を獲得してください。</p>
+
+                    <h2>よくある質問</h2>
+                    <h3>Q: 最小投資額はいくらですか？</h3>
+                    <p>A: 最小投資額はわずか $100 です。小額で始めて、時間をかけて投資を増やすことができます。</p>
+
+                    <h3>Q: コミッションはどのくらいの頻度でクレジットされますか？</h3>
+                    <p>A: 日々のコミッションは選択した投資計画に基づいて 24 時間ごとにアカウントにクレジットされます。ダッシュボードでリアルタイムに収益を確認できます。</p>
+
+                    <h3>Q: 投資期間中に引き出せますか？</h3>
+                    <p>A: いつでも日々のコミッションを引き出すことができます。あなたの資本はあなたのプランで指定された投資期間の完了までロックされます。</p>
+
+                    <h3>Q: どのような支払い方法が受け入れられていますか？</h3>
+                    <p>A: Grant Union はすべてのトランザクションでビットコインと USDT を受け入れており、迅速で安全なグローバルアクセスを保証します。</p>
+
+                    <h3>Q: リファーラルからどのくらい稼げますか？</h3>
+                    <p>A: リファーラル収入に制限はありません。あなたの独自のリファーラルリンクを使用して登録した人による毎回の入金から 10% を獲得します。紹介が多いほど、稼ぎも増えます。</p>
+
+                    <h3>Q: 出金にはどのくらいの時間がかかりますか？</h3>
+                    <p>A: 出金は数分以内に処理されます。ビットコインと USDT の転送は通常、24 時間以内にブロックチェーンで確認されます。</p>
+
+                    <h3>Q: 私の投資は安全ですか？</h3>
+                    <p>A: はい。Grant Union は業界レベルのセキュリティ対策を採用しており、プロの取引チームがあなたの資金を慎重かつ専門的に管理することを保証します。</p>
+
+                    <h2>主な利点</h2>
+                    <ul>
+                        <li>プロの取引チームがあなたの投資を管理</li>
+                        <li>透明で安全な取引</li>
+                        <li>迅速な出金と入金</li>
+                        <li>24/7 カスタマーサポート</li>
+                        <li>無制限のリファーラルコミッション</li>
+                        <li>異なる予算のための複数の投資計画</li>
+                        <li>リアルタイムのアカウント更新</li>
+                    </ul>
+
+                `
+            },
+            ko: {
+                name: '🇰🇷 한국어',
+                content: `
+                    <h1>Grant Union에 오신 것을 환영합니다</h1>
+                    <p>세계 최고의 투자 및 거래 플랫폼인 Grant Union에 오신 것을 환영합니다. 안전하고 투명하며 수익성 있는 투자 경험을 제공하기 위해 노력합니다.</p>
+
+                    <h2>Grant Union 소개</h2>
+                    <p>Grant Union은 암호화폐 거래, 외환 거래, 금 및 부동산 투자를 전문으로 하는 전문 거래 회사입니다. 저희 전문 거래팀은 비트코인 투자 수익을 극대화하기 위해 성실하게 일합니다.</p>
+
+                    <h2>최소 투자액</h2>
+                    <p>회사는 투자 계획에 따라 일일 수수료를 제공합니다. 단 $100의 최소 입금으로 수익을 시작할 수 있습니다. 투자 기간 후 자본과 수익을 인출하거나 계속된 성장을 위해 재투자하도록 선택할 수 있습니다.</p>
+
+                    <h2>투자 계획 및 수익</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>계획</th>
+                                    <th>기간</th>
+                                    <th>일일 수수료</th>
+                                    <th>최소 입금</th>
+                                    <th>최대 입금</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>3일 계획</strong></td>
+                                    <td>3 일</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>7일 계획</strong></td>
+                                    <td>7 일</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>12일 계획</strong></td>
+                                    <td>12 일</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>15일 계획</strong></td>
+                                    <td>15 일</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3개월 계획</strong></td>
+                                    <td>90 일</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>6개월 계획</strong></td>
+                                    <td>180 일</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>무제한</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>계산 예시</h3>
+                    <p>3일 계획에 일일 8% 수익률로 $100을 투자하면 3일 후 $24을 얻게 됩니다. 자본과 수익을 인출하거나 재투자하도록 선택할 수 있습니다.</p>
+
+                    <h2>작동 방식</h2>
+                    <p>Grant Union에 투자할 때, 우리의 전문 거래 팀은 선택한 계획 기간(예: 3일) 동안 귀하의 비트코인을 거래합니다. 투자 기간 후, 귀하의 자본과 이익이 백오피스로 이전되며, 여기서 인출하거나 재투자하도록 선택할 수 있습니다.</p>
+
+                    <h2>인출 프로세스</h2>
+                    <h3>빠르고 효율적인 인출</h3>
+                    <p>인출은 빠르고 효율적입니다. 프로세스는 단 몇 분이 걸리며, 최대 24시간입니다.</p>
+
+                    <h3>인출 단계</h3>
+                    <ul>
+                        <li>Grant Union 계정에 로그인</li>
+                        <li>인출 섹션으로 이동</li>
+                        <li>인출 금액 선택</li>
+                        <li>결제 방법 선택(비트코인 또는 USDT)</li>
+                        <li>지갑 주소 입력</li>
+                        <li>인출 요청 제출</li>
+                        <li>자금은 수 분 내에 이전</li>
+                    </ul>
+
+                    <h3>이용 가능한 방법</h3>
+                    <ul>
+                        <li><strong>비트코인:</strong> 안전하고 빠른 암호화폐 이체</li>
+                        <li><strong>USDT:</strong> 안정적인 가치의 스테이블코인 이체</li>
+                    </ul>
+                    <p>투자 기간이 끝난 후 자본을 인출하든, 일일 커미션을 인출하든 Grant Union은 이를 빠르고 편리하게 만듭니다.</p>
+
+                    <h2>결제 방법</h2>
+                    <p>Grant Union은 플랫폼의 모든 거래에 비트코인과 USDT를 사용하여 빠르고 안전하며 글로벌 액세스를 보장합니다.</p>
+
+                    <h2>보안</h2>
+                    <h3>귀하의 보안에 대한 우리의 약속</h3>
+                    <p>Grant Union은 최고의 보안 표준을 유지하고 귀하의 투자를 보호하기로 약속합니다.</p>
+
+                    <h3>보안 기능</h3>
+                    <ul>
+                        <li>모든 데이터 전송에 대한 산업 수준의 암호화</li>
+                        <li>안전한 클라우드 인프라</li>
+                        <li>정기적인 보안 감사 및 규정 준수 확인</li>
+                        <li>전문 거래 팀이 투자를 모니터링</li>
+                        <li>투명한 거래 기록 및 보고서</li>
+                    </ul>
+
+                    <h3>계정 보호</h3>
+                    <ul>
+                        <li>계정에 강력하고 고유한 비밀번호 사용</li>
+                        <li>로그인 자격증명을 누구와도 공유하지 마세요</li>
+                        <li>이메일 주소를 안전하고 모니터링</li>
+                        <li>모든 거래에 대한 이메일 알림 활성화</li>
+                        <li>의심스러운 활동은 즉시 보고</li>
+                    </ul>
+                    <p>Grant Union은 항상 귀하의 자금과 개인 정보를 보호하기 위한 고급 보안 조치를 사용합니다.</p>
+
+                    <h2>추천 커미션</h2>
+                    <h3>무제한 10% 추천 커미션을 획득하세요</h3>
+                    <p>Grant Union은 모든 투자자에게 무제한 10% 추천 커미션을 제공합니다! 귀하의 고유한 추천 링크를 사용하여 가입한 사람의 모든 입금에서 10%를 획득하세요.</p>
+
+                    <h2>자주 묻는 질문</h2>
+                    <h3>Q: 최소 투자액은 얼마입니까?</h3>
+                    <p>A: 최소 투자액은 단 $100입니다. 작은 금액으로 시작하여 시간이 지남에 따라 투자를 늘릴 수 있습니다.</p>
+
+                    <h3>Q: 커미션은 얼마나 자주 입금됩니까?</h3>
+                    <p>A: 일일 커미션은 선택한 투자 계획에 따라 24시간마다 계정에 입금됩니다. 대시보드에서 실시간으로 수익을 확인할 수 있습니다.</p>
+
+                    <h3>Q: 투자 기간 중에 인출할 수 있습니까?</h3>
+                    <p>A: 언제든지 일일 커미션을 인출할 수 있습니다. 귀하의 자본은 귀하의 계획에 명시된 투자 기간이 완료될 때까지 잠긴 상태로 유지됩니다.</p>
+
+                    <h3>Q: 어떤 결제 방법이 허용됩니까?</h3>
+                    <p>A: Grant Union은 모든 거래에 비트코인 및 USDT를 수용하여 빠르고 안전하며 글로벌 액세스를 보장합니다.</p>
+
+                    <h3>Q: 추천에서 얼마나 벌 수 있습니까?</h3>
+                    <p>A: 추천 수입에 제한이 없습니다. 귀하의 고유한 추천 링크를 사용하여 가입한 사람의 모든 입금에서 10%를 획득합니다. 더 많은 추천을 할수록 더 많이 벌 수 있습니다.</p>
+
+                    <h3>Q: 인출하는 데 얼마나 걸립니까?</h3>
+                    <p>A: 인출은 수 분 내에 처리됩니다. 비트코인 및 USDT 전송은 일반적으로 24시간 내에 블록체인에서 확인됩니다.</p>
+
+                    <h3>Q: 나의 투자는 안전합니까?</h3>
+                    <p>A: 네. Grant Union은 산업 수준의 보안 조치를 사용하며 우리의 전문 거래 팀은 귀하의 자금이 주의 깊고 전문적으로 관리될 것을 보장합니다.</p>
+
+                    <h2>주요 이점</h2>
+                    <ul>
+                        <li>전문 거래 팀이 투자를 관리</li>
+                        <li>투명하고 안전한 거래</li>
+                        <li>빠른 출금 및 입금</li>
+                        <li>24/7 고객 지원</li>
+                        <li>무제한 추천 커미션</li>
+                        <li>다양한 예산을 위한 여러 투자 계획</li>
+                        <li>실시간 계정 업데이트</li>
+                    </ul>
+
+                `
+            },
+            nl: {
+                name: '🇳🇱 Nederlands',
+                content: `
+                    <h1>Welkom bij Grant Union</h1>
+                    <p>Welkom bij Grant Union, dé toonaangevende investerings- en handelsplatform ter wereld. Wij streven ernaar u een veilige, transparante en winstgevende beleggingservaring te bieden.</p>
+
+                    <h2>Over Grant Union</h2>
+                    <p>Grant Union is een professioneel handelsbedrijf dat gespecialiseerd is in cryptocurrency-handel, forex-handel, goud en onroerend goedinvesteringen. Ons team van professionele traders werkt nauw samen om het rendement op uw Bitcoin-investeringen te maximaliseren.</p>
+
+                    <h2>Minimale Investering</h2>
+                    <p>Het bedrijf biedt dagelijks provisie op basis van uw investeringsplan. Met een minimale storting van slechts $100 kunt u beginnen met verdienen. Na uw investeringsperiode kunt u ervoor kiezen om uw kapitaal en winsten op te nemen, of opnieuw te beleggen voor voortdurende groei.</p>
+
+                    <h2>Investeringsplannen en Rendement</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Duur</th>
+                                    <th>Dagelijkse Provisie</th>
+                                    <th>Min. Storting</th>
+                                    <th>Max. Storting</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>3-daags plan</strong></td>
+                                    <td>3 dagen</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>7-daags plan</strong></td>
+                                    <td>7 dagen</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>12-daags plan</strong></td>
+                                    <td>12 dagen</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>15-daags plan</strong></td>
+                                    <td>15 dagen</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3-maands plan</strong></td>
+                                    <td>90 dagen</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>6-maands plan</strong></td>
+                                    <td>180 dagen</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>Onbeperkt</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Berekeningsvoorbeeld</h3>
+                    <p>Als u $100 investeert in het 3-daags plan met 8% dagelijks rendement, verdient u $24 na 3 dagen. U kunt ervoor kiezen om uw kapitaal en winsten op te nemen of opnieuw te beleggen.</p>
+
+                    <h2>Hoe Het Werkt</h2>
+                    <p>Wanneer u met Grant Union investeert, handelt ons professionele handelsteam uw Bitcoin gedurende uw gekozen planperiode (bijvoorbeeld 3 dagen). Na de investeringsperiode worden uw kapitaal en winsten naar uw back office overgebracht, waar u kunt kiezen voor opname of herbelegging.</p>
+
+                    <h2>Opnameproces</h2>
+                    <h3>Snelle en Efficiënte Opnames</h3>
+                    <p>Opnames zijn snel en efficiënt. Het proces duurt slechts enkele minuten, maximaal 24 uur.</p>
+
+                    <h3>Opnamestappen</h3>
+                    <ul>
+                        <li>Log in op uw Grant Union-account</li>
+                        <li>Ga naar het Opnamesgedeelte</li>
+                        <li>Selecteer het opnamebedrag</li>
+                        <li>Kies uw betalingsmethode (Bitcoin of USDT)</li>
+                        <li>Voer uw portefeuilleadres in</li>
+                        <li>Dien uw opnameverzoek in</li>
+                        <li>Geldmiddelen worden binnen minuten overgedragen</li>
+                    </ul>
+
+                    <h3>Beschikbare Methoden</h3>
+                    <ul>
+                        <li><strong>Bitcoin:</strong> Veilige en snelle cryptovalutaoverdrachten</li>
+                        <li><strong>USDT:</strong> Stablecoin-overdrachten met stabiele waarde</li>
+                    </ul>
+                    <p>Of u nu uw kapitaal na het einde van uw investeringsperiode wilt opnemen of uw dagelijkse provisies wilt opnemen, Grant Union maakt dit snel en gemakkelijk.</p>
+
+                    <h2>Betalingsmethoden</h2>
+                    <p>Grant Union gebruikt Bitcoin en USDT voor alle transacties op het platform, wat snelle, veilige en wereldwijde toegang garandeert.</p>
+
+                    <h2>Beveiliging</h2>
+                    <h3>Onze Toewijding aan Uw Beveiliging</h3>
+                    <p>Grant Union zet zich in voor het handhaven van de hoogste beveiligingsnormen en bescherming van uw investeringen.</p>
+
+                    <h3>Beveiligingsfuncties</h3>
+                    <ul>
+                        <li>Versleuteling op industriëniveau voor alle gegevensoverdracht</li>
+                        <li>Veilige cloud-infrastructuur</li>
+                        <li>Regelmatige beveiligingsaudits en nalevingscontroles</li>
+                        <li>Professionaal handelsteam bewaakt uw investeringen</li>
+                        <li>Transparante transactiegeschiedenis en rapporten</li>
+                    </ul>
+
+                    <h3>Beveilig Uw Account</h3>
+                    <ul>
+                        <li>Gebruik een sterk en uniek wachtwoord voor uw account</li>
+                        <li>Deel uw inloggegevens nooit met iemand</li>
+                        <li>Houd uw e-mailadres veilig en gemonitord</li>
+                        <li>Schakel e-mailmeldingen in voor alle transacties</li>
+                        <li>Meld onmiddellijk verdachte activiteiten</li>
+                    </ul>
+                    <p>Grant Union hanteert geavanceerde beveiligingsmaatregelen om uw geldmiddelen en persoonlijke gegevens te allen tijde te beschermen.</p>
+
+                    <h2>Referral Commissie</h2>
+                    <h3>Verdien Onbeperkte 10% Referral Commissie</h3>
+                    <p>Grant Union biedt onbeperkte 10% referral commissie aan alle beleggers! Verdien 10% van elke storting van iemand die zich aanmeldt via uw unieke referral link.</p>
+
+                    <h2>Veelgestelde Vragen</h2>
+                    <h3>V: Wat is het minimale investeringsbedrag?</h3>
+                    <p>A: Het minimale investeringsbedrag is slechts $100. U kunt klein beginnen en uw investeringen in de loop der tijd uitbreiden.</p>
+
+                    <h3>V: Hoe vaak worden commissies gestort?</h3>
+                    <p>A: Dagelijkse commissies worden elke 24 uur op basis van uw gekozen investeringsplan op uw account gestort. U kunt uw inkomsten in realtime op uw dashboard bekijken.</p>
+
+                    <h3>V: Kan ik vóór het einde van mijn investeringsperiode opnemen?</h3>
+                    <p>A: U kunt uw dagelijkse commissies op elk moment opnemen. Uw kapitaal blijft vergrendeld totdat uw investeringsperiode zoals aangegeven in uw plan is voltooid.</p>
+
+                    <h3>V: Welke betalingsmethoden worden geaccepteerd?</h3>
+                    <p>A: Grant Union accepteert Bitcoin en USDT voor alle transacties, wat snelle, veilige en wereldwijde toegang garandeert.</p>
+
+                    <h3>V: Hoeveel kan ik verdienen met referrals?</h3>
+                    <p>A: Er zijn geen beperkingen op referral-inkomsten. U verdient 10% van elke storting van iemand die zich aanmeldt via uw unieke referral link. Hoe meer referrals u geeft, hoe meer u verdient.</p>
+
+                    <h3>V: Hoe lang duurt een opname?</h3>
+                    <p>A: Opnames worden binnen minuten verwerkt. Bitcoin- en USDT-overdrachten worden doorgaans binnen 24 uur op de blockchain bevestigd.</p>
+
+                    <h3>V: Is mijn belegging veilig?</h3>
+                    <p>A: Ja. Grant Union hanteert beveiligingsmaatregelen op industriëniveau en ons professionele handelsteam garandeert dat uw geldmiddelen zorgvuldig en professioneel worden beheerd.</p>
+
+                    <h2>Belangrijkste Voordelen</h2>
+                    <ul>
+                        <li>Professioneel handelsteam beheert uw investeringen</li>
+                        <li>Transparante en veilige transacties</li>
+                        <li>Snelle opnames en stortingen</li>
+                        <li>24/7 klantenondersteuning</li>
+                        <li>Onbeperkte referral commissies</li>
+                        <li>Meerdere investeringsplannen voor verschillende budgetten</li>
+                        <li>Realtime rekeningupdates</li>
+                    </ul>
+
+                `
+            },
+            pl: {
+                name: '🇵🇱 Polski',
+                content: `
+                    <h1>Witaj w Grant Union</h1>
+                    <p>Witaj w Grant Union, wiodącej na światową platformę inwestycyjną i handlową. Zaangażowani jesteśmy w zapewnieniu Ci bezpiecznego, przejrzystego i dochodowego doświadczenia inwestycyjnego.</p>
+
+                    <h2>O Grant Union</h2>
+                    <p>Grant Union to profesjonalna firma handlowa specjalizująca się w handlu kryptowalutami, handlu na rynku forex, złocie i inwestycjach nieruchomościowych. Nasz zespół profesjonalnych traderów pracuje sumiennie, aby maksymalizować zwroty z twoich inwestycji w Bitcoin.</p>
+
+                    <h2>Inwestycja Minimalna</h2>
+                    <p>Firma oferuje dzienną prowizję na podstawie Twojego planu inwestycyjnego. Dzięki minimalnej wpłacie zaledwie $100 możesz zacząć zarabiać. Po okresie inwestycji możesz wybrać wycofanie kapitału i zysków, bądź reinwestycję w celu dalszego wzrostu.</p>
+
+                    <h2>Plany Inwestycyjne i Zwroty</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Czas Trwania</th>
+                                    <th>Dzienna Prowizja</th>
+                                    <th>Min. Wpłata</th>
+                                    <th>Maks. Wpłata</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Plan 3-dniowy</strong></td>
+                                    <td>3 dni</td>
+                                    <td>8%</td>
+                                    <td>$100</td>
+                                    <td>$999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 7-dniowy</strong></td>
+                                    <td>7 dni</td>
+                                    <td>3%</td>
+                                    <td>$599</td>
+                                    <td>$3,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 12-dniowy</strong></td>
+                                    <td>12 dni</td>
+                                    <td>3.5%</td>
+                                    <td>$1,000</td>
+                                    <td>$4,999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 15-dniowy</strong></td>
+                                    <td>15 dni</td>
+                                    <td>4%</td>
+                                    <td>$3,000</td>
+                                    <td>$9,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 3-miesięczny</strong></td>
+                                    <td>90 dni</td>
+                                    <td>4%</td>
+                                    <td>$5,000</td>
+                                    <td>$15,000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Plan 6-miesięczny</strong></td>
+                                    <td>180 dni</td>
+                                    <td>5%</td>
+                                    <td>$15,999</td>
+                                    <td>Bez Limitu</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Przykład Obliczenia</h3>
+                    <p>Jeśli zainwestujesz $100 w plan 3-dniowy z 8% dziennym zwrotem, zarobisz $24 po 3 dniach. Możesz wybrać wycofanie kapitału i zysków lub reinwestycję.</p>
+
+                    <h2>Jak To Działa</h2>
+                    <p>Kiedy inwestujesz w Grant Union, nasz profesjonalny zespół handlowy handluje Twoim Bitcoin przez wybrany przez Ciebie okres planu (na przykład 3 dni). Po okresie inwestycji Twój kapitał i zyski są przenoszone do Twojego backoffice, gdzie możesz wybrać wycofanie lub reinwestycję.</p>
+
+                    <h2>Proces Wypłaty</h2>
+                    <h3>Szybkie i Efektywne Wypłaty</h3>
+                    <p>Wypłaty są szybkie i efektywne. Proces trwa zaledwie kilka minut, maksymalnie 24 godziny.</p>
+
+                    <h3>Kroki Wypłaty</h3>
+                    <ul>
+                        <li>Zaloguj się do swojego konta Grant Union</li>
+                        <li>Przejdź do sekcji Wypłaty</li>
+                        <li>Wybierz kwotę wypłaty</li>
+                        <li>Wybierz metodę płatności (Bitcoin lub USDT)</li>
+                        <li>Wpisz adres swojego portfela</li>
+                        <li>Prześlij żądanie wypłaty</li>
+                        <li>Środki są przenoszone w ciągu minut</li>
+                    </ul>
+
+                    <h3>Dostępne Metody</h3>
+                    <ul>
+                        <li><strong>Bitcoin:</strong> Bezpieczne i szybkie transfery kryptowalut</li>
+                        <li><strong>USDT:</strong> Transfery stablecoin o stabilnej wartości</li>
+                    </ul>
+                    <p>Niezależnie od tego, czy chcesz wycofać kapitał po zakończeniu okresu inwestycji, czy też wycofać swoje dzienne prowizje, Grant Union czyni to szybko i wygodnie.</p>
+
+                    <h2>Metody Płatności</h2>
+                    <p>Grant Union używa Bitcoin i USDT do wszystkich transakcji na platformie, zapewniając szybki, bezpieczny i globalny dostęp.</p>
+
+                    <h2>Bezpieczeństwo</h2>
+                    <h3>Nasze Zaangażowanie w Twoją Bezpieczeństwo</h3>
+                    <p>Grant Union zobowiązuje się do utrzymania najwyższych standardów bezpieczeństwa i ochrony Twoich inwestycji.</p>
+
+                    <h3>Funkcje Bezpieczeństwa</h3>
+                    <ul>
+                        <li>Szyfrowanie na poziomie przemysłu dla wszystkich transmisji danych</li>
+                        <li>Bezpieczna infrastruktura chmury</li>
+                        <li>Regularne audyty bezpieczeństwa i kontrole zgodności</li>
+                        <li>Profesjonalny zespół handlowy monitoruje Twoje inwestycje</li>
+                        <li>Przejrzysta historia transakcji i raporty</li>
+                    </ul>
+
+                    <h3>Chroń Swoje Konto</h3>
+                    <ul>
+                        <li>Używaj silnego i unikalnego hasła do swojego konta</li>
+                        <li>Nigdy nie udostępniaj swoich poświadczeń logowania komukolwiek</li>
+                        <li>Trzymaj swój adres e-mail bezpieczny i monitorowany</li>
+                        <li>Włącz powiadomienia e-mail dla wszystkich transakcji</li>
+                        <li>Natychmiast zgłoś wszelkie podejrzane działania</li>
+                    </ul>
+                    <p>Grant Union stosuje zaawansowane środki bezpieczeństwa w celu ochrony Twoich środków i danych osobowych przez cały czas.</p>
+
+                    <h2>Komisja Referralna</h2>
+                    <h3>Zarabiaj Nieograniczoną Komisję Referralną 10%</h3>
+                    <p>Grant Union oferuje nieograniczoną komisję referralną 10% dla wszystkich inwestorów! Zarabiaj 10% z każdej wpłaty dokonanej przez każdego, kto zarejestruje się przy użyciu Twojego unikalnego linku referralnego.</p>
+
+                    <h2>Częste Pytania</h2>
+                    <h3>P: Jaka jest minimalna kwota inwestycji?</h3>
+                    <p>O: Minimalna kwota inwestycji wynosi zaledwie $100. Możesz zacząć od małej kwoty i z czasem zwiększać swoją inwestycję.</p>
+
+                    <h3>P: Jak często komisje są zapisywane na konto?</h3>
+                    <p>O: Dzienne prowizje są zapisywane na Twoje konto co 24 godziny na podstawie wybranego planu inwestycyjnego. Możesz wyświetlać swoje zarobki w czasie rzeczywistym na swoim pulpicie.</p>
+
+                    <h3>P: Czy mogę wycofać się przed końcem okresu inwestycji?</h3>
+                    <p>O: Możesz wycofać swoje dzienne prowizje w dowolnym momencie. Twój kapitał pozostaje zablokowany do czasu ukończenia okresu inwestycji wskazanego w Twoim planie.</p>
+
+                    <h3>P: Jakie metody płatności są akceptowane?</h3>
+                    <p>O: Grant Union akceptuje Bitcoin i USDT dla wszystkich transakcji, zapewniając szybki, bezpieczny i globalny dostęp.</p>
+
+                    <h3>P: Ile mogę zarobić na referrals?</h3>
+                    <p>O: Nie ma ograniczeń dotyczących dochodów z referencji. Zarabiasz 10% z każdej wpłaty dokonanej przez każdego, kto zarejestruje się przy użyciu Twojego unikalnego linku referralnego. Im więcej referencji wykonasz, tym więcej zarobisz.</p>
+
+                    <h3>P: Jak długo trwa wypłata?</h3>
+                    <p>O: Wypłaty są przetwarzane w ciągu minut. Transfery Bitcoin i USDT są zwykle potwierdzone w blockchain w ciągu 24 godzin.</p>
+
+                    <h3>P: Czy moja inwestycja jest bezpieczna?</h3>
+                    <p>O: Tak. Grant Union stosuje środki bezpieczeństwa na poziomie przemysłu i nasz profesjonalny zespół handlowy gwarantuje, że Twoje środki będą zarządzane starannie i zawodowo.</p>
+
+                    <h2>Główne Korzyści</h2>
+                    <ul>
+                        <li>Profesjonalny zespół handlowy zarządza Twoimi inwestycjami</li>
+                        <li>Przejrzyste i bezpieczne transakcje</li>
+                        <li>Szybkie wypłaty i wpłaty</li>
+                        <li>Obsługa klienta 24/7</li>
+                        <li>Nieograniczone komisje referralne</li>
+                        <li>Wiele planów inwestycyjnych dla różnych budżetów</li>
+                        <li>Aktualizacje konta w czasie rzeczywistym</li>
+                    </ul>
+
+                `
+            }
+        };
+
+        const languageSelector = document.getElementById('languageSelector');
+        const contentArea = document.getElementById('contentArea');
+
+        function renderLanguageButtons() {
+            Object.entries(languages).forEach(([code, lang]) => {
+                const btn = document.createElement('button');
+                btn.className = 'lang-btn' + (code === 'en' ? ' active' : '');
+                btn.textContent = lang.name;
+                btn.onclick = () => switchLanguage(code);
+                languageSelector.appendChild(btn);
+            });
+        }
+
+        function switchLanguage(code) {
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.language-content').forEach(div => div.classList.remove('active'));
+
+            event.target.classList.add('active');
+            contentArea.innerHTML = languages[code].content;
+            localStorage.setItem('grantUnionLanguage', code);
+        }
+
+        function initializeLanguage() {
+            const saved = localStorage.getItem('grantUnionLanguage') || 'en';
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            const targetBtn = Array.from(document.querySelectorAll('.lang-btn')).find(btn => 
+                btn.textContent.includes(languages[saved].name.split(' ')[1])
+            );
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+            contentArea.innerHTML = languages[saved].content;
+        }
+
+        renderLanguageButtons();
+        initializeLanguage();
+    </script>
+</body>
+</html>
