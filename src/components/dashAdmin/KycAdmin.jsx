@@ -1,35 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { supabaseDb } from '../../database/supabaseUtils';
 import { supabase } from '../../database/supabaseConfig';
+import { useAutoRefresh } from '../../hooks/useAutoRefresh';
 
 export default function KycAdmin({ currentUser }) {
   const [requests, setRequests] = useState([]);
+  const [loadingId, setLoadingId] = useState(null);
+
+  const fetchKycRequests = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('kyc')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('Error fetching KYC requests:', error);
+        return;
+      }
+      
+      if (data) {
+        setRequests(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch KYC requests:', err);
+    }
+  };
+
+  // Auto-refresh every 5 seconds
+  useAutoRefresh(fetchKycRequests, []);
 
   useEffect(() => {
-    // Fetch initial KYC requests
-    const fetchKycRequests = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('kyc')
-          .select('*')
-          .order('created_at', { ascending: false });
-        
-        if (error) {
-          console.error('Error fetching KYC requests:', error);
-          return;
-        }
-        
-        if (data) {
-          setRequests(data);
-        }
-      } catch (err) {
-        console.error('Failed to fetch KYC requests:', err);
-      }
-    };
-
-    fetchKycRequests();
-
-    // Set up real-time subscription
+    // Set up real-time subscription for instant updates
     const subscription = supabase
       .channel('kyc-changes')
       .on('postgres_changes', {
@@ -48,6 +50,9 @@ export default function KycAdmin({ currentUser }) {
 
   const updateKyc = async (kycId, newStatus) => {
     try {
+      // Set loading state for this specific button
+      setLoadingId(kycId);
+      
       console.log(`📋 Calling KYC update API for ${kycId} -> ${newStatus}`);
       
       // Call server-side API endpoint to update KYC and send email
@@ -69,17 +74,13 @@ export default function KycAdmin({ currentUser }) {
       alert(`✅ KYC ${newStatus.toLowerCase()} successfully!`);
       
       // Refresh KYC requests list
-      const { data, error } = await supabase
-        .from('kyc')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (!error && data) {
-        setRequests(data);
-      }
+      await fetchKycRequests();
     } catch (err) {
       console.error('KYC update error', err);
       alert(`Failed to ${newStatus.toLowerCase()} KYC. Please try again.`);
+    } finally {
+      // Clear loading state
+      setLoadingId(null);
     }
   };
 
@@ -141,16 +142,18 @@ export default function KycAdmin({ currentUser }) {
                           <button
                             className="action-btn verify"
                             onClick={() => updateKyc(r.id, 'Verified')}
+                            disabled={loadingId === r.id}
                           >
-                            Verify
+                            {loadingId === r.id ? '⏳ Processing...' : 'Verify'}
                           </button>
                         )}
                         {r.status !== 'Rejected' && (
                           <button
                             className="action-btn reject"
                             onClick={() => updateKyc(r.id, 'Rejected')}
+                            disabled={loadingId === r.id}
                           >
-                            Reject
+                            {loadingId === r.id ? '⏳ Processing...' : 'Reject'}
                           </button>
                         )}
                       </div>

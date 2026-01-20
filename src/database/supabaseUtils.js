@@ -1306,6 +1306,7 @@ export const supabaseDb = {
       .single();
 
     if (fetchError || !request) {
+      console.error('❌ Request not found:', fetchError);
       return { data: null, error: fetchError || new Error('Request not found') };
     }
 
@@ -1324,24 +1325,42 @@ export const supabaseDb = {
       .single();
 
     if (error) {
+      console.error('❌ Failed to update deletion request status:', error);
       return { data: null, error };
     }
 
     // Perform the actual deletion
     try {
+      console.log(`🗑️ Deleting user data for ${request.user_name}`);
+      
       // Delete related records in correct order (reverse of creation dependencies)
-      await supabaseDb.deleteNotificationsByUserId(request.idnum);
-      await supabaseDb.deleteKycByUserId(request.user_id);
-      await supabaseDb.deleteChatsByUserId(request.user_id);
-      await supabaseDb.deleteLoansByUserId(request.idnum);
-      await supabaseDb.deleteWithdrawalCodesByUserId(request.user_id);
-      await supabaseDb.deleteReferralsByUserId(request.user_id);
-      await supabaseDb.deleteInvestmentsByUserId(request.idnum);
-      await supabaseDb.deleteWithdrawalsByUserId(request.idnum);
-      await supabaseDb.deleteUser(request.user_id);
+      const deletions = [
+        { name: 'notifications', fn: () => supabaseDb.deleteNotificationsByUserId(request.idnum) },
+        { name: 'kyc', fn: () => supabaseDb.deleteKycByUserId(request.user_id) },
+        { name: 'chats', fn: () => supabaseDb.deleteChatsByUserId(request.user_id) },
+        { name: 'loans', fn: () => supabaseDb.deleteLoansByUserId(request.idnum) },
+        { name: 'withdrawal codes', fn: () => supabaseDb.deleteWithdrawalCodesByUserId(request.user_id) },
+        { name: 'referrals', fn: () => supabaseDb.deleteReferralsByUserId(request.user_id) },
+        { name: 'investments', fn: () => supabaseDb.deleteInvestmentsByUserId(request.idnum) },
+        { name: 'withdrawals', fn: () => supabaseDb.deleteWithdrawalsByUserId(request.idnum) },
+        { name: 'user account', fn: () => supabaseDb.deleteUser(request.user_id) }
+      ];
 
+      for (const deletion of deletions) {
+        try {
+          console.log(`  Deleting ${deletion.name}...`);
+          await deletion.fn();
+          console.log(`  ✅ ${deletion.name} deleted`);
+        } catch (delError) {
+          console.error(`  ❌ Failed to delete ${deletion.name}:`, delError);
+          throw new Error(`Failed to delete ${deletion.name}: ${delError.message}`);
+        }
+      }
+
+      console.log(`✅ Successfully deleted all user data for ${request.user_name}`);
       return { data, error: null };
     } catch (deleteError) {
+      console.error('❌ Deletion process failed:', deleteError);
       // If deletion fails, revert the request status
       await supabase
         .from('deletion_requests')

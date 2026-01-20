@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabaseDb } from "../../database/supabaseUtils";
+import { useAutoRefresh } from "../../hooks/useAutoRefresh";
 import Modal from "../Modal";
 
 const DeletionRequestsAdmin = ({ deletionRequests = [], currentUser, setDeletionRequests }) => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [adminNotes, setAdminNotes] = useState('');
+  const [allRequests, setAllRequests] = useState(deletionRequests);
+
+  // Auto-refresh deletion requests every 5 seconds
+  const fetchDeletionRequests = async () => {
+    const { data, error } = await supabaseDb.getDeletionRequests();
+    if (!error && data) {
+      setAllRequests(data);
+      setDeletionRequests(data);
+    }
+  };
+
+  useAutoRefresh(fetchDeletionRequests, []);
 
   // Modal State
   const [modalConfig, setModalConfig] = useState({
@@ -89,8 +102,8 @@ const DeletionRequestsAdmin = ({ deletionRequests = [], currentUser, setDeletion
     }
   };
 
-  const pendingRequests = deletionRequests.filter(req => req.status === 'pending');
-  const processedRequests = deletionRequests.filter(req => req.status !== 'pending');
+  const pendingRequests = allRequests.filter(req => req.status === 'pending');
+  const processedRequests = allRequests.filter(req => req.status !== 'pending');
 
   return (
     <div style={{ width: '100%' }}>
@@ -103,7 +116,7 @@ const DeletionRequestsAdmin = ({ deletionRequests = [], currentUser, setDeletion
           </div>
           <div style={{ background: 'var(--dark-clr3)', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(255, 179, 71, 0.2)' }}>
             <h3 style={{ color: '#FFB347', margin: '0 0 0.5rem 0' }}>Total Requests</h3>
-            <p style={{ color: 'var(--text-clr1)', fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>{deletionRequests.length}</p>
+            <p style={{ color: 'var(--text-clr1)', fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>{allRequests.length}</p>
           </div>
         </div>
       </div>
@@ -159,18 +172,20 @@ const DeletionRequestsAdmin = ({ deletionRequests = [], currentUser, setDeletion
                         handleApproveRequest
                       );
                     }}
+                    disabled={isProcessing}
                     style={{
-                      background: 'linear-gradient(135deg, #4CAF50, #45a049)',
+                      background: isProcessing ? '#999' : 'linear-gradient(135deg, #4CAF50, #45a049)',
                       color: 'white',
                       border: 'none',
                       borderRadius: '25px',
                       padding: '0.5rem 1rem',
-                      cursor: 'pointer',
-                      fontWeight: '600'
+                      cursor: isProcessing ? 'not-allowed' : 'pointer',
+                      fontWeight: '600',
+                      opacity: isProcessing ? 0.6 : 1
                     }}
                   >
                     <i className="icofont-check" style={{ marginRight: '0.25rem' }}></i>
-                    Approve
+                    {isProcessing ? 'Processing...' : 'Approve'}
                   </button>
                   <button
                     onClick={() => {
@@ -181,10 +196,17 @@ const DeletionRequestsAdmin = ({ deletionRequests = [], currentUser, setDeletion
                         handleRejectRequest
                       );
                     }}
+                    disabled={isProcessing}
                     style={{
-                      background: 'linear-gradient(135deg, #f44336, #d32f2f)',
+                      background: isProcessing ? '#999' : 'linear-gradient(135deg, #f44336, #d32f2f)',
                       color: 'white',
                       border: 'none',
+                      borderRadius: '25px',
+                      padding: '0.5rem 1rem',
+                      cursor: isProcessing ? 'not-allowed' : 'pointer',
+                      fontWeight: '600',
+                      opacity: isProcessing ? 0.6 : 1
+                    }}
                       borderRadius: '25px',
                       padding: '0.5rem 1rem',
                       cursor: 'pointer',
