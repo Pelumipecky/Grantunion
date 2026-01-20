@@ -3,11 +3,11 @@ const fetch = require('node-fetch').default || require('node-fetch');
 
 async function testEmailAPI() {
   const emailData = {
-    to: 'pelumipecky@gmail.com',
+    to: 'test@grantunion.com',
     subject: 'Test Investment Approval - Grant Union Investment',
     type: 'investment_approval',
     templateData: {
-      userName: 'Pelumi Test User',
+      userName: 'Test User',
       plan: '7-Day Plan',
       capital: 500,
       roi: 35,

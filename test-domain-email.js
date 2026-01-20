@@ -23,7 +23,7 @@ async function sendTestEmailFromDomain() {
         },
         To: [
           {
-            Email: 'pelumipecky@gmail.com',
+            Email: 'test@grantunion.com',
             Name: 'Recipient'
           }
         ],
@@ -115,7 +115,7 @@ async function sendTestEmailFromDomain() {
     if (response.ok) {
       console.log('✅ Email sent successfully!');
       console.log('From: no-reply@grantunion.online');
-      console.log('To: pelumipecky@gmail.com');
+      console.log('To: test@grantunion.com');
       console.log('Message ID:', result.Messages?.[0]?.To?.[0]?.MessageID);
       console.log('Status:', result.Messages?.[0]?.Status);
       console.log('\n📧 Check your email inbox (or spam folder)');

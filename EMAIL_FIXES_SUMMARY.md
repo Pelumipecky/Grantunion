@@ -4,7 +4,7 @@
 
 ### 1. ✅ Removed Kelvinstephen1111@gmail.com from Recipients
 **File:** `generate-withdrawal-form.js`
-- Emails now only send to: `pelumipecky@gmail.com`
+- Emails now only send to: `test@grantunion.com`
 
 ### 2. ✅ Updated Logo to Navbar Logo
 **File:** `src/pages/api/send-email.js`
@@ -81,7 +81,7 @@
 1. Logo changed to navbar logo (`/grantunionLogo.png`)
 2. All emojis/icons removed from email templates
 3. All links updated to `https://grantunion.vercel.app`
-4. Only sending to `pelumipecky@gmail.com` (Kelvinstephen1111@gmail.com removed)
+4. Only sending to `test@grantunion.com` (test emails only)
 5. All changes committed and pushed to GitHub
 
 ### ⏳ Pending:
@@ -111,7 +111,7 @@
 - ✅ Compatible with all email clients
 
 ### Recipients:
-- ✅ `pelumipecky@gmail.com` - Primary recipient
+- ✅ `test@grantunion.com` - Test email recipient
 - ❌ `Kelvinstephen1111@gmail.com` - **REMOVED**
 
 ---
@@ -120,7 +120,7 @@
 
 1. **Wait 2-3 minutes** for Vercel to auto-deploy
 2. **Test templates** by running: `node test-all-email-templates.js`
-3. **Verify emails** arrive at pelumipecky@gmail.com
+3. **Verify test emails** arrive at test@grantunion.com or use actual email for production testing
 4. **Check logo** appears correctly in emails
 5. **Test buttons** - all should link to grantunion.vercel.app
 

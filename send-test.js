@@ -4,7 +4,7 @@
 const http = require('http');
 
 const emailData = {
-  to: 'pelumipecky@gmail.com',
+  to: 'test@grantunion.com',
   subject: 'Test Investment Approval - Grant Union',
   type: 'investment_approval',
   templateData: {

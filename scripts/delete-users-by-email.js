@@ -4,12 +4,17 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env.local
+dotenv.config({ path: '.env.local' });
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('❌ Missing SUPABASE environment variables');
+  console.error('   Make sure NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set in .env.local');
   process.exit(1);
 }
 
@@ -17,8 +22,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // Users to delete
 const USERS_TO_DELETE = [
-  'pelumipecky@gmail.com',
-  'opeblazee.ot@gmail.com'
+  'test@example.com', // Change to the emails you want to delete
 ];
 
 async function deleteUserByEmail(email) {

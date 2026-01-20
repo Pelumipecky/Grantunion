@@ -13,7 +13,7 @@ async function sendTestEmail() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                to: 'pelumipecky@gmail.com',
+                to: 'test@grantunion.com',
                 type: 'test_email',
                 templateData: {
                     title: '🎉 Welcome to Grant Union Investment Platform',

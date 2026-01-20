@@ -8,7 +8,7 @@ Your email system is **fully operational** and sending emails successfully throu
 
 #### Direct Mailjet API Test
 ```
-✅ Email sent to pelumipecky@gmail.com
+✅ Email sent to test@grantunion.com
    Message ID: 576460786589789800
 ```
 

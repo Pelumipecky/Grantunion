@@ -96,7 +96,7 @@ async function sendTestEmail() {
         },
         To: [
           {
-            Email: 'pelumipecky@gmail.com',
+            Email: 'test@grantunion.com',
             Name: 'Recipient'
           }
         ],

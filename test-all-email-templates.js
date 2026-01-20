@@ -7,7 +7,7 @@
 require('dotenv').config({ path: '.env.local' });
 
 const WEBSITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://grantunion.vercel.app';
-const TEST_EMAILS = ['pelumipecky@gmail.com'];
+const TEST_EMAILS = ['test@grantunion.com'];
 
 async function sendTestEmail(type, subject, templateData, email) {
   try {

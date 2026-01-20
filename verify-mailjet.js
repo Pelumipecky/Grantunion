@@ -43,7 +43,7 @@ async function testMailjetEmail() {
         },
         To: [
           {
-            Email: 'pelumipecky@gmail.com'
+            Email: 'test@grantunion.com'
           }
         ],
         Subject: 'Test Email - Mailjet Credential Verification',
@@ -74,7 +74,7 @@ async function testMailjetEmail() {
     console.log('✅ Mailjet API Response:');
     console.log('Status:', response.status);
     console.log('Message ID:', data.Messages?.[0]?.To?.[0]?.MessageID);
-    console.log('\n✅ Email should be sent to pelumipecky@gmail.com');
+    console.log('\n✅ Email should be sent to test@grantunion.com');
     return true;
   } catch (error) {
     console.log('❌ Error:', error.message);

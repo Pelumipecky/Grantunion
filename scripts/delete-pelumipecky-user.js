@@ -1,6 +1,8 @@
 /**
- * Script to delete user "Pelumipecky@gmail.com" and all associated data
+ * Script to delete a specific user and all associated data
  * from both Supabase and Firebase databases
+ * 
+ * NOTE: Use delete-users-by-email.js instead for a more flexible, reusable script
  */
 
 try {
@@ -27,7 +29,7 @@ const firebaseConfig = {
   appId: "1:123456789:web:abcdef123456"
 };
 
-const TARGET_EMAIL = 'pelumipecky@gmail.com';
+const TARGET_EMAIL = 'test@example.com'; // Change to target email
 
 async function deleteFromFirebase(userId) {
   console.log('🔥 Deleting from Firebase...');

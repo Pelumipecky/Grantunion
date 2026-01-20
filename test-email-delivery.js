@@ -21,13 +21,13 @@ async function testEmailSending() {
 
   const testEmails = [
     {
-      to: 'pelumipecky@gmail.com',
+      to: 'test@grantunion.com',
       subject: 'Test 1: Direct API - Investment Approval',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>Investment Approved!</h2>
           <p>This is a test email to verify Mailjet delivery.</p>
-          <p><strong>Recipient:</strong> pelumipecky@gmail.com</p>
+          <p><strong>Recipient:</strong> test@grantunion.com</p>
           <p><strong>Time:</strong> ${new Date().toISOString()}</p>
           <p><strong>Test Type:</strong> Direct API</p>
         </div>

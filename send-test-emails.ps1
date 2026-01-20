@@ -7,11 +7,11 @@ Start-Sleep -Seconds 3
 # Test 1: Investment Approval Email
 Write-Host "`nSending Investment Approval Email..." -ForegroundColor Cyan
 $investmentBody = @{
-    to = "pelumipecky@gmail.com"
+    to = "test@grantunion.com"
     subject = "Investment Approved - Test"
     type = "investment_approved"
     templateData = @{
-        userName = "Pelumi Pecky"
+        userName = "Test User"
         plan = "Premium Plan"
         amount = "5000"
         roi = "25%"
@@ -35,11 +35,11 @@ Start-Sleep -Seconds 2
 # Test 2: Withdrawal Notification Email
 Write-Host "`nSending Withdrawal Notification Email..." -ForegroundColor Cyan
 $withdrawalBody = @{
-    to = "pelumipecky@gmail.com"
+    to = "test@grantunion.com"
     subject = "Withdrawal Notification - Test"
     type = "withdrawal_notification"
     templateData = @{
-        userName = "Pelumi Pecky"
+        userName = "Test User"
         amount = "2500"
         status = "approved"
         transactionId = "WD-TEST-12345"
@@ -56,4 +56,4 @@ try {
     Write-Host $_.Exception.Message -ForegroundColor Red
 }
 
-Write-Host "`nDone! Check pelumipecky@gmail.com inbox." -ForegroundColor Yellow
+Write-Host "`nDone! Check test@grantunion.com inbox." -ForegroundColor Yellow

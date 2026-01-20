@@ -3,7 +3,7 @@ Write-Host ""
 
 # Email data as JSON
 $emailJson = @{
-    to = "pelumipecky@gmail.com"
+    to = "test@grantunion.com"
     subject = "Test Investment Approval"
     type = "investment_approval"
     templateData = @{
@@ -17,7 +17,7 @@ $emailJson = @{
 } | ConvertTo-Json -Depth 10
 
 Write-Host "📧 Email Details:" -ForegroundColor Yellow
-Write-Host "To: pelumipecky@gmail.com"
+Write-Host "To: test@grantunion.com"
 Write-Host "Plan: 7-Day Plan"
 Write-Host "Capital: $500"
 Write-Host "ROI: $35"

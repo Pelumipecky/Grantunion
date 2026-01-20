@@ -1,5 +1,7 @@
 /**
- * Script to delete user "pelumipecky@gmail.com" and all associated data from Supabase
+ * Script to delete a specific user and all associated data from Supabase
+ * 
+ * NOTE: Use delete-users-by-email.js instead for a more flexible, reusable script
  */
 
 try {
@@ -13,7 +15,7 @@ const { createClient } = require('@supabase/supabase-js');
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const TARGET_EMAIL = 'pelumipecky@gmail.com';
+const TARGET_EMAIL = 'test@example.com'; // Change to target email
 
 async function deleteUserFromSupabase() {
   console.log('🗄️ Deleting user from Supabase...');

@@ -1,11 +1,11 @@
 const https = require('https');
 
 const data = JSON.stringify({
-  to: 'pelumipecky@gmail.com',
+  to: 'test@grantunion.com',
   subject: 'Investment Approved - Grant Union Investment',
   type: 'investment_approved',
   templateData: {
-    userName: 'Pelumi',
+    userName: 'Test User',
     plan: 'Premium Plan',
     amount: '100000',
     roi: '7500',
@@ -27,7 +27,7 @@ const options = {
 };
 
 console.log('📧 Testing investment approval email...\n');
-console.log('Sending to: pelumipecky@gmail.com');
+console.log('Sending to: test@grantunion.com');
 console.log('Template: investment_approved\n');
 
 const req = https.request(options, (res) => {
