@@ -1,10 +1,34 @@
 /**
  * API endpoint to create an investment and send confirmation email
  * This must run on the server to safely send emails
+ * Uses direct Supabase calls (same pattern as withdrawals)
  */
 
-import { supabaseDb } from '../../../database/supabaseUtils';
+import { supabase } from '../../../database/supabaseConfig';
 import { sendTransactionalEmail } from '../../../lib/emailService';
+
+// Normalize investment payload
+const normalizeInvestmentPayload = (investmentData = {}) => {
+  if (!investmentData || typeof investmentData !== 'object') {
+    throw new Error('Investment data must be a valid object');
+  }
+
+  return {
+    idnum: investmentData.idnum,
+    plan: investmentData.plan,
+    status: investmentData.status || 'Pending',
+    capital: investmentData.capital ?? 0,
+    roi: investmentData.roi ?? 0,
+    bonus: investmentData.bonus ?? 0,
+    duration: investmentData.duration ?? 5,
+    paymentoption: investmentData.paymentOption ?? investmentData.paymentoption ?? 'Bitcoin',
+    transaction_hash: investmentData.transactionHash ?? investmentData.transaction_hash ?? null,
+    authstatus: investmentData.authStatus ?? investmentData.authstatus ?? 'unseen',
+    credited_roi: investmentData.credited_roi ?? 0,
+    credited_bonus: investmentData.credited_bonus ?? 0,
+    date: investmentData.date ?? new Date().toISOString(),
+  };
+};
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -24,38 +48,77 @@ export default async function handler(req, res) {
 
     console.log('📊 Creating investment for user:', investmentData.idnum);
 
-    // Create investment in database
-    const result = await supabaseDb.createInvestment(investmentData);
+    // Normalize and validate investment data
+    const cleanData = normalizeInvestmentPayload(investmentData);
 
-    if (result.error) {
-      console.error('❌ Failed to create investment:', result.error);
+    // Create investment in database using direct Supabase call
+    const { data, error } = await supabase
+      .from('investments')
+      .insert([cleanData])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('❌ Failed to create investment:', error);
       return res.status(400).json({ 
         error: 'Failed to create investment',
-        details: result.error.message
+        details: error.message
       });
+    }
+
+    console.log('✅ Investment created successfully:', data.id);
+
+    // Create notification for user about investment submission
+    if (data) {
+      try {
+        const notificationMessage = `💰 Your investment of $${cleanData.capital} has been submitted successfully and is pending approval. You will be notified once it's activated and starts earning ROI.`;
+        
+        const { error: notificationError } = await supabase
+          .from('notifications')
+          .insert([{
+            idnum: cleanData.idnum,
+            title: 'Investment Submitted',
+            message: notificationMessage,
+            status: 'unseen',
+            type: 'investment_submitted',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }]);
+
+        if (notificationError) {
+          console.error('Failed to create investment submission notification:', notificationError);
+        }
+      } catch (notificationError) {
+        console.error('Error creating investment submission notification:', notificationError);
+      }
     }
 
     // Send email notification to user
     try {
-      console.log('📧 Fetching user details for investment email. idnum:', investmentData.idnum);
-      const userResult = await supabaseDb.getUserByIdnum(investmentData.idnum);
+      console.log('📧 Fetching user details for investment email. idnum:', cleanData.idnum);
       
-      if (userResult.error) {
-        console.error('⚠️ Error fetching user for investment email:', userResult.error);
+      const { data: userData, error: userError } = await supabase
+        .from('userlogs')
+        .select('email, name')
+        .eq('idnum', cleanData.idnum)
+        .single();
+
+      if (userError) {
+        console.error('⚠️ Error fetching user for investment email:', userError);
       }
-      
-      if (!userResult.data) {
-        console.warn('⚠️ No user data found for idnum:', investmentData.idnum);
-      } else if (!userResult.data.email) {
-        console.warn('⚠️ User has no email field. User data:', userResult.data);
+
+      if (!userData) {
+        console.warn('⚠️ No user data found for idnum:', cleanData.idnum);
+      } else if (!userData.email) {
+        console.warn('⚠️ User has no email field. User data:', userData);
       }
-      
-      if (userResult.data && userResult.data.email) {
-        const userEmail = userResult.data.email;
-        const userName = userResult.data.name || 'Valued Investor';
-        const plan = investmentData.plan || 'Investment Plan';
-        const capitalAmount = parseFloat(investmentData.capital).toFixed(2);
-        const duration = investmentData.duration || 'N/A';
+
+      if (userData && userData.email) {
+        const userEmail = userData.email;
+        const userName = userData.name || 'Valued Investor';
+        const plan = cleanData.plan || 'Investment Plan';
+        const capitalAmount = parseFloat(cleanData.capital).toFixed(2);
+        const duration = cleanData.duration || 'N/A';
 
         const htmlBody = `
 <!DOCTYPE html>
