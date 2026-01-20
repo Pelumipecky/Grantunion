@@ -3,8 +3,8 @@
  * This endpoint is server-side to safely use Mailjet credentials
  */
 
-import { supabase } from '../../../database/supabaseConfig';
-import { sendTransactionalEmail } from '../../../lib/emailService';
+import { supabase } from '../../../../database/supabaseConfig';
+import { sendTransactionalEmail } from '../../../../lib/emailService';
 
 export default async function handler(req, res) {
   // Only allow POST requests
