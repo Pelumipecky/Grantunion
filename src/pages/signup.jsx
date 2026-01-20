@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { supabase } from '../database/supabaseConfig';
 import { supabaseAuth, supabaseDb } from '../database/supabaseUtils';
+import { sendTransactionalEmail } from '../lib/emailService';
 import { themeContext } from '../../providers/ThemeProvider';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -223,6 +224,144 @@ const Signup = () => {
       } catch (notifyError) {
         console.error('Failed to create welcome notification:', notifyError);
         // Don't block signup success if notification fails
+      }
+
+      // Send welcome email to new user
+      try {
+        console.log('📧 Sending welcome email to:', toLocaleStorage.email);
+        
+        const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: 'Alegreya Sans', Arial, sans-serif; background-color: #f5f5f5; color: #333333; margin: 0; padding: 0; }
+    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 1px solid #e0e0e0; }
+    .header { background: linear-gradient(120deg, #FF8C37, #FF6B1A); padding: 40px 20px; text-align: center; }
+    .header h1 { color: #ffffff; font-size: 28px; margin: 10px 0 0 0; font-weight: 600; }
+    .content { padding: 30px 25px; }
+    .content p { margin: 15px 0; line-height: 1.6; font-size: 15px; }
+    .steps-box { background: #f8f8f8; border: 1px solid #e0e0e0; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    .step { padding: 12px 0; border-bottom: 1px solid #e0e0e0; }
+    .step:last-child { border-bottom: none; }
+    .step-number { display: inline-block; background: #FF8C37; color: #ffffff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 600; margin-right: 10px; }
+    .info-box { background: rgba(255, 140, 55, 0.1); border-left: 4px solid #FF8C37; padding: 15px; border-radius: 6px; margin: 15px 0; }
+    .button { display: inline-block; background: linear-gradient(120deg, #1C0F36, #2f1d5c); color: #ffffff; padding: 14px 35px; text-decoration: none; border-radius: 8px; font-weight: 600; text-align: center; margin: 20px auto; }
+    .footer { background: #f8f8f8; padding: 25px; text-align: center; border-top: 2px solid #FF8C37; font-size: 12px; color: #666666; }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>Welcome to Grant Union! 🎉</h1>
+    </div>
+    <div class="content">
+      <p>Dear <strong style="color: #1C0F36;">${toLocaleStorage.name || 'Valued Member'}</strong>,</p>
+      <p>Welcome to Grant Union Investment! We're thrilled to have you join our community of successful investors.</p>
+
+      <div class="steps-box">
+        <h3 style="margin-top: 0; color: #1C0F36;">Getting Started in 5 Steps</h3>
+        
+        <div class="step">
+          <span class="step-number">1</span>
+          <strong>Complete Your Profile</strong><br>
+          <span style="font-size: 13px; color: #666;">Go to Dashboard → Profile to verify your account details</span>
+        </div>
+
+        <div class="step">
+          <span class="step-number">2</span>
+          <strong>Submit KYC Verification</strong><br>
+          <span style="font-size: 13px; color: #666;">Visit Dashboard → KYC to upload required documents</span>
+        </div>
+
+        <div class="step">
+          <span class="step-number">3</span>
+          <strong>Choose Investment Plan</strong><br>
+          <span style="font-size: 13px; color: #666;">Browse our plans: 7-Day, 14-Day, 3-Month, or 6-Month options</span>
+        </div>
+
+        <div class="step">
+          <span class="step-number">4</span>
+          <strong>Make Your First Deposit</strong><br>
+          <span style="font-size: 13px; color: #666;">Click Invest Now and follow the deposit instructions</span>
+        </div>
+
+        <div class="step">
+          <span class="step-number">5</span>
+          <strong>Track Your Returns</strong><br>
+          <span style="font-size: 13px; color: #666;">Monitor daily ROI credits in your dashboard</span>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>Account Details:</strong><br>
+        📧 Email: ${toLocaleStorage.email}<br>
+        📅 Member Since: ${new Date().toLocaleDateString()}<br>
+        ✓ Status: Active
+      </div>
+
+      <p style="text-align: center;">
+        <a href="https://grantunion.vercel.app/dashboard" class="button">Access Your Dashboard</a>
+      </p>
+
+      <p>If you have any questions, our support team is here to help 24/7. Don't hesitate to reach out!</p>
+      <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+    </div>
+    <div class="footer">
+      <p style="margin-top: 0; font-weight: 600;">Grant Union Investment</p>
+      <p><a href="https://grantunion.vercel.app/contact" style="color: #FF8C37; text-decoration: none;">Contact Support</a></p>
+      <p style="color: #999999; margin-bottom: 0;">© 2026 Grant Union Investment. All rights reserved.</p>
+      <p style="color: #999999; margin: 5px 0 0 0; font-size: 11px;">This is an automated message. Please do not reply to this email.</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+        const textBody = `Welcome to Grant Union Investment!
+
+Dear ${toLocaleStorage.name || 'Valued Member'},
+
+Welcome to Grant Union Investment! We're thrilled to have you join our community of successful investors.
+
+Getting Started in 5 Steps:
+
+1. Complete Your Profile
+   Go to Dashboard → Profile to verify your account details
+
+2. Submit KYC Verification
+   Visit Dashboard → KYC to upload required documents
+
+3. Choose Investment Plan
+   Browse our plans: 7-Day, 14-Day, 3-Month, or 6-Month options
+
+4. Make Your First Deposit
+   Click Invest Now and follow the deposit instructions
+
+5. Track Your Returns
+   Monitor daily ROI credits in your dashboard
+
+Account Details:
+Email: ${toLocaleStorage.email}
+Member Since: ${new Date().toLocaleDateString()}
+Status: Active
+
+If you have any questions, our support team is here to help 24/7.
+
+Best regards,
+The Grant Union Investment Team`;
+
+        await sendTransactionalEmail({
+          to: toLocaleStorage.email,
+          subject: 'Welcome to Grant Union Investment',
+          htmlBody,
+          textBody
+        });
+
+        console.log('✅ Welcome email sent successfully');
+      } catch (emailError) {
+        console.error('⚠️ Error sending welcome email:', emailError);
+        // Don't block signup if email fails
       }
 
       // Create admin notification for new user registration
