@@ -1271,15 +1271,21 @@ export const supabaseDb = {
   },
 
   getDeletionRequestByUserId: async (userId) => {
+    // Don't use .single() because there might be no deletion request
+    // 406 error happens when .single() expects exactly 1 row but gets 0
     const { data, error } = await supabase
       .from('deletion_requests')
       .select('*')
       .eq('user_id', userId)
       .order('requested_at', { ascending: false })
-      .limit(1)
-      .single();
-    return { data, error };
-  },
+      .limit(1);
+    
+    // Return the first item or null
+    return { 
+      data: data && data.length > 0 ? data[0] : null, 
+      error 
+    };
+  }.
 
   updateDeletionRequest: async (id, updates) => {
     const { data, error } = await supabase

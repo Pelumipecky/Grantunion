@@ -317,14 +317,21 @@ FOR UPDATE USING (
 );
 
 -- Storage policies (allow authenticated users to upload)
+-- Note: auth.uid() != null is more reliable than checking auth.role() for authenticated uploads
 CREATE POLICY "Allow authenticated users to upload KYC documents" ON storage.objects
-FOR INSERT WITH CHECK (bucket_id = 'kyc-documents' AND auth.role() = 'authenticated');
+FOR INSERT WITH CHECK (
+  bucket_id = 'kyc-documents' 
+  AND (auth.uid()::text != '' OR auth.role() = 'authenticated')
+);
 
 CREATE POLICY "Allow public access to KYC documents" ON storage.objects
 FOR SELECT USING (bucket_id = 'kyc-documents');
 
 CREATE POLICY "Allow authenticated users to upload avatars" ON storage.objects
-FOR INSERT WITH CHECK (bucket_id = 'avatars' AND auth.role() = 'authenticated');
+FOR INSERT WITH CHECK (
+  bucket_id = 'avatars' 
+  AND (auth.uid()::text != '' OR auth.role() = 'authenticated')
+);
 
 CREATE POLICY "Allow public access to avatars" ON storage.objects
 FOR SELECT USING (bucket_id = 'avatars');
