@@ -143,17 +143,46 @@ export default function KYC({ currentUser }) {
     try {
       const uploaded = {};
       
+      // Helper function to upload file via API (server-side, bypasses RLS)
+      const uploadFileViaAPI = async (file, fileName) => {
+        const reader = new FileReader();
+        return new Promise((resolve, reject) => {
+          reader.onload = async (e) => {
+            try {
+              const fileData = e.target.result;
+              const response = await fetch('/api/kyc/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  fileName: fileName,
+                  fileData: fileData,
+                  bucket: 'kyc-documents',
+                  path: `kyc/${userId}/${fileName}`,
+                  userId: userId,
+                  fileType: file.type
+                })
+              });
+
+              const result = await response.json();
+              if (!response.ok) {
+                reject(new Error(result.details || result.error));
+              }
+              resolve(result.publicUrl);
+            } catch (err) {
+              reject(err);
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      };
+      
       // Removed console.log for security
       setUploadStatus('Uploading ID document...');
       if (idFile) {
         // Removed console.log for security
-
-        const path = `kyc/${userId}/id_${Date.now()}_${idFile.name}`;
+        const fileName = `id_${Date.now()}_${idFile.name}`;
         // Removed console.log for security
-
-        const { data, error } = await supabaseStorage.uploadFile('kyc-documents', path, idFile);
-        if (error) throw error;
-        uploaded.idUrl = supabaseStorage.getPublicUrl('kyc-documents', path);
+        uploaded.idUrl = await uploadFileViaAPI(idFile, fileName);
         // Removed console.log for security
       }
 
@@ -161,13 +190,9 @@ export default function KYC({ currentUser }) {
       setUploadStatus('Uploading selfie...');
       if (selfieFile) {
         // Removed console.log for security
-
-        const path = `kyc/${userId}/selfie_${Date.now()}_${selfieFile.name}`;
+        const fileName = `selfie_${Date.now()}_${selfieFile.name}`;
         // Removed console.log for security
-
-        const { data, error } = await supabaseStorage.uploadFile('kyc-documents', path, selfieFile);
-        if (error) throw error;
-        uploaded.selfieUrl = supabaseStorage.getPublicUrl('kyc-documents', path);
+        uploaded.selfieUrl = await uploadFileViaAPI(selfieFile, fileName);
         // Removed console.log for security
       }
 
