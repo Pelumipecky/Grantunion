@@ -238,7 +238,7 @@ The Grant Union Investment Team`;
     }
 
     return res.status(200).json({ 
-      data: result.data,
+      data: data,
       message: 'Investment created successfully'
     });
 
