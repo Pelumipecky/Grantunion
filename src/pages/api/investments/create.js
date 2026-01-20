@@ -44,7 +44,6 @@ const normalizeInvestmentPayload = (investmentData = {}) => {
     authstatus: investmentData.authStatus ?? investmentData.authstatus ?? 'unseen',
     credited_roi: investmentData.credited_roi ?? 0,
     credited_bonus: investmentData.credited_bonus ?? 0,
-    date: investmentData.date ?? new Date().toISOString(),
   };
 };
 
