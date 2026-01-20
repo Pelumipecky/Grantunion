@@ -121,6 +121,44 @@ export default async function handler(req, res) {
       console.error('Error creating withdrawal notification:', notificationError);
       // Don't fail the withdrawal if notification fails
     }
+
+    // Send pending/submitted withdrawal email to user
+    try {
+      const { data: userData, error: userError } = await supabase
+        .from('userlogs')
+        .select('email, name')
+        .eq('idnum', cleanData.idnum)
+        .single();
+
+      if (userError) {
+        console.error('⚠️ Could not fetch user data for email:', userError);
+      } else if (userData?.email) {
+        console.log('📧 Sending withdrawal pending email to:', userData.email);
+        
+        await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: userData.email,
+            subject: 'Withdrawal Request Received - Pending Review',
+            type: 'withdrawal_notification',
+            templateData: {
+              userName: userData.name || 'User',
+              amount: cleanData.amount,
+              status: 'pending',
+              method: cleanData.paymentoption || 'N/A'
+            }
+          })
+        });
+        
+        console.log('✅ Withdrawal pending email sent successfully');
+      } else {
+        console.warn('⚠️ No email found for user - skipping email notification');
+      }
+    } catch (emailError) {
+      console.error('⚠️ Error sending withdrawal pending email (non-blocking):', emailError);
+      // Don't fail the withdrawal if email fails
+    }
     
     return res.status(200).json({ 
       data: data,
