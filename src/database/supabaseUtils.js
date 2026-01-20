@@ -1285,7 +1285,7 @@ export const supabaseDb = {
       data: data && data.length > 0 ? data[0] : null, 
       error 
     };
-  }.
+  },
 
   updateDeletionRequest: async (id, updates) => {
     const { data, error } = await supabase
