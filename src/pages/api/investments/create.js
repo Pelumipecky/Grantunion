@@ -13,11 +13,29 @@ const normalizeInvestmentPayload = (investmentData = {}) => {
     throw new Error('Investment data must be a valid object');
   }
 
+  // Validate required fields
+  const idnum = Number(investmentData.idnum);
+  if (isNaN(idnum) || idnum <= 0) {
+    throw new Error(`Invalid user account ID: ${investmentData.idnum}`);
+  }
+
+  const plan = investmentData.plan;
+  if (!plan) {
+    throw new Error('Investment plan is required');
+  }
+
+  const capital = Number(investmentData.capital);
+  if (isNaN(capital) || capital <= 0) {
+    throw new Error(`Invalid capital amount: ${investmentData.capital}`);
+  }
+
+  console.log('🔧 Normalizing investment payload for user:', idnum, 'Plan:', plan, 'Capital:', capital);
+
   return {
-    idnum: investmentData.idnum,
-    plan: investmentData.plan,
+    idnum,
+    plan,
     status: investmentData.status || 'Pending',
-    capital: investmentData.capital ?? 0,
+    capital: capital,
     roi: investmentData.roi ?? 0,
     bonus: investmentData.bonus ?? 0,
     duration: investmentData.duration ?? 5,
@@ -51,6 +69,8 @@ export default async function handler(req, res) {
     // Normalize and validate investment data
     const cleanData = normalizeInvestmentPayload(investmentData);
 
+    console.log('📊 Cleaned investment data:', cleanData);
+
     // Create investment in database using direct Supabase call
     const { data, error } = await supabase
       .from('investments')
@@ -60,9 +80,11 @@ export default async function handler(req, res) {
 
     if (error) {
       console.error('❌ Failed to create investment:', error);
+      console.error('Error details:', error.code, error.message, error.details);
       return res.status(400).json({ 
         error: 'Failed to create investment',
-        details: error.message
+        details: error.message,
+        code: error.code
       });
     }
 
