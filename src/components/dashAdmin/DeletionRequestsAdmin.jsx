@@ -207,14 +207,9 @@ const DeletionRequestsAdmin = ({ deletionRequests = [], currentUser, setDeletion
                       fontWeight: '600',
                       opacity: isProcessing ? 0.6 : 1
                     }}
-                      borderRadius: '25px',
-                      padding: '0.5rem 1rem',
-                      cursor: 'pointer',
-                      fontWeight: '600'
-                    }}
                   >
                     <i className="icofont-close" style={{ marginRight: '0.25rem' }}></i>
-                    Reject
+                    {isProcessing ? 'Processing...' : 'Reject'}
                   </button>
                 </div>
               </div>
