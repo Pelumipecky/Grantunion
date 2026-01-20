@@ -11,11 +11,19 @@ if (!MAILJET_API_KEY || !MAILJET_API_SECRET) {
 }
 
 async function sendTransactionalEmail({ to, subject, htmlBody, textBody }) {
+  if (!to) {
+    const err = new Error('Email recipient (to) is required');
+    console.error('EmailService error:', err.message);
+    throw err;
+  }
+
   if (!MAILJET_API_KEY || !MAILJET_API_SECRET) {
     const err = new Error('Mailjet not configured');
     console.error('EmailService error:', err.message);
     throw err;
   }
+
+  console.log(`📨 Sending email to: ${to}, subject: ${subject}`);
 
   const payload = {
     Messages: [
@@ -53,6 +61,7 @@ async function sendTransactionalEmail({ to, subject, htmlBody, textBody }) {
     throw err;
   }
 
+  console.log(`✅ Email sent successfully to ${to}`);
   return result;
 }
 

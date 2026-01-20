@@ -67,6 +67,94 @@ async function sendROIEmail(userEmail, userName, investmentPlan, dailyROI, total
   }
 }
 
+// Function to send investment completion email
+async function sendInvestmentCompletionEmail(userEmail, userName, investmentPlan, capitalAmount, totalROI) {
+  try {
+    const emailMessage = `
+      <div style="font-family: 'Alegreya Sans', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f5f5f5;">
+        <div style="background: linear-gradient(135deg, #FF8C37, #FF9837); padding: 40px 20px; text-align: center; border-radius: 12px 12px 0 0;">
+          <h1 style="color: #ffffff; font-size: 28px; margin: 0; font-weight: 600;">Investment Plan Completed! 🎉</h1>
+        </div>
+        <div style="background-color: #ffffff; padding: 30px 25px; border-radius: 0 0 12px 12px;">
+          <p>Dear <strong style="color: #1C0F36;">${userName}</strong>,</p>
+          <p>Congratulations! Your investment plan has reached completion. Your capital and all earned ROI are now available for withdrawal.</p>
+
+          <div style="background: rgba(255, 152, 55, 0.1); border-left: 4px solid #FF8C37; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: #1C0F36; margin-bottom: 15px;">Investment Summary</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 15px; color: #666666;">Investment Plan</td>
+                <td style="padding: 15px; text-align: right; font-weight: 600; color: #FF8C37;">${investmentPlan}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 15px; color: #666666;">Initial Capital</td>
+                <td style="padding: 15px; text-align: right; font-weight: 600;">$${parseFloat(capitalAmount).toFixed(2)}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 15px; color: #666666;">Total ROI Earned</td>
+                <td style="padding: 15px; text-align: right; font-weight: 600; color: #28a745;">+$${parseFloat(totalROI).toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td style="padding: 15px; color: #1C0F36; font-weight: 600;">Available for Withdrawal</td>
+                <td style="padding: 15px; text-align: right; font-weight: 600; color: #1C0F36; font-size: 16px;">$${(parseFloat(capitalAmount) + parseFloat(totalROI)).toFixed(2)}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: #1C0F36;">Next Steps:</h3>
+            <ol style="color: #333333; line-height: 1.8;">
+              <li>Log in to your dashboard</li>
+              <li>Go to the "Withdraw" section</li>
+              <li>Enter your desired withdrawal amount</li>
+              <li>Select your preferred payment method</li>
+              <li>Submit your withdrawal request</li>
+              <li>Your funds will be processed after admin approval</li>
+            </ol>
+          </div>
+
+          <p style="text-align: center; margin-top: 30px;">
+            <a href="https://grantunion.vercel.app/dashboard" style="display: inline-block; background: linear-gradient(120deg, #1C0F36, #2f1d5c); color: #ffffff; padding: 14px 35px; text-decoration: none; border-radius: 8px; font-weight: 600;">View Dashboard & Withdraw</a>
+          </p>
+
+          <p style="margin-top: 25px;">Thank you for investing with Grant Union Investment! We appreciate your trust and look forward to serving you again.</p>
+          <p>Best regards,<br><strong style="color: #FF8C37;">The Grant Union Investment Team</strong></p>
+
+          <hr style="border: none; border-top: 2px solid #FF8C37; margin: 25px 0;">
+          <p style="font-size: 12px; color: #666666; margin: 0;">
+            This is an automated message. Please do not reply to this email.<br>
+            © 2026 Grant Union Investment. All rights reserved.
+          </p>
+        </div>
+      </div>
+    `;
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: userEmail,
+        subject: `Your Investment Completed - $${(parseFloat(capitalAmount) + parseFloat(totalROI)).toFixed(2)} Ready for Withdrawal`,
+        message: emailMessage,
+        type: 'investment_completed'
+      })
+    });
+
+    if (response.ok) {
+      console.log(`✅ Investment completion email sent to ${userEmail}`);
+      return true;
+    } else {
+      console.error(`Failed to send completion email to ${userEmail}`);
+      return false;
+    }
+  } catch (emailError) {
+    console.error('Error sending investment completion email:', emailError);
+    return false;
+  }
+}
+
 export default async function handler(req, res) {
   // Security check: Ensure only authorized calls (optional but recommended)
   // You can add a secret query param like ?key=MY_SECRET_KEY
@@ -118,6 +206,29 @@ export default async function handler(req, res) {
                 .eq('id', investment.id);
             completedCount++;
             logs.push(`Investment ${investment.id} marked as Completed.`);
+
+            // Send investment completion email
+            try {
+              const { data: userData, error: userError } = await supabase
+                .from('userlogs')
+                .select('email, name')
+                .eq('idnum', investment.idnum)
+                .single();
+
+              if (!userError && userData && userData.email) {
+                await sendInvestmentCompletionEmail(
+                  userData.email,
+                  userData.name || 'User',
+                  investment.plan,
+                  investment.capital,
+                  totalExpectedROI
+                );
+                logs.push(`Completion email sent for investment ${investment.id}`);
+              }
+            } catch (emailErr) {
+              console.error(`Error sending completion email for investment ${investment.id}:`, emailErr);
+              logs.push(`Failed to send completion email for investment ${investment.id}`);
+            }
         }
         continue;
       }

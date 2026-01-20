@@ -521,11 +521,25 @@ export const supabaseDb = {
   },
 
   getUserByIdnum: async (idnum) => {
+    if (!idnum) {
+      console.warn('[supabaseDb.getUserByIdnum] No idnum provided');
+      return { data: null, error: new Error('idnum is required') };
+    }
+    
     const { data, error } = await supabase
       .from('userlogs')
       .select('*')
       .eq('idnum', idnum)
       .single();
+    
+    if (error) {
+      console.warn('[supabaseDb.getUserByIdnum] Query error for idnum', idnum, ':', error.message);
+    }
+    
+    if (!data) {
+      console.warn('[supabaseDb.getUserByIdnum] No user found with idnum:', idnum);
+    }
+    
     return { data: mapUserRecord(data), error };
   },
 
