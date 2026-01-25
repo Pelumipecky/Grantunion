@@ -1180,7 +1180,7 @@ button.logoutBtn:hover i {
         align-items: center;
         justify-content: center;
         gap: 10px;
-        margin-top: 20px;
+        margin-top: 0px;
         box-shadow: 0 4px 15px rgba(220, 18, 98, 0.3);
         transition: all 0.3s ease;
         position: relative;

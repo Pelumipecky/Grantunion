@@ -46,7 +46,7 @@ async function testEmailSending() {
         body: JSON.stringify({
           Messages: [
             {
-              From: { Email: 'grantunion583@gmail.com', Name: 'Grant Union Investment' },
+              From: { Email: MAILJET_FROM_EMAIL, Name: 'Grant Union Investment' },
               To: [{ Email: email.to }],
               Subject: email.subject,
               HTMLPart: email.html

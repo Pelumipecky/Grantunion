@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useContext, useEffect, useCallback } from "react";
-import Navbar from "../components/home/Navbar";
+
 import Link from "next/link";
 import Image from 'next/image';
+import LanguageSwitcher from "../components/LanguageSwitcher";
 import DashboardSect from "../components/dashboard/dashboardSect";
 import ProfileSect from "../components/dashboard/profileSect";
 import { supabase, supabaseDb, supabaseRealtime } from "../database/supabaseUtils";
@@ -648,6 +649,7 @@ const Profile = () => {
             <Link href={"/contact"}>
               <i className="icofont-ui-text-loading"></i> Feedback
             </Link>
+            <LanguageSwitcher />
           </ul>
         </div>
         <div className={profileStyles.rightLeftProfile}>
@@ -962,6 +964,7 @@ const Profile = () => {
                 <Link href={"/contact"}>
                   <i className="icofont-ui-text-loading"></i> Feedback
                 </Link>
+                <LanguageSwitcher />
               </ul>
             </div>
             <div className={profileStyles.rightLeftProfile}>
