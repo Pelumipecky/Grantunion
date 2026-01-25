@@ -414,6 +414,35 @@ video {
   }
 }
 
+/* Mobile navbar: make logout button full width and visible */
+.mobileNavSect .bottomMobiNavSect .logout,
+.mobileNavSect .bottomMobiNavSect .logout.borderBtn {
+  display: flex;
+  width: calc(100% - 32px);
+  margin: 12px auto;
+  padding: 12px 18px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  z-index: 10010;
+}
+
+/* Reposition Tawk.to floating widget to the left side */
+/* Tawk creates elements with classes like .tawk-min and IDs; override common selectors */
+.tawk-min, .tawk-minified, #tawkchat-min, #tawk_chat_container, .tawk-wrapper, .tawk-embedded {
+  right: auto !important;
+  left: 20px !important;
+  bottom: 20px !important;
+  z-index: 11000 !important;
+}
+
+/* Ensure the iframe holder also moves */
+#tawkChatIframeHolder, #tawkIframeContainer, iframe[src*="tawk.to"] {
+  right: auto !important;
+  left: 20px !important;
+}
+
 @media (max-width: 768px) {
   .modalCard {
     max-width: 90% !important;
