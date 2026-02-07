@@ -2,26 +2,47 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './TelegramWidget.module.css';
 
+const BASE_OFFSET = 30;
+
 const TelegramWidget = () => {
-  const [bottomOffset, setBottomOffset] = useState(30);
+  const [bottomOffset, setBottomOffset] = useState(BASE_OFFSET);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    const findTawkElement = () =>
+      document.querySelector(
+        '.tawk-min-container, .tawk-min, .tawk-button, #tawk-mpreview-wrapper, iframe[src*="tawk.to"], iframe[title*="chat widget"], iframe[title*="tawk"]'
+      );
+
     const adjustOffset = () => {
-      // If Tawk.to is present, move Telegram button below it
-      if (window.Tawk_API || document.querySelector('.tawk-min')) {
-        setBottomOffset(110);
-      } else {
-        setBottomOffset(30);
+      const tawkNode = findTawkElement();
+
+      if (tawkNode) {
+        const rect = tawkNode.getBoundingClientRect();
+        const height = rect?.height || 80; // fallback height if rect is zero while hidden
+        const clearance = Math.min(220, Math.max(110, Math.round(height + 40)));
+        setBottomOffset(clearance);
+        return;
       }
+
+      setBottomOffset(BASE_OFFSET);
     };
 
-    // Initial check and after a short delay to allow Tawk to initialize
+    const observer = new MutationObserver(adjustOffset);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    window.addEventListener('resize', adjustOffset);
+
+    // Initial checks to catch both immediate and delayed loads
     adjustOffset();
     const timer = setTimeout(adjustOffset, 1500);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+      window.removeEventListener('resize', adjustOffset);
+    };
   }, []);
 
   return (

@@ -435,6 +435,9 @@ video {
   left: 20px !important;
   bottom: 20px !important;
   z-index: 11000 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* Ensure the iframe holder also moves */

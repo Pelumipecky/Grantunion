@@ -649,7 +649,6 @@ const Profile = () => {
             <Link href={"/contact"}>
               <i className="icofont-ui-text-loading"></i> Feedback
             </Link>
-            <LanguageSwitcher />
           </ul>
         </div>
         <div className={profileStyles.rightLeftProfile}>

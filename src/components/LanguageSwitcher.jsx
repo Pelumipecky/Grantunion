@@ -160,18 +160,22 @@ const LanguageSwitcher = () => {
     setSelectedIndex(0);
     handleInteraction();
 
-    if (!applyGoogleLanguage(langCode)) {
-      pendingLanguageRef.current = langCode;
-      if (!isGoogleReady) {
-        setTimeout(() => applyGoogleLanguage(langCode), 500);
+    const tryApplyGoogle = (attempts = 0) => {
+      if (applyGoogleLanguage(langCode)) {
+        return;
       }
-    }
+      if (attempts < 10) { // Retry up to 10 times
+        setTimeout(() => tryApplyGoogle(attempts + 1), 200);
+      }
+    };
+
+    tryApplyGoogle();
 
     // Save language preference to localStorage
     if (typeof window !== 'undefined') {
       localStorage.setItem('i18nextLng', langCode);
     }
-  }, [i18n, applyGoogleLanguage, isGoogleReady, handleInteraction]);
+  }, [i18n, applyGoogleLanguage, handleInteraction]);
 
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e) => {

@@ -41,10 +41,13 @@ const TawkToWidget = () => {
           clearInterval(check);
           try {
             // Ensure widget is visible
-            if (typeof window.Tawk_API.hideWidget === 'function') {
-              // show widget by default
-              try { window.Tawk_API.showWidget(); } catch(e){}
+            if (typeof window.Tawk_API.showWidget === 'function') {
+              window.Tawk_API.showWidget();
             }
+            if (typeof window.Tawk_API.show === 'function') {
+              window.Tawk_API.show();
+            }
+            console.log('Tawk.to widget shown');
           } catch (e) {
             console.warn('Tawk.to API error after load', e);
           }
